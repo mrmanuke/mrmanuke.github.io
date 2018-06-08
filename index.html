@@ -295,7 +295,7 @@ class ADSRBasicOsc extends Instrument {
 		this.filter.frequency.value = 8000;//300;
 		
 		var merger = audi.ctx.createChannelMerger(3);
-		this.osc = this.addOsc("sine", 220, merger, 1);
+		this.osc = this.addOsc("triangle", 220, merger, 1);
 		this.osc2 = this.addOsc("sine", 220, merger, 0.0001);
 		this.osc3 = this.addOsc("sine", 220, merger, 0.0001);
 		
@@ -1620,7 +1620,7 @@ class SynthControls {
 		
 		this.oscTypeSel = new RBPanel(x + this.kw*1.0, y+this.kw*0.1, this.kw*2*0.8, this.kw*0.5*0.8, osctypes, true);
 		this.oscTypeSel.setTypeTarget(oscarr);
-		this.oscTypeSel.setValue(0);
+		this.oscTypeSel.setValue(2);
 		this.modules.push(this.oscTypeSel);
 		
 		this.oscGainKnob = new Knob(x + this.kw*3.3, y + this.kw*0.05, this.kw*0.5, this.kw*0.5, [1], 0.0001, 1);
