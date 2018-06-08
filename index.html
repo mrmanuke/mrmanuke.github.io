@@ -1958,7 +1958,7 @@ class GameLoop {
    }
 
    step(deltaTime) {
-	piano.step(deltaTime);
+	if (piano) piano.step(deltaTime);
    }
 
    draw(deltaTime) {
@@ -1969,8 +1969,8 @@ class GameLoop {
 		ctx.strokeStyle = "black";
 		ctx.stroke();
 		
-		piano.drawOb(ctx);
-		staff.drawOb(ctx);
+		if (piano) piano.drawOb(ctx);
+		if (staff) staff.drawOb(ctx);
    }
 
    tick(time) {
