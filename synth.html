@@ -59,6 +59,7 @@ var TYPE_OSC = 1;
 var TYPE_AUDIO = 2;
 var TYPE_TRIGGER = 3;
 var TYPE_VALUE = 4;
+var TYPE_MULTI = 5;
 
 class qwerty {
 	constructor() {
@@ -2359,6 +2360,8 @@ class Clicker extends Drawable {
 		this.trigprop = trigprop;
 		this.oscnum = -1;
 		this.knum = -1;
+		this.clicked = false;
+		this.fillCol = keypresscol;
 	}
 	
 	hitCheck(isdown, coords) {
@@ -2367,9 +2370,11 @@ class Clicker extends Drawable {
 			if (isdown) {
 				this.oscnum = sound.getPiano(this.knum, this.oscnum);
 				if (this.oscnum > -1) this.trigprop.trigger(true, this.knum, this.oscnum);
+				this.fill = true;
 			} else if (!isdown) {
 				this.trigprop.trigger(false, this.knum, this.oscnum);
 				sound.returnPiano(this.oscnum);
+				this.fill = false;
 			}
 		}
 		return hit;
@@ -2379,13 +2384,9 @@ class Clicker extends Drawable {
 	}
 }
 
-class TextField extends SynthModContainer {
+class ValueModContainer extends SynthModContainer {
 	constructor(x, y, w, h, bl, br, bt, bb, noder) {
 		super(x, y, w, h, bl, br, bt, bb);
-		this.addONode(w-2*noder, this.h*0.5-noder, noder, TYPE_VALUE, [TYPE_VALUE], "value");
-		this.text = "0";
-		this.valueOb = new ValueSetter();
-		this.outNodes[0].setObject(this.valueOb);
 	}
 	
 	hitCheck(isdown, coords) {
@@ -2440,14 +2441,26 @@ class TextField extends SynthModContainer {
 	unpress(code) {
 	}
 	
-	drawOb(ctx) {
+	drawOb(ctx, tt) {
 		super.drawOb(ctx);
 		if (focusOb === this) {
 			drawRect(ctx, this.x, this.y, this.w, this.h, true, this.fill, this.fillCol, keypresscol);
 		}
 		ctx.font = this.h*0.26 + "px Arial";
 		ctx.fillStyle = pianocol;
-		ctx.fillText(this.text, this.x + this.w*0.1, this.y + this.h*0.5);
+		var t = this.text;
+		if (tt) t += tt;
+		ctx.fillText(t, this.x + this.w*0.1, this.y + this.h*0.5);
+	}
+}
+
+class TextField extends ValueModContainer {
+	constructor(x, y, w, h, bl, br, bt, bb, noder) {
+		super(x, y, w, h, bl, br, bt, bb, noder);
+		this.addONode(w-2*noder, this.h*0.5-noder, noder, TYPE_VALUE, [TYPE_VALUE], "value");
+		this.text = "0";
+		this.valueOb = new ValueSetter();
+		this.outNodes[0].setObject(this.valueOb);
 	}
 }
 
@@ -2498,14 +2511,16 @@ class SynthModKeyboard extends SynthModContainer {
 	constructor(x, y, w, h, bl, br, bt, bb, obj, noder) {
 		super(x, y, w, h, bl, br, bt, bb);
 		this.kw = w*0.6;
-		this.kh = h*0.8;
-		this.kx = x + w*0.1;
+		this.kh = h*0.6;
+		this.kx = x + w*0.05;
 		this.ky = y + h*0.1;
 		this.fillCol = pianocol;
 		this.addONode(this.w-2*noder, this.h*0.33-noder, noder, TYPE_KEY, [TYPE_KEY], "key");
 		this.outNodes[0].setObject(obj);
 		this.addONode(this.w-2*noder, this.h*0.67-noder, noder, TYPE_KEY, [TYPE_KEY], "key");
 		this.outNodes[1].setObject(obj);
+		this.addINode(this.w*0.5-noder, this.h-noder*2, noder, TYPE_VALUE, [TYPE_VALUE], "fmulti", "F");
+		this.inNodes[0].setObject(obj);
 	}
 	
 	drawOb(ctx) {
@@ -2592,7 +2607,7 @@ class ModuleIcon extends Drawable {
 
 class KeyboardIcon extends ModuleIcon {
 	createMod(d) {
-		return new SynthModKeyboard(this.x, piano.modbt, piano.modw, piano.modh, piano.modbl, piano.modbr, piano.modbt, piano.modbb, piano.keyout, piano.noder);
+		return new SynthModKeyboard(this.x, piano.modbt, piano.modw, piano.modh*1.2, piano.modbl, piano.modbr, piano.modbt, piano.modbb, piano.keyout, piano.noder);
 	}
 	
 	drawOb(ctx) {
@@ -2678,7 +2693,7 @@ class SpeakerIcon extends ModuleIcon {
 	}
 }
 
-class ValueIcon  extends ModuleIcon {
+class ValueIcon extends ModuleIcon {
 	createMod() {
 		return new TextField(this.x, piano.modbt, piano.modh, piano.modh, piano.modbl, piano.modbr, piano.modbt, piano.modbb, piano.noder);
 	}
@@ -2686,6 +2701,17 @@ class ValueIcon  extends ModuleIcon {
 	drawOb(ctx) {
 		super.drawOb(ctx);
 		ctx.fillText("VAL", this.x+this.w*0.25, this.y+this.h*0.5);
+	}
+}
+
+class MultiplierIcon extends ModuleIcon {
+	createMod() {
+		return new MultiField(this.x, piano.modbt, piano.modh, piano.modh, piano.modbl, piano.modbr, piano.modbt, piano.modbb, piano.noder);
+	}
+	
+	drawOb(ctx) {
+		super.drawOb(ctx);
+		ctx.fillText("2X", this.x+this.w*0.30, this.y+this.h*0.5);
 	}
 }
 
@@ -2762,6 +2788,11 @@ class KeyboardOutput {
 	constructor() {
 		this.outputs = new Array();
 		this.triggers = new Array();
+		this.multi = 1;
+	}
+	
+	setValues(v) {
+		this.multi = v;
 	}
 	
 	connect(obj) {
@@ -2810,9 +2841,9 @@ class KeyboardOutput {
 	
 	noteOnNow(freq, knum, onum) {
 		var oscnum = sound.getPiano(knum, onum);
-		//for (var i = 0; i < this.outputs.length; i++) {
-			//this.outputs[i].noteOnNow(freq, knum, oscnum);
-		//}
+		for (var i = 0; i < this.outputs.length; i++) {
+			this.outputs[i].noteOnNow(freq, knum, oscnum);
+		}
 		for (var i = 0; i < this.triggers.length; i++) {
 			this.triggers[i].trigger(true, knum, oscnum);
 		}
