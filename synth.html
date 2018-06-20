@@ -3684,7 +3684,7 @@ function mouseDown(event) {
 }
 
 function touchstart(event) {
-	//event.preventDefault();
+	event.preventDefault();
 	mouseDown(event.changedTouches[0]);
 	//document.getElementById("msgdiv").innerHTML = "touchstart";
 }
@@ -3698,7 +3698,7 @@ function mouseUp(event) {
 }
 
 function touchend(event) {
-	//event.preventDefault();
+	event.preventDefault();
 	//document.getElementById("msgdiv").innerHTML = "touchend";
 	mouseUp(event.changedTouches[0]);
 }
@@ -3717,7 +3717,7 @@ function mouseMove(event) {
 }
 
 function touchmove(event) {
-	//event.preventDefault();
+	event.preventDefault();
 	mouseMove(event.changedTouches[0]);
 	//document.getElementById("msgdiv").innerHTML = "touchmove";
 }
