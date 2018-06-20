@@ -1363,11 +1363,14 @@ class RBPanel extends SynthModule {
 		}
 	}
 	
-	setValue(i) {
-		this.val = this.vals[i];
-		this.btns[i].on = true;
+	setValue(ind) {
+		this.val = this.vals[ind];
+		for (var i = 0; i < this.btns.length; i++) {
+			this.btns[i].on = false;
+		}
+		this.btns[ind].on = true;
 		setMsg("set value to " + this.val);
-		super.setValue(i);
+		super.setValue(ind);
 	}
 	
 	drawOb(ctx) {
@@ -3285,6 +3288,7 @@ function initmods() {
 	m.setPos(x, piano.modbt);
 	x += m.w + piano.modw*0.1;
 	var o = piano.modbar.oscb.createMod();
+	o.oscTypeSel.setValue(3);
 	o.setPos(x, piano.modbt);
 	x += o.w + piano.modw*0.1;
 	var g = piano.modbar.gainb.createMod();
