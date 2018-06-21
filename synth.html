@@ -47,12 +47,14 @@ var filtypes = ["lowpass", "highpass", "bandpass", "lowshelf", "highshelf", "pea
 //var keypresscol = "#ff0000";
 //var lastkeycol = "#aaaaff";
 
+var TYPE_NULL = -1;
 var TYPE_KEY = 0;
 var TYPE_OSC = 1;
 var TYPE_AUDIO = 2;
 var TYPE_TRIGGER = 3;
 var TYPE_VALUE = 4;
 var TYPE_MULTI = 5;
+var TYPE_SPLITTER = 6;
 
 class qwerty {
 	constructor() {
@@ -1803,32 +1805,44 @@ class ioNode extends Drawable {
 		return false;
 	}
 	
+	disconnectToSplitter(node) {
+		return node.splitter.disconnectInput(this);
+	}
+	
+	connectToSplitter(node) {
+		return node.splitter.connectInput(this);
+	}
+	
 	connect(node) {
-		if (!this.checkTypes(node)) return false;
-		if (!this.obj || node.connected) return false;
-		if (this.connected || this.isInput == node.isInput) return true;
-		if (this.objIsArray) {
-			if (node.objIsArray) {
-				if (this.obj.length != node.obj.length) {
-					console.log("object array lengths don't match");
-					return false;
+		if (node.ntype === TYPE_SPLITTER) {
+			if (!this.connectToSplitter(node)) return false;
+		} else {
+			if (!this.checkTypes(node)) return false;
+			if (!this.obj || node.connected) return false;
+			if (this.connected || this.isInput == node.isInput) return true;
+			if (this.objIsArray) {
+				if (node.objIsArray) {
+					if (this.obj.length != node.obj.length) {
+						console.log("object array lengths don't match");
+						return false;
+					} else {
+						for (var i = 0; i < this.obj.length; i++) {
+							this.obj[i].connect(node.obj[i]);
+						}
+					}
 				} else {
 					for (var i = 0; i < this.obj.length; i++) {
-						this.obj[i].connect(node.obj[i]);
+						this.obj[i].connect(node.obj);
 					}
 				}
 			} else {
-				for (var i = 0; i < this.obj.length; i++) {
-					this.obj[i].connect(node.obj);
+				if (node.objIsArray) {
+					for (var i = 0; i < node.obj.length; i++) {
+						this.obj.connect(node.obj[i]);
+					}
+				} else {
+					this.obj.connect(node.obj);
 				}
-			}
-		} else {
-			if (node.objIsArray) {
-				for (var i = 0; i < node.obj.length; i++) {
-					this.obj.connect(node.obj[i]);
-				}
-			} else {
-				this.obj.connect(node.obj);
 			}
 		}
 		if (this.obj === piano.keyout) {
@@ -1845,30 +1859,34 @@ class ioNode extends Drawable {
 	}
 	
 	disconnect() {
-		if (!this.obj || !this.connected || !this.con) return;
 		var node = this.con;
-		if (this.objIsArray) {
-			if (node.objIsArray) {
-				if (this.obj.length != node.obj.length) {
-					console.log("object array lengths don't match");
-					return false;
+		if (this.con && this.con.ntype === TYPE_SPLITTER) {
+			if (!this.disconnectToSplitter(this.con)) return false;
+		} else {
+			if (!this.obj || !this.connected || !this.con) return;
+			if (this.objIsArray) {
+				if (node.objIsArray) {
+					if (this.obj.length != node.obj.length) {
+						console.log("object array lengths don't match");
+						return false;
+					} else {
+						for (var i = 0; i < this.obj.length; i++) {
+							this.obj[i].disconnect(node.obj[i]);
+						}
+					}
 				} else {
 					for (var i = 0; i < this.obj.length; i++) {
-						this.obj[i].disconnect(node.obj[i]);
+						this.obj[i].disconnect(node.obj);
 					}
 				}
 			} else {
-				for (var i = 0; i < this.obj.length; i++) {
-					this.obj[i].disconnect(node.obj);
+				if (node.objIsArray) {
+					for (var i = 0; i < node.obj.length; i++) {
+						this.obj.disconnect(node.obj[i]);
+					}
+				} else {
+					this.obj.disconnect(node.obj);
 				}
-			}
-		} else {
-			if (node.objIsArray) {
-				for (var i = 0; i < node.obj.length; i++) {
-					this.obj.disconnect(node.obj[i]);
-				}
-			} else {
-				this.obj.disconnect(node.obj);
 			}
 		}
 		if (this.obj === piano.keyout) {
@@ -1878,6 +1896,9 @@ class ioNode extends Drawable {
 		this.connected = false;
 		this.con.connected = false;
 		this.con.disconnectInput();
+		this.drawline = false;
+		this.conx = this.x+this.r;
+		this.cony = this.y+this.r;
 		this.con = null;
 	}
 	
@@ -2205,7 +2226,7 @@ class SynthOscContainer extends SynthModContainer {
 		super.drawOb(ctx);
 		ctx.font = this.h*0.15 + "px Arial";
 		ctx.fillStyle = pianocol;
-		ctx.fillText("LFOs", this.x + this.w*0.23, this.y + this.h*0.95);
+		ctx.fillText("LFO", this.x + this.w*0.23, this.y + this.h*0.95);
 	}
 }
 
@@ -2344,10 +2365,19 @@ class SynthGainContainer extends SynthModContainer {
 		this.inNodes[0].setObject(oscgarr, true);
 		this.addONode(this.w-2*noder, this.h*0.5-noder, noder, TYPE_AUDIO, [TYPE_AUDIO], "gain");
 		this.outNodes[0].setObject(oscgarr, true);
-		this.addINode(this.w*0.33-noder, this.h-noder*2, noder, TYPE_VALUE, [TYPE_VALUE], "min", "m");
+		this.addINode(this.w*0.1-noder, 0, noder, TYPE_VALUE, [TYPE_VALUE], "min", "m");
 		this.inNodes[1].setObject(this.knob.min);
-		this.addINode(this.w*0.67-noder, this.h-noder*2, noder, TYPE_VALUE, [TYPE_VALUE], "max", "M");
+		this.addINode(this.w*0.9-noder, 0, noder, TYPE_VALUE, [TYPE_VALUE], "max", "M");
 		this.inNodes[2].setObject(this.knob.max);
+		this.addINode(this.w*0.5-noder, this.h-noder*2, noder, TYPE_AUDIO, [TYPE_AUDIO], "LFO", "F");
+		this.inNodes[3].setObject(oscggarr);
+	}
+	
+	drawOb(ctx) {
+		super.drawOb(ctx);
+		ctx.font = this.h*0.15 + "px Arial";
+		ctx.fillStyle = pianocol;
+		ctx.fillText("LFO", this.x + this.w*0.05, this.y + this.h*0.95);
 	}
 }
 
@@ -2562,7 +2592,7 @@ class SynthModKeyboard extends SynthModContainer {
 		this.outNodes[0].setObject(obj);
 		this.addONode(this.w-2*noder, this.h*0.67-noder, noder, TYPE_KEY, [TYPE_KEY], "key");
 		this.outNodes[1].setObject(obj);
-		this.addINode(this.w*0.5-noder, this.h-noder*2, noder, TYPE_VALUE, [TYPE_VALUE], "fmulti", "F");
+		this.addINode(this.w*0.6-noder, this.h-noder*2, noder, TYPE_VALUE, [TYPE_VALUE], "fmulti", "F");
 		this.inNodes[0].setObject(obj);
 	}
 	
@@ -2570,12 +2600,68 @@ class SynthModKeyboard extends SynthModContainer {
 		super.drawOb(ctx);
 		drawRect(ctx, this.x, this.y, this.w, this.h, this.stroke, this.fill, this.fillCol, this.strokeCol);
 		drawLittleKeyboard(ctx, this.kx, this.ky, this.kw, this.kh, this.fillCol, this.strokeCol);
+		ctx.font = this.h*0.14 + "px Arial";
+		ctx.fillStyle = pianocol;
+		ctx.fillText("MULTI", this.x + this.w*0.05, this.y + this.h*0.95);
 	}
 	
 	drag(dcoords, ccoords) {
 		super.drag(dcoords, ccoords);
 		this.kx += this.stepx;
 		this.ky += this.stepy;
+	}
+}
+
+class SplitterMod extends SynthModContainer {
+	constructor(x, y, w, h, bl, br, bt, bb, noder) {
+		super(x, y, w, h, bl, br, bt, bb);
+		//this.splitters = new Array();
+		//for (var i = 0; i < sound.numpianos; i++) {
+		//	this.splitters.push(sound.ctx.createChannelSplitter(3));
+		//}
+		this.addINode(0, this.h*0.5-noder, noder, TYPE_SPLITTER, [TYPE_KEY, TYPE_OSC, TYPE_AUDIO, TYPE_TRIGGER, TYPE_VALUE, TYPE_MULTI, TYPE_SPLITTER], "split");
+		this.inNodes[0].setObject(this);
+		this.inNodes[0].splitter = this;
+		for (var i = 0; i < 3; i++) {
+			this.addONode(this.w-2*noder, this.h*(0.2 + i*0.3)-noder, noder, TYPE_NULL, [TYPE_NULL], "split");
+			//this.outNodes[i].setObject(this);
+			//this.outNodes[i].splitter = this;
+		}
+	}
+	
+	connectInput(node) {
+		if (node.ntype == TYPE_AUDIO) {
+			this.splitters = new Array();
+			for (var i = 0; i < sound.numpianos; i++) {
+				this.splitters.push(sound.ctx.createChannelSplitter(3));
+				node.obj[i].connect(this.splitters[i]);
+			}
+			for (var i = 0; i < this.outNodes.length; i++) {
+				this.outNodes[i].setObject(this.splitters);
+				this.outNodes[i].ntype = TYPE_AUDIO;
+			}
+			return true;
+		}
+		return false;
+	}
+	
+	disconnectInput(node) {
+		for (var i = 0; i < this.outNodes.length; i++) {
+			this.outNodes[i].disconnect();
+			this.outNodes[i].setObject(null);
+			this.outNodes[i].ntype = TYPE_NULL;
+		}
+		for (var i = 0; i < this.splitters.length; i++) {
+			this.splitters[i].disconnect();
+			this.splitters[i] = null;
+		}
+		this.splitters = null;
+		return true;
+	}
+	
+	drawOb(ctx) {
+		super.drawOb(ctx);
+		drawLittleSplitter(ctx, this.x, this.y, this.w, this.h);
 	}
 }
 
@@ -2616,6 +2702,30 @@ function drawLittleSpeaker(ctx, x, y, w, h, fcol, scol) {
 	ctx.lineTo(x+w*0.7, y+h*0.8);
 	ctx.lineTo(x+w*0.43, y+h*0.67);
 	ctx.closePath();
+	ctx.stroke();
+}
+
+function drawLittleSplitter(ctx, x, y, w, h) {
+	ctx.beginPath();
+	ctx.moveTo(x + w*0.25, y + h*0.5);
+	ctx.lineTo(x + w*0.75, y + h*0.5);
+	ctx.moveTo(x + w*0.75, y + h*0.2);
+	ctx.lineTo(x + w*0.6, y + h*0.2);
+	ctx.lineTo(x + w*0.4, y + h*0.5);
+	ctx.lineTo(x + w*0.6, y + h*0.8);
+	ctx.lineTo(x + w*0.75, y + h*0.8);
+	ctx.stroke();
+}
+
+function drawLittleMerger(ctx, x, y, w, h) {
+	ctx.beginPath();
+	ctx.moveTo(x + w*0.25, y + h*0.5);
+	ctx.lineTo(x + w*0.75, y + h*0.5);
+	ctx.moveTo(x + w*0.25, y + h*0.2);
+	ctx.lineTo(x + w*0.4, y + h*0.2);
+	ctx.lineTo(x + w*0.6, y + h*0.5);
+	ctx.lineTo(x + w*0.4, y + h*0.8);
+	ctx.lineTo(x + w*0.25, y + h*0.8);
 	ctx.stroke();
 }
 
@@ -2782,6 +2892,28 @@ class ClickIcon extends ModuleIcon {
 	}
 }
 
+class SplitterIcon extends ModuleIcon {
+	createMod() {
+		return new SplitterMod(this.x, piano.modbt, piano.modh, piano.modh, piano.modbl, piano.modbr, piano.modbt, piano.modbb, piano.noder);
+	}
+	
+	drawOb(ctx) {
+		super.drawOb(ctx);
+		drawLittleSplitter(ctx, this.x, this.y, this.w, this.h);
+	}
+}
+
+class MergerIcon extends ModuleIcon {
+	createMod() {
+		return new MergerMod(this.x, piano.modbt, piano.modh, piano.modh, piano.modbl, piano.modbr, piano.modbt, piano.modbb, piano.noder);
+	}
+	
+	drawOb(ctx) {
+		super.drawOb(ctx);
+		drawLittleMerger(ctx, this.x, this.y, this.w, this.h);
+	}
+}
+
 class ModuleBar extends Drawable {
 	constructor(x, y, w, h) {
 		super(x, y, w, h);
@@ -2808,6 +2940,10 @@ class ModuleBar extends Drawable {
 		this.speakerb = new SpeakerIcon(x+a,y+h*0.1, h*0.8, h*0.8, 0, canW, y, canH);
 		a += h*0.9;
 		this.valb = new ValueIcon(x+a,y+h*0.1, h*0.8, h*0.8, 0, canW, y, canH);
+		a += h*0.9;
+		this.splitterb = new SplitterIcon(x+a,y+h*0.1, h*0.8, h*0.8, 0, canW, y, canH);
+		a += h*0.9;
+		//this.mergerb = new MergerIcon(x+a,y+h*0.1, h*0.8, h*0.8, 0, canW, y, canH);
 		this.icons.push(this.keyb);
 		this.icons.push(this.oscb);
 		this.icons.push(this.gainb);
@@ -2819,6 +2955,8 @@ class ModuleBar extends Drawable {
 		this.icons.push(this.valb);
 		this.icons.push(this.whiteb);
 		this.icons.push(this.switchb);
+		//this.icons.push(this.mergerb);
+		this.icons.push(this.splitterb);
 		this.hideicon = -1;
 	}
 	
@@ -2850,7 +2988,7 @@ class KeyboardOutput {
 		this.multi = 1;
 	}
 	
-	setValues(v) {
+	setValue(v) {
 		this.multi = v;
 	}
 	
@@ -2907,7 +3045,7 @@ class KeyboardOutput {
 			return oscnum;
 		}
 		for (var i = 0; i < this.outputs.length; i++) {
-			this.outputs[i].noteOnNow(freq, knum, oscnum);
+			this.outputs[i].noteOnNow(freq*this.multi, knum, oscnum);
 		}
 		for (var i = 0; i < this.triggers.length; i++) {
 			this.triggers[i].trigger(true, knum, oscnum);
@@ -3048,6 +3186,7 @@ class Piano {
 			for (var i = 0; i < this.btns.length; i++) {
 				if (this.btns[i].hitCheck(isdown, coords)) {
 					this.btns[i].press(isdown, 0);
+					return true;
 				}
 			}
 			if (!rollkey.pressed) {
