@@ -55,6 +55,7 @@ var TYPE_TRIGGER = 3;
 var TYPE_VALUE = 4;
 var TYPE_MULTI = 5;
 var TYPE_SPLITTER = 6;
+var TYPE_MERGER = 7;
 
 class qwerty {
 	constructor() {
@@ -1410,8 +1411,17 @@ class ValueReceiver {
 	}
 	
 	setValue(v) {
+		if (this.min && v <= this.min.value) {
+			setMsg("you can't set the max to <= the min");
+			return false;
+		}
+		if (this.max && v >= this.max.value) {
+			setMsg("you can't set the min to >= the max");
+			return false;
+		}
 		this.value = v;
 		this.owner.updateValue();
+		return true;
 	}
 }
 
@@ -1433,6 +1443,8 @@ class Knob extends SynthModule {
 		this.doty = 0;
 		this.min = new ValueReceiver(this, min);
 		this.max = new ValueReceiver(this, max);
+		this.min.max = this.max;
+		this.max.min = this.min;
 		this.val = 0;
 		if (init) this.setValue(vals[init]); else this.setValue(vals[0]);
 		this.calcDotPos();
@@ -1799,23 +1811,34 @@ class ioNode extends Drawable {
 	}
 	
 	checkTypes(node) {
+		if (this.ntype == TYPE_MERGER) return true;
 		for (var i = 0; i < node.acceptTypes.length; i++) {
-			if (this.ntype == node.acceptTypes[i]) return true;
+			if (this.ntype != TYPE_NULL && this.ntype == node.acceptTypes[i]) return true;
 		}
 		return false;
 	}
 	
 	disconnectToSplitter(node) {
-		return node.splitter.disconnectInput(this);
+		return node.splitter.disconnectSplit(this);
 	}
 	
 	connectToSplitter(node) {
-		return node.splitter.connectInput(this);
+		return node.splitter.connectSplit(this);
+	}
+	
+	disconnectToMerger(node) {
+		return this.splitter.disconnectMerge(node);
+	}
+	
+	connectToMerger(node) {
+		return this.splitter.connectMerge(node);
 	}
 	
 	connect(node) {
 		if (node.ntype === TYPE_SPLITTER) {
 			if (!this.connectToSplitter(node)) return false;
+		} else if (this.ntype == TYPE_MERGER) {
+			if (!this.connectToMerger(node)) return false;
 		} else {
 			if (!this.checkTypes(node)) return false;
 			if (!this.obj || node.connected) return false;
@@ -1845,7 +1868,7 @@ class ioNode extends Drawable {
 				}
 			}
 		}
-		if (this.obj === piano.keyout) {
+		if (this.obj === piano.keyout && node.ntype == TYPE_TRIGGER) {
 			piano.keyout.connectTrigger(node.trigprop);
 		}
 		this.trigprop.connect(node.trigprop);
@@ -1860,8 +1883,10 @@ class ioNode extends Drawable {
 	
 	disconnect() {
 		var node = this.con;
-		if (this.con && this.con.ntype === TYPE_SPLITTER) {
+		if (this.con && this.con.ntype == TYPE_SPLITTER) {
 			if (!this.disconnectToSplitter(this.con)) return false;
+		} else if (this.ntype == TYPE_MERGER) {
+			if (!this.disconnectToMerger(node)) return false;
 		} else {
 			if (!this.obj || !this.connected || !this.con) return;
 			if (this.objIsArray) {
@@ -1889,13 +1914,13 @@ class ioNode extends Drawable {
 				}
 			}
 		}
-		if (this.obj === piano.keyout) {
+		if (this.obj === piano.keyout && node.ntype == TYPE_TRIGGER) {
 			piano.keyout.disconnectTrigger(node.trigprop);
 		}
-		this.trigprop.disconnect(node.trigprop);
 		this.connected = false;
 		this.con.connected = false;
 		this.con.disconnectInput();
+		this.trigprop.disconnect(node.trigprop);
 		this.drawline = false;
 		this.conx = this.x+this.r;
 		this.cony = this.y+this.r;
@@ -1983,6 +2008,10 @@ class SynthModContainer extends Drawable {
 		this.outputs = new Array();
 	}
 	
+	notifyDisconnect() {
+		
+	}
+	
 	connect(t) {
 		for (var i = 0; i < this.outputs.length; i++) {
 			if (this.outputs[i] === t) return;
@@ -1994,6 +2023,7 @@ class SynthModContainer extends Drawable {
 		for (var i = 0; i < this.outputs.length; i++) {
 			if (this.outputs[i] === t) {
 				this.outputs.splice(i, 1);
+				t.notifyDisconnect();
 				return;
 			}
 		}
@@ -2080,23 +2110,45 @@ class SynthModContainer extends Drawable {
 }
 
 class ValueSetter {	
+	constructor() {
+	this.val = 0;
+		this.obj = new Array();
+	}
+	
 	connect(o) {
-		this.obj = o;
+		var e = false;
+		for (var i = 0; i < this.obj.length; i++) {
+			if (this.obj[i] === o) {
+				e = true;
+				break;
+			}
+		}
+		if (!e) this.obj.push(o);
+		//this.setValue(this.val);
 	}
 	
 	disconnect(o) {
-		if (this.obj === o) this.obj = null;
+		for (var i = 0; i < this.obj.length; i++) {
+			if (this.obj[i] === o) {
+				this.obj.splice(i, 1);
+				break;
+			}
+		}
 	}
 	
 	setValue(v) {
-		if (this.obj) {
-			this.obj.setValue(v);
+		this.val = v;
+		var noerr = true;
+		for (var i = 0; i < this.obj.length; i++) {
+			if (!this.obj[i].setValue(v)) noerr = false;
 		}
+		return noerr;
 	}
 }
 
 class FrequencySetter {
 	constructor(o) {
+		this.name = "freq setter";
 		this.o = o;
 	}
 	
@@ -2108,6 +2160,7 @@ class FrequencySetter {
 		for (var i = 0; i < this.o.length; i++) {
 			this.o[i].frequency.setValueAtTime(v, sound.ctx.currentTime);
 		}
+		return true;
 	}
 	
 	noteOFF() {	
@@ -2121,12 +2174,12 @@ class GainTrigger {
 	}
 	
 	noteOnNow(f, knum, onum) {
-		this.g[onum].gain.setTargetAtTime(1, sound.ctx.currentTime+0.05, timeConstOn);
+		//this.g[onum].gain.setTargetAtTime(1, sound.ctx.currentTime+0.05, timeConstOn);
 	}
 	
 	noteOFF(onum, knum) {
-		this.g[onum].gain.cancelScheduledValues(sound.ctx.currentTime);
-		this.g[onum].gain.setTargetAtTime(OFF_VOL, sound.ctx.currentTime+0.01, timeConstOff);
+		//this.g[onum].gain.cancelScheduledValues(sound.ctx.currentTime);
+		//this.g[onum].gain.setTargetAtTime(OFF_VOL, sound.ctx.currentTime+0.01, timeConstOff);
 	}
 }
 
@@ -2152,22 +2205,22 @@ class WhiteNoiseContainer extends SynthModContainer {
 			this.oscs.push(noise);
 			//this.gains.push(noise.g);
 		}
-		//this.gt = new GainTrigger(this.gains);
+		this.gt = new GainTrigger();
 		this.addONode(this.w-2*noder, this.h*0.5-noder, noder, TYPE_AUDIO, [TYPE_AUDIO], "white");
 		this.outNodes[0].setObject(this.gains);
-		//this.addINode(0, this.h*0.5-noder, noder, TYPE_KEY, [TYPE_KEY, TYPE_TRIGGER], "white g", "T");
-		//this.inNodes[0].setObject(this.gt);
+		this.addINode(0, this.h*0.5-noder, noder, TYPE_TRIGGER, [TYPE_KEY, TYPE_TRIGGER], "white g", "T");
+		this.inNodes[0].setObject(this.gt);
 	}
 	
 	trigger(on, knum, onum) {
-		if (knum) {
-			if (on) {
-				this.gt.noteOnNow(220, knum, onum);
-			} else {
-				this.gt.noteOFF(onum, knum);
-			}
-		}
-		super.trigger(on, knum, onum);
+		//if (knum) {
+		//	if (on) {
+		//		this.gt.noteOnNow(220, knum, onum);
+		//	} else {
+		//		this.gt.noteOFF(onum, knum);
+		//	}
+		//}
+		if (this.gt.connected) super.trigger(on, knum, onum);
 	}
 	
 	drawOb(ctx) {
@@ -2194,7 +2247,7 @@ class SynthOscContainer extends SynthModContainer {
 			this.gfs.push(osc.frequency);
 		}
 		this.fs = new FrequencySetter(this.oscs);
-		//this.gt = new GainTrigger(this.gains);
+		this.gt = new GainTrigger();
 		this.oscTypeSel.setTypeTarget(this.oscs);
 		this.oscTypeSel.setValue(0);
 		this.addModule(this.oscTypeSel, w*0.1, h*0.1);
@@ -2202,11 +2255,11 @@ class SynthOscContainer extends SynthModContainer {
 		this.outNodes[0].setObject(this.oscs);//this.gains);
 		this.addINode(0, this.h*0.33-noder, noder, TYPE_KEY, [TYPE_KEY, TYPE_VALUE], "osc f", "F");
 		this.inNodes[0].setObject(this.fs);
-		//this.addINode(0, this.h*0.67-noder, noder, TYPE_KEY, [TYPE_KEY, TYPE_TRIGGER], "osc g", "T");
-		//this.inNodes[1].setObject(this.gt);
+		this.addINode(0, this.h*0.67-noder, noder, TYPE_TRIGGER, [TYPE_KEY, TYPE_TRIGGER], "osc g", "T");
+		this.inNodes[1].setObject(this.gt);
 		//->outnode.obj.connect(innode.obj)
 		this.addINode(w*0.4, h-2*noder, noder, TYPE_AUDIO, [TYPE_AUDIO], "f LFO", "F");
-		this.inNodes[1].setObject(this.gfs);
+		this.inNodes[2].setObject(this.gfs);
 		//this.addINode(w*0.4+noder*3, h-2*noder, noder, TYPE_AUDIO, [TYPE_AUDIO], "g LFO", "G");
 		//this.inNodes[3].setObject(this.ggs);
 	}
@@ -2219,7 +2272,7 @@ class SynthOscContainer extends SynthModContainer {
 		//		this.gt.noteOFF(onum, knum);
 		//	}
 		//}
-		super.trigger(on, knum, onum);
+		if (this.gt.connected) super.trigger(on, knum, onum);
 	}
 	
 	drawOb(ctx) {
@@ -2408,7 +2461,12 @@ class Switch extends Drawable {
 		return hit;
 	}
 	
-	connect() {
+	connect(obj) {
+		obj.connected = true;
+	}
+	
+	disconnect(obj) {
+		obj.connected = false;
 	}
 }
 
@@ -2437,27 +2495,37 @@ class Clicker extends Drawable {
 		return hit;
 	}
 	
-	connect() {
+	connect(obj) {
+		obj.connected = true;
+	}
+	
+	disconnect(obj) {
+		obj.connected = false;
 	}
 }
 
 class ValueModContainer extends SynthModContainer {
 	constructor(x, y, w, h, bl, br, bt, bb, noder) {
 		super(x, y, w, h, bl, br, bt, bb);
+		this.crossout = false;
 	}
 	
 	hitCheck(isdown, coords) {
 		var hit = super.hitCheck(isdown, coords);
-		if (this.inBounds(coords.x, coords.y)) {
+		if (hit) this.setValue();
+		if (hit && dragOb === this) {
 			focusOb = this;
-		} else {
-			if (focusOb === this) focusOb = qwertyboard;
-			this.setValue();
+		} else if (isdown) {
+			if (focusOb === this) {
+				focusOb = qwertyboard;
+				if (!hit) this.setValue();
+			}
 		}
+		return hit;
 	}
 	
 	setValue() {
-		this.valueOb.setValue(parseFloat(this.text));
+		this.crossout = !this.valueOb.setValue(parseFloat(this.text))
 	}
 	
 	codeToNum(c) {
@@ -2502,6 +2570,14 @@ class ValueModContainer extends SynthModContainer {
 		super.drawOb(ctx);
 		if (focusOb === this) {
 			drawRect(ctx, this.x, this.y, this.w, this.h, true, this.fill, this.fillCol, keypresscol);
+		}
+		if (this.crossout) {
+			ctx.beginPath();
+			ctx.moveTo(this.x, this.y);
+			ctx.lineTo(this.x + this.w, this.y + this.h);
+			ctx.moveTo(this.x, this.y + this.h);
+			ctx.lineTo(this.x + this.w, this.y);
+			ctx.stroke();
 		}
 		ctx.font = this.h*0.26 + "px Arial";
 		ctx.fillStyle = pianocol;
@@ -2612,25 +2688,134 @@ class SynthModKeyboard extends SynthModContainer {
 	}
 }
 
+class MergerMod extends SynthModContainer {
+	constructor(x, y, w, h, bl, br, bt, bb, noder) {
+		super(x, y, w, h, bl, br, bt, bb);
+		this.addONode(this.w-2*noder, this.h*0.5-noder, noder, TYPE_MERGER, [TYPE_KEY, TYPE_OSC, TYPE_AUDIO, TYPE_TRIGGER, TYPE_VALUE, TYPE_MULTI, TYPE_SPLITTER], "split");
+		this.outNodes[0].setObject(this);
+		this.outNodes[0].splitter = this;
+		this.isValue = false;
+		for (var i = 0; i < 3; i++) {
+			this.addINode(0, this.h*(0.2 + i*0.3)-noder, noder, TYPE_NULL, [TYPE_NULL], "split");
+		}
+	}
+	
+	notifyDisconnect() {
+		this.setValue();
+	}
+	
+	disconnect(t) {
+		console.log("disconnect mergermod");
+		super.disconnect(t);
+	}
+	
+	connectMerge(node) {//connect output
+		var nt = node.ntype
+		if (nt == TYPE_AUDIO) {
+			this.mergers = new Array();
+			for (var i = 0; i < sound.numpianos; i++) {
+				this.mergers.push(sound.ctx.createChannelMerger(3));
+				if (node.objIsArray) {
+					this.mergers[i].connect(node.obj[i]);
+				} else {
+					this.mergers[i].connect(node.obj);
+				}
+			}
+			for (var i = 0; i < this.inNodes.length; i++) {
+				this.inNodes[i].setObject(this.mergers);
+				this.inNodes[i].acceptTypes = [TYPE_AUDIO];
+			}
+			return true;
+		} else if (nt == TYPE_KEY || nt == TYPE_MULTI || nt == TYPE_TRIGGER) {
+			for (var i = 0; i < this.inNodes.length; i++) {
+				this.inNodes[i].setObject(node.obj);
+				this.inNodes[i].ntype = nt;
+				if (nt == TYPE_TRIGGER) {
+					this.inNodes[i].acceptTypes = [TYPE_TRIGGER, TYPE_KEY];
+				} else {
+					this.inNodes[i].acceptTypes = [nt];
+				}
+			}
+			return true;
+		} else if (nt == TYPE_VALUE) {
+			this.vs = new ValueSetter();
+			this.vs.connect(node.obj);
+			for (var i = 0; i < this.inNodes.length; i++) {
+				this.inNodes[i].setObject(this);
+				this.inNodes[i].acceptTypes = [TYPE_VALUE];
+			}
+			this.isValue = true;
+			return true;
+		}
+		return false;
+	}
+	
+	disconnectMerge(node) {
+		this.isValue = false;
+		for (var i = 0; i < this.inNodes.length; i++) {
+			if (!this.inNodes[i].con) continue;
+			this.inNodes[i].con.disconnect();
+			this.inNodes[i].setObject(null);
+			this.inNodes[i].acceptTypes = [TYPE_NULL];
+			this.inNodes[i].type = TYPE_NULL;
+		}
+		if (!node) return false;
+		var nt = node.ntype
+		if (nt == TYPE_AUDIO) {
+			if (!this.mergers) return false;
+			for (var i = 0; i < this.mergers.length; i++) {
+				this.mergers[i].disconnect();
+				this.mergers[i] = null;
+			}
+			this.mergers = null;
+			return true;
+		} else if (nt == TYPE_KEY || nt == TYPE_MULTI || nt == TYPE_TRIGGER) {
+			return true;
+		} else if (nt == TYPE_VALUE) {
+			this.vs.disconnect(node.obj);
+			for (var i = 0; i < this.inNodes.length; i++) {
+				this.inNodes[i].setObject(null);
+				this.inNodes[i].acceptTypes = [TYPE_NULL];
+				this.inNodes[i].type = TYPE_NULL;
+			}
+			return true;
+		}
+	}
+	
+	setValue() {
+		var v = 0;
+		for (var i = 0; i < this.inNodes.length; i++) {
+			if (this.inNodes[i].con) v += this.inNodes[i].con.obj.val;
+		}
+		this.vs.setValue(v);
+		//console.log("set merger value to " + v);
+	}
+	
+	drawOb(ctx) {
+		super.drawOb(ctx);
+		drawLittleMerger(ctx, this.x, this.y, this.w, this.h);
+		if (this.isValue) {
+			ctx.font = this.h*0.16 + "px Arial";
+			ctx.fillStyle = pianocol;
+			ctx.fillText(this.vs.val, this.x + this.w*0.4, this.y + this.h*0.95);
+		}
+	}
+}
+
 class SplitterMod extends SynthModContainer {
 	constructor(x, y, w, h, bl, br, bt, bb, noder) {
 		super(x, y, w, h, bl, br, bt, bb);
-		//this.splitters = new Array();
-		//for (var i = 0; i < sound.numpianos; i++) {
-		//	this.splitters.push(sound.ctx.createChannelSplitter(3));
-		//}
 		this.addINode(0, this.h*0.5-noder, noder, TYPE_SPLITTER, [TYPE_KEY, TYPE_OSC, TYPE_AUDIO, TYPE_TRIGGER, TYPE_VALUE, TYPE_MULTI, TYPE_SPLITTER], "split");
 		this.inNodes[0].setObject(this);
 		this.inNodes[0].splitter = this;
 		for (var i = 0; i < 3; i++) {
 			this.addONode(this.w-2*noder, this.h*(0.2 + i*0.3)-noder, noder, TYPE_NULL, [TYPE_NULL], "split");
-			//this.outNodes[i].setObject(this);
-			//this.outNodes[i].splitter = this;
 		}
 	}
 	
-	connectInput(node) {
-		if (node.ntype == TYPE_AUDIO) {
+	connectSplit(node) {
+		var nt = node.ntype
+		if (nt == TYPE_AUDIO) {
 			this.splitters = new Array();
 			for (var i = 0; i < sound.numpianos; i++) {
 				this.splitters.push(sound.ctx.createChannelSplitter(3));
@@ -2641,22 +2826,33 @@ class SplitterMod extends SynthModContainer {
 				this.outNodes[i].ntype = TYPE_AUDIO;
 			}
 			return true;
-		}
+		} else if (nt == TYPE_KEY || nt == TYPE_VALUE || nt == TYPE_MULTI || nt == TYPE_TRIGGER) {
+			for (var i = 0; i < this.outNodes.length; i++) {
+				this.outNodes[i].setObject(node.obj);
+				this.outNodes[i].ntype = nt;
+			}
+			return true;
+		} 
 		return false;
 	}
 	
-	disconnectInput(node) {
+	disconnectSplit(node) {
+		var nt = node.ntype
 		for (var i = 0; i < this.outNodes.length; i++) {
 			this.outNodes[i].disconnect();
 			this.outNodes[i].setObject(null);
 			this.outNodes[i].ntype = TYPE_NULL;
 		}
-		for (var i = 0; i < this.splitters.length; i++) {
-			this.splitters[i].disconnect();
-			this.splitters[i] = null;
+		if (nt == TYPE_AUDIO) {
+			for (var i = 0; i < this.splitters.length; i++) {
+				this.splitters[i].disconnect();
+				this.splitters[i] = null;
+			}
+			this.splitters = null;
+			return true;
+		} else if (nt == TYPE_KEY || nt == TYPE_VALUE || nt == TYPE_MULTI || nt == TYPE_TRIGGER) {
+			return true;
 		}
-		this.splitters = null;
-		return true;
 	}
 	
 	drawOb(ctx) {
@@ -2943,7 +3139,7 @@ class ModuleBar extends Drawable {
 		a += h*0.9;
 		this.splitterb = new SplitterIcon(x+a,y+h*0.1, h*0.8, h*0.8, 0, canW, y, canH);
 		a += h*0.9;
-		//this.mergerb = new MergerIcon(x+a,y+h*0.1, h*0.8, h*0.8, 0, canW, y, canH);
+		this.mergerb = new MergerIcon(x+a,y+h*0.1, h*0.8, h*0.8, 0, canW, y, canH);
 		this.icons.push(this.keyb);
 		this.icons.push(this.oscb);
 		this.icons.push(this.gainb);
@@ -2955,7 +3151,7 @@ class ModuleBar extends Drawable {
 		this.icons.push(this.valb);
 		this.icons.push(this.whiteb);
 		this.icons.push(this.switchb);
-		//this.icons.push(this.mergerb);
+		this.icons.push(this.mergerb);
 		this.icons.push(this.splitterb);
 		this.hideicon = -1;
 	}
@@ -2990,11 +3186,12 @@ class KeyboardOutput {
 	
 	setValue(v) {
 		this.multi = v;
+		return true;
 	}
 	
 	connect(obj) {
 		this.outputs.push(obj);
-		//console.log("connect " + obj.name + " to keyout");
+		obj.connected = true;
 	}
 	
 	connectTrigger(t) {
@@ -3012,7 +3209,10 @@ class KeyboardOutput {
 				break;
 			}
 		}
-		if (ind > -1) this.outputs.splice(ind, 1);
+		if (ind > -1) {
+			obj.connected = false;
+			this.outputs.splice(ind, 1);
+		}
 	}
 	
 	disconnectTrigger(t) {
