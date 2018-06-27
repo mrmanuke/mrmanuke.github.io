@@ -2,6 +2,7 @@
 <head>
 <script>
 var numpianos = 25;
+var lastonum = 0;
 var playcount = 0;
 var lastgenr = '1.2.0: Fs4+v=100, Cs4+v=100, An3+v=100; 2.0.0: Gs1+v=100, Gs2+v=100, Fs3+v=100; 2.2.0: Cn4+v=100; 3.0.0: Fs1+v=0, Fs2+v=0, Cs4+v=0, An3+v=0, Fs3+v=0, Fs4+v=0, Cs4+v=0, An3+v=0, Gs1+v=0, Gs2+v=0, Fs3+v=0, Cn4+v=0, An1+v=100, An2+v=100, Fs3+v=100, Cs3+v=100; 3.1.0: Cs4+v=100; 3.2.0: En4+v=100, Fs3+v=100; 3.3.0: Cs4+v=100; 4.0.0: An1+v=0, An2+v=0, Fs3+v=0, Cs3+v=0, Cs4+v=0, En4+v=0, Fs3+v=0, Cs4+v=0, Gs1+v=100, Gs2+v=100, Ds4+v=100, Gs3+v=100, En3+v=100; 4.2.0: Bn3+v=100, Gs3+v=100; 5.0.0: Gs1+v=0, Gs2+v=0, Ds4+v=0, Gs3+v=0, En3+v=0, Bn3+v=0, Gs3+v=0, Fs1+v=100, Fs2+v=100, An3+v=100, Fs3+v=100, Dn3+v=100; 5.2.0: Dn3+v=100; 6.0.0: Fs1+v=0, Fs2+v=0, An3+v=0, Fs3+v=0, Dn3+v=0, Dn3+v=0, Fn1+v=100, Fn2+v=100, Gs3+v=100, Fn3+v=100, Cs3+v=100; 6.2.0: Cs3+v=100; 7.0.0: Fn1+v=0, Fn2+v=0, Gs3+v=0, Fn3+v=0, Cs3+v=0, Cs3+v=0, Ds1+v=100, Ds2+v=100, An3+v=100, Fs3+v=100, Ds3+v=100, Cn3+v=100; 7.2.0: Fs3+v=100, Ds3+v=100; 8.0.0: Ds1+v=0, Ds2+v=0, An3+v=0, Fs3+v=0, Ds3+v=0, Cn3+v=0, Fs3+v=0, Ds3+v=0, Cs1+v=100, Cs2+v=100, Fs3+v=100, Fn3+v=100, Bn2+v=100; 8.2.0: Gs3+v=100, Fn3+v=100; 9.0.0: Cs1+v=0, Cs2+v=0, Fs3+v=0, Fn3+v=0, Bn2+v=0, Gs3+v=0, Fn3+v=0, Fs1+v=100, Fs2+v=100, An3+v=100, Fs3+v=100, Cs3+v=100; 9.1.0: Cs4+v=100; 9.2.0: Fs1+v=0, Fs2+v=0, An3+v=0, Fs3+v=0, Cs3+v=0, Cs4+v=0, An1+v=100, An2+v=100, Cn4+v=100, An3+v=100, En3+v=100; 9.3.0: Bn3+v=100; 10.0.0: An1+v=0, An2+v=0, Cn4+v=0, An3+v=0, En3+v=0, Bn3+v=0, Cn2+v=100, Cn3+v=100, Cn4+v=100, Fs3+v=100, Ds3+v=100; 10.0.5: Bn3+v=100; 10.1.0: An3+v=100; 10.1.5: Cs3+v=100; 10.2.0: Cn2+v=0, Cn3+v=0, Cn4+v=0, Fs3+v=0, Ds3+v=0, Bn3+v=0, An3+v=0, Cs3+v=0, Cs2+v=100, Cs3+v=100, Gs3+v=100, Fn3+v=100; 10.2.33: Gs2+v=100, Bn3+v=100; 10.2.67: Gs3+v=100, Cs4+v=100, Gs3+v=100; 10.3.0: Bn3+v=100, Fn4+v=100; 10.3.33: Cs4+v=100, Gs4+v=100; 10.3.67: Fn4+v=100, Bn4+v=100; 11.0.0: Cs2+v=0, Cs3+v=0, Gs3+v=0, Fn3+v=0, Gs2+v=0, Bn3+v=0, Gs3+v=0, Cs4+v=0, Gs3+v=0, Bn3+v=0, Fn4+v=0, Cs4+v=0, Gs4+v=0, Fn4+v=0, Bn4+v=0, Fs3+v=100, Fs2+v=100, An4+v=100, Fs4+v=100, Cs4+v=100, An3+v=100; 11.1.0: Fs1+v=100, Bn4+v=100; 11.2.0: Fs3+v=0, Fs2+v=0, An4+v=0, Fs4+v=0, Cs4+v=0, An3+v=0, Fs1+v=0, Bn4+v=0, En1+v=100, En2+v=100, Gs4+v=100, En4+v=100, Bn3+v=100, Gs3+v=100; 11.3.0: Cs2+v=100, Fs4+v=100, Gs3+v=100; 12.0.0: En1+v=0, En2+v=0, Gs4+v=0, En4+v=0, Bn3+v=0, Gs3+v=0, Cs2+v=0, Fs4+v=0, Gs3+v=0, Gs1+v=100, Gs2+v=100, Bn4+v=100, En4+v=100, Bn3+v=100; 12.1.0: Gs2+v=100, En4+v=100, Bn3+v=100; 12.2.0: An1+v=100, An2+v=100, En5+v=100, Bn4+v=100, An4+v=100, En4+v=100; 12.3.0: An2+v=100; 12.3.2: En3+v=100; 12.3.4: An3+v=100; 12.3.6: Bn3+v=100; 12.3.8: En4+v=100; 13.0.0: sig: 6/4; 13.0.0: An3+v=100; 13.0.2: En4+v=100; 13.0.4: An4+v=100; 13.0.6: Bn4+v=100; 13.0.8: En5+v=100; 13.2.0: Bn5+v=100, Gs5+v=100, En5+v=100, An4+v=100; 13.4.0: Gs1+v=0, Gs2+v=0, Bn4+v=0, En4+v=0, Bn3+v=0, Gs2+v=0, En4+v=0, Bn3+v=0, An1+v=0, An2+v=0, En5+v=0, Bn4+v=0, An4+v=0, En4+v=0, An2+v=0, En3+v=0, An3+v=0, Bn3+v=0, En4+v=0, An3+v=0, En4+v=0, An4+v=0, Bn4+v=0, En5+v=0, Bn5+v=0, Gs5+v=0, En5+v=0, An4+v=0, Cs5+v=100, Cs4+v=100; 13.5.0: Ds5+v=100, Ds4+v=100; 14.0.0: sig: 4/4; 14.0.0: Cs5+v=0, Cs4+v=0, Ds5+v=0, Ds4+v=0, Ds1+v=100, Ds2+v=100, Fn5+v=100, Cs5+v=100, Gs4+v=100, Fn4+v=100; 14.1.0: Cs5+v=100, Gs4+v=100, Cs4+v=100; 14.2.0: Ds1+v=0, Ds2+v=0, Fn5+v=0, Cs5+v=0, Gs4+v=0, Fn4+v=0, Cs5+v=0, Gs4+v=0, Cs4+v=0, En1+v=100, En2+v=100, Ds5+v=100, Bn4+v=100, Gs4+v=100, Ds4+v=100; 14.3.0: En3+v=100; 14.3.25: Gs3+v=100; 14.3.5: Bn3+v=100; 14.3.75: Cs4+v=100; 15.0.0: sig: 6/4; 15.0.0: En1+v=0, En2+v=0, Ds5+v=0, Bn4+v=0, Gs4+v=0, Ds4+v=0, En3+v=0, Gs3+v=0, Bn3+v=0, Cs4+v=0, Cs4+v=100, Fs4+v=100; 15.0.5: Gs4+v=100; 15.1.0: As4+v=100; 15.1.5: Fs4+v=100; 15.2.0: Gs4+v=100, Fs4+v=100, Cs4+v=100; 15.3.0: En3+v=100; 15.4.0: En2+v=100, Cs5+v=100, Cs4+v=100; 15.5.0: Ds5+v=100, Ds4+v=100; 16.0.0: sig: 2/4; 16.0.0: Cs4+v=0, Fs4+v=0, Gs4+v=0, As4+v=0, Fs4+v=0, Gs4+v=0, Fs4+v=0, Cs4+v=0, En3+v=0, En2+v=0, Cs5+v=0, Cs4+v=0, Ds5+v=0, Ds4+v=0, Ds2+v=100, Ds1+v=100, Fn5+v=100, Cs5+v=100, Gs4+v=100, Fn4+v=100; 16.1.0: Cs5+v=100, Gs4+v=100, Cs4+v=100; 17.0.0: sig: 4/4; 17.0.0: Ds2+v=0, Ds1+v=0, Fn5+v=0, Cs5+v=0, Gs4+v=0, Fn4+v=0, Cs5+v=0, Gs4+v=0, Cs4+v=0, En2+v=100, En1+v=100, Bn4+v=100, Bn3+v=100; 17.0.33: Gs4+v=100; 17.0.67: Ds4+v=100; 17.1.0: Bn3+v=100; 17.1.33: Gs3+v=100; 17.1.67: Ds3+v=100; 17.2.0: En2+v=0, En1+v=0, Bn4+v=0, Bn3+v=0, Gs4+v=0, Ds4+v=0, Bn3+v=0, Gs3+v=0, Ds3+v=0, As4+v=100, Cs4+v=100; 17.2.33: Fs4+v=100; 17.2.67: Cs4+v=100; 17.3.0: As3+v=100; 17.3.33: Fs3+v=100; 17.3.67: Cs3+v=100; 18.0.0: As4+v=0, Cs4+v=0, Fs4+v=0, Cs4+v=0, As3+v=0, Fs3+v=0, Cs3+v=0, Gs4+v=100; 18.0.33: En4+v=100; 18.0.67: Bn3+v=100; 18.1.0: Gs3+v=100; 18.1.33: En3+v=100; 18.1.67: Bn2+v=100; 18.2.0: Gs4+v=0, En4+v=0, Bn3+v=0, Gs3+v=0, En3+v=0, Bn2+v=0, As3+v=100; 18.2.33: Fs3+v=100; 18.2.67: Cs3+v=100; 18.3.0: Bn2+v=100; 18.3.33: Gs2+v=100; 18.3.67: Ds2+v=100; 19.0.0: As3+v=0, Fs3+v=0, Cs3+v=0, Bn2+v=0, Gs2+v=0, Ds2+v=0, En2+v=100, Ds4+v=100; 19.0.33: Bn2+v=100; 19.0.67: En3+v=100; 19.1.0: Fs3+v=100; 19.1.33: Gs3+v=100; 19.1.67: Bn3+v=100; 19.2.0: En2+v=0, Ds4+v=0, Bn2+v=0, En3+v=0, Fs3+v=0, Gs3+v=0, Bn3+v=0, Bn2+v=100, Fs4+v=100; 19.2.33: Fs3+v=100; 19.2.67: As3+v=100; 19.3.0: Bn3+v=100; 19.3.33: Cs4+v=100; 19.3.67: Ds4+v=100; 20.0.0: Bn2+v=0, Fs4+v=0, Fs3+v=0, As3+v=0, Bn3+v=0, Cs4+v=0, Ds4+v=0, Dn2+v=100, An4+v=100, Fn4+v=100; 20.0.5: As4+v=100; 20.1.0: Cn5+v=100; 20.1.5: Dn5+v=100; 20.2.0: Cn5+v=100; 20.2.5: As4+v=100; 20.3.0: An4+v=100; 20.3.5: As4+v=100; 21.0.0: Dn2+v=0, An4+v=0, Fn4+v=0, As4+v=0, Cn5+v=0, Dn5+v=0, Cn5+v=0, As4+v=0, An4+v=0, As4+v=0, An4+v=100; 21.0.5: As4+v=100; 21.1.0: Cn5+v=100; 21.1.5: Dn5+v=100; 21.2.0: Cn5+v=100; 21.2.5: As4+v=100; 21.3.0: An4+v=100; 21.3.5: Gn4+v=100; 22.0.0: An4+v=0, As4+v=0, Cn5+v=0, Dn5+v=0, Cn5+v=0, As4+v=0, An4+v=0, Gn4+v=0, En4+v=100, As3+v=100, Dn3+v=100, An4+v=100; 22.0.5: As4+v=100; 22.1.0: Cn5+v=100; 22.1.5: Dn5+v=100; 22.2.0: Cn5+v=100; 22.2.5: As4+v=100; 22.3.0: An4+v=100; 22.3.5: As4+v=100; 23.0.0: En4+v=0, As3+v=0, Dn3+v=0, An4+v=0, As4+v=0, Cn5+v=0, Dn5+v=0, Cn5+v=0, As4+v=0, An4+v=0, As4+v=0, An4+v=100; 23.0.5: As4+v=100; 23.1.0: Bn1+v=100, Cn5+v=100; 23.1.33: Fs2+v=100; 23.1.5: Dn5+v=100; 23.1.67: Ds3+v=100; 23.2.0: Fs3+v=100, Ds3+v=100, Fs2+v=100, Bn1+v=100, Cn5+v=100; 23.2.5: As4+v=100; 23.3.0: An4+v=100; 23.3.5: Gn4+v=100; 24.0.0: An4+v=0, As4+v=0, Bn1+v=0, Cn5+v=0, Fs2+v=0, Dn5+v=0, Ds3+v=0, Fs3+v=0, Ds3+v=0, Fs2+v=0, Bn1+v=0, Cn5+v=0, As4+v=0, An4+v=0, Gn4+v=0, Dn2+v=100, An4+v=100; 24.0.5: As4+v=100; 24.0.67: Dn4+v=100; 24.0.83: Fn4+v=100; 24.1.0: Cn5+v=100; 24.1.5: Dn5+v=100; 24.1.67: Dn4+v=100; 24.1.83: Fn4+v=100; 24.2.0: Cn5+v=100; 24.2.5: As4+v=100; 24.2.67: Dn4+v=100; 24.2.83: Fn4+v=100; 24.3.0: An4+v=100; 24.3.5: As4+v=100; 24.3.67: Dn4+v=100; 24.3.83: Fn4+v=100; 25.0.0: Dn2+v=0, An4+v=0, As4+v=0, Dn4+v=0, Fn4+v=0, Cn5+v=0, Dn5+v=0, Dn4+v=0, Fn4+v=0, Cn5+v=0, As4+v=0, Dn4+v=0, Fn4+v=0, An4+v=0, As4+v=0, Dn4+v=0, Fn4+v=0, An4+v=100; 25.0.5: As4+v=100; 25.0.67: Dn4+v=100; 25.0.83: Fn4+v=100; 25.1.0: Cn5+v=100; 25.1.5: Dn5+v=100; 25.1.67: Dn4+v=100; 25.1.83: Fn4+v=100; 25.2.0: Cn5+v=100; 25.2.5: As4+v=100; 25.2.67: Dn4+v=100; 25.2.83: Fn4+v=100; 25.3.0: An4+v=100; 25.3.5: Gn4+v=100; 25.3.67: Dn4+v=100; 25.3.83: Fn4+v=100; 26.0.0: An4+v=0, As4+v=0, Dn4+v=0, Fn4+v=0, Cn5+v=0, Dn5+v=0, Dn4+v=0, Fn4+v=0, Cn5+v=0, As4+v=0, Dn4+v=0, Fn4+v=0, An4+v=0, Gn4+v=0, Dn4+v=0, Fn4+v=0, Dn2+v=100, An4+v=100; 26.0.25: As4+v=100; 26.0.5: As3+v=100; 26.0.75: En4+v=100; 26.1.0: Cn5+v=100; 26.1.25: Dn5+v=100; 26.1.5: Dn4+v=100; 26.1.75: Gn4+v=100; 26.2.0: Cn5+v=100; 26.2.25: As4+v=100; 26.2.5: En5+v=100; 26.2.75: An5+v=100; 26.3.0: An4+v=100; 26.3.25: As4+v=100; 26.3.5: As5+v=100; 26.3.75: En6+v=100; 27.0.0: Dn2+v=0, An4+v=0, As4+v=0, As3+v=0, En4+v=0, Cn5+v=0, Dn5+v=0, Dn4+v=0, Gn4+v=0, Cn5+v=0, As4+v=0, En5+v=0, An5+v=0, An4+v=0, As4+v=0, As5+v=0, En6+v=0, An4+v=100; 27.0.5: As4+v=100; 27.1.0: Cn5+v=100; 27.1.5: Dn5+v=100; 27.2.0: Cn5+v=100; 27.2.5: As4+v=100; 27.3.0: An4+v=100; 27.3.5: Gn4+v=100; 28.0.0: An4+v=0, As4+v=0, Cn5+v=0, Dn5+v=0, Cn5+v=0, As4+v=0, An4+v=0, Gn4+v=0, Fs4+v=100, Cs4+v=100, An3+v=100, Cs5+v=100; 28.2.0: Fs5+v=100; 29.0.0: Fs4+v=0, Cs4+v=0, An3+v=0, Cs5+v=0, Fs5+v=0, Fs4+v=100, Cs4+v=100, Gs3+v=100; 29.2.0: Cn5+v=100; 30.0.0: Fs4+v=0, Cs4+v=0, Gs3+v=0, Cn5+v=0, Fs4+v=100, Cs4+v=100, An3+v=100; 30.1.0: Cs5+v=100; 30.2.0: En5+v=100; 30.3.0: Cs5+v=100; 31.0.0: Fs4+v=0, Cs4+v=0, An3+v=0, Cs5+v=0, En5+v=0, Cs5+v=0, En4+v=100, Cs4+v=100, Ds5+v=100; 31.2.0: Bn4+v=100; 32.0.0: En4+v=0, Cs4+v=0, Ds5+v=0, Bn4+v=0, An3+v=100, Dn3+v=100, An4+v=100, Fs4+v=100; 33.0.0: An3+v=0, Dn3+v=0, An4+v=0, Fs4+v=0, Gs3+v=100, Cs3+v=100, Gs4+v=100, Fn4+v=100; 34.0.0: Gs3+v=0, Cs3+v=0, Gs4+v=0, Fn4+v=0, Fs3+v=100, Cn3+v=100, An4+v=100, Ds4+v=100; 34.2.0: Fs4+v=100; 35.0.0: Fs3+v=0, Cn3+v=0, An4+v=0, Ds4+v=0, Fs4+v=0, Fn3+v=100, Cs3+v=100, Fs4+v=100, Bn3+v=100; 35.3.0: Gs4+v=100; 36.0.0: Fn3+v=0, Cs3+v=0, Fs4+v=0, Bn3+v=0, Gs4+v=0, Cs4+v=100, Fs3+v=100, An4+v=100; 36.1.0: Cs5+v=100; 36.1.5: An2+v=100; 36.2.0: Cn4+v=100, Fs3+v=100, Cn5+v=100, Ds4+v=100; 36.3.5: Bn4+v=100; 37.0.0: Cs4+v=0, Fs3+v=0, An4+v=0, Cs5+v=0, An2+v=0, Cn4+v=0, Fs3+v=0, Cn5+v=0, Ds4+v=0, Bn4+v=0, An3+v=100, Cn3+v=100, Cn5+v=100, Ds4+v=100; 37.0.5: Bn4+v=100; 37.1.0: Fs3+v=100, An4+v=100, Cn4+v=100; 37.1.5: Cs4+v=100; 37.2.0: Bn3+v=100, Cs3+v=100, Gs4+v=100, Fn4+v=100, Dn4+v=100; 37.3.0: Cs2+v=100, Cs4+v=100; 38.0.0: An3+v=0, Cn3+v=0, Cn5+v=0, Ds4+v=0, Bn4+v=0, Fs3+v=0, An4+v=0, Cn4+v=0, Cs4+v=0, Bn3+v=0, Cs3+v=0, Gs4+v=0, Fn4+v=0, Dn4+v=0, Cs2+v=0, Cs4+v=0, Fs2+v=100, Fs1+v=100, An4+v=100, En4+v=100, Cs4+v=100; 38.0.67: Cs3+v=100; 38.1.0: Fs3+v=100, Bn4+v=100, Fs4+v=100, En4+v=100; 38.1.33: An3+v=100; 38.1.67: Cs4+v=100; 38.2.0: En2+v=100, En1+v=100, Gs4+v=100, Ds4+v=100, Cs4+v=100, Bn3+v=100; 38.2.67: Cs3+v=100; 38.3.0: En3+v=100; 38.3.33: Gs3+v=100; 38.3.5: Fs4+v=100; 38.3.67: Bn3+v=100; 39.0.0: Fs2+v=0, Fs1+v=0, An4+v=0, En4+v=0, Cs4+v=0, Cs3+v=0, Fs3+v=0, Bn4+v=0, Fs4+v=0, En4+v=0, An3+v=0, Cs4+v=0, En2+v=0, En1+v=0, Gs4+v=0, Ds4+v=0, Cs4+v=0, Bn3+v=0, Cs3+v=0, En3+v=0, Gs3+v=0, Fs4+v=0, Bn3+v=0, Gs2+v=100, Gs1+v=100, Bn4+v=100, Fs4+v=100, Ds4+v=100, Bn3+v=100; 39.0.5: Bn2+v=100; 39.0.67: En3+v=100; 39.0.83: Gs3+v=100; 39.1.0: Gs2+v=100, En5+v=100, En4+v=100; 39.2.0: An2+v=100, An1+v=100, En6+v=100, Bn5+v=100, An5+v=100, En5+v=100; 39.3.0: Gs2+v=0, Gs1+v=0, Bn4+v=0, Fs4+v=0, Ds4+v=0, Bn3+v=0, Bn2+v=0, En3+v=0, Gs3+v=0, Gs2+v=0, En5+v=0, En4+v=0, An2+v=0, An1+v=0, En6+v=0, Bn5+v=0, An5+v=0, En5+v=0, En4+v=100, Bn3+v=100, Gs3+v=100, Ds5+v=100, Bn4+v=100, Fs4+v=100; 39.3.5: Bn3+v=100, Fs3+v=100, Ds3+v=100, As4+v=100, Fs4+v=100, Cs4+v=100; 40.0.0: sig: 6/4; 40.0.0: Ds6+v=100, Bn5+v=100, Fs5+v=100, En5+v=100, Bn4+v=100, Gs4+v=100; 40.0.5: As5+v=100, Fs5+v=100, Cs5+v=100, Bn4+v=100, Fs4+v=100, Ds4+v=100; 40.1.0: Ds7+v=100, Bn6+v=100, Fs6+v=100, En6+v=100, Bn5+v=100, Fs5+v=100; 40.4.0: En4+v=0, Bn3+v=0, Gs3+v=0, Ds5+v=0, Bn4+v=0, Fs4+v=0, Bn3+v=0, Fs3+v=0, Ds3+v=0, As4+v=0, Fs4+v=0, Cs4+v=0, Ds6+v=0, Bn5+v=0, Fs5+v=0, En5+v=0, Bn4+v=0, Gs4+v=0, As5+v=0, Fs5+v=0, Cs5+v=0, Bn4+v=0, Fs4+v=0, Ds4+v=0, Ds7+v=0, Bn6+v=0, Fs6+v=0, En6+v=0, Bn5+v=0, Fs5+v=0, Cs4+v=100, Cs6+v=100, Cs5+v=100; 40.5.0: Ds4+v=100, Ds6+v=100, Ds5+v=100; 41.0.0: sig: 4/4; 41.0.0: Cs4+v=0, Cs6+v=0, Cs5+v=0, Ds4+v=0, Ds6+v=0, Ds5+v=0, Cs5+v=100, As4+v=100, Ds4+v=100, Fn6+v=100, Cs6+v=100, Gs5+v=100, Fn5+v=100; 41.1.0: Cs6+v=100, Cs5+v=100; 41.2.0: Bn4+v=100, Gs4+v=100, En4+v=100, Ds6+v=100, Fs5+v=100, Ds5+v=100; 41.3.0: En2+v=100, En1+v=100, Gs3+v=100, Bn2+v=100; 42.0.0: sig: 6/4; 42.0.0: Cs5+v=0, As4+v=0, Ds4+v=0, Fn6+v=0, Cs6+v=0, Gs5+v=0, Fn5+v=0, Cs6+v=0, Cs5+v=0, Bn4+v=0, Gs4+v=0, En4+v=0, Ds6+v=0, Fs5+v=0, Ds5+v=0, En2+v=0, En1+v=0, Gs3+v=0, Bn2+v=0, As3+v=100, Ds3+v=100, Fs4+v=100, Cs4+v=100; 42.0.5: Gs4+v=100; 42.1.0: Ds2+v=100, Ds1+v=100, As4+v=100; 42.1.5: Fs4+v=100; 42.2.0: Bn3+v=100, En3+v=100, Gs4+v=100, Cs4+v=100; 42.3.0: En2+v=100, En1+v=100; 42.4.0: Cs5+v=100, Gs4+v=100, Fs4+v=100, Cs4+v=100; 42.5.0: Ds6+v=100, Ds5+v=100, Ds4+v=100; 43.0.0: sig: 4/4; 43.0.0: As3+v=0, Ds3+v=0, Fs4+v=0, Cs4+v=0, Gs4+v=0, Ds2+v=0, Ds1+v=0, As4+v=0, Fs4+v=0, Bn3+v=0, En3+v=0, Gs4+v=0, Cs4+v=0, En2+v=0, En1+v=0, Cs5+v=0, Cs5+v=0, Gs4+v=0, Fs4+v=0, Cs4+v=0, Ds6+v=0, Ds5+v=0, Ds4+v=0, Cs5+v=100, Ds4+v=100, Fn6+v=100, Cs6+v=100, Gs5+v=100, Fn5+v=100; 43.1.0: Cs6+v=100, Cs5+v=100; 43.2.0: En4+v=100, Bn5+v=100, Gs5+v=100, Ds5+v=100, Bn4+v=100; 44.0.0: Cs5+v=0, Ds4+v=0, Fn6+v=0, Cs6+v=0, Gs5+v=0, Fn5+v=0, Cs6+v=0, Cs5+v=0, En4+v=0, Bn5+v=0, Gs5+v=0, Ds5+v=0, Bn4+v=0, Ds4+v=100, As5+v=100, Fs5+v=100, Cs5+v=100, As4+v=100; 44.2.0: Gs4+v=100, Cs4+v=100, Gs5+v=100, En5+v=100, Ds5+v=100, Bn4+v=100; 45.0.0: sig: 6/4; 45.0.0: Ds4+v=0, As5+v=0, Fs5+v=0, Cs5+v=0, As4+v=0, Gs4+v=0, Cs4+v=0, Gs5+v=0, En5+v=0, Ds5+v=0, Bn4+v=0, En2+v=100, En1+v=100, Gs3+v=100, Cs3+v=100; 46.0.0: En2+v=0, En1+v=0, Gs3+v=0, Cs3+v=0, En4+v=100, Bn3+v=100, Ds5+v=100, Gs4+v=100, Fs4+v=100; 46.2.0: As4+v=100, En4+v=100, Fs5+v=100, Cs5+v=100, Bn4+v=100; 48.0: En4+v=0, Bn3+v=0, Ds5+v=0, Gs4+v=0, Fs4+v=0, As4+v=0, En4+v=0, Fs5+v=0, Cs5+v=0, Bn4+v=0;';
 var lastgenl = '1.0.0: Fs1+v=100, Fs2+v=100, Cs4+v=100, An3+v=100, Fs3+v=100;';
@@ -211,6 +212,44 @@ class Instrument {
 	}
 }
 
+class Equalizer {
+	constructor() {
+		this.in = sound.ctx.createChannelSplitter(3);
+		this.out = sound.ctx.createChannelMerger(3);
+		this.hBand = sound.ctx.createBiquadFilter();
+		this.hBand.type = "lowshelf";
+		this.hBand.frequency.value = 360;
+		this.hBand.gain.value = -40;
+		this.hInvert = sound.ctx.createGain();
+		this.hInvert.gain.value = -1;
+		this.mBand = sound.ctx.createGain();
+		this.lBand = sound.ctx.createBiquadFilter();
+		this.lBand.type = "highshelf";
+		this.lBand.frequency.value = 3600;
+		this.lBand.gain.value = -40;
+		this.lInvert = sound.ctx.createGain();
+		this.lInvert.gain.value = -1;
+		this.in.connect(this.lBand);
+		this.in.connect(this.mBand);
+		this.in.connect(this.hBand);
+		this.hBand.connect(this.hInvert);
+		this.lBand.connect(this.lInvert);
+		this.bandMerge = sound.ctx.createChannelMerger(2);
+		this.hInvert.connect(this.bandMerge);
+		this.lInvert.connect(this.bandMerge);
+		this.bandMerge.connect(this.mBand);
+		this.lGain = sound.ctx.createGain();
+		this.mGain = sound.ctx.createGain();
+		this.hGain = sound.ctx.createGain();
+		this.lBand.connect(this.lGain);
+		this.mBand.connect(this.mGain);
+		this.hBand.connect(this.hGain);
+		this.lGain.connect(this.out);
+		this.mGain.connect(this.out);
+		this.hGain.connect(this.out);
+	}
+}
+
 class ENVLP {
 	constructor(audi, strv, atkt, atkv, dect, decv) {
 		this.aud = audi;
@@ -227,21 +266,27 @@ class ENVLP {
 		this.decv = new Object();
 		this.decv.value = decv;
 		this.multi = 1;
+		this.targets = new Array();
+		this.objects = new Array();
 	}
 	
 	connect(obj) {
 		if (this.iskey) {
 			this.setTarget(obj.o[this.pnum].frequency);
-		} else if (this.object) {
-			this.object.connect(obj);
+		} else {
+			for (var i = 0; i < this.objects.length; i++) {
+				this.objects[i].connect(obj);
+			}
 		}
 	}
 	
 	disconnect(obj) {
 		if (this.iskey) {
-			this.removeTarget();
+			this.removeTarget(obj);
 		} else if (this.object) {
-			this.object.disconnect(obj);
+			for (var i = 0; i < this.objects.length; i++) {
+				this.objects[i].disconnect(obj);
+			}
 		}
 	}
 	
@@ -251,40 +296,67 @@ class ENVLP {
 	}
 	
 	setObject(obj) {
-		this.object = obj;//if target is gain value, object is gain
+		for (var i = 0; i < this.objects.length; i++) {
+			if (this.objects[i] === obj) return;
+		}
+		this.objects.push(obj);
+		//this.object = obj;//if target is gain value, object is gain
 	}
 	
-	removeObject() {
-		this.object = null;
+	removeObject(obj) {
+		if (!obj) console.log((new Error()).stack);
+		for (var i = 0; i < this.objects.length; i++) {
+			if (this.objects[i] === obj) {
+				this.objects.splice(i, 1);
+				return;
+			}
+		}
+		//this.object = null;
 	}
 	
 	setTarget(target) {
-		this.target = target;
+		for (var i = 0; i < this.targets.length; i++) {
+			if (this.targets[i] === target) return;
+		}
+		this.targets.push(target);
+		//this.target = target;
 	}
 	
-	removeTarget() {
-		this.target = null;
+	removeTarget(target) {
+		if (!target) console.log((new Error()).stack);
+		for (var i = 0; i < this.targets.length; i++) {
+			if (this.targets[i] === target) {
+				this.targets.splice(i, 1);
+				return;
+			}
+		}
+		//this.target = null;
 	}
 	
 	noteON(time, f) {
-		if (!this.target) return;
+		//if (!this.target) return;
 		var f = f || 0;
 		if (!this.iskey) f = 0;
-		this.target.cancelScheduledValues(time);
-		var vv = this.atkv.value * this.multi;
+		var vv = f + this.atkv.value * this.multi;
 		var vt = time+this.atkt.value;
-		console.log("set value to " + vv + " at " + vt);
-		this.target.setValueAtTime(this.strv.value * this.multi, time);
-		this.target.linearRampToValueAtTime(this.atkv.value * this.multi, time+this.atkt.value);
-		this.target.linearRampToValueAtTime(this.decv.value * this.multi, time+this.atkt.value + this.dect.value);
+		for (var i = 0; i < this.targets.length; i++) {
+			var m = this.targets[i].multi || 1;
+			this.targets[i].cancelScheduledValues(time);
+			//console.log("set value to " + vv + " at " + vt);
+			this.targets[i].setValueAtTime((f+this.strv.value * this.multi)*m, time);
+			this.targets[i].linearRampToValueAtTime((f+this.atkv.value * this.multi)*m, time+this.atkt.value);
+			this.targets[i].linearRampToValueAtTime((f+this.decv.value * this.multi)*m, time+this.atkt.value + this.dect.value);
+		}
 	}
 	
 	noteOFF(time, f) {
-		if (!this.target) return;
+		//if (!this.target) return;
 		var f = f || 0;
 		if (!this.iskey) f = 0;
-		this.target.cancelScheduledValues(time);
-		this.target.linearRampToValueAtTime(OFF_VOL, time);
+		for (var i = 0; i < this.targets.length; i++) {
+			this.targets[i].cancelScheduledValues(time);
+			this.targets[i].linearRampToValueAtTime(OFF_VOL, time);
+		}
 		//console.log("adsr note off to " + this.relv + " at time " + time + " + " + this.relt);
 	}
 }
@@ -308,23 +380,28 @@ class ADSR {
 		this.relt = new Object();
 		this.relt.value = relt;
 		this.relv = relv;
-		this.target = null;
 		this.multi = 1;
+		this.targets = new Array();
+		this.objects = new Array();
 	}
 	
 	connect(obj) {
 		if (this.iskey) {
 			this.setTarget(obj.o[this.pnum].frequency);
-		} else if (this.object) {
-			this.object.connect(obj);
+		} else {
+			for (var i = 0; i < this.objects.length; i++) {
+				this.objects[i].connect(obj);
+			}
 		}
 	}
 	
 	disconnect(obj) {
 		if (this.iskey) {
-			this.removeTarget();
+			this.removeTarget(obj);
 		} else if (this.object) {
-			this.object.disconnect(obj);
+			for (var i = 0; i < this.objects.length; i++) {
+				this.objects[i].disconnect(obj);
+			}
 		}
 	}
 	
@@ -334,38 +411,65 @@ class ADSR {
 	}
 	
 	setObject(obj) {
-		this.object = obj;//if target is gain value, object is gain
+		for (var i = 0; i < this.objects.length; i++) {
+			if (this.objects[i] === obj) return;
+		}
+		this.objects.push(obj);
+		//this.object = obj;//if target is gain value, object is gain
 	}
 	
-	removeObject() {
-		this.object = null;
+	removeObject(obj) {
+		if (!obj) console.log((new Error()).stack);
+		for (var i = 0; i < this.objects.length; i++) {
+			if (this.objects[i] === obj) {
+				this.objects.splice(i, 1);
+				return;
+			}
+		}
+		//this.object = null;
 	}
 	
 	setTarget(target) {
-		this.target = target;
+		for (var i = 0; i < this.targets.length; i++) {
+			if (this.targets[i] === target) return;
+		}
+		this.targets.push(target);
+		//this.target = target;
 	}
 	
-	removeTarget() {
-		this.target = null;
+	removeTarget(target) {
+		if (!target) console.log((new Error()).stack);
+		for (var i = 0; i < this.targets.length; i++) {
+			if (this.targets[i] === target) {
+				this.targets.splice(i, 1);
+				return;
+			}
+		}
+		//this.target = null;
 	}
 	
 	noteON(time, f) {
-		if (!this.target) return;
+		//if (!this.target) return;
 		var f = f || 0;
 		if (!this.iskey) f = 0;
-		this.target.cancelScheduledValues(time);
-		this.target.setValueAtTime(OFF_VOL, time);
-		this.target.linearRampToValueAtTime(f + this.atkv * this.multi, time+this.atkt.value);
-		this.target.linearRampToValueAtTime(f + this.decv.value * this.multi, time+this.atkt.value + this.dect.value);
-		this.target.linearRampToValueAtTime(f + this.susv.value * this.multi, time+this.sust.value + this.atkt.value + this.dect.value);
+		for (var i = 0; i < this.targets.length; i++) {
+			var m = this.targets[i].multi || 1;
+			this.targets[i].cancelScheduledValues(time);
+			this.targets[i].setValueAtTime(OFF_VOL, time);
+			this.targets[i].linearRampToValueAtTime((f + this.atkv * this.multi)*m, time+this.atkt.value);
+			this.targets[i].linearRampToValueAtTime((f + this.decv.value * this.multi)*m, time+this.atkt.value + this.dect.value);
+			this.targets[i].linearRampToValueAtTime((f + this.susv.value * this.multi)*m, time+this.sust.value + this.atkt.value + this.dect.value);
+		}
 	}
 	
 	noteOFF(time, f) {
-		if (!this.target) return;
+		//if (!this.target) return;
 		var f = f || 0;
 		if (!this.iskey) f = 0;
-		this.target.cancelScheduledValues(time);
-		this.target.linearRampToValueAtTime(f + this.relv * this.multi, time+this.relt.value);
+		for (var i = 0; i < this.targets.length; i++) {
+			this.targets[i].cancelScheduledValues(time);
+			this.targets[i].linearRampToValueAtTime(f + this.relv * this.multi, time+this.relt.value);
+		}
 		//console.log("adsr note off to " + this.relv + " at time " + time + " + " + this.relt);
 	}
 }
@@ -494,6 +598,22 @@ class AudioManager {
 			//tosc.connectToSpeakers();
 			this.pianos.push(tosc);
 		}
+		this.impulse = this.impulseResponse(1, 2, false);
+	}
+	
+	impulseResponse(duration, decay, reverse) {
+		var sampleRate = this.ctx.sampleRate;
+		var length = sampleRate * duration;
+		var impulse = this.ctx.createBuffer(1, length, sampleRate);
+		var impulseL = impulse.getChannelData(0);
+
+		if (!decay)
+			decay = 2.0;
+		for (var i = 0; i < length; i++){
+		  var n = reverse ? length - i : i;
+		  impulseL[i] = (Math.random() * 2 - 1) * Math.pow(1 - n / length, decay);
+		}
+		return impulse;
 	}
 	
 	makeOsc(typei, freqi, desti, startgain) {
@@ -1642,6 +1762,84 @@ class Knob extends SynthModule {
 	}
 }
 
+class EqualModule extends SynthModule {
+	constructor(x, y, w, h, vals) {
+		super(x, y, w, h, vals);
+		this.kw = w/3;
+		this.knobL = new Knob(x, y, this.kw, this.kw, [1], 0, 1);
+		this.knobL.name = "Low";
+		this.knobL.setParentModule([this]);
+		this.knobM = new Knob(x, y, this.kw, this.kw, [1], 0, 1);
+		this.knobM.name = "Mid";
+		this.knobM.setParentModule([this]);
+		this.knobH = new Knob(x, y, this.kw, this.kw, [1], 0, 1);
+		this.knobH.name = "Hi";
+		this.knobH.setParentModule([this]);
+	}
+	
+	setPos(x, y) {
+		this.x = x;
+		this.y = y;
+		this.knobL.setPos(x, y);
+		this.knobM.setPos(x+this.kw*1, y);
+		this.knobH.setPos(x+this.kw*2, y);
+		this.sx = x + this.w*0.05;
+		this.sw = this.w*0.9;
+		this.sy = y + this.kw + this.w*0.08;
+		this.sh = y + this.h - this.sy - this.w*0.05;
+		this.xm = this.sx + this.sw*0.5;
+		this.xh = this.sx + this.sw;
+		this.update();
+	}
+	
+	stepPos(x, y) {
+		this.setPos(this.x + x, this.y + y);
+	}
+	
+	update() {
+		this.yl = this.sy + this.sh*0.9*(1-this.knobL.val) + this.sh*0.1;
+		this.ym = this.sy + this.sh*0.9*(1-this.knobM.val) + this.sh*0.1;
+		this.yh = this.sy + this.sh*0.9*(1-this.knobH.val) + this.sh*0.1;
+	}
+	
+	setTarget(a) {
+		var targl = new Array();
+		var targm = new Array();
+		var targh = new Array();
+		for (var i = 0; i < a.length; i++) {
+			targl.push(a[i].lGain.gain);
+			targm.push(a[i].mGain.gain);
+			targh.push(a[i].hGain.gain);
+		}
+		this.knobL.setNumTarget(targl);
+		this.knobM.setNumTarget(targm);
+		this.knobH.setNumTarget(targh);
+	}
+	
+	hitCheck(isdown, coords) {
+		this.knobL.hitCheck(isdown, coords);
+		this.knobM.hitCheck(isdown, coords);
+		this.knobH.hitCheck(isdown, coords);
+	}
+	
+	drawOb(ctx) {
+		//super.drawOb(ctx);
+		this.knobL.drawOb(ctx);
+		this.knobM.drawOb(ctx);
+		this.knobH.drawOb(ctx);
+		this.drawScreen(ctx);
+	}
+	
+	drawScreen(ctx) {
+		drawRect(ctx, this.sx, this.sy, this.sw, this.sh, this.stroke, this.fill, this.fillCol, this.strokeCol);
+		ctx.beginPath();
+		ctx.moveTo(this.sx, this.yl);
+		ctx.lineTo(this.xm, this.ym);
+		ctx.lineTo(this.xh, this.yh);
+		ctx.stroke();
+	}
+}
+
 class ENVLPModule extends SynthModule {
 	constructor(x, y, w, h, vals, envs) {
 		super(x, y, w, h, vals);
@@ -1670,7 +1868,6 @@ class ENVLPModule extends SynthModule {
 		this.setPos(x, y);
 		this.setTarget(envs);
 	}
-
 	
 	setPos(x, y) {
 		this.x = x;
@@ -2342,7 +2539,7 @@ class SynthModContainer extends Drawable {
 
 class ValueSetter {	
 	constructor() {
-	this.val = 0;
+		this.val = 0;
 		this.obj = new Array();
 	}
 	
@@ -2367,13 +2564,28 @@ class ValueSetter {
 		}
 	}
 	
-	setValue(v) {
+	setValue(v, k, o) {
 		this.val = v;
 		var noerr = true;
 		for (var i = 0; i < this.obj.length; i++) {
-			if (!this.obj[i].setValue(v)) noerr = false;
+			//if(this.iskey) {
+			//	this.obj[i].noteOnNow(v, k, o);
+			//} else {
+				if (!this.obj[i].setValue(v)) noerr = false;
+			//}
 		}
 		return noerr;
+	}
+}
+
+class MultiSetter {
+	constructor(fs) {
+		this.fs = fs;
+	}
+	
+	setValue(v) {
+		this.fs.setMulti(v);
+		return true;
 	}
 }
 
@@ -2381,15 +2593,27 @@ class FrequencySetter {
 	constructor(o) {
 		this.name = "freq setter";
 		this.o = o;
+		this.setMulti(1);
+	}
+	
+	setMulti(m) {
+		this.multi = m;
+		for (var i = 0; i < this.o.length; i++) {
+			this.o[i].frequency.multi = m;
+		}
 	}
 	
 	noteOnNow(f, knum, onum) {
-		this.o[onum].frequency.setValueAtTime(f, sound.ctx.currentTime);
+		var val = f*this.multi;
+		console.log("set fs val to " + val);
+		this.o[onum].frequency.setValueAtTime(val, sound.ctx.currentTime);
 	}
 	
 	setValue(v) {
+		var val = v*this.multi;
+		console.log("set fs val to " + val);
 		for (var i = 0; i < this.o.length; i++) {
-			this.o[i].frequency.setValueAtTime(v, sound.ctx.currentTime);
+			this.o[i].frequency.setValueAtTime(val, sound.ctx.currentTime);
 		}
 		return true;
 	}
@@ -2433,12 +2657,9 @@ class GainTrigger {
 	}
 	
 	trigger(on, knum, onum, f) {
-		if (this.connected) {
-			for (var i = 0; i < this.triggers.length; i++) {
-				this.triggers[i].trigger(on, knum, onum, f);
-			}
+		for (var i = 0; i < this.triggers.length; i++) {
+			this.triggers[i].trigger(on, knum, onum, f);
 		}
-		console.log("trigger osc con " + on);
 	}
 	
 	notifyConnect() {
@@ -2452,7 +2673,6 @@ class WhiteNoiseContainer extends SynthModContainer {
 	constructor(x, y, w, h, bl, br, bt, bb, noder) {
 		super(x, y, w, h, bl, br, bt, bb);
 		this.oscs = new Array();
-		//this.gains = new Array();
 		var bufferSize = sound.ctx.sampleRate;
 		for (var i = 0; i < sound.numpianos; i++) {
 			var buffer = sound.ctx.createBuffer(1, bufferSize, sound.ctx.sampleRate);
@@ -2463,18 +2683,14 @@ class WhiteNoiseContainer extends SynthModContainer {
 			var noise = sound.ctx.createBufferSource();
 			noise.loop = true;
 			noise.buffer = buffer;
-			//noise.g = sound.ctx.createGain();
-			//noise.g.gain.value = OFF_VOL;
-			//noise.connect(noise.g);
 			noise.start(0);
 			this.oscs.push(noise);
-			//this.gains.push(noise.g);
 		}
-		this.gt = new GainTrigger();
+		this.trigprop = new GainTrigger();
 		this.addONode(this.w-2*noder, this.h*0.5-noder, noder, TYPE_AUDIO, [TYPE_AUDIO], "white");
-		this.outNodes[0].setObject(this.gains);
+		this.outNodes[0].setObject(this.oscs);
 		this.addINode(0, this.h*0.5-noder, noder, TYPE_TRIGGER, [TYPE_KEY, TYPE_TRIGGER], "white g", "T");
-		this.inNodes[0].setObject(this.gt);
+		this.inNodes[0].setObject(this.trigprop);
 	}
 	
 	trigger(on, knum, onum, f) {
@@ -2485,7 +2701,7 @@ class WhiteNoiseContainer extends SynthModContainer {
 		//		this.gt.noteOFF(onum, knum);
 		//	}
 		//}
-		if (this.gt.connected) super.trigger(on, knum, onum, f);
+		//if (this.gt.connected) super.trigger(on, knum, onum, f);
 	}
 	
 	drawOb(ctx) {
@@ -2512,41 +2728,39 @@ class SynthOscContainer extends SynthModContainer {
 			this.gfs.push(osc.frequency);
 		}
 		this.fs = new FrequencySetter(this.oscs);
-		this.gt = new GainTrigger();
+		this.ms = new MultiSetter(this.fs);
+		this.trigprop = new GainTrigger();
 		this.oscTypeSel.setTypeTarget(this.oscs);
 		this.oscTypeSel.setValue(0);
 		this.addModule(this.oscTypeSel, w*0.1, h*0.1);
-		this.addONode(this.w-2*noder, this.h*0.5-noder, noder, TYPE_AUDIO, [TYPE_AUDIO], "osc", null, this.gt);
+		this.addONode(this.w-2*noder, this.h*0.5-noder, noder, TYPE_AUDIO, [TYPE_AUDIO], "osc", null, this.trigprop);
 		this.outNodes[0].setObject(this.oscs);//this.gains);
-		this.addINode(0, this.h*0.33-noder, noder, TYPE_KEY, [TYPE_KEY, TYPE_VALUE], "osc f", "F", this);
+		this.addINode(0, this.h*0.33-noder, noder, TYPE_KEY, [TYPE_KEY, TYPE_VALUE, TYPE_ENV], "osc f", "F", this);
 		this.inNodes[0].setObject(this.fs);
-		this.addINode(0, this.h*0.67-noder, noder, TYPE_TRIGGER, [TYPE_KEY, TYPE_TRIGGER], "osc g", "T", this.gt);
-		this.inNodes[1].setObject(this.gt);
+		this.addINode(0, this.h*0.67-noder, noder, TYPE_TRIGGER, [TYPE_KEY, TYPE_TRIGGER], "osc g", "T", this.trigprop);
+		this.inNodes[1].setObject(this.trigprop);
 		//->outnode.obj.connect(innode.obj)
-		this.addINode(w*0.4, h-2*noder, noder, TYPE_AUDIO, [TYPE_AUDIO], "f LFO", "F");
+		this.addINode(w*0.7, h-2*noder, noder, TYPE_AUDIO, [TYPE_AUDIO], "f LFO", "F");
 		this.inNodes[2].setObject(this.gfs);
-		//this.addINode(w*0.4+noder*3, h-2*noder, noder, TYPE_AUDIO, [TYPE_AUDIO], "g LFO", "G");
-		//this.inNodes[3].setObject(this.ggs);
+		this.addINode(w*0.21+noder*3, h-2*noder, noder, TYPE_VALUE, [TYPE_VALUE, TYPE_MULTI], "f multi", null, this);
+		this.inNodes[3].setObject(this.ms);
 	}
 	
 	trigger(on, knum, onum, f) {
-		//if (knum) {
-		//	if (on) {
-		//		this.gt.noteOnNow(220, knum, onum);
-		//	} else {
-		//		this.gt.noteOFF(onum, knum);
-		//	}
-		//}
-		//console.log("trigger osc con " + on);
-		//if (this.gt.connected) super.trigger(on, knum, onum, f);
-		super.trigger(on, knum, onum, f);
+	}
+	
+	hitCheck(isdown, coords) {
+		var h = super.hitCheck(isdown, coords);
+			if (h && isdown) console.log("osc " + lastonum + " freq: " + this.oscs[lastonum].frequency.value);
+		return h;
 	}
 	
 	drawOb(ctx) {
 		super.drawOb(ctx);
 		ctx.font = this.h*0.15 + "px Arial";
 		ctx.fillStyle = pianocol;
-		ctx.fillText("LFO", this.x + this.w*0.23, this.y + this.h*0.95);
+		ctx.fillText("LFO", this.x + this.w*0.58, this.y + this.h*0.95);
+		ctx.fillText("MULTI", this.x + this.w*0.15, this.y + this.h*0.95);
 	}
 }
 
@@ -2666,6 +2880,51 @@ class SpeakerMod extends SynthModContainer {
 	}
 }
 
+class SynthEqualContainer extends SynthModContainer {
+	constructor(x, y, w, h, bl, br, bt, bb, noder) {
+		super(x, y, w, h, bl, br, bt, bb);
+		this.eqs = new Array();
+		var eqins = new Array();
+		var eqouts = new Array();
+		for (var i = 0; i < sound.numpianos; i++) {
+			var eq = new Equalizer();
+			this.eqs.push(eq);
+			eqins.push(eq.in);
+			eqouts.push(eq.out);
+		}
+		this.mod = new EqualModule(0, 0, w*0.8, h*0.9, 0);
+		this.mod.setTarget(this.eqs);
+		this.addModule(this.mod, w*0.1, h*0.05);
+		this.addINode(0, this.h*0.5-noder, noder, TYPE_AUDIO, [TYPE_AUDIO], "eq");
+		this.inNodes[0].setObject(eqins);
+		this.addONode(this.w-2*noder, this.h*0.5-noder, noder, TYPE_AUDIO, [TYPE_AUDIO], "eq");
+		this.outNodes[0].setObject(eqouts);
+	}
+}
+
+class SynthConvContainer extends SynthModContainer {
+	constructor(x, y, w, h, bl, br, bt, bb, noder) {
+		super(x, y, w, h, bl, br, bt, bb);
+		var convs = new Array();
+		for (var i = 0; i < sound.numpianos; i++) {
+			var c = sound.ctx.createConvolver();
+			c.buffer = sound.impulse;
+			convs.push(c);
+		}
+		this.addINode(0, this.h*0.5-noder, noder, TYPE_AUDIO, [TYPE_AUDIO], "conv");
+		this.inNodes[0].setObject(convs);
+		this.addONode(this.w-2*noder, this.h*0.5-noder, noder, TYPE_AUDIO, [TYPE_AUDIO], "conv");
+		this.outNodes[0].setObject(convs);
+	}
+	
+	drawOb(ctx) {
+		super.drawOb(ctx);
+		ctx.font = this.h*0.15 + "px Arial";
+		ctx.fillStyle = pianocol;
+		ctx.fillText("conv", this.x + this.w*0.23, this.y + this.h*0.95);
+	}
+}
+
 class SynthGainContainer extends SynthModContainer {
 	constructor(x, y, w, h, bl, br, bt, bb, noder) {
 		super(x, y, w, h, bl, br, bt, bb);
@@ -2778,9 +3037,14 @@ class ValueModContainer extends SynthModContainer {
 		this.lockinput = false;
 	}
 	
+	connect(t) {
+		super.connect(t);
+		this.setValue();
+	}
+	
 	hitCheck(isdown, coords) {
 		var hit = super.hitCheck(isdown, coords);
-		if (hit) this.setValue();
+		//if (hit) this.setValue();
 		if (!this.lockinput && hit && dragOb === this) {
 			focusOb = this;
 		} else if (isdown) {
@@ -2788,15 +3052,17 @@ class ValueModContainer extends SynthModContainer {
 				focusOb = qwertyboard;
 				if (!hit) this.setValue();
 			}
+		} else if (hit && !focusOb === this) {
+			this.setValue();
 		}
 		return hit;
 	}
 	
 	noteOnNow(f, k, o) {
-		this.setValue(f);
+		this.setValue(f, k, o);
 	}
 	
-	setValue(v) {
+	setValue(v, k, o) {
 		var val = 0;
 		if (v) {
 			val = v;
@@ -2804,7 +3070,7 @@ class ValueModContainer extends SynthModContainer {
 		} else {
 			val = parseFloat(this.text);
 		}
-		this.crossout = !this.valueOb.setValue(val)
+		this.crossout = !this.valueOb.setValue(val, k, o)
 	}
 	
 	codeToNum(c) {
@@ -3030,13 +3296,12 @@ class ENVModContainer extends SynthModContainer {
 		this.adsr = envs;
 		this.mod = mod;
 		this.addModule(this.mod, w*0.1, h*0.1);
-		this.addINode(0, this.h*0.5-noder, noder, TYPE_ENV, [TYPE_AUDIO, TYPE_KEY], "adsr");
+		this.addINode(0, this.h*0.5-noder, noder, TYPE_ENV, [TYPE_AUDIO, TYPE_KEY, TYPE_VALUE], "env");
 		this.inNodes[0].setObject(this.adsr);
 		this.inNodes[0].env = this;
-		this.addINode(this.w*0.1, this.h-2*noder, noder, TYPE_VALUE, [TYPE_VALUE], "adsr multi");
+		this.addINode(this.w*0.1, this.h-2*noder, noder, TYPE_VALUE, [TYPE_VALUE], "env multi");
 		this.inNodes[1].setObject(this.adsr);
-		this.addONode(this.w-2*noder, this.h*0.5-noder, noder, TYPE_ENV, [TYPE_ENV], "adsr");
-		this.outNodes[0].isEnvelope = true;
+		this.addONode(this.w-2*noder, this.h*0.5-noder, noder, TYPE_ENV, [TYPE_ENV], "env");
 		this.outNodes[0].env = this;
 		this.outNodes[0].setObject(this.adsr);
 	}
@@ -3062,7 +3327,7 @@ class ENVModContainer extends SynthModContainer {
 			}
 			this.outNodes[0].ntype = TYPE_AUDIO;
 			return true;
-		} else if (node.ntype == TYPE_KEY) {
+		} else if (node.ntype == TYPE_KEY || node.ntype == TYPE_VALUE) {
 			this.stopTrigger = true;
 			for (var i = 0; i < sound.numpianos; i++) {
 				this.adsr[i].iskey = true;
@@ -3076,8 +3341,8 @@ class ENVModContainer extends SynthModContainer {
 		console.log("disconnect source");
 		if (node.ntype == TYPE_AUDIO) {
 			for (var i = 0; i < sound.numpianos; i++) {
-				this.adsr[i].removeObject();
-				this.adsr[i].removeTarget();
+				this.adsr[i].removeObject(this.gains[i]);
+				this.adsr[i].removeTarget(this.gains[i].gain);
 				node.obj[i].disconnect();
 				this.gains[i] = null;
 			}
@@ -3085,9 +3350,9 @@ class ENVModContainer extends SynthModContainer {
 			this.outNodes[0].disconnect();
 			this.outNodes[0].ntype = TYPE_ENV;
 			return true;
-		} else if (node.ntype == TYPE_KEY) {
+		} else if (node.ntype == TYPE_KEY || node.ntype == TYPE_VALUE) {
 			for (var i = 0; i < sound.numpianos; i++) {
-				this.adsr[i].removeTarget();
+				//this.adsr[i].removeTarget();
 			}
 			this.outNodes[0].disconnect();
 			this.outNodes[0].ntype = TYPE_ENV;
@@ -3097,6 +3362,7 @@ class ENVModContainer extends SynthModContainer {
 	
 	trigger(on, knum, onum, f) {
 		if (on) {
+			//console.log("turn on envelope " + onum);
 			this.adsr[onum].noteON(sound.ctx.currentTime, f);
 		} else {
 			this.adsr[onum].noteOFF(sound.ctx.currentTime, f);
@@ -3179,11 +3445,6 @@ class MergerMod extends SynthModContainer {
 		this.setValue();
 	}
 	
-	disconnect(t) {
-		console.log("disconnect mergermod");
-		super.disconnect(t);
-	}
-	
 	connectMerge(node) {//connect output
 		var nt = node.ntype
 		if (nt == TYPE_AUDIO) {
@@ -3201,20 +3462,18 @@ class MergerMod extends SynthModContainer {
 				this.inNodes[i].acceptTypes = [TYPE_AUDIO];
 			}
 			return true;
-		} else if (nt == TYPE_KEY || nt == TYPE_MULTI || nt == TYPE_TRIGGER) {
+		} else if (nt == TYPE_MULTI || nt == TYPE_TRIGGER) {
 			for (var i = 0; i < this.inNodes.length; i++) {
 				this.inNodes[i].setObject(node.obj);
 				this.inNodes[i].ntype = nt;
 				if (nt == TYPE_TRIGGER) {
 					this.inNodes[i].acceptTypes = [TYPE_TRIGGER, TYPE_KEY];
-				} else if (nt == TYPE_KEY) {
-					this.inNodes[i].acceptTypes = [TYPE_KEY, TYPE_VALUE];
 				} else {
 					this.inNodes[i].acceptTypes = [nt];
 				}
 			}
 			return true;
-		} else if (nt == TYPE_VALUE) {
+		} else if (nt == TYPE_VALUE || nt == TYPE_KEY) {
 			this.vs = new ValueSetter();
 			this.vs.connect(node.obj);
 			for (var i = 0; i < this.inNodes.length; i++) {
@@ -3246,9 +3505,9 @@ class MergerMod extends SynthModContainer {
 			}
 			this.mergers = null;
 			return true;
-		} else if (nt == TYPE_KEY || nt == TYPE_MULTI || nt == TYPE_TRIGGER) {
+		} else if (nt == TYPE_MULTI || nt == TYPE_TRIGGER) {
 			return true;
-		} else if (nt == TYPE_VALUE) {
+		} else if (nt == TYPE_KEY || nt == TYPE_VALUE) {
 			this.vs.disconnect(node.obj);
 			for (var i = 0; i < this.inNodes.length; i++) {
 				this.inNodes[i].setObject(null);
@@ -3264,8 +3523,9 @@ class MergerMod extends SynthModContainer {
 		for (var i = 0; i < this.inNodes.length; i++) {
 			if (this.inNodes[i].con) v += this.inNodes[i].con.obj.val;
 		}
-		this.vs.setValue(v);
+		if (this.vs) this.vs.setValue(v);
 		//console.log("set merger value to " + v);
+		return true;
 	}
 	
 	drawOb(ctx) {
@@ -3282,7 +3542,7 @@ class MergerMod extends SynthModContainer {
 class SplitterMod extends SynthModContainer {
 	constructor(x, y, w, h, bl, br, bt, bb, noder) {
 		super(x, y, w, h, bl, br, bt, bb);
-		this.addINode(0, this.h*0.5-noder, noder, TYPE_SPLITTER, [TYPE_KEY, TYPE_OSC, TYPE_AUDIO, TYPE_TRIGGER, TYPE_VALUE, TYPE_MULTI, TYPE_SPLITTER], "split");
+		this.addINode(0, this.h*0.5-noder, noder, TYPE_SPLITTER, [TYPE_KEY, TYPE_OSC, TYPE_AUDIO, TYPE_TRIGGER, TYPE_VALUE, TYPE_MULTI, TYPE_SPLITTER, TYPE_ENV], "split");
 		this.inNodes[0].setObject(this);
 		this.inNodes[0].splitter = this;
 		for (var i = 0; i < 3; i++) {
@@ -3303,7 +3563,7 @@ class SplitterMod extends SynthModContainer {
 				this.outNodes[i].ntype = TYPE_AUDIO;
 			}
 			return true;
-		} else if (nt == TYPE_KEY || nt == TYPE_VALUE || nt == TYPE_MULTI || nt == TYPE_TRIGGER) {
+		} else if (nt == TYPE_KEY || nt == TYPE_VALUE || nt == TYPE_MULTI || nt == TYPE_TRIGGER || nt == TYPE_ENV) {
 			for (var i = 0; i < this.outNodes.length; i++) {
 				this.outNodes[i].setObject(node.obj);
 				this.outNodes[i].ntype = nt;
@@ -3327,7 +3587,7 @@ class SplitterMod extends SynthModContainer {
 			}
 			this.splitters = null;
 			return true;
-		} else if (nt == TYPE_KEY || nt == TYPE_VALUE || nt == TYPE_MULTI || nt == TYPE_TRIGGER) {
+		} else if (nt == TYPE_KEY || nt == TYPE_VALUE || nt == TYPE_MULTI || nt == TYPE_TRIGGER || nt == TYPE_ENV) {
 			return true;
 		}
 	}
@@ -3504,6 +3764,17 @@ class WhiteIcon extends ModuleIcon {
 	}
 }
 
+class EQIcon extends ModuleIcon {
+	createMod() {
+		return new SynthEqualContainer(this.x, piano.modbt, piano.modh*2, piano.modh*2, piano.modbl, piano.modbr, piano.modbt, piano.modbb, piano.noder);
+	}
+	
+	drawOb(ctx) {
+		super.drawOb(ctx);
+		ctx.fillText("EQ", this.x+this.w*0.3, this.y+this.h*0.5);
+	}
+}
+
 class GainIcon extends ModuleIcon {
 	createMod() {
 		return new SynthGainContainer(this.x, piano.modbt, piano.modh*1.4, piano.modh*1.3, piano.modbl, piano.modbr, piano.modbt, piano.modbb, piano.noder);
@@ -3555,7 +3826,18 @@ class CompIcon extends ModuleIcon {
 	
 	drawOb(ctx) {
 		super.drawOb(ctx);
-		ctx.fillText("COMP", this.x+this.w*0.15, this.y+this.h*0.5);
+		ctx.fillText("COMP", this.x+this.w*0.1, this.y+this.h*0.5);
+	}
+}
+
+class ConvIcon extends ModuleIcon {
+	createMod() {
+		return new SynthConvContainer(this.x, piano.modbt, piano.modh, piano.modh, piano.modbl, piano.modbr, piano.modbt, piano.modbb, piano.noder);
+	}
+	
+	drawOb(ctx) {
+		super.drawOb(ctx);
+		ctx.fillText("CONV", this.x+this.w*0.1, this.y+this.h*0.5);
 	}
 }
 
@@ -3697,6 +3979,8 @@ class ModuleBar extends Drawable {
 		a += h*0.9;
 		this.comp = new CompIcon(x+a,y+h*0.1, h*0.8, h*0.8, 0, canW, y, canH);
 		a += h*0.9;
+		this.convb = new ConvIcon(x+a,y+h*0.1, h*0.8, h*0.8, 0, canW, y, canH);
+		a += h*0.9;
 		this.speakerb = new SpeakerIcon(x+a,y+h*0.1, h*0.8, h*0.8, 0, canW, y, canH);
 		a += h*0.9;
 		this.valb = new ValueIcon(x+a,y+h*0.1, h*0.8, h*0.8, 0, canW, y, canH);
@@ -3710,6 +3994,8 @@ class ModuleBar extends Drawable {
 		this.seqb = new SequencerIcon(x+a,y+h*0.1, h*0.8, h*0.8, 0, canW, y, canH);
 		a += h*0.9;
 		this.timerb = new TimerIcon(x+a,y+h*0.1, h*0.8, h*0.8, 0, canW, y, canH);
+		a += h*0.9;
+		this.eqb = new EQIcon(x+a,y+h*0.1, h*0.8, h*0.8, 0, canW, y, canH);
 		this.icons.push(this.keyb);
 		this.icons.push(this.oscb);
 		this.icons.push(this.gainb);
@@ -3717,6 +4003,7 @@ class ModuleBar extends Drawable {
 		this.icons.push(this.envlpb);
 		this.icons.push(this.filt);
 		this.icons.push(this.comp);
+		this.icons.push(this.convb);
 		this.icons.push(this.speakerb);
 		this.icons.push(this.clickb);
 		this.icons.push(this.valb);
@@ -3727,6 +4014,7 @@ class ModuleBar extends Drawable {
 		this.icons.push(this.splitterb);
 		this.icons.push(this.seqb);
 		this.icons.push(this.timerb);
+		this.icons.push(this.eqb);
 		this.hideicon = -1;
 	}
 	
@@ -3818,6 +4106,7 @@ class KeyboardOutput {
 			console.log("can't get piano at " + t.measure + ":" + t.beat + ":" + t.fraction);
 			return oscnum;
 		}
+		lastonum = oscnum;
 		for (var i = 0; i < this.outputs.length; i++) {
 			this.outputs[i].noteOnNow(freq*this.multi, knum, oscnum);
 		}
@@ -3852,7 +4141,7 @@ class Piano {
 		var btnw = 6;
 		var kw = this.w * 0.15;
 		var cony = y + keyH * 1.7 + keyW*btnw;
-		this.modbar = new ModuleBar(x, cony, this.w, keyH*0.9);
+		this.modbar = new ModuleBar(x, cony, this.w, keyH*0.85);
 		
 		this.modules = new Array();
 		var tw = keyW*btnw*2;
