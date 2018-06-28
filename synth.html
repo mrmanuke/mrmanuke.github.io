@@ -4,6 +4,7 @@
 var numpianos = 25;
 var lastonum = 0;
 var playcount = 0;
+var modsaveteststring = '[{"type":"SynthModKeyboard" , "x":12 , "y":326 , "w":120 , "h":115.19999999999999 , "outnodes" : [{"mod":1 , "node":0} , {"mod":1 , "node":1}]}, {"type":"SynthOscContainer" , "x":144 , "y":326 , "w":336 , "h":115.19999999999999 , "outnodes" : [{"mod":2 , "node":0}] , "osc":"triangle"}, {"type":"SynthGainContainer" , "x":492 , "y":326 , "w":134.39999999999998 , "h":124.80000000000001 , "outnodes" : [{"mod":3 , "node":0}] , "gain":0.2}, {"type":"SynthADSRContainer" , "x":638.4 , "y":326 , "w":288 , "h":192 , "outnodes" : [{"mod":4 , "node":0}] , "A":0.01 , "D":0.05 , "DV":0.5 , "S":5 , "SV":0.1 , "R":0.00001}, {"type":"SpeakerMod" , "x":938.4 , "y":326 , "w":96 , "h":96 , "outnodes" : []}]';
 var lastgenr = '1.2.0: Fs4+v=100, Cs4+v=100, An3+v=100; 2.0.0: Gs1+v=100, Gs2+v=100, Fs3+v=100; 2.2.0: Cn4+v=100; 3.0.0: Fs1+v=0, Fs2+v=0, Cs4+v=0, An3+v=0, Fs3+v=0, Fs4+v=0, Cs4+v=0, An3+v=0, Gs1+v=0, Gs2+v=0, Fs3+v=0, Cn4+v=0, An1+v=100, An2+v=100, Fs3+v=100, Cs3+v=100; 3.1.0: Cs4+v=100; 3.2.0: En4+v=100, Fs3+v=100; 3.3.0: Cs4+v=100; 4.0.0: An1+v=0, An2+v=0, Fs3+v=0, Cs3+v=0, Cs4+v=0, En4+v=0, Fs3+v=0, Cs4+v=0, Gs1+v=100, Gs2+v=100, Ds4+v=100, Gs3+v=100, En3+v=100; 4.2.0: Bn3+v=100, Gs3+v=100; 5.0.0: Gs1+v=0, Gs2+v=0, Ds4+v=0, Gs3+v=0, En3+v=0, Bn3+v=0, Gs3+v=0, Fs1+v=100, Fs2+v=100, An3+v=100, Fs3+v=100, Dn3+v=100; 5.2.0: Dn3+v=100; 6.0.0: Fs1+v=0, Fs2+v=0, An3+v=0, Fs3+v=0, Dn3+v=0, Dn3+v=0, Fn1+v=100, Fn2+v=100, Gs3+v=100, Fn3+v=100, Cs3+v=100; 6.2.0: Cs3+v=100; 7.0.0: Fn1+v=0, Fn2+v=0, Gs3+v=0, Fn3+v=0, Cs3+v=0, Cs3+v=0, Ds1+v=100, Ds2+v=100, An3+v=100, Fs3+v=100, Ds3+v=100, Cn3+v=100; 7.2.0: Fs3+v=100, Ds3+v=100; 8.0.0: Ds1+v=0, Ds2+v=0, An3+v=0, Fs3+v=0, Ds3+v=0, Cn3+v=0, Fs3+v=0, Ds3+v=0, Cs1+v=100, Cs2+v=100, Fs3+v=100, Fn3+v=100, Bn2+v=100; 8.2.0: Gs3+v=100, Fn3+v=100; 9.0.0: Cs1+v=0, Cs2+v=0, Fs3+v=0, Fn3+v=0, Bn2+v=0, Gs3+v=0, Fn3+v=0, Fs1+v=100, Fs2+v=100, An3+v=100, Fs3+v=100, Cs3+v=100; 9.1.0: Cs4+v=100; 9.2.0: Fs1+v=0, Fs2+v=0, An3+v=0, Fs3+v=0, Cs3+v=0, Cs4+v=0, An1+v=100, An2+v=100, Cn4+v=100, An3+v=100, En3+v=100; 9.3.0: Bn3+v=100; 10.0.0: An1+v=0, An2+v=0, Cn4+v=0, An3+v=0, En3+v=0, Bn3+v=0, Cn2+v=100, Cn3+v=100, Cn4+v=100, Fs3+v=100, Ds3+v=100; 10.0.5: Bn3+v=100; 10.1.0: An3+v=100; 10.1.5: Cs3+v=100; 10.2.0: Cn2+v=0, Cn3+v=0, Cn4+v=0, Fs3+v=0, Ds3+v=0, Bn3+v=0, An3+v=0, Cs3+v=0, Cs2+v=100, Cs3+v=100, Gs3+v=100, Fn3+v=100; 10.2.33: Gs2+v=100, Bn3+v=100; 10.2.67: Gs3+v=100, Cs4+v=100, Gs3+v=100; 10.3.0: Bn3+v=100, Fn4+v=100; 10.3.33: Cs4+v=100, Gs4+v=100; 10.3.67: Fn4+v=100, Bn4+v=100; 11.0.0: Cs2+v=0, Cs3+v=0, Gs3+v=0, Fn3+v=0, Gs2+v=0, Bn3+v=0, Gs3+v=0, Cs4+v=0, Gs3+v=0, Bn3+v=0, Fn4+v=0, Cs4+v=0, Gs4+v=0, Fn4+v=0, Bn4+v=0, Fs3+v=100, Fs2+v=100, An4+v=100, Fs4+v=100, Cs4+v=100, An3+v=100; 11.1.0: Fs1+v=100, Bn4+v=100; 11.2.0: Fs3+v=0, Fs2+v=0, An4+v=0, Fs4+v=0, Cs4+v=0, An3+v=0, Fs1+v=0, Bn4+v=0, En1+v=100, En2+v=100, Gs4+v=100, En4+v=100, Bn3+v=100, Gs3+v=100; 11.3.0: Cs2+v=100, Fs4+v=100, Gs3+v=100; 12.0.0: En1+v=0, En2+v=0, Gs4+v=0, En4+v=0, Bn3+v=0, Gs3+v=0, Cs2+v=0, Fs4+v=0, Gs3+v=0, Gs1+v=100, Gs2+v=100, Bn4+v=100, En4+v=100, Bn3+v=100; 12.1.0: Gs2+v=100, En4+v=100, Bn3+v=100; 12.2.0: An1+v=100, An2+v=100, En5+v=100, Bn4+v=100, An4+v=100, En4+v=100; 12.3.0: An2+v=100; 12.3.2: En3+v=100; 12.3.4: An3+v=100; 12.3.6: Bn3+v=100; 12.3.8: En4+v=100; 13.0.0: sig: 6/4; 13.0.0: An3+v=100; 13.0.2: En4+v=100; 13.0.4: An4+v=100; 13.0.6: Bn4+v=100; 13.0.8: En5+v=100; 13.2.0: Bn5+v=100, Gs5+v=100, En5+v=100, An4+v=100; 13.4.0: Gs1+v=0, Gs2+v=0, Bn4+v=0, En4+v=0, Bn3+v=0, Gs2+v=0, En4+v=0, Bn3+v=0, An1+v=0, An2+v=0, En5+v=0, Bn4+v=0, An4+v=0, En4+v=0, An2+v=0, En3+v=0, An3+v=0, Bn3+v=0, En4+v=0, An3+v=0, En4+v=0, An4+v=0, Bn4+v=0, En5+v=0, Bn5+v=0, Gs5+v=0, En5+v=0, An4+v=0, Cs5+v=100, Cs4+v=100; 13.5.0: Ds5+v=100, Ds4+v=100; 14.0.0: sig: 4/4; 14.0.0: Cs5+v=0, Cs4+v=0, Ds5+v=0, Ds4+v=0, Ds1+v=100, Ds2+v=100, Fn5+v=100, Cs5+v=100, Gs4+v=100, Fn4+v=100; 14.1.0: Cs5+v=100, Gs4+v=100, Cs4+v=100; 14.2.0: Ds1+v=0, Ds2+v=0, Fn5+v=0, Cs5+v=0, Gs4+v=0, Fn4+v=0, Cs5+v=0, Gs4+v=0, Cs4+v=0, En1+v=100, En2+v=100, Ds5+v=100, Bn4+v=100, Gs4+v=100, Ds4+v=100; 14.3.0: En3+v=100; 14.3.25: Gs3+v=100; 14.3.5: Bn3+v=100; 14.3.75: Cs4+v=100; 15.0.0: sig: 6/4; 15.0.0: En1+v=0, En2+v=0, Ds5+v=0, Bn4+v=0, Gs4+v=0, Ds4+v=0, En3+v=0, Gs3+v=0, Bn3+v=0, Cs4+v=0, Cs4+v=100, Fs4+v=100; 15.0.5: Gs4+v=100; 15.1.0: As4+v=100; 15.1.5: Fs4+v=100; 15.2.0: Gs4+v=100, Fs4+v=100, Cs4+v=100; 15.3.0: En3+v=100; 15.4.0: En2+v=100, Cs5+v=100, Cs4+v=100; 15.5.0: Ds5+v=100, Ds4+v=100; 16.0.0: sig: 2/4; 16.0.0: Cs4+v=0, Fs4+v=0, Gs4+v=0, As4+v=0, Fs4+v=0, Gs4+v=0, Fs4+v=0, Cs4+v=0, En3+v=0, En2+v=0, Cs5+v=0, Cs4+v=0, Ds5+v=0, Ds4+v=0, Ds2+v=100, Ds1+v=100, Fn5+v=100, Cs5+v=100, Gs4+v=100, Fn4+v=100; 16.1.0: Cs5+v=100, Gs4+v=100, Cs4+v=100; 17.0.0: sig: 4/4; 17.0.0: Ds2+v=0, Ds1+v=0, Fn5+v=0, Cs5+v=0, Gs4+v=0, Fn4+v=0, Cs5+v=0, Gs4+v=0, Cs4+v=0, En2+v=100, En1+v=100, Bn4+v=100, Bn3+v=100; 17.0.33: Gs4+v=100; 17.0.67: Ds4+v=100; 17.1.0: Bn3+v=100; 17.1.33: Gs3+v=100; 17.1.67: Ds3+v=100; 17.2.0: En2+v=0, En1+v=0, Bn4+v=0, Bn3+v=0, Gs4+v=0, Ds4+v=0, Bn3+v=0, Gs3+v=0, Ds3+v=0, As4+v=100, Cs4+v=100; 17.2.33: Fs4+v=100; 17.2.67: Cs4+v=100; 17.3.0: As3+v=100; 17.3.33: Fs3+v=100; 17.3.67: Cs3+v=100; 18.0.0: As4+v=0, Cs4+v=0, Fs4+v=0, Cs4+v=0, As3+v=0, Fs3+v=0, Cs3+v=0, Gs4+v=100; 18.0.33: En4+v=100; 18.0.67: Bn3+v=100; 18.1.0: Gs3+v=100; 18.1.33: En3+v=100; 18.1.67: Bn2+v=100; 18.2.0: Gs4+v=0, En4+v=0, Bn3+v=0, Gs3+v=0, En3+v=0, Bn2+v=0, As3+v=100; 18.2.33: Fs3+v=100; 18.2.67: Cs3+v=100; 18.3.0: Bn2+v=100; 18.3.33: Gs2+v=100; 18.3.67: Ds2+v=100; 19.0.0: As3+v=0, Fs3+v=0, Cs3+v=0, Bn2+v=0, Gs2+v=0, Ds2+v=0, En2+v=100, Ds4+v=100; 19.0.33: Bn2+v=100; 19.0.67: En3+v=100; 19.1.0: Fs3+v=100; 19.1.33: Gs3+v=100; 19.1.67: Bn3+v=100; 19.2.0: En2+v=0, Ds4+v=0, Bn2+v=0, En3+v=0, Fs3+v=0, Gs3+v=0, Bn3+v=0, Bn2+v=100, Fs4+v=100; 19.2.33: Fs3+v=100; 19.2.67: As3+v=100; 19.3.0: Bn3+v=100; 19.3.33: Cs4+v=100; 19.3.67: Ds4+v=100; 20.0.0: Bn2+v=0, Fs4+v=0, Fs3+v=0, As3+v=0, Bn3+v=0, Cs4+v=0, Ds4+v=0, Dn2+v=100, An4+v=100, Fn4+v=100; 20.0.5: As4+v=100; 20.1.0: Cn5+v=100; 20.1.5: Dn5+v=100; 20.2.0: Cn5+v=100; 20.2.5: As4+v=100; 20.3.0: An4+v=100; 20.3.5: As4+v=100; 21.0.0: Dn2+v=0, An4+v=0, Fn4+v=0, As4+v=0, Cn5+v=0, Dn5+v=0, Cn5+v=0, As4+v=0, An4+v=0, As4+v=0, An4+v=100; 21.0.5: As4+v=100; 21.1.0: Cn5+v=100; 21.1.5: Dn5+v=100; 21.2.0: Cn5+v=100; 21.2.5: As4+v=100; 21.3.0: An4+v=100; 21.3.5: Gn4+v=100; 22.0.0: An4+v=0, As4+v=0, Cn5+v=0, Dn5+v=0, Cn5+v=0, As4+v=0, An4+v=0, Gn4+v=0, En4+v=100, As3+v=100, Dn3+v=100, An4+v=100; 22.0.5: As4+v=100; 22.1.0: Cn5+v=100; 22.1.5: Dn5+v=100; 22.2.0: Cn5+v=100; 22.2.5: As4+v=100; 22.3.0: An4+v=100; 22.3.5: As4+v=100; 23.0.0: En4+v=0, As3+v=0, Dn3+v=0, An4+v=0, As4+v=0, Cn5+v=0, Dn5+v=0, Cn5+v=0, As4+v=0, An4+v=0, As4+v=0, An4+v=100; 23.0.5: As4+v=100; 23.1.0: Bn1+v=100, Cn5+v=100; 23.1.33: Fs2+v=100; 23.1.5: Dn5+v=100; 23.1.67: Ds3+v=100; 23.2.0: Fs3+v=100, Ds3+v=100, Fs2+v=100, Bn1+v=100, Cn5+v=100; 23.2.5: As4+v=100; 23.3.0: An4+v=100; 23.3.5: Gn4+v=100; 24.0.0: An4+v=0, As4+v=0, Bn1+v=0, Cn5+v=0, Fs2+v=0, Dn5+v=0, Ds3+v=0, Fs3+v=0, Ds3+v=0, Fs2+v=0, Bn1+v=0, Cn5+v=0, As4+v=0, An4+v=0, Gn4+v=0, Dn2+v=100, An4+v=100; 24.0.5: As4+v=100; 24.0.67: Dn4+v=100; 24.0.83: Fn4+v=100; 24.1.0: Cn5+v=100; 24.1.5: Dn5+v=100; 24.1.67: Dn4+v=100; 24.1.83: Fn4+v=100; 24.2.0: Cn5+v=100; 24.2.5: As4+v=100; 24.2.67: Dn4+v=100; 24.2.83: Fn4+v=100; 24.3.0: An4+v=100; 24.3.5: As4+v=100; 24.3.67: Dn4+v=100; 24.3.83: Fn4+v=100; 25.0.0: Dn2+v=0, An4+v=0, As4+v=0, Dn4+v=0, Fn4+v=0, Cn5+v=0, Dn5+v=0, Dn4+v=0, Fn4+v=0, Cn5+v=0, As4+v=0, Dn4+v=0, Fn4+v=0, An4+v=0, As4+v=0, Dn4+v=0, Fn4+v=0, An4+v=100; 25.0.5: As4+v=100; 25.0.67: Dn4+v=100; 25.0.83: Fn4+v=100; 25.1.0: Cn5+v=100; 25.1.5: Dn5+v=100; 25.1.67: Dn4+v=100; 25.1.83: Fn4+v=100; 25.2.0: Cn5+v=100; 25.2.5: As4+v=100; 25.2.67: Dn4+v=100; 25.2.83: Fn4+v=100; 25.3.0: An4+v=100; 25.3.5: Gn4+v=100; 25.3.67: Dn4+v=100; 25.3.83: Fn4+v=100; 26.0.0: An4+v=0, As4+v=0, Dn4+v=0, Fn4+v=0, Cn5+v=0, Dn5+v=0, Dn4+v=0, Fn4+v=0, Cn5+v=0, As4+v=0, Dn4+v=0, Fn4+v=0, An4+v=0, Gn4+v=0, Dn4+v=0, Fn4+v=0, Dn2+v=100, An4+v=100; 26.0.25: As4+v=100; 26.0.5: As3+v=100; 26.0.75: En4+v=100; 26.1.0: Cn5+v=100; 26.1.25: Dn5+v=100; 26.1.5: Dn4+v=100; 26.1.75: Gn4+v=100; 26.2.0: Cn5+v=100; 26.2.25: As4+v=100; 26.2.5: En5+v=100; 26.2.75: An5+v=100; 26.3.0: An4+v=100; 26.3.25: As4+v=100; 26.3.5: As5+v=100; 26.3.75: En6+v=100; 27.0.0: Dn2+v=0, An4+v=0, As4+v=0, As3+v=0, En4+v=0, Cn5+v=0, Dn5+v=0, Dn4+v=0, Gn4+v=0, Cn5+v=0, As4+v=0, En5+v=0, An5+v=0, An4+v=0, As4+v=0, As5+v=0, En6+v=0, An4+v=100; 27.0.5: As4+v=100; 27.1.0: Cn5+v=100; 27.1.5: Dn5+v=100; 27.2.0: Cn5+v=100; 27.2.5: As4+v=100; 27.3.0: An4+v=100; 27.3.5: Gn4+v=100; 28.0.0: An4+v=0, As4+v=0, Cn5+v=0, Dn5+v=0, Cn5+v=0, As4+v=0, An4+v=0, Gn4+v=0, Fs4+v=100, Cs4+v=100, An3+v=100, Cs5+v=100; 28.2.0: Fs5+v=100; 29.0.0: Fs4+v=0, Cs4+v=0, An3+v=0, Cs5+v=0, Fs5+v=0, Fs4+v=100, Cs4+v=100, Gs3+v=100; 29.2.0: Cn5+v=100; 30.0.0: Fs4+v=0, Cs4+v=0, Gs3+v=0, Cn5+v=0, Fs4+v=100, Cs4+v=100, An3+v=100; 30.1.0: Cs5+v=100; 30.2.0: En5+v=100; 30.3.0: Cs5+v=100; 31.0.0: Fs4+v=0, Cs4+v=0, An3+v=0, Cs5+v=0, En5+v=0, Cs5+v=0, En4+v=100, Cs4+v=100, Ds5+v=100; 31.2.0: Bn4+v=100; 32.0.0: En4+v=0, Cs4+v=0, Ds5+v=0, Bn4+v=0, An3+v=100, Dn3+v=100, An4+v=100, Fs4+v=100; 33.0.0: An3+v=0, Dn3+v=0, An4+v=0, Fs4+v=0, Gs3+v=100, Cs3+v=100, Gs4+v=100, Fn4+v=100; 34.0.0: Gs3+v=0, Cs3+v=0, Gs4+v=0, Fn4+v=0, Fs3+v=100, Cn3+v=100, An4+v=100, Ds4+v=100; 34.2.0: Fs4+v=100; 35.0.0: Fs3+v=0, Cn3+v=0, An4+v=0, Ds4+v=0, Fs4+v=0, Fn3+v=100, Cs3+v=100, Fs4+v=100, Bn3+v=100; 35.3.0: Gs4+v=100; 36.0.0: Fn3+v=0, Cs3+v=0, Fs4+v=0, Bn3+v=0, Gs4+v=0, Cs4+v=100, Fs3+v=100, An4+v=100; 36.1.0: Cs5+v=100; 36.1.5: An2+v=100; 36.2.0: Cn4+v=100, Fs3+v=100, Cn5+v=100, Ds4+v=100; 36.3.5: Bn4+v=100; 37.0.0: Cs4+v=0, Fs3+v=0, An4+v=0, Cs5+v=0, An2+v=0, Cn4+v=0, Fs3+v=0, Cn5+v=0, Ds4+v=0, Bn4+v=0, An3+v=100, Cn3+v=100, Cn5+v=100, Ds4+v=100; 37.0.5: Bn4+v=100; 37.1.0: Fs3+v=100, An4+v=100, Cn4+v=100; 37.1.5: Cs4+v=100; 37.2.0: Bn3+v=100, Cs3+v=100, Gs4+v=100, Fn4+v=100, Dn4+v=100; 37.3.0: Cs2+v=100, Cs4+v=100; 38.0.0: An3+v=0, Cn3+v=0, Cn5+v=0, Ds4+v=0, Bn4+v=0, Fs3+v=0, An4+v=0, Cn4+v=0, Cs4+v=0, Bn3+v=0, Cs3+v=0, Gs4+v=0, Fn4+v=0, Dn4+v=0, Cs2+v=0, Cs4+v=0, Fs2+v=100, Fs1+v=100, An4+v=100, En4+v=100, Cs4+v=100; 38.0.67: Cs3+v=100; 38.1.0: Fs3+v=100, Bn4+v=100, Fs4+v=100, En4+v=100; 38.1.33: An3+v=100; 38.1.67: Cs4+v=100; 38.2.0: En2+v=100, En1+v=100, Gs4+v=100, Ds4+v=100, Cs4+v=100, Bn3+v=100; 38.2.67: Cs3+v=100; 38.3.0: En3+v=100; 38.3.33: Gs3+v=100; 38.3.5: Fs4+v=100; 38.3.67: Bn3+v=100; 39.0.0: Fs2+v=0, Fs1+v=0, An4+v=0, En4+v=0, Cs4+v=0, Cs3+v=0, Fs3+v=0, Bn4+v=0, Fs4+v=0, En4+v=0, An3+v=0, Cs4+v=0, En2+v=0, En1+v=0, Gs4+v=0, Ds4+v=0, Cs4+v=0, Bn3+v=0, Cs3+v=0, En3+v=0, Gs3+v=0, Fs4+v=0, Bn3+v=0, Gs2+v=100, Gs1+v=100, Bn4+v=100, Fs4+v=100, Ds4+v=100, Bn3+v=100; 39.0.5: Bn2+v=100; 39.0.67: En3+v=100; 39.0.83: Gs3+v=100; 39.1.0: Gs2+v=100, En5+v=100, En4+v=100; 39.2.0: An2+v=100, An1+v=100, En6+v=100, Bn5+v=100, An5+v=100, En5+v=100; 39.3.0: Gs2+v=0, Gs1+v=0, Bn4+v=0, Fs4+v=0, Ds4+v=0, Bn3+v=0, Bn2+v=0, En3+v=0, Gs3+v=0, Gs2+v=0, En5+v=0, En4+v=0, An2+v=0, An1+v=0, En6+v=0, Bn5+v=0, An5+v=0, En5+v=0, En4+v=100, Bn3+v=100, Gs3+v=100, Ds5+v=100, Bn4+v=100, Fs4+v=100; 39.3.5: Bn3+v=100, Fs3+v=100, Ds3+v=100, As4+v=100, Fs4+v=100, Cs4+v=100; 40.0.0: sig: 6/4; 40.0.0: Ds6+v=100, Bn5+v=100, Fs5+v=100, En5+v=100, Bn4+v=100, Gs4+v=100; 40.0.5: As5+v=100, Fs5+v=100, Cs5+v=100, Bn4+v=100, Fs4+v=100, Ds4+v=100; 40.1.0: Ds7+v=100, Bn6+v=100, Fs6+v=100, En6+v=100, Bn5+v=100, Fs5+v=100; 40.4.0: En4+v=0, Bn3+v=0, Gs3+v=0, Ds5+v=0, Bn4+v=0, Fs4+v=0, Bn3+v=0, Fs3+v=0, Ds3+v=0, As4+v=0, Fs4+v=0, Cs4+v=0, Ds6+v=0, Bn5+v=0, Fs5+v=0, En5+v=0, Bn4+v=0, Gs4+v=0, As5+v=0, Fs5+v=0, Cs5+v=0, Bn4+v=0, Fs4+v=0, Ds4+v=0, Ds7+v=0, Bn6+v=0, Fs6+v=0, En6+v=0, Bn5+v=0, Fs5+v=0, Cs4+v=100, Cs6+v=100, Cs5+v=100; 40.5.0: Ds4+v=100, Ds6+v=100, Ds5+v=100; 41.0.0: sig: 4/4; 41.0.0: Cs4+v=0, Cs6+v=0, Cs5+v=0, Ds4+v=0, Ds6+v=0, Ds5+v=0, Cs5+v=100, As4+v=100, Ds4+v=100, Fn6+v=100, Cs6+v=100, Gs5+v=100, Fn5+v=100; 41.1.0: Cs6+v=100, Cs5+v=100; 41.2.0: Bn4+v=100, Gs4+v=100, En4+v=100, Ds6+v=100, Fs5+v=100, Ds5+v=100; 41.3.0: En2+v=100, En1+v=100, Gs3+v=100, Bn2+v=100; 42.0.0: sig: 6/4; 42.0.0: Cs5+v=0, As4+v=0, Ds4+v=0, Fn6+v=0, Cs6+v=0, Gs5+v=0, Fn5+v=0, Cs6+v=0, Cs5+v=0, Bn4+v=0, Gs4+v=0, En4+v=0, Ds6+v=0, Fs5+v=0, Ds5+v=0, En2+v=0, En1+v=0, Gs3+v=0, Bn2+v=0, As3+v=100, Ds3+v=100, Fs4+v=100, Cs4+v=100; 42.0.5: Gs4+v=100; 42.1.0: Ds2+v=100, Ds1+v=100, As4+v=100; 42.1.5: Fs4+v=100; 42.2.0: Bn3+v=100, En3+v=100, Gs4+v=100, Cs4+v=100; 42.3.0: En2+v=100, En1+v=100; 42.4.0: Cs5+v=100, Gs4+v=100, Fs4+v=100, Cs4+v=100; 42.5.0: Ds6+v=100, Ds5+v=100, Ds4+v=100; 43.0.0: sig: 4/4; 43.0.0: As3+v=0, Ds3+v=0, Fs4+v=0, Cs4+v=0, Gs4+v=0, Ds2+v=0, Ds1+v=0, As4+v=0, Fs4+v=0, Bn3+v=0, En3+v=0, Gs4+v=0, Cs4+v=0, En2+v=0, En1+v=0, Cs5+v=0, Cs5+v=0, Gs4+v=0, Fs4+v=0, Cs4+v=0, Ds6+v=0, Ds5+v=0, Ds4+v=0, Cs5+v=100, Ds4+v=100, Fn6+v=100, Cs6+v=100, Gs5+v=100, Fn5+v=100; 43.1.0: Cs6+v=100, Cs5+v=100; 43.2.0: En4+v=100, Bn5+v=100, Gs5+v=100, Ds5+v=100, Bn4+v=100; 44.0.0: Cs5+v=0, Ds4+v=0, Fn6+v=0, Cs6+v=0, Gs5+v=0, Fn5+v=0, Cs6+v=0, Cs5+v=0, En4+v=0, Bn5+v=0, Gs5+v=0, Ds5+v=0, Bn4+v=0, Ds4+v=100, As5+v=100, Fs5+v=100, Cs5+v=100, As4+v=100; 44.2.0: Gs4+v=100, Cs4+v=100, Gs5+v=100, En5+v=100, Ds5+v=100, Bn4+v=100; 45.0.0: sig: 6/4; 45.0.0: Ds4+v=0, As5+v=0, Fs5+v=0, Cs5+v=0, As4+v=0, Gs4+v=0, Cs4+v=0, Gs5+v=0, En5+v=0, Ds5+v=0, Bn4+v=0, En2+v=100, En1+v=100, Gs3+v=100, Cs3+v=100; 46.0.0: En2+v=0, En1+v=0, Gs3+v=0, Cs3+v=0, En4+v=100, Bn3+v=100, Ds5+v=100, Gs4+v=100, Fs4+v=100; 46.2.0: As4+v=100, En4+v=100, Fs5+v=100, Cs5+v=100, Bn4+v=100; 48.0: En4+v=0, Bn3+v=0, Ds5+v=0, Gs4+v=0, Fs4+v=0, As4+v=0, En4+v=0, Fs5+v=0, Cs5+v=0, Bn4+v=0;';
 var lastgenl = '1.0.0: Fs1+v=100, Fs2+v=100, Cs4+v=100, An3+v=100, Fs3+v=100;';
 var lastgenbeatlen = 0.7;
@@ -36,7 +37,7 @@ eventTimeThresh = eventTimeThresh * timeUnit;
 var eventTimeThreshAdj = eventTimeThresh * timemulti;
 var rollkey;
 var pianocol = "#666666";//"#000000";
-var keypresscol = "#ffb8b8";//"#ff0000";
+var keypresscol = "#ff9999";//"#ffb8b8";//"#ff0000";
 var lastkeycol = "#fff0f0";//"#ddddff";//"#aaaaff";
 var playing = false;
 var OFF_VOL = 0;//0.00001;
@@ -214,8 +215,8 @@ class Instrument {
 
 class Equalizer {
 	constructor() {
-		this.in = sound.ctx.createChannelSplitter(3);
-		this.out = sound.ctx.createChannelMerger(3);
+		this.in = sound.ctx.createGain();
+		this.out = sound.ctx.createGain();
 		this.hBand = sound.ctx.createBiquadFilter();
 		this.hBand.type = "lowshelf";
 		this.hBand.frequency.value = 360;
@@ -234,10 +235,8 @@ class Equalizer {
 		this.in.connect(this.hBand);
 		this.hBand.connect(this.hInvert);
 		this.lBand.connect(this.lInvert);
-		this.bandMerge = sound.ctx.createChannelMerger(2);
-		this.hInvert.connect(this.bandMerge);
-		this.lInvert.connect(this.bandMerge);
-		this.bandMerge.connect(this.mBand);
+		this.hInvert.connect(this.mBand);
+		this.lInvert.connect(this.mBand);
 		this.lGain = sound.ctx.createGain();
 		this.mGain = sound.ctx.createGain();
 		this.hGain = sound.ctx.createGain();
@@ -268,11 +267,17 @@ class ENVLP {
 		this.multi = 1;
 		this.targets = new Array();
 		this.objects = new Array();
+		this.knob = null;
 	}
 	
 	connect(obj) {
 		if (this.iskey) {
 			this.setTarget(obj.o[this.pnum].frequency);
+		} else if (this.isval) {
+			this.setTarget(obj.targets[this.pnum]);
+			if (obj.isknob) {
+				this.knob = obj;
+			}
 		} else {
 			for (var i = 0; i < this.objects.length; i++) {
 				this.objects[i].connect(obj);
@@ -281,9 +286,10 @@ class ENVLP {
 	}
 	
 	disconnect(obj) {
-		if (this.iskey) {
+		if (this.iskey || this.isval) {
+			this.knob = null;
 			this.removeTarget(obj);
-		} else if (this.object) {
+		} else {
 			for (var i = 0; i < this.objects.length; i++) {
 				this.objects[i].disconnect(obj);
 			}
@@ -333,19 +339,35 @@ class ENVLP {
 		//this.target = null;
 	}
 	
+	noteOnNow(f, knum, oscnum) {
+		this.noteON(sound.ctx.currentTime);
+	}
+	
 	noteON(time, f) {
 		//if (!this.target) return;
 		var f = f || 0;
 		if (!this.iskey) f = 0;
-		var vv = f + this.atkv.value * this.multi;
-		var vt = time+this.atkt.value;
-		for (var i = 0; i < this.targets.length; i++) {
-			var m = this.targets[i].multi || 1;
-			this.targets[i].cancelScheduledValues(time);
-			//console.log("set value to " + vv + " at " + vt);
-			this.targets[i].setValueAtTime((f+this.strv.value * this.multi)*m, time);
-			this.targets[i].linearRampToValueAtTime((f+this.atkv.value * this.multi)*m, time+this.atkt.value);
-			this.targets[i].linearRampToValueAtTime((f+this.decv.value * this.multi)*m, time+this.atkt.value + this.dect.value);
+		if (this.knob) {
+			var kmin = this.knob.min.value;
+			var kmax = this.knob.max.value - kmin;
+			var vv = kmin + this.atkv.value * kmax;
+			var vt = time+this.atkt.value;
+			for (var i = 0; i < this.targets.length; i++) {
+				this.targets[i].cancelScheduledValues(time);
+				//console.log("set value to " + vv + " at " + vt);
+				this.targets[i].setValueAtTime(kmin + this.strv.value * kmax, time);
+				this.targets[i].linearRampToValueAtTime(vv, vt);
+				this.targets[i].linearRampToValueAtTime(kmin + this.decv.value * kmax, time+this.atkt.value + this.dect.value);
+			}
+		} else {
+			for (var i = 0; i < this.targets.length; i++) {
+				var m = this.targets[i].multi || 1;
+				this.targets[i].cancelScheduledValues(time);
+				//console.log("set value to " + vv + " at " + vt);
+				this.targets[i].setValueAtTime((f+this.strv.value * this.multi)*m, time);
+				this.targets[i].linearRampToValueAtTime((f+this.atkv.value * this.multi)*m, time+this.atkt.value);
+				this.targets[i].linearRampToValueAtTime((f+this.decv.value * this.multi)*m, time+this.atkt.value + this.dect.value);
+			}
 		}
 	}
 	
@@ -354,8 +376,9 @@ class ENVLP {
 		var f = f || 0;
 		if (!this.iskey) f = 0;
 		for (var i = 0; i < this.targets.length; i++) {
+			var m = this.targets[i].multi || 1;
 			this.targets[i].cancelScheduledValues(time);
-			this.targets[i].linearRampToValueAtTime(OFF_VOL, time);
+			this.targets[i].linearRampToValueAtTime((f+OFF_VOL)*m, time);
 		}
 		//console.log("adsr note off to " + this.relv + " at time " + time + " + " + this.relt);
 	}
@@ -383,11 +406,17 @@ class ADSR {
 		this.multi = 1;
 		this.targets = new Array();
 		this.objects = new Array();
+		this.knob = null;
 	}
 	
 	connect(obj) {
 		if (this.iskey) {
 			this.setTarget(obj.o[this.pnum].frequency);
+		} else if (this.isval) {
+			this.setTarget(obj.targets[this.pnum]);
+			if (obj.isknob) {
+				this.knob = obj;
+			}
 		} else {
 			for (var i = 0; i < this.objects.length; i++) {
 				this.objects[i].connect(obj);
@@ -396,9 +425,10 @@ class ADSR {
 	}
 	
 	disconnect(obj) {
-		if (this.iskey) {
+		if (this.iskey || this.isval) {
 			this.removeTarget(obj);
-		} else if (this.object) {
+			this.knob = null;
+		} else {
 			for (var i = 0; i < this.objects.length; i++) {
 				this.objects[i].disconnect(obj);
 			}
@@ -448,17 +478,34 @@ class ADSR {
 		//this.target = null;
 	}
 	
+	noteOnNow(f, knum, oscnum) {
+		this.noteON(sound.ctx.currentTime);
+	}
+	
 	noteON(time, f) {
 		//if (!this.target) return;
 		var f = f || 0;
 		if (!this.iskey) f = 0;
-		for (var i = 0; i < this.targets.length; i++) {
-			var m = this.targets[i].multi || 1;
-			this.targets[i].cancelScheduledValues(time);
-			this.targets[i].setValueAtTime(OFF_VOL, time);
-			this.targets[i].linearRampToValueAtTime((f + this.atkv * this.multi)*m, time+this.atkt.value);
-			this.targets[i].linearRampToValueAtTime((f + this.decv.value * this.multi)*m, time+this.atkt.value + this.dect.value);
-			this.targets[i].linearRampToValueAtTime((f + this.susv.value * this.multi)*m, time+this.sust.value + this.atkt.value + this.dect.value);
+		if (this.knob) {
+			var kmin = this.knob.min.value;
+			var kmax = this.knob.max.value - kmin;
+			for (var i = 0; i < this.targets.length; i++) {
+				this.targets[i].cancelScheduledValues(time);
+				this.targets[i].cancelScheduledValues(time);
+				this.targets[i].setValueAtTime(OFF_VOL, time);
+				this.targets[i].linearRampToValueAtTime(kmin + this.atkv * kmax, time+this.atkt.value);
+				this.targets[i].linearRampToValueAtTime(kmin + this.decv.value * kmax, time+this.atkt.value + this.dect.value);
+				this.targets[i].linearRampToValueAtTime(kmin + this.susv.value * kmax, time+this.sust.value + this.atkt.value + this.dect.value);
+			}
+		} else {
+			for (var i = 0; i < this.targets.length; i++) {
+				var m = this.targets[i].multi || 1;
+				this.targets[i].cancelScheduledValues(time);
+				this.targets[i].setValueAtTime(OFF_VOL, time);
+				this.targets[i].linearRampToValueAtTime((f + this.atkv * this.multi)*m, time+this.atkt.value);
+				this.targets[i].linearRampToValueAtTime((f + this.decv.value * this.multi)*m, time+this.atkt.value + this.dect.value);
+				this.targets[i].linearRampToValueAtTime((f + this.susv.value * this.multi)*m, time+this.sust.value + this.atkt.value + this.dect.value);
+			}
 		}
 	}
 	
@@ -598,7 +645,7 @@ class AudioManager {
 			//tosc.connectToSpeakers();
 			this.pianos.push(tosc);
 		}
-		this.impulse = this.impulseResponse(1, 2, false);
+		this.impulse = this.impulseResponse(0.5, 2, false);
 	}
 	
 	impulseResponse(duration, decay, reverse) {
@@ -762,6 +809,10 @@ class Drawable {
 			this.stepx = this.x - sx;
 			this.stepy = this.y - sy;
 		}
+	}
+	
+	dimsToString() {
+		return '"x":' + this.x + ' , "y":' + this.y + ' , "w":' + this.w + ' , "h":' + this.h;
 	}
 }
 
@@ -931,7 +982,7 @@ class PKey extends Drawable {
 				}
 				this.pressed = false;
 				var msg = this.oscnum == -1;
-				this.keyout.noteOFF(this.oscnum, this.num, msg);
+				this.keyout.noteOFF(this.oscnum, this.num, msg, this.freq);
 				this.oscnum = -1;
 				var txt = "";
 				for (var i = 0; i < this.names.length; i++) {
@@ -1467,6 +1518,7 @@ class SynthModule extends Drawable {
 				this.parents[i].update();
 			}
 		}
+		return true;
 	}
 }
 
@@ -1653,9 +1705,11 @@ class ValueReceiver {
 class Knob extends SynthModule {
 	constructor(x, y, w, h, vals, min, max, init, turns) {
 		super(x, y, w, h, vals);
+		this.isknob = true;
+		this.locked = false;
 		this.name = "knob";
 		this.turns = turns || 1;
-		this.discreet = (this.n > 1);
+		this.discreet = false;//(this.n > 1);
 		this.step = Math.PI * 2 / (this.n);
 		this.knobspeed = 0.03;
 		this.r = this.w*0.5;
@@ -1690,9 +1744,11 @@ class Knob extends SynthModule {
 		ctx.arc(this.x + this.r, this.y + this.r, this.r, 0, 2*Math.PI);
 		ctx.stroke();
 		ctx.closePath();
-		ctx.beginPath();
-		ctx.arc(this.dotx + this.dotr, this.doty + this.dotr, this.dotr, 0, 2*Math.PI);
-		ctx.stroke();
+		if (!this.locked) {
+			ctx.beginPath();
+			ctx.arc(this.dotx + this.dotr, this.doty + this.dotr, this.dotr, 0, 2*Math.PI);
+			ctx.stroke();
+		}
 		ctx.closePath();
 		ctx.fillStyle = pianocol;
 		ctx.font = this.h*0.26 + "px Arial";
@@ -1722,7 +1778,12 @@ class Knob extends SynthModule {
 		}
 	}
 	
+	lock(locked) {
+		this.locked = locked;
+	}
+	
 	drag(dragCoords, clickCoords) {
+		if (this.locked) return;
 		this.ddist = clickCoords.y - dragCoords.y;
 		var ndota = this.startdota - this.ddist * this.knobspeed;
 		var nval = 0;
@@ -1746,10 +1807,13 @@ class Knob extends SynthModule {
 	}
 	
 	setValue(v) {
+		var inrange = true;
 		if (v > this.max.value) {
 			v = this.max.value;
+			inrange = false;
 		} else if (v < this.min.value) {
 			v = this.min.value;
+			inrange = false;
 		}
 		if (this.discreet) {
 			this.val = this.vals[v-this.min.value];
@@ -1759,6 +1823,7 @@ class Knob extends SynthModule {
 			this.dota = -v * Math.PI * this.turns / (0.55 * (this.max.value - this.min.value));
 		}
 		super.setValue();
+		return inrange;
 	}
 }
 
@@ -1775,6 +1840,11 @@ class EqualModule extends SynthModule {
 		this.knobH = new Knob(x, y, this.kw, this.kw, [1], 0, 1);
 		this.knobH.name = "Hi";
 		this.knobH.setParentModule([this]);
+	}
+	
+	save() {
+		var t = '"L":' + this.knobL.val + ' , "M":' + this.knobM.val + ' , "H":' + this.knobH.val;
+		return t;
 	}
 	
 	setPos(x, y) {
@@ -1846,13 +1916,13 @@ class ENVLPModule extends SynthModule {
 		this.kw = w/5;
 		//new ADSRBasicOsc(this, atkt=0.05, atkv=1, dect=0.05, decv=0.5,
 		//sust=5, susv=0.00001, relt=0.2, relv=0.00001);
-		this.knobSV = new Knob(x+this.kw*4, y, this.kw, this.kw, [0.5], OFF_VOL, 1);
+		this.knobSV = new Knob(x+this.kw*4, y, this.kw, this.kw, [0], OFF_VOL, 1);
 		this.knobSV.name = "vS";
 		this.knobSV.setParentModule([this]);
 		this.knobA = new Knob(x, y, this.kw, this.kw, [1], 0.001, 10);
 		this.knobA.name = "tA";
 		this.knobA.setParentModule([this]);
-		this.knobAV = new Knob(x, y, this.kw, this.kw, [0.6], OFF_VOL, 1);
+		this.knobAV = new Knob(x, y, this.kw, this.kw, [1], OFF_VOL, 1);
 		this.knobAV.name = "vA";
 		this.knobAV.setParentModule([this]);
 		this.knobD = new Knob(x+this.kw, y, this.kw, this.kw, [1], 0.001, 10);
@@ -1867,6 +1937,12 @@ class ENVLPModule extends SynthModule {
 		this.expD = knobtot/(this.knobD.max.value - this.knobD.min.value);
 		this.setPos(x, y);
 		this.setTarget(envs);
+	}
+	
+	save() {
+		var t = '"SV":' + this.knobSV.val + ' , "A":' + this.knobA.val + ' , "AV":' + this.knobAV.val;
+		t += ' , "D":' + this.knobD.val + ' , "DV":' + this.knobDV.val;
+		return t;
 	}
 	
 	setPos(x, y) {
@@ -1938,6 +2014,7 @@ class ENVLPModule extends SynthModule {
 	drawScreen(ctx) {
 		drawRect(ctx, this.sx, this.sy, this.sw, this.sh, this.stroke, this.fill, this.fillCol, this.strokeCol);
 		ctx.beginPath();
+		ctx.strokeStyle = keypresscol;
 		ctx.moveTo(this.sx, this.ys);
 		ctx.lineTo(this.xa, this.ya);
 		ctx.lineTo(this.xd, this.yd);
@@ -1954,16 +2031,16 @@ class ADSRModule extends SynthModule {
 		this.knobA = new Knob(x, y, this.kw, this.kw, [0.01], 0.0001, 1);
 		this.knobA.name = "tA";
 		this.knobA.setParentModule([this]);
-		this.knobD = new Knob(x+this.kw, y, this.kw, this.kw, [0.05], 0.00001, 1);
+		this.knobD = new Knob(x+this.kw, y, this.kw, this.kw, [0.05], 0.0001, 1);
 		this.knobD.name = "tD";
 		this.knobD.setParentModule([this]);
-		this.knobDV = new Knob(x+this.kw*2, y, this.kw, this.kw, [0.5], 0.0001, 0.99);
+		this.knobDV = new Knob(x+this.kw*2, y, this.kw, this.kw, [0.5], OFF_VOL, 1);
 		this.knobDV.name = "vD";
 		this.knobDV.setParentModule([this]);
 		this.knobS = new Knob(x+this.kw*3, y, this.kw, this.kw, [5], 1, 10);
 		this.knobS.name = "tS";
 		this.knobS.setParentModule([this]);
-		this.knobSV = new Knob(x+this.kw*4, y, this.kw, this.kw, [0.1], 0.01, 0.9);
+		this.knobSV = new Knob(x+this.kw*4, y, this.kw, this.kw, [0.1], OFF_VOL, 1);
 		this.knobSV.name = "vS";
 		this.knobSV.setParentModule([this]);
 		this.knobR = new Knob(x+this.kw*5, y, this.kw, this.kw, [0.00001], 0.00001, 1);
@@ -1977,6 +2054,12 @@ class ADSRModule extends SynthModule {
 		this.expR = knobtot/(this.knobR.max.value - this.knobR.min.value);
 		this.setPos(x, y);
 		this.setTarget(envs);
+	}
+	
+	save() {
+		var t = '"A":' + this.knobA.val + ' , "D":' + this.knobD.val + ' , "DV":' + this.knobDV.val;
+		t += ' , "S":' + this.knobS.val + ' , "SV":' + this.knobSV.val + ' , "R":' + this.knobR.val;
+		return t;
 	}
 	
 	setPos(x, y) {
@@ -2058,6 +2141,7 @@ class ADSRModule extends SynthModule {
 		drawRect(ctx, this.sx, this.sy, this.sw, this.sh, this.stroke, this.fill, this.fillCol, this.strokeCol);
 		ctx.beginPath();
 		ctx.moveTo(this.sx, this.sy + this.sh);
+		ctx.strokeStyle = keypresscol;
 		ctx.lineTo(this.xa, this.ya);
 		ctx.lineTo(this.xd, this.yd);
 		ctx.lineTo(this.xs, this.ys);
@@ -2290,6 +2374,7 @@ class ioNode extends Drawable {
 			piano.keyout.connectTrigger(node.trigprop);
 		}
 		this.trigprop.connect(node.trigprop);
+		node.trigprop.notifyConnect(node);
 		this.conx = node.x+node.r;
 		this.cony = node.y+node.r;
 		this.connected = true;
@@ -2342,6 +2427,7 @@ class ioNode extends Drawable {
 		this.con.connected = false;
 		this.con.disconnectInput();
 		this.trigprop.disconnect(node.trigprop);
+		node.trigprop.notifyDisconnect(node);
 		this.drawline = false;
 		this.conx = this.x+this.r;
 		this.cony = this.y+this.r;
@@ -2430,6 +2516,46 @@ class SynthModContainer extends Drawable {
 		this.stopTrigger = false;
 	}
 	
+	save() {
+		var t = this.dimsToString();
+		t += ' , "outnodes" : [';
+		for (var i = 0; i < this.outNodes.length; i++) {
+			if (this.outNodes[i].con) {
+				t += '{"mod":' + this.outNodes[i].con.modnum + ' , "node":' + this.outNodes[i].con.nodenum + '}';
+			} else {
+				t += '{"mod":-1 , "node":-1}'
+			}
+			if (i < this.outNodes.length-1) t += ' , ';
+		}
+		t += ']';
+		return t;
+	}
+	
+	setModNum(m) {
+		this.modnum = m;
+		for (var i = 0; i < this.inNodes.length; i++) {
+			this.inNodes[i].modnum = m;
+			this.inNodes[i].nodenum = i;
+		}
+		for (var i = 0; i < this.outNodes.length; i++) {
+			this.outNodes[i].modnum = m;
+			this.outNodes[i].nodenum = i;
+		}
+	}
+	
+	trash() {
+		for (var i = 0; i < this.inNodes.length; i++) {
+			if (this.inNodes[i].con) this.inNodes[i].con.disconnect();
+		}
+		for (var i = 0; i < this.outNodes.length; i++) {
+			if (this.outNodes[i].con) this.outNodes[i].disconnect();
+		}
+		for (var i = 0; i < this.modules.length; i++) {
+			
+		}
+		piano.trash(this);
+	}
+	
 	notifyDisconnect() {
 	}
 	
@@ -2441,14 +2567,12 @@ class SynthModContainer extends Drawable {
 			if (this.triggers[i] === t) return;
 		}
 		this.triggers.push(t);
-		t.notifyConnect();
 	}
 	
 	disconnect(t) {
 		for (var i = 0; i < this.triggers.length; i++) {
 			if (this.triggers[i] === t) {
 				this.triggers.splice(i, 1);
-				t.notifyDisconnect();
 				return;
 			}
 		}
@@ -2478,6 +2602,10 @@ class SynthModContainer extends Drawable {
 	
 	hitCheck(isdown, coords) {
 		if (dragOb == this && !isdown) {
+			if (piano.trashcan.highlight) {
+				this.trash();
+				return true;
+			}
 			dragOb = null;
 		}
 		if (coords.x > this.x && coords.y > this.y && coords.x < this.x + this.w && coords.y < this.y + this.h) {
@@ -2501,6 +2629,9 @@ class SynthModContainer extends Drawable {
 	
 	drag(dcoords, ccoords) {
 		super.drag(dcoords, ccoords);
+		if (piano.trashcan.inBounds(dcoords.x, dcoords.y)) {
+			piano.trashcan.highlight = true;
+		}
 		this.dragObs(this.inNodes);
 		this.dragObs(this.outNodes);
 		this.dragObs(this.modules);
@@ -2605,13 +2736,13 @@ class FrequencySetter {
 	
 	noteOnNow(f, knum, onum) {
 		var val = f*this.multi;
-		console.log("set fs val to " + val);
+		//console.log("set fs val to " + val);
 		this.o[onum].frequency.setValueAtTime(val, sound.ctx.currentTime);
 	}
 	
 	setValue(v) {
 		var val = v*this.multi;
-		console.log("set fs val to " + val);
+		//console.log("set fs val to " + val);
 		for (var i = 0; i < this.o.length; i++) {
 			this.o[i].frequency.setValueAtTime(val, sound.ctx.currentTime);
 		}
@@ -2643,14 +2774,12 @@ class GainTrigger {
 			if (this.triggers[i] === t) return;
 		}
 		this.triggers.push(t);
-		t.notifyConnect();
 	}
 	
 	disconnect(t) {
 		for (var i = 0; i < this.triggers.length; i++) {
 			if (this.triggers[i] === t) {
 				this.triggers.splice(i, 1);
-				t.notifyDisconnect();
 				return;
 			}
 		}
@@ -2693,6 +2822,12 @@ class WhiteNoiseContainer extends SynthModContainer {
 		this.inNodes[0].setObject(this.trigprop);
 	}
 	
+	save() {
+		var t = '{"type":"WhiteNoiseContainer" , ' + super.save();
+		t += '}';
+		return t;
+	}
+	
 	trigger(on, knum, onum, f) {
 		//if (knum) {
 		//	if (on) {
@@ -2715,6 +2850,7 @@ class WhiteNoiseContainer extends SynthModContainer {
 class SynthOscContainer extends SynthModContainer {
 	constructor(x, y, w, h, bl, br, bt, bb, noder) {
 		super(x, y, w, h, bl, br, bt, bb);
+		this.name = "osc con";
 		this.oscTypeSel = new RBPanel(0, 0, w*0.8, w*0.8*0.25, osctypes, true);
 		this.oscs = new Array();
 		//this.gains = new Array();
@@ -2744,6 +2880,12 @@ class SynthOscContainer extends SynthModContainer {
 		this.inNodes[2].setObject(this.gfs);
 		this.addINode(w*0.21+noder*3, h-2*noder, noder, TYPE_VALUE, [TYPE_VALUE, TYPE_MULTI], "f multi", null, this);
 		this.inNodes[3].setObject(this.ms);
+	}
+	
+	save() {
+		var t = '{"type":"SynthOscContainer" , ' + super.save();
+		t += ' , "osc":"' + this.oscTypeSel.val + '"}';
+		return t;
 	}
 	
 	trigger(on, knum, onum, f) {
@@ -2787,28 +2929,66 @@ class SynthFilterContainer extends SynthModContainer {
 		
 		this.filtFreqKnob = new Knob(0, 0, this.filtSel.h*0.9, this.filtSel.h*0.9, [8000], 100, 24000, null, 10);
 		this.filtFreqKnob.setNumTarget(oscarrff);
-		this.filtFreqKnob.name = "freq";
+		this.filtFreqKnob.name = "Freq";
 		this.addModule(this.filtFreqKnob, w*0.05, h*0.55);
+		this.addINode(w*0.05 + this.filtSel.h*0.7, this.h-noder*2, noder, TYPE_VALUE, [TYPE_VALUE], "env", "E");
+		this.inNodes[0].setObject(this.filtFreqKnob);
+		this.fnode = this.inNodes[0];
 		
 		this.filtQKnob = new Knob(0, 0, this.filtSel.h*0.9, this.filtSel.h*0.9, [1], 0.0001, 10, null, 2);
 		this.filtQKnob.setNumTarget(oscarrfq);
 		this.filtQKnob.name = "Q";
 		this.addModule(this.filtQKnob, w*0.05 + this.filtSel.h*1.1, h*0.55);
+		this.addINode(w*0.05 + this.filtSel.h*1.8, this.h-noder*2, noder, TYPE_VALUE, [TYPE_VALUE], "env", "E");
+		this.inNodes[1].setObject(this.filtQKnob);
+		this.qnode = this.inNodes[1];
 		
 		this.filtGKnob = new Knob(0, 0, this.filtSel.h*0.9, this.filtSel.h*0.9, [0], -40, 40);
 		this.filtGKnob.setNumTarget(oscarrfg);
 		this.filtGKnob.name = "Gain";
 		this.addModule(this.filtGKnob, w*0.05 + this.filtSel.h*2.2, h*0.55);
+		this.addINode(w*0.05 + this.filtSel.h*2.9, this.h-noder*2, noder, TYPE_VALUE, [TYPE_VALUE], "env", "E");
+		this.inNodes[2].setObject(this.filtGKnob);
+		this.gnode = this.inNodes[2];
 		
 		this.addINode(0, this.h*0.5-noder, noder, TYPE_AUDIO, [TYPE_AUDIO], "filter");
-		this.inNodes[0].setObject(this.filter);
+		this.inNodes[3].setObject(this.filter);
 		this.addONode(this.w-2*noder, this.h*0.5-noder, noder, TYPE_AUDIO, [TYPE_AUDIO], "osc");
 		this.outNodes[0].setObject(this.filter);
+	}
+	
+	save() {
+		var t = '{"type":"SynthFilterContainer" , ' + super.save();
+		t += ' , "filter":"' + this.filtSel.val + '" , "F":' + this.filtFreqKnob.val;
+		t += ' , "Q":' + this.filtQKnob.val + ' , "G":' + this.filtGKnob.val;
+		t += '}';
+		return t;
+	}
+	
+	notifyConnect(n) {
+		if (n == this.fnode) {
+			this.filtFreqKnob.lock(true);
+		} else if (n == this.qnode) {
+			this.filtQKnob.lock(true);
+		} else if (n == this.gnode) {
+			this.filtGKnob.lock(true);
+		}
+		super.notifyConnect(n);
+	}
+	
+	notifyDisconnect(n) {
+		if (n == this.fnode) {
+			this.filtFreqKnob.lock(false);
+		} else if (n == this.qnode) {
+			this.filtQKnob.lock(false);
+		} else if (n == this.gnode) {
+			this.filtGKnob.lock(false);
+		}
+		super.notifyDisconnect(n);
 	}
 }
 
 class SynthCompContainer extends SynthModContainer {
-
 	constructor(x, y, w, h, bl, br, bt, bb, noder) {
 		super(x, y, w, h, bl, br, bt, bb);
 		
@@ -2864,6 +3044,15 @@ class SynthCompContainer extends SynthModContainer {
 		this.addONode(this.w-2*noder, this.h*0.5-noder, noder, TYPE_AUDIO, [TYPE_AUDIO], "osc");
 		this.outNodes[0].setObject(this.comp);
 	}
+	
+	save() {
+		var t = '{"type":"SynthCompContainer" , ' + super.save();
+		t += ' , "thresh":' + this.compThreshK.val + ' , "knee":' + this.compKneeK.val;
+		t += ' , "rat":' + this.compRatK.val + ' , "atk":' + this.compAtkK.val;
+		t += ' , "rel":' + this.compRelK.val;
+		t += '}';
+		return t;
+	}
 }
 
 class SpeakerMod extends SynthModContainer {
@@ -2872,6 +3061,12 @@ class SpeakerMod extends SynthModContainer {
 		this.r = w*0.3;
 		this.addINode(0, this.h*0.5-noder, noder, TYPE_AUDIO, [TYPE_AUDIO], "speaker");
 		this.inNodes[0].setObject(sound.ctx.destination);
+	}
+	
+	save() {
+		var t = '{"type":"SpeakerMod" , ' + super.save();
+		t += '}';
+		return t;
 	}
 
 	drawOb(ctx) {
@@ -2900,6 +3095,13 @@ class SynthEqualContainer extends SynthModContainer {
 		this.addONode(this.w-2*noder, this.h*0.5-noder, noder, TYPE_AUDIO, [TYPE_AUDIO], "eq");
 		this.outNodes[0].setObject(eqouts);
 	}
+	
+	save() {
+		var t = '{"type":"SynthEqualContainer" , ' + super.save();
+		t += ' , ' + this.mod.save();
+		t += '}';
+		return t;
+	}
 }
 
 class SynthConvContainer extends SynthModContainer {
@@ -2915,6 +3117,12 @@ class SynthConvContainer extends SynthModContainer {
 		this.inNodes[0].setObject(convs);
 		this.addONode(this.w-2*noder, this.h*0.5-noder, noder, TYPE_AUDIO, [TYPE_AUDIO], "conv");
 		this.outNodes[0].setObject(convs);
+	}
+	
+	save() {
+		var t = '{"type":"SynthConvContainer" , ' + super.save();
+		t += '}';
+		return t;
 	}
 	
 	drawOb(ctx) {
@@ -2939,7 +3147,7 @@ class SynthGainContainer extends SynthModContainer {
 			oscggarr.push(gain.gain);
 		}
 		this.knob.setNumTarget(oscggarr);
-		this.addModule(this.knob, w*0.2, h*0.1);
+		this.addModule(this.knob, w*0.2, h*0.2);
 		this.addINode(0, this.h*0.5-noder, noder, TYPE_AUDIO, [TYPE_AUDIO], "gain");
 		this.inNodes[0].setObject(oscgarr, true);
 		this.addONode(this.w-2*noder, this.h*0.5-noder, noder, TYPE_AUDIO, [TYPE_AUDIO], "gain");
@@ -2948,15 +3156,39 @@ class SynthGainContainer extends SynthModContainer {
 		this.inNodes[1].setObject(this.knob.min);
 		this.addINode(this.w*0.9-noder, 0, noder, TYPE_VALUE, [TYPE_VALUE], "max", "M");
 		this.inNodes[2].setObject(this.knob.max);
-		this.addINode(this.w*0.5-noder, this.h-noder*2, noder, TYPE_AUDIO, [TYPE_AUDIO], "LFO", "F");
+		this.addINode(this.w*0.78, this.h-noder*2, noder, TYPE_AUDIO, [TYPE_AUDIO], "LFO", "F");
 		this.inNodes[3].setObject(oscggarr);
+		this.addINode(this.w*0.5-noder, 0, noder, TYPE_VALUE, [TYPE_VALUE], "env", "E");
+		this.inNodes[4].setObject(this.knob);
+		this.envnode = this.inNodes[4];
+	}
+	
+	save() {
+		var t = '{"type":"SynthGainContainer" , ' + super.save();
+		t += ' , "gain":' + this.knob.val;
+		t += '}';
+		return t;
+	}
+	
+	notifyConnect(node) {
+		if (node === this.envnode) {
+			this.knob.lock(true);
+		}
+		super.notifyConnect();
+	}
+	
+	notifyDisconnect(node) {
+		if (node === this.envnode) {
+			this.knob.lock(false);
+		}
+		super.notifyDisconnect();
 	}
 	
 	drawOb(ctx) {
 		super.drawOb(ctx);
 		ctx.font = this.h*0.15 + "px Arial";
 		ctx.fillStyle = pianocol;
-		ctx.fillText("LFO", this.x + this.w*0.05, this.y + this.h*0.95);
+		ctx.fillText("LFO", this.x + this.w*0.45, this.y + this.h*0.97);
 	}
 }
 
@@ -3035,6 +3267,12 @@ class ValueModContainer extends SynthModContainer {
 		super(x, y, w, h, bl, br, bt, bb);
 		this.crossout = false;
 		this.lockinput = false;
+	}
+	
+	save() {
+		var t = '{"type":"ValueModContainer" , ' + super.save();
+		t += '}';
+		return t;
 	}
 	
 	connect(t) {
@@ -3145,6 +3383,12 @@ class TextField extends ValueModContainer {
 		this.inNodes[0].setObject(this);
 	}
 	
+	save() {
+		var t = '{"type":"TextField" , ' + super.save();
+		t += ' , "val"' + this.valueOb.val + '}';
+		return t;
+	}
+	
 	notifyConnect() {
 		this.lockinput = true;
 	}
@@ -3173,6 +3417,12 @@ class TimerMod extends ValueModContainer {
 		this.knum = sound.getKeyNum();
 		this.onum = -1;
 		this.pulseon = false;
+	}
+	
+	save() {
+		var t = '{"type":"TimerMod" , ' + super.save();
+		t += ' , "time"' + this.time + '}';
+		return t;
 	}
 	
 	setValue(v) {
@@ -3232,6 +3482,12 @@ class TextFieldMulti extends ValueModContainer {
 		this.prod = 1;
 	}
 	
+	save() {
+		var t = '{"type":"TextFieldMulti" , ' + super.save();
+		t += ' , "val"' + this.mval + '}';
+		return t;
+	}
+	
 	drawOb(ctx) {
 		super.drawOb(ctx, this.ap, this.ty);
 		ctx.font = this.h*0.22 + "px Arial";
@@ -3268,6 +3524,12 @@ class SwitchMod extends SynthModContainer {
 		this.addModule(this.c, w*0.1, h*0.2);
 		this.outNodes[0].setObject(this.c);
 	}
+	
+	save() {
+		var t = '{"type":"SwitchMod" , ' + super.save();
+		t += '}';
+		return t;
+	}
 
 	drawOb(ctx) {
 		super.drawOb(ctx);
@@ -3284,26 +3546,45 @@ class ClickMod extends SynthModContainer {
 		this.addModule(this.c, w*0.1, h*0.2);
 		this.outNodes[0].setObject(this.c);
 	}
+	
+	save() {
+		var t = '{"type":"ClickMod" , ' + super.save();
+		t += '}';
+		return t;
+	}
 
 	drawOb(ctx) {
 		super.drawOb(ctx);
 	}
 }
 
-class ENVModContainer extends SynthModContainer {
+class ENVContainer extends SynthModContainer {
 	constructor(x, y, w, h, bl, br, bt, bb, noder, envs, mod) {
 		super(x, y, w, h, bl, br, bt, bb);
 		this.adsr = envs;
 		this.mod = mod;
 		this.addModule(this.mod, w*0.1, h*0.1);
-		this.addINode(0, this.h*0.5-noder, noder, TYPE_ENV, [TYPE_AUDIO, TYPE_KEY, TYPE_VALUE], "env");
+		this.addINode(0, this.h*0.5-noder, noder, TYPE_ENV, [TYPE_AUDIO, TYPE_KEY, TYPE_VALUE], "env base", "V");
 		this.inNodes[0].setObject(this.adsr);
 		this.inNodes[0].env = this;
 		this.addINode(this.w*0.1, this.h-2*noder, noder, TYPE_VALUE, [TYPE_VALUE], "env multi");
 		this.inNodes[1].setObject(this.adsr);
-		this.addONode(this.w-2*noder, this.h*0.5-noder, noder, TYPE_ENV, [TYPE_ENV], "env");
+		this.addINode(0, this.h*0.8-noder, noder, TYPE_TRIGGER, [TYPE_KEY, TYPE_TRIGGER], "env trigger", "T");
+		this.inNodes[2].setObject(this.adsr);
+		this.addONode(this.w-2*noder, this.h*0.5-noder, noder, TYPE_VALUE, [TYPE_VALUE], "env");
 		this.outNodes[0].env = this;
 		this.outNodes[0].setObject(this.adsr);
+		this.stopTrigger = true;
+		for (var i = 0; i < sound.numpianos; i++) {
+			this.adsr[i].isval = true;
+		}
+	}
+	
+	save() {
+		var t = '{"type":"SynthADSRContainer" , ' + super.save();
+		t += ' , ' + this.mod.save();
+		t += '}';
+		return t;
 	}
 	
 	drawOb(ctx) {
@@ -3322,18 +3603,27 @@ class ENVModContainer extends SynthModContainer {
 				this.gains[i].gain.value = OFF_VOL;
 				node.obj[i].connect(this.gains[i]);
 				this.adsr[i].iskey = false;
+				this.adsr[i].isval = false;
 				this.adsr[i].setTarget(this.gains[i].gain);
 				this.adsr[i].setObject(this.gains[i]);
 			}
 			this.outNodes[0].ntype = TYPE_AUDIO;
 			return true;
-		} else if (node.ntype == TYPE_KEY || node.ntype == TYPE_VALUE) {
+		} else if (node.ntype == TYPE_KEY) {
 			this.stopTrigger = true;
 			for (var i = 0; i < sound.numpianos; i++) {
 				this.adsr[i].iskey = true;
+				this.adsr[i].isval = false;
 			}
-			this.outNodes[0].ntype = TYPE_KEY;
+			this.outNodes[0].ntype = TYPE_VALUE;
 			return true;
+		} else if (node.ntype == TYPE_VALUE) {
+			this.stopTrigger = true;
+			for (var i = 0; i < sound.numpianos; i++) {
+				this.adsr[i].iskey = false;
+				this.adsr[i].isval = true;
+			}
+			this.outNodes[0].ntype = TYPE_VALUE;
 		}
 	}
 	
@@ -3348,14 +3638,16 @@ class ENVModContainer extends SynthModContainer {
 			}
 			this.gains = null;
 			this.outNodes[0].disconnect();
-			this.outNodes[0].ntype = TYPE_ENV;
+			this.outNodes[0].ntype = TYPE_VALUE;
 			return true;
 		} else if (node.ntype == TYPE_KEY || node.ntype == TYPE_VALUE) {
 			for (var i = 0; i < sound.numpianos; i++) {
 				//this.adsr[i].removeTarget();
+				this.adsr[i].iskey = false;
+				this.adsr[i].isval = false;
 			}
 			this.outNodes[0].disconnect();
-			this.outNodes[0].ntype = TYPE_ENV;
+			this.outNodes[0].ntype = TYPE_VALUE;
 			return true;
 		}
 	}
@@ -3371,7 +3663,7 @@ class ENVModContainer extends SynthModContainer {
 	}
 }
 
-class SynthADSRContainer extends ENVModContainer {
+class SynthADSRContainer extends ENVContainer {
 	constructor(x, y, w, h, bl, br, bt, bb, noder) {
 		var envs = new Array();
 		for (var i = 0; i < sound.numpianos; i++) {
@@ -3384,7 +3676,7 @@ class SynthADSRContainer extends ENVModContainer {
 	}
 }
 
-class SynthENVLPContainer extends ENVModContainer {
+class SynthENVLPContainer extends ENVContainer {
 	constructor(x, y, w, h, bl, br, bt, bb, noder) {
 		var envs = new Array();
 		for (var i = 0; i < sound.numpianos; i++) {
@@ -3413,6 +3705,12 @@ class SynthModKeyboard extends SynthModContainer {
 		this.inNodes[0].setObject(obj);
 	}
 	
+	save() {
+		var t = '{"type":"SynthModKeyboard" , ' + super.save();
+		t += '}';
+		return t;
+	}
+	
 	drawOb(ctx) {
 		super.drawOb(ctx);
 		drawRect(ctx, this.x, this.y, this.w, this.h, this.stroke, this.fill, this.fillCol, this.strokeCol);
@@ -3426,6 +3724,12 @@ class SynthModKeyboard extends SynthModContainer {
 		super.drag(dcoords, ccoords);
 		this.kx += this.stepx;
 		this.ky += this.stepy;
+	}
+	
+	save() {
+		var t = '{"type":"SynthModKeyboard" , ' + super.save();
+		t += '}';
+		return t;
 	}
 }
 
@@ -3441,6 +3745,12 @@ class MergerMod extends SynthModContainer {
 		}
 	}
 	
+	save() {
+		var t = '{"type":"MergerMod" , ' + super.save();
+		t += '}';
+		return t;
+	}
+	
 	notifyDisconnect() {
 		this.setValue();
 	}
@@ -3450,7 +3760,8 @@ class MergerMod extends SynthModContainer {
 		if (nt == TYPE_AUDIO) {
 			this.mergers = new Array();
 			for (var i = 0; i < sound.numpianos; i++) {
-				this.mergers.push(sound.ctx.createChannelMerger(3));
+				//this.mergers.push(sound.ctx.createChannelMerger(3));
+				this.mergers.push(sound.ctx.createGain());
 				if (node.objIsArray) {
 					this.mergers[i].connect(node.obj[i]);
 				} else {
@@ -3542,7 +3853,7 @@ class MergerMod extends SynthModContainer {
 class SplitterMod extends SynthModContainer {
 	constructor(x, y, w, h, bl, br, bt, bb, noder) {
 		super(x, y, w, h, bl, br, bt, bb);
-		this.addINode(0, this.h*0.5-noder, noder, TYPE_SPLITTER, [TYPE_KEY, TYPE_OSC, TYPE_AUDIO, TYPE_TRIGGER, TYPE_VALUE, TYPE_MULTI, TYPE_SPLITTER, TYPE_ENV], "split");
+		this.addINode(0, this.h*0.5-noder, noder, TYPE_SPLITTER, [TYPE_KEY, TYPE_OSC, TYPE_TRIGGER, TYPE_VALUE, TYPE_MULTI, TYPE_SPLITTER, TYPE_ENV], "split");
 		this.inNodes[0].setObject(this);
 		this.inNodes[0].splitter = this;
 		for (var i = 0; i < 3; i++) {
@@ -3550,12 +3861,19 @@ class SplitterMod extends SynthModContainer {
 		}
 	}
 	
+	save() {
+		var t = '{"type":"SplitterMod" , ' + super.save();
+		t += '}';
+		return t;
+	}
+	
 	connectSplit(node) {
 		var nt = node.ntype
 		if (nt == TYPE_AUDIO) {
 			this.splitters = new Array();
 			for (var i = 0; i < sound.numpianos; i++) {
-				this.splitters.push(sound.ctx.createChannelSplitter(3));
+				//this.splitters.push(sound.ctx.createChannelSplitter(3));
+				this.splitters.push(sound.ctx.createGain());
 				node.obj[i].connect(this.splitters[i]);
 			}
 			for (var i = 0; i < this.outNodes.length; i++) {
@@ -3602,6 +3920,12 @@ class SequencerMod extends SynthModContainer {
 	constructor(x, y, w, h, bl, br, bt, bb, noder) {
 		super(x, y, w, h, bl, br, bt, bb);
 	}
+	
+	save() {
+		var t = '{"type":"SequencerMod" , ' + super.save();
+		t += '}';
+		return t;
+	}
 }
 
 function drawLittleKnob(ctx, x, y, w, h, fcol, scol) {
@@ -3626,6 +3950,7 @@ function drawLittleTimer(ctx, x, y, w, h, fill) {
 	if (fill) {
 		ctx.fillStyle = keypresscol;
 		ctx.fill();
+		ctx.strokeStyle = "white";
 	}
 	ctx.beginPath();
 	ctx.moveTo(x + w*0.5, y + h*0.1);
@@ -3810,7 +4135,7 @@ class ENVLIcon extends ModuleIcon {
 
 class FiterIcon extends ModuleIcon {
 	createMod() {
-		return new SynthFilterContainer(this.x, piano.modbt, piano.modh*7, piano.modh*2, piano.modbl, piano.modbr, piano.modbt, piano.modbb, piano.noder);
+		return new SynthFilterContainer(this.x, piano.modbt, piano.modh*6, piano.modh*2, piano.modbl, piano.modbr, piano.modbt, piano.modbb, piano.noder);
 	}
 	
 	drawOb(ctx) {
@@ -3860,7 +4185,7 @@ class ValueIcon extends ModuleIcon {
 	
 	drawOb(ctx) {
 		super.drawOb(ctx);
-		ctx.fillText("VAL", this.x+this.w*0.25, this.y+this.h*0.5);
+		ctx.fillText("= 2", this.x+this.w*0.25, this.y+this.h*0.5);
 	}
 }
 
@@ -3871,7 +4196,7 @@ class MultiIcon extends ModuleIcon {
 	
 	drawOb(ctx) {
 		super.drawOb(ctx);
-		ctx.fillText("MULTI", this.x+this.w*0.1, this.y+this.h*0.5);
+		ctx.fillText("2x", this.x+this.w*0.3, this.y+this.h*0.5);
 	}
 }
 
@@ -3981,8 +4306,6 @@ class ModuleBar extends Drawable {
 		a += h*0.9;
 		this.convb = new ConvIcon(x+a,y+h*0.1, h*0.8, h*0.8, 0, canW, y, canH);
 		a += h*0.9;
-		this.speakerb = new SpeakerIcon(x+a,y+h*0.1, h*0.8, h*0.8, 0, canW, y, canH);
-		a += h*0.9;
 		this.valb = new ValueIcon(x+a,y+h*0.1, h*0.8, h*0.8, 0, canW, y, canH);
 		a += h*0.9;
 		this.multib = new MultiIcon(x+a,y+h*0.1, h*0.8, h*0.8, 0, canW, y, canH);
@@ -3996,6 +4319,8 @@ class ModuleBar extends Drawable {
 		this.timerb = new TimerIcon(x+a,y+h*0.1, h*0.8, h*0.8, 0, canW, y, canH);
 		a += h*0.9;
 		this.eqb = new EQIcon(x+a,y+h*0.1, h*0.8, h*0.8, 0, canW, y, canH);
+		a += h*0.9;
+		this.speakerb = new SpeakerIcon(x+a,y+h*0.1, h*0.8, h*0.8, 0, canW, y, canH);
 		this.icons.push(this.keyb);
 		this.icons.push(this.oscb);
 		this.icons.push(this.gainb);
@@ -4088,13 +4413,13 @@ class KeyboardOutput {
 		if (ind > -1) this.triggers.splice(ind, 1);
 	}
 	
-	noteOFF(oscnum, knum, msg) {
+	noteOFF(oscnum, knum, msg, f) {
 		//for (var i = 0; i < this.outputs.length; i++) {
 		//	this.outputs[i].noteOFF(oscnum, knum, msg);
 		//}
 		if (oscnum < 0) return;
 		for (var i = 0; i < this.triggers.length; i++) {
-			this.triggers[i].trigger(false, knum, oscnum, 0);
+			this.triggers[i].trigger(false, knum, oscnum, f);
 		}
 		sound.returnPiano(oscnum);
 	}
@@ -4114,6 +4439,48 @@ class KeyboardOutput {
 			this.triggers[i].trigger(true, knum, oscnum, freq);
 		}
 		return oscnum;
+	}
+}
+
+class TrashCan extends Drawable {
+	constructor(x, y, w, h) {
+		super(x, y, w, h);
+		this.highlight = false;
+		this.topy = y + h*0.1;
+		this.topl = x + w*0.05;
+		this.topr = x + w*0.95;
+		this.lty = y + h*0.25;
+		this.lby = y + h*0.85;
+		this.ltx = this.topl + (this.topr - this.topl)/3;
+		this.rtx = this.topl + 2*(this.topr - this.topl)/3;
+		this.botl = this.topl + w*0.06;
+		this.botr = this.topr - w*0.06;
+		this.lbx = this.botl + (this.botr - this.botl)/3;
+		this.rbx = this.botl + 2*(this.botr - this.botl)/3;
+		this.r = x + w;
+		this.b = y + h;
+	}
+	
+	drawOb(ctx) {
+		ctx.beginPath();
+		ctx.moveTo(this.ltx, this.y);
+		ctx.lineTo(this.rtx, this.y);
+		ctx.moveTo(this.x, this.topy);
+		ctx.lineTo(this.r, this.topy);
+		ctx.moveTo(this.topl, this.topy);
+		ctx.lineTo(this.botl, this.b);
+		ctx.lineTo(this.botr, this.b);
+		ctx.lineTo(this.topr, this.topy);
+		ctx.moveTo(this.ltx, this.lty);
+		ctx.lineTo(this.lbx, this.lby);
+		ctx.moveTo(this.rtx, this.lty);
+		ctx.lineTo(this.rbx, this.lby);
+		if (this.highlight) {
+			ctx.strokeStyle = keypresscol;
+		} else {
+			ctx.strokeStyle = pianocol;
+		}
+		ctx.stroke();
 	}
 }
 
@@ -4142,6 +4509,9 @@ class Piano {
 		var kw = this.w * 0.15;
 		var cony = y + keyH * 1.7 + keyW*btnw;
 		this.modbar = new ModuleBar(x, cony, this.w, keyH*0.85);
+		var trashw = kw*0.6;
+		var trashh = kw*0.7;
+		this.trashcan = new TrashCan(x + this.w + kw*0.2, cony + this.modbar.h - trashh, trashw, trashh);
 		
 		this.modules = new Array();
 		var tw = keyW*btnw*2;
@@ -4210,6 +4580,63 @@ class Piano {
 			this.allkeys[i].noteOFF();
 		}
 	}
+	
+	saveModules() {
+		var t = "[";
+		for (var i = 0; i < this.modules.length; i++) {
+			this.modules[i].setModNum(i);
+		}
+		for (var i = 0; i < this.modules.length; i++) {
+			t += this.modules[i].save();
+			if (i < this.modules.length - 1) t += ", ";
+		}
+		t += "]";
+		console.log(t);
+	}
+	
+	loadModules() {
+		var mods = JSON.parse(modsaveteststring);
+		for (var i = 0; i < mods.length; i++) {
+			var type = mods[i].type;
+			//console.log(type);
+			var m = null;
+			if (type == "WhiteNoiseContainer") {
+			} else if (type == "SynthFilterContainer") {
+			} else if (type == "SynthCompContainer") {
+			} else if (type == "SpeakerMod") {
+			} else if (type == "SynthEqualContainer") {
+			} else if (type == "SynthConvContainer") {
+			} else if (type == "SynthGainContainer") {
+			} else if (type == "ValueModContainer") {
+			} else if (type == "TextField") {
+			} else if (type == "TimerMod") {
+			} else if (type == "TextFieldMulti") {
+			} else if (type == "SwitchMod") {
+			} else if (type == "ClickMod") {
+			} else if (type == "SynthADSRContainer") {
+			} else if (type == "SynthModKeyboard") {
+			} else if (type == "MergerMod") {
+			} else if (type == "SplitterMod") {
+			} else if (type == "SequencerMod") {
+			} else if (type == "SynthOscContainer") {
+				m = piano.modbar.oscb.createMod();
+			}
+			if (m) {
+				m.setPos(mods[i].x, mods[i].y);
+				piano.modules.push(m);
+			}
+		}
+	}
+	
+	trash(mod) {
+		for (var i = 0; i < this.modules.length; i++) {
+			if (this.modules[i] === mod) {
+				console.log("trash " + mod.name);
+				this.modules.splice(i, 1);
+				return;
+			}
+		}
+	}
 
 	drawOb(ctx) {
 		for (var i = 0; i < this.btns.length; i++) {
@@ -4225,6 +4652,7 @@ class Piano {
 			this.modules[i].drawOb(ctx);
 		}
 		this.modbar.drawOb(ctx);
+		this.trashcan.drawOb(ctx);
 	}
 
 	hit(coords) {
@@ -4297,6 +4725,7 @@ class Staff {
 	}
 	
 	drawOb(ctx) {
+		ctx.strokeStyle = pianocol;
 		ctx.beginPath();
 		for (var i = 0; i < 5; i++) {
 			ctx.moveTo(this.x, this.y + i * this.lineH);
@@ -4438,6 +4867,7 @@ function setup() {
 	//hitfncts.push({press: function () { console.log("ok") }, unpress: function () { console.log("unok") }});
 	piano = new Piano(10, 10, keyW, keyH);
 	initmods();
+	//piano.loadModules();
 	staff = new Staff(20, 50 + keyH, keyH*2, keyH * 0.6);
 	setMsg("");
 	focusOb = qwertyboard;
@@ -4854,6 +5284,7 @@ function mouseUp(event) {
 	mouseCoords = document.getElementById('myCanvas').relMouseCoords(event);
 	var r = piano.hitCheck(clickCoords, false);
 	dragOb = null;
+	piano.trashcan.highlight = false;
 	clicking = false;
 	dragging = false;
 	return r;
@@ -4935,6 +5366,7 @@ function drawRect(ctx, x, y, width, height, stroke, fill, fillCol, strokeCol) {
 </script>
 <body onload="setup()">
 	<canvas id="myCanvas" width="200" height="200"></canvas>
+	<br><button onclick="piano.saveModules()">Save Config</button>
 	<div id="textin">
 		<input type="text" id="beattime"/>
 	</div>
