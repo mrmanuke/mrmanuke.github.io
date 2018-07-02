@@ -4,7 +4,8 @@
 var numpianos = 25;
 var lastonum = 0;
 var playcount = 0;
-var modsaveteststring = '[{"type":"SynthModKeyboard" , "x":12 , "y":326 , "w":120 , "h":115.19999999999999 , "outnodes" : [{"mod":1 , "node":0} , {"mod":1 , "node":1}]}, {"type":"SynthOscContainer" , "x":144 , "y":326 , "w":336 , "h":115.19999999999999 , "outnodes" : [{"mod":2 , "node":0}] , "osc":"triangle"}, {"type":"SynthGainContainer" , "x":492 , "y":326 , "w":134.39999999999998 , "h":124.80000000000001 , "outnodes" : [{"mod":3 , "node":0}] , "gain":0.2}, {"type":"SynthADSRContainer" , "x":638.4 , "y":326 , "w":288 , "h":192 , "outnodes" : [{"mod":4 , "node":0}] , "A":0.01 , "D":0.05 , "DV":0.5 , "S":5 , "SV":0.1 , "R":0.00001}, {"type":"SpeakerMod" , "x":938.4 , "y":326 , "w":96 , "h":96 , "outnodes" : []}]';
+//var fileSys = require('fs');
+var modsaveteststring = '[{"type":"SynthModKeyboard" , "x":12 , "y":326 , "w":120 , "h":115.19999999999999 , "outnodes" : [{"mod":1 , "node":0} , {"mod":1 , "node":1}]}, {"type":"SynthOscContainer" , "x":144 , "y":326 , "w":336 , "h":115.19999999999999 , "outnodes" : [{"mod":2 , "node":0}] , "osc":"2"}, {"type":"SynthGainContainer" , "x":492 , "y":326 , "w":134.39999999999998 , "h":124.80000000000001 , "outnodes" : [{"mod":3 , "node":0}] , "gain":0.2735295837084556}, {"type":"SynthADSRContainer" , "x":638.4 , "y":326 , "w":288 , "h":192 , "outnodes" : [{"mod":4 , "node":0}] , "A":0.09402540657152562 , "D":0.07100635164288135 , "DV":0.30041970136276325 , "S":4.149157674230728 , "SV":0.28907607239317173 , "R":0.25420739467201175}, {"type":"SpeakerMod" , "x":938.4 , "y":326 , "w":96 , "h":96 , "outnodes" : []}]';
 var lastgenr = '1.2.0: Fs4+v=100, Cs4+v=100, An3+v=100; 2.0.0: Gs1+v=100, Gs2+v=100, Fs3+v=100; 2.2.0: Cn4+v=100; 3.0.0: Fs1+v=0, Fs2+v=0, Cs4+v=0, An3+v=0, Fs3+v=0, Fs4+v=0, Cs4+v=0, An3+v=0, Gs1+v=0, Gs2+v=0, Fs3+v=0, Cn4+v=0, An1+v=100, An2+v=100, Fs3+v=100, Cs3+v=100; 3.1.0: Cs4+v=100; 3.2.0: En4+v=100, Fs3+v=100; 3.3.0: Cs4+v=100; 4.0.0: An1+v=0, An2+v=0, Fs3+v=0, Cs3+v=0, Cs4+v=0, En4+v=0, Fs3+v=0, Cs4+v=0, Gs1+v=100, Gs2+v=100, Ds4+v=100, Gs3+v=100, En3+v=100; 4.2.0: Bn3+v=100, Gs3+v=100; 5.0.0: Gs1+v=0, Gs2+v=0, Ds4+v=0, Gs3+v=0, En3+v=0, Bn3+v=0, Gs3+v=0, Fs1+v=100, Fs2+v=100, An3+v=100, Fs3+v=100, Dn3+v=100; 5.2.0: Dn3+v=100; 6.0.0: Fs1+v=0, Fs2+v=0, An3+v=0, Fs3+v=0, Dn3+v=0, Dn3+v=0, Fn1+v=100, Fn2+v=100, Gs3+v=100, Fn3+v=100, Cs3+v=100; 6.2.0: Cs3+v=100; 7.0.0: Fn1+v=0, Fn2+v=0, Gs3+v=0, Fn3+v=0, Cs3+v=0, Cs3+v=0, Ds1+v=100, Ds2+v=100, An3+v=100, Fs3+v=100, Ds3+v=100, Cn3+v=100; 7.2.0: Fs3+v=100, Ds3+v=100; 8.0.0: Ds1+v=0, Ds2+v=0, An3+v=0, Fs3+v=0, Ds3+v=0, Cn3+v=0, Fs3+v=0, Ds3+v=0, Cs1+v=100, Cs2+v=100, Fs3+v=100, Fn3+v=100, Bn2+v=100; 8.2.0: Gs3+v=100, Fn3+v=100; 9.0.0: Cs1+v=0, Cs2+v=0, Fs3+v=0, Fn3+v=0, Bn2+v=0, Gs3+v=0, Fn3+v=0, Fs1+v=100, Fs2+v=100, An3+v=100, Fs3+v=100, Cs3+v=100; 9.1.0: Cs4+v=100; 9.2.0: Fs1+v=0, Fs2+v=0, An3+v=0, Fs3+v=0, Cs3+v=0, Cs4+v=0, An1+v=100, An2+v=100, Cn4+v=100, An3+v=100, En3+v=100; 9.3.0: Bn3+v=100; 10.0.0: An1+v=0, An2+v=0, Cn4+v=0, An3+v=0, En3+v=0, Bn3+v=0, Cn2+v=100, Cn3+v=100, Cn4+v=100, Fs3+v=100, Ds3+v=100; 10.0.5: Bn3+v=100; 10.1.0: An3+v=100; 10.1.5: Cs3+v=100; 10.2.0: Cn2+v=0, Cn3+v=0, Cn4+v=0, Fs3+v=0, Ds3+v=0, Bn3+v=0, An3+v=0, Cs3+v=0, Cs2+v=100, Cs3+v=100, Gs3+v=100, Fn3+v=100; 10.2.33: Gs2+v=100, Bn3+v=100; 10.2.67: Gs3+v=100, Cs4+v=100, Gs3+v=100; 10.3.0: Bn3+v=100, Fn4+v=100; 10.3.33: Cs4+v=100, Gs4+v=100; 10.3.67: Fn4+v=100, Bn4+v=100; 11.0.0: Cs2+v=0, Cs3+v=0, Gs3+v=0, Fn3+v=0, Gs2+v=0, Bn3+v=0, Gs3+v=0, Cs4+v=0, Gs3+v=0, Bn3+v=0, Fn4+v=0, Cs4+v=0, Gs4+v=0, Fn4+v=0, Bn4+v=0, Fs3+v=100, Fs2+v=100, An4+v=100, Fs4+v=100, Cs4+v=100, An3+v=100; 11.1.0: Fs1+v=100, Bn4+v=100; 11.2.0: Fs3+v=0, Fs2+v=0, An4+v=0, Fs4+v=0, Cs4+v=0, An3+v=0, Fs1+v=0, Bn4+v=0, En1+v=100, En2+v=100, Gs4+v=100, En4+v=100, Bn3+v=100, Gs3+v=100; 11.3.0: Cs2+v=100, Fs4+v=100, Gs3+v=100; 12.0.0: En1+v=0, En2+v=0, Gs4+v=0, En4+v=0, Bn3+v=0, Gs3+v=0, Cs2+v=0, Fs4+v=0, Gs3+v=0, Gs1+v=100, Gs2+v=100, Bn4+v=100, En4+v=100, Bn3+v=100; 12.1.0: Gs2+v=100, En4+v=100, Bn3+v=100; 12.2.0: An1+v=100, An2+v=100, En5+v=100, Bn4+v=100, An4+v=100, En4+v=100; 12.3.0: An2+v=100; 12.3.2: En3+v=100; 12.3.4: An3+v=100; 12.3.6: Bn3+v=100; 12.3.8: En4+v=100; 13.0.0: sig: 6/4; 13.0.0: An3+v=100; 13.0.2: En4+v=100; 13.0.4: An4+v=100; 13.0.6: Bn4+v=100; 13.0.8: En5+v=100; 13.2.0: Bn5+v=100, Gs5+v=100, En5+v=100, An4+v=100; 13.4.0: Gs1+v=0, Gs2+v=0, Bn4+v=0, En4+v=0, Bn3+v=0, Gs2+v=0, En4+v=0, Bn3+v=0, An1+v=0, An2+v=0, En5+v=0, Bn4+v=0, An4+v=0, En4+v=0, An2+v=0, En3+v=0, An3+v=0, Bn3+v=0, En4+v=0, An3+v=0, En4+v=0, An4+v=0, Bn4+v=0, En5+v=0, Bn5+v=0, Gs5+v=0, En5+v=0, An4+v=0, Cs5+v=100, Cs4+v=100; 13.5.0: Ds5+v=100, Ds4+v=100; 14.0.0: sig: 4/4; 14.0.0: Cs5+v=0, Cs4+v=0, Ds5+v=0, Ds4+v=0, Ds1+v=100, Ds2+v=100, Fn5+v=100, Cs5+v=100, Gs4+v=100, Fn4+v=100; 14.1.0: Cs5+v=100, Gs4+v=100, Cs4+v=100; 14.2.0: Ds1+v=0, Ds2+v=0, Fn5+v=0, Cs5+v=0, Gs4+v=0, Fn4+v=0, Cs5+v=0, Gs4+v=0, Cs4+v=0, En1+v=100, En2+v=100, Ds5+v=100, Bn4+v=100, Gs4+v=100, Ds4+v=100; 14.3.0: En3+v=100; 14.3.25: Gs3+v=100; 14.3.5: Bn3+v=100; 14.3.75: Cs4+v=100; 15.0.0: sig: 6/4; 15.0.0: En1+v=0, En2+v=0, Ds5+v=0, Bn4+v=0, Gs4+v=0, Ds4+v=0, En3+v=0, Gs3+v=0, Bn3+v=0, Cs4+v=0, Cs4+v=100, Fs4+v=100; 15.0.5: Gs4+v=100; 15.1.0: As4+v=100; 15.1.5: Fs4+v=100; 15.2.0: Gs4+v=100, Fs4+v=100, Cs4+v=100; 15.3.0: En3+v=100; 15.4.0: En2+v=100, Cs5+v=100, Cs4+v=100; 15.5.0: Ds5+v=100, Ds4+v=100; 16.0.0: sig: 2/4; 16.0.0: Cs4+v=0, Fs4+v=0, Gs4+v=0, As4+v=0, Fs4+v=0, Gs4+v=0, Fs4+v=0, Cs4+v=0, En3+v=0, En2+v=0, Cs5+v=0, Cs4+v=0, Ds5+v=0, Ds4+v=0, Ds2+v=100, Ds1+v=100, Fn5+v=100, Cs5+v=100, Gs4+v=100, Fn4+v=100; 16.1.0: Cs5+v=100, Gs4+v=100, Cs4+v=100; 17.0.0: sig: 4/4; 17.0.0: Ds2+v=0, Ds1+v=0, Fn5+v=0, Cs5+v=0, Gs4+v=0, Fn4+v=0, Cs5+v=0, Gs4+v=0, Cs4+v=0, En2+v=100, En1+v=100, Bn4+v=100, Bn3+v=100; 17.0.33: Gs4+v=100; 17.0.67: Ds4+v=100; 17.1.0: Bn3+v=100; 17.1.33: Gs3+v=100; 17.1.67: Ds3+v=100; 17.2.0: En2+v=0, En1+v=0, Bn4+v=0, Bn3+v=0, Gs4+v=0, Ds4+v=0, Bn3+v=0, Gs3+v=0, Ds3+v=0, As4+v=100, Cs4+v=100; 17.2.33: Fs4+v=100; 17.2.67: Cs4+v=100; 17.3.0: As3+v=100; 17.3.33: Fs3+v=100; 17.3.67: Cs3+v=100; 18.0.0: As4+v=0, Cs4+v=0, Fs4+v=0, Cs4+v=0, As3+v=0, Fs3+v=0, Cs3+v=0, Gs4+v=100; 18.0.33: En4+v=100; 18.0.67: Bn3+v=100; 18.1.0: Gs3+v=100; 18.1.33: En3+v=100; 18.1.67: Bn2+v=100; 18.2.0: Gs4+v=0, En4+v=0, Bn3+v=0, Gs3+v=0, En3+v=0, Bn2+v=0, As3+v=100; 18.2.33: Fs3+v=100; 18.2.67: Cs3+v=100; 18.3.0: Bn2+v=100; 18.3.33: Gs2+v=100; 18.3.67: Ds2+v=100; 19.0.0: As3+v=0, Fs3+v=0, Cs3+v=0, Bn2+v=0, Gs2+v=0, Ds2+v=0, En2+v=100, Ds4+v=100; 19.0.33: Bn2+v=100; 19.0.67: En3+v=100; 19.1.0: Fs3+v=100; 19.1.33: Gs3+v=100; 19.1.67: Bn3+v=100; 19.2.0: En2+v=0, Ds4+v=0, Bn2+v=0, En3+v=0, Fs3+v=0, Gs3+v=0, Bn3+v=0, Bn2+v=100, Fs4+v=100; 19.2.33: Fs3+v=100; 19.2.67: As3+v=100; 19.3.0: Bn3+v=100; 19.3.33: Cs4+v=100; 19.3.67: Ds4+v=100; 20.0.0: Bn2+v=0, Fs4+v=0, Fs3+v=0, As3+v=0, Bn3+v=0, Cs4+v=0, Ds4+v=0, Dn2+v=100, An4+v=100, Fn4+v=100; 20.0.5: As4+v=100; 20.1.0: Cn5+v=100; 20.1.5: Dn5+v=100; 20.2.0: Cn5+v=100; 20.2.5: As4+v=100; 20.3.0: An4+v=100; 20.3.5: As4+v=100; 21.0.0: Dn2+v=0, An4+v=0, Fn4+v=0, As4+v=0, Cn5+v=0, Dn5+v=0, Cn5+v=0, As4+v=0, An4+v=0, As4+v=0, An4+v=100; 21.0.5: As4+v=100; 21.1.0: Cn5+v=100; 21.1.5: Dn5+v=100; 21.2.0: Cn5+v=100; 21.2.5: As4+v=100; 21.3.0: An4+v=100; 21.3.5: Gn4+v=100; 22.0.0: An4+v=0, As4+v=0, Cn5+v=0, Dn5+v=0, Cn5+v=0, As4+v=0, An4+v=0, Gn4+v=0, En4+v=100, As3+v=100, Dn3+v=100, An4+v=100; 22.0.5: As4+v=100; 22.1.0: Cn5+v=100; 22.1.5: Dn5+v=100; 22.2.0: Cn5+v=100; 22.2.5: As4+v=100; 22.3.0: An4+v=100; 22.3.5: As4+v=100; 23.0.0: En4+v=0, As3+v=0, Dn3+v=0, An4+v=0, As4+v=0, Cn5+v=0, Dn5+v=0, Cn5+v=0, As4+v=0, An4+v=0, As4+v=0, An4+v=100; 23.0.5: As4+v=100; 23.1.0: Bn1+v=100, Cn5+v=100; 23.1.33: Fs2+v=100; 23.1.5: Dn5+v=100; 23.1.67: Ds3+v=100; 23.2.0: Fs3+v=100, Ds3+v=100, Fs2+v=100, Bn1+v=100, Cn5+v=100; 23.2.5: As4+v=100; 23.3.0: An4+v=100; 23.3.5: Gn4+v=100; 24.0.0: An4+v=0, As4+v=0, Bn1+v=0, Cn5+v=0, Fs2+v=0, Dn5+v=0, Ds3+v=0, Fs3+v=0, Ds3+v=0, Fs2+v=0, Bn1+v=0, Cn5+v=0, As4+v=0, An4+v=0, Gn4+v=0, Dn2+v=100, An4+v=100; 24.0.5: As4+v=100; 24.0.67: Dn4+v=100; 24.0.83: Fn4+v=100; 24.1.0: Cn5+v=100; 24.1.5: Dn5+v=100; 24.1.67: Dn4+v=100; 24.1.83: Fn4+v=100; 24.2.0: Cn5+v=100; 24.2.5: As4+v=100; 24.2.67: Dn4+v=100; 24.2.83: Fn4+v=100; 24.3.0: An4+v=100; 24.3.5: As4+v=100; 24.3.67: Dn4+v=100; 24.3.83: Fn4+v=100; 25.0.0: Dn2+v=0, An4+v=0, As4+v=0, Dn4+v=0, Fn4+v=0, Cn5+v=0, Dn5+v=0, Dn4+v=0, Fn4+v=0, Cn5+v=0, As4+v=0, Dn4+v=0, Fn4+v=0, An4+v=0, As4+v=0, Dn4+v=0, Fn4+v=0, An4+v=100; 25.0.5: As4+v=100; 25.0.67: Dn4+v=100; 25.0.83: Fn4+v=100; 25.1.0: Cn5+v=100; 25.1.5: Dn5+v=100; 25.1.67: Dn4+v=100; 25.1.83: Fn4+v=100; 25.2.0: Cn5+v=100; 25.2.5: As4+v=100; 25.2.67: Dn4+v=100; 25.2.83: Fn4+v=100; 25.3.0: An4+v=100; 25.3.5: Gn4+v=100; 25.3.67: Dn4+v=100; 25.3.83: Fn4+v=100; 26.0.0: An4+v=0, As4+v=0, Dn4+v=0, Fn4+v=0, Cn5+v=0, Dn5+v=0, Dn4+v=0, Fn4+v=0, Cn5+v=0, As4+v=0, Dn4+v=0, Fn4+v=0, An4+v=0, Gn4+v=0, Dn4+v=0, Fn4+v=0, Dn2+v=100, An4+v=100; 26.0.25: As4+v=100; 26.0.5: As3+v=100; 26.0.75: En4+v=100; 26.1.0: Cn5+v=100; 26.1.25: Dn5+v=100; 26.1.5: Dn4+v=100; 26.1.75: Gn4+v=100; 26.2.0: Cn5+v=100; 26.2.25: As4+v=100; 26.2.5: En5+v=100; 26.2.75: An5+v=100; 26.3.0: An4+v=100; 26.3.25: As4+v=100; 26.3.5: As5+v=100; 26.3.75: En6+v=100; 27.0.0: Dn2+v=0, An4+v=0, As4+v=0, As3+v=0, En4+v=0, Cn5+v=0, Dn5+v=0, Dn4+v=0, Gn4+v=0, Cn5+v=0, As4+v=0, En5+v=0, An5+v=0, An4+v=0, As4+v=0, As5+v=0, En6+v=0, An4+v=100; 27.0.5: As4+v=100; 27.1.0: Cn5+v=100; 27.1.5: Dn5+v=100; 27.2.0: Cn5+v=100; 27.2.5: As4+v=100; 27.3.0: An4+v=100; 27.3.5: Gn4+v=100; 28.0.0: An4+v=0, As4+v=0, Cn5+v=0, Dn5+v=0, Cn5+v=0, As4+v=0, An4+v=0, Gn4+v=0, Fs4+v=100, Cs4+v=100, An3+v=100, Cs5+v=100; 28.2.0: Fs5+v=100; 29.0.0: Fs4+v=0, Cs4+v=0, An3+v=0, Cs5+v=0, Fs5+v=0, Fs4+v=100, Cs4+v=100, Gs3+v=100; 29.2.0: Cn5+v=100; 30.0.0: Fs4+v=0, Cs4+v=0, Gs3+v=0, Cn5+v=0, Fs4+v=100, Cs4+v=100, An3+v=100; 30.1.0: Cs5+v=100; 30.2.0: En5+v=100; 30.3.0: Cs5+v=100; 31.0.0: Fs4+v=0, Cs4+v=0, An3+v=0, Cs5+v=0, En5+v=0, Cs5+v=0, En4+v=100, Cs4+v=100, Ds5+v=100; 31.2.0: Bn4+v=100; 32.0.0: En4+v=0, Cs4+v=0, Ds5+v=0, Bn4+v=0, An3+v=100, Dn3+v=100, An4+v=100, Fs4+v=100; 33.0.0: An3+v=0, Dn3+v=0, An4+v=0, Fs4+v=0, Gs3+v=100, Cs3+v=100, Gs4+v=100, Fn4+v=100; 34.0.0: Gs3+v=0, Cs3+v=0, Gs4+v=0, Fn4+v=0, Fs3+v=100, Cn3+v=100, An4+v=100, Ds4+v=100; 34.2.0: Fs4+v=100; 35.0.0: Fs3+v=0, Cn3+v=0, An4+v=0, Ds4+v=0, Fs4+v=0, Fn3+v=100, Cs3+v=100, Fs4+v=100, Bn3+v=100; 35.3.0: Gs4+v=100; 36.0.0: Fn3+v=0, Cs3+v=0, Fs4+v=0, Bn3+v=0, Gs4+v=0, Cs4+v=100, Fs3+v=100, An4+v=100; 36.1.0: Cs5+v=100; 36.1.5: An2+v=100; 36.2.0: Cn4+v=100, Fs3+v=100, Cn5+v=100, Ds4+v=100; 36.3.5: Bn4+v=100; 37.0.0: Cs4+v=0, Fs3+v=0, An4+v=0, Cs5+v=0, An2+v=0, Cn4+v=0, Fs3+v=0, Cn5+v=0, Ds4+v=0, Bn4+v=0, An3+v=100, Cn3+v=100, Cn5+v=100, Ds4+v=100; 37.0.5: Bn4+v=100; 37.1.0: Fs3+v=100, An4+v=100, Cn4+v=100; 37.1.5: Cs4+v=100; 37.2.0: Bn3+v=100, Cs3+v=100, Gs4+v=100, Fn4+v=100, Dn4+v=100; 37.3.0: Cs2+v=100, Cs4+v=100; 38.0.0: An3+v=0, Cn3+v=0, Cn5+v=0, Ds4+v=0, Bn4+v=0, Fs3+v=0, An4+v=0, Cn4+v=0, Cs4+v=0, Bn3+v=0, Cs3+v=0, Gs4+v=0, Fn4+v=0, Dn4+v=0, Cs2+v=0, Cs4+v=0, Fs2+v=100, Fs1+v=100, An4+v=100, En4+v=100, Cs4+v=100; 38.0.67: Cs3+v=100; 38.1.0: Fs3+v=100, Bn4+v=100, Fs4+v=100, En4+v=100; 38.1.33: An3+v=100; 38.1.67: Cs4+v=100; 38.2.0: En2+v=100, En1+v=100, Gs4+v=100, Ds4+v=100, Cs4+v=100, Bn3+v=100; 38.2.67: Cs3+v=100; 38.3.0: En3+v=100; 38.3.33: Gs3+v=100; 38.3.5: Fs4+v=100; 38.3.67: Bn3+v=100; 39.0.0: Fs2+v=0, Fs1+v=0, An4+v=0, En4+v=0, Cs4+v=0, Cs3+v=0, Fs3+v=0, Bn4+v=0, Fs4+v=0, En4+v=0, An3+v=0, Cs4+v=0, En2+v=0, En1+v=0, Gs4+v=0, Ds4+v=0, Cs4+v=0, Bn3+v=0, Cs3+v=0, En3+v=0, Gs3+v=0, Fs4+v=0, Bn3+v=0, Gs2+v=100, Gs1+v=100, Bn4+v=100, Fs4+v=100, Ds4+v=100, Bn3+v=100; 39.0.5: Bn2+v=100; 39.0.67: En3+v=100; 39.0.83: Gs3+v=100; 39.1.0: Gs2+v=100, En5+v=100, En4+v=100; 39.2.0: An2+v=100, An1+v=100, En6+v=100, Bn5+v=100, An5+v=100, En5+v=100; 39.3.0: Gs2+v=0, Gs1+v=0, Bn4+v=0, Fs4+v=0, Ds4+v=0, Bn3+v=0, Bn2+v=0, En3+v=0, Gs3+v=0, Gs2+v=0, En5+v=0, En4+v=0, An2+v=0, An1+v=0, En6+v=0, Bn5+v=0, An5+v=0, En5+v=0, En4+v=100, Bn3+v=100, Gs3+v=100, Ds5+v=100, Bn4+v=100, Fs4+v=100; 39.3.5: Bn3+v=100, Fs3+v=100, Ds3+v=100, As4+v=100, Fs4+v=100, Cs4+v=100; 40.0.0: sig: 6/4; 40.0.0: Ds6+v=100, Bn5+v=100, Fs5+v=100, En5+v=100, Bn4+v=100, Gs4+v=100; 40.0.5: As5+v=100, Fs5+v=100, Cs5+v=100, Bn4+v=100, Fs4+v=100, Ds4+v=100; 40.1.0: Ds7+v=100, Bn6+v=100, Fs6+v=100, En6+v=100, Bn5+v=100, Fs5+v=100; 40.4.0: En4+v=0, Bn3+v=0, Gs3+v=0, Ds5+v=0, Bn4+v=0, Fs4+v=0, Bn3+v=0, Fs3+v=0, Ds3+v=0, As4+v=0, Fs4+v=0, Cs4+v=0, Ds6+v=0, Bn5+v=0, Fs5+v=0, En5+v=0, Bn4+v=0, Gs4+v=0, As5+v=0, Fs5+v=0, Cs5+v=0, Bn4+v=0, Fs4+v=0, Ds4+v=0, Ds7+v=0, Bn6+v=0, Fs6+v=0, En6+v=0, Bn5+v=0, Fs5+v=0, Cs4+v=100, Cs6+v=100, Cs5+v=100; 40.5.0: Ds4+v=100, Ds6+v=100, Ds5+v=100; 41.0.0: sig: 4/4; 41.0.0: Cs4+v=0, Cs6+v=0, Cs5+v=0, Ds4+v=0, Ds6+v=0, Ds5+v=0, Cs5+v=100, As4+v=100, Ds4+v=100, Fn6+v=100, Cs6+v=100, Gs5+v=100, Fn5+v=100; 41.1.0: Cs6+v=100, Cs5+v=100; 41.2.0: Bn4+v=100, Gs4+v=100, En4+v=100, Ds6+v=100, Fs5+v=100, Ds5+v=100; 41.3.0: En2+v=100, En1+v=100, Gs3+v=100, Bn2+v=100; 42.0.0: sig: 6/4; 42.0.0: Cs5+v=0, As4+v=0, Ds4+v=0, Fn6+v=0, Cs6+v=0, Gs5+v=0, Fn5+v=0, Cs6+v=0, Cs5+v=0, Bn4+v=0, Gs4+v=0, En4+v=0, Ds6+v=0, Fs5+v=0, Ds5+v=0, En2+v=0, En1+v=0, Gs3+v=0, Bn2+v=0, As3+v=100, Ds3+v=100, Fs4+v=100, Cs4+v=100; 42.0.5: Gs4+v=100; 42.1.0: Ds2+v=100, Ds1+v=100, As4+v=100; 42.1.5: Fs4+v=100; 42.2.0: Bn3+v=100, En3+v=100, Gs4+v=100, Cs4+v=100; 42.3.0: En2+v=100, En1+v=100; 42.4.0: Cs5+v=100, Gs4+v=100, Fs4+v=100, Cs4+v=100; 42.5.0: Ds6+v=100, Ds5+v=100, Ds4+v=100; 43.0.0: sig: 4/4; 43.0.0: As3+v=0, Ds3+v=0, Fs4+v=0, Cs4+v=0, Gs4+v=0, Ds2+v=0, Ds1+v=0, As4+v=0, Fs4+v=0, Bn3+v=0, En3+v=0, Gs4+v=0, Cs4+v=0, En2+v=0, En1+v=0, Cs5+v=0, Cs5+v=0, Gs4+v=0, Fs4+v=0, Cs4+v=0, Ds6+v=0, Ds5+v=0, Ds4+v=0, Cs5+v=100, Ds4+v=100, Fn6+v=100, Cs6+v=100, Gs5+v=100, Fn5+v=100; 43.1.0: Cs6+v=100, Cs5+v=100; 43.2.0: En4+v=100, Bn5+v=100, Gs5+v=100, Ds5+v=100, Bn4+v=100; 44.0.0: Cs5+v=0, Ds4+v=0, Fn6+v=0, Cs6+v=0, Gs5+v=0, Fn5+v=0, Cs6+v=0, Cs5+v=0, En4+v=0, Bn5+v=0, Gs5+v=0, Ds5+v=0, Bn4+v=0, Ds4+v=100, As5+v=100, Fs5+v=100, Cs5+v=100, As4+v=100; 44.2.0: Gs4+v=100, Cs4+v=100, Gs5+v=100, En5+v=100, Ds5+v=100, Bn4+v=100; 45.0.0: sig: 6/4; 45.0.0: Ds4+v=0, As5+v=0, Fs5+v=0, Cs5+v=0, As4+v=0, Gs4+v=0, Cs4+v=0, Gs5+v=0, En5+v=0, Ds5+v=0, Bn4+v=0, En2+v=100, En1+v=100, Gs3+v=100, Cs3+v=100; 46.0.0: En2+v=0, En1+v=0, Gs3+v=0, Cs3+v=0, En4+v=100, Bn3+v=100, Ds5+v=100, Gs4+v=100, Fs4+v=100; 46.2.0: As4+v=100, En4+v=100, Fs5+v=100, Cs5+v=100, Bn4+v=100; 48.0: En4+v=0, Bn3+v=0, Ds5+v=0, Gs4+v=0, Fs4+v=0, As4+v=0, En4+v=0, Fs5+v=0, Cs5+v=0, Bn4+v=0;';
 var lastgenl = '1.0.0: Fs1+v=100, Fs2+v=100, Cs4+v=100, An3+v=100, Fs3+v=100;';
 var lastgenbeatlen = 0.7;
@@ -286,9 +287,12 @@ class ENVLP {
 	}
 	
 	disconnect(obj) {
-		if (this.iskey || this.isval) {
+		if (this.iskey) {
 			this.knob = null;
-			this.removeTarget(obj);
+			this.removeTarget(obj.o[this.pnum].frequency);
+		} else if (this.isval) {
+			this.knob = null;
+			this.removeTarget(obj.targets[this.pnum]);
 		} else {
 			for (var i = 0; i < this.objects.length; i++) {
 				this.objects[i].disconnect(obj);
@@ -333,9 +337,11 @@ class ENVLP {
 		for (var i = 0; i < this.targets.length; i++) {
 			if (this.targets[i] === target) {
 				this.targets.splice(i, 1);
+				console.log("found target " + i);
 				return;
 			}
 		}
+		console.log("failed to remove target");
 		//this.target = null;
 	}
 	
@@ -354,7 +360,7 @@ class ENVLP {
 			var vt = time+this.atkt.value;
 			for (var i = 0; i < this.targets.length; i++) {
 				this.targets[i].cancelScheduledValues(time);
-				//console.log("set value to " + vv + " at " + vt);
+				console.log("set value to " + vv + " at " + vt);
 				this.targets[i].setValueAtTime(kmin + this.strv.value * kmax, time);
 				this.targets[i].linearRampToValueAtTime(vv, vt);
 				this.targets[i].linearRampToValueAtTime(kmin + this.decv.value * kmax, time+this.atkt.value + this.dect.value);
@@ -425,8 +431,11 @@ class ADSR {
 	}
 	
 	disconnect(obj) {
-		if (this.iskey || this.isval) {
-			this.removeTarget(obj);
+		if (this.iskey) {
+			this.removeTarget(obj.o[this.pnum].frequency);
+			this.knob = null;
+		} else if (this.isval) {
+			this.removeTarget(obj.targets[this.pnum]);
 			this.knob = null;
 		} else {
 			for (var i = 0; i < this.objects.length; i++) {
@@ -475,6 +484,7 @@ class ADSR {
 				return;
 			}
 		}
+		console.log("failed to remove target");
 		//this.target = null;
 	}
 	
@@ -645,7 +655,7 @@ class AudioManager {
 			//tosc.connectToSpeakers();
 			this.pianos.push(tosc);
 		}
-		this.impulse = this.impulseResponse(0.5, 2, false);
+		this.impulse = this.impulseResponse(0.25, 2, false);
 	}
 	
 	impulseResponse(duration, decay, reverse) {
@@ -1637,6 +1647,7 @@ class RBPanel extends SynthModule {
 	}
 	
 	setValue(ind) {
+		this.ind = ind;
 		this.val = this.vals[ind];
 		for (var i = 0; i < this.btns.length; i++) {
 			this.btns[i].on = false;
@@ -1819,8 +1830,10 @@ class Knob extends SynthModule {
 			this.val = this.vals[v-this.min.value];
 			this.dota = -v * this.step;
 		} else {
+			//console.log((new Error()).stack);
 			this.val = v;
 			this.dota = -v * Math.PI * this.turns / (0.55 * (this.max.value - this.min.value));
+			this.calcDotPos();
 		}
 		super.setValue();
 		return inrange;
@@ -1845,6 +1858,12 @@ class EqualModule extends SynthModule {
 	save() {
 		var t = '"L":' + this.knobL.val + ' , "M":' + this.knobM.val + ' , "H":' + this.knobH.val;
 		return t;
+	}
+	
+	load(data) {
+		this.knobL.setValue(data.L);
+		this.knobM.setValue(data.M);
+		this.knobH.setValue(data.H);
 	}
 	
 	setPos(x, y) {
@@ -1943,6 +1962,14 @@ class ENVLPModule extends SynthModule {
 		var t = '"SV":' + this.knobSV.val + ' , "A":' + this.knobA.val + ' , "AV":' + this.knobAV.val;
 		t += ' , "D":' + this.knobD.val + ' , "DV":' + this.knobDV.val;
 		return t;
+	}
+	
+	load(data) {
+		this.knobSV.setValue(data.SV);
+		this.knobA.setValue(data.A);
+		this.knobAV.setValue(data.AV);
+		this.knobD.setValue(data.D);
+		this.knobDV.setValue(data.DV);
 	}
 	
 	setPos(x, y) {
@@ -2060,6 +2087,15 @@ class ADSRModule extends SynthModule {
 		var t = '"A":' + this.knobA.val + ' , "D":' + this.knobD.val + ' , "DV":' + this.knobDV.val;
 		t += ' , "S":' + this.knobS.val + ' , "SV":' + this.knobSV.val + ' , "R":' + this.knobR.val;
 		return t;
+	}
+	
+	load(data) {
+		this.knobA.setValue(data.A);
+		this.knobD.setValue(data.D);
+		this.knobDV.setValue(data.DV);
+		this.knobS.setValue(data.S);
+		this.knobSV.setValue(data.SV);
+		this.knobR.setValue(data.R);
 	}
 	
 	setPos(x, y) {
@@ -2531,6 +2567,13 @@ class SynthModContainer extends Drawable {
 		return t;
 	}
 	
+	load() {
+	}
+	
+	create(data) {
+		this.setPos(data.x, data.y);
+	}
+	
 	setModNum(m) {
 		this.modnum = m;
 		for (var i = 0; i < this.inNodes.length; i++) {
@@ -2631,6 +2674,8 @@ class SynthModContainer extends Drawable {
 		super.drag(dcoords, ccoords);
 		if (piano.trashcan.inBounds(dcoords.x, dcoords.y)) {
 			piano.trashcan.highlight = true;
+		} else {
+			piano.trashcan.highlight = false;
 		}
 		this.dragObs(this.inNodes);
 		this.dragObs(this.outNodes);
@@ -2884,8 +2929,12 @@ class SynthOscContainer extends SynthModContainer {
 	
 	save() {
 		var t = '{"type":"SynthOscContainer" , ' + super.save();
-		t += ' , "osc":"' + this.oscTypeSel.val + '"}';
+		t += ' , "osc":"' + this.oscTypeSel.ind + '"}';
 		return t;
+	}
+	
+	load(data) {
+		this.oscTypeSel.setValue(data.osc);
 	}
 	
 	trigger(on, knum, onum, f) {
@@ -2922,7 +2971,7 @@ class SynthFilterContainer extends SynthModContainer {
 			oscarrfq.push(this.filter[i].Q);
 			oscarrfg.push(this.filter[i].gain);
 		}
-		console.log("filter Q:" + this.filter[0].Q.value + " gain:" + this.filter[0].gain.value);
+		//console.log("filter Q:" + this.filter[0].Q.value + " gain:" + this.filter[0].gain.value);
 		this.filtSel.setTypeTarget(this.filter);
 		this.filtSel.setValue(0);
 		this.addModule(this.filtSel, w*0.05, h*0.1);
@@ -2959,10 +3008,17 @@ class SynthFilterContainer extends SynthModContainer {
 	
 	save() {
 		var t = '{"type":"SynthFilterContainer" , ' + super.save();
-		t += ' , "filter":"' + this.filtSel.val + '" , "F":' + this.filtFreqKnob.val;
+		t += ' , "filter":"' + this.filtSel.ind + '" , "F":' + this.filtFreqKnob.val;
 		t += ' , "Q":' + this.filtQKnob.val + ' , "G":' + this.filtGKnob.val;
 		t += '}';
 		return t;
+	}
+	
+	load(data) {
+		this.filtSel.setValue(data.filter);
+		this.filtFreqKnob.setValue(data.F);
+		this.filtQKnob.setValue(data.Q);
+		this.filtGKnob.setValue(data.G);
 	}
 	
 	notifyConnect(n) {
@@ -3053,6 +3109,14 @@ class SynthCompContainer extends SynthModContainer {
 		t += '}';
 		return t;
 	}
+	
+	load(data) {
+		this.compThreshK.setValue(data.thresh);
+		this.compKneeK.setValue(data.knee);
+		this.compRatK.setValue(data.rat);
+		this.compAtkK.setValue(data.atk);
+		this.compRelK.setValue(data.rel);
+	}
 }
 
 class SpeakerMod extends SynthModContainer {
@@ -3101,6 +3165,10 @@ class SynthEqualContainer extends SynthModContainer {
 		t += ' , ' + this.mod.save();
 		t += '}';
 		return t;
+	}
+	
+	load(data) {
+		this.mod.load(data);
 	}
 }
 
@@ -3168,6 +3236,10 @@ class SynthGainContainer extends SynthModContainer {
 		t += ' , "gain":' + this.knob.val;
 		t += '}';
 		return t;
+	}
+	
+	load(data) {
+		this.knob.setValue(data.gain);
 	}
 	
 	notifyConnect(node) {
@@ -3389,6 +3461,10 @@ class TextField extends ValueModContainer {
 		return t;
 	}
 	
+	load(data) {
+		this.valueOb.setValue(data.val);
+	}
+	
 	notifyConnect() {
 		this.lockinput = true;
 	}
@@ -3425,9 +3501,14 @@ class TimerMod extends ValueModContainer {
 		return t;
 	}
 	
+	load(data) {
+		this.setValue(data.time);
+	}
+	
 	setValue(v) {
 		if (v) {
 			this.time = v;
+			this.text = Math.round(v/1000);
 		} else {
 			this.time = 1000*parseFloat(this.text);
 		}
@@ -3486,6 +3567,11 @@ class TextFieldMulti extends ValueModContainer {
 		var t = '{"type":"TextFieldMulti" , ' + super.save();
 		t += ' , "val"' + this.mval + '}';
 		return t;
+	}
+	
+	load(data) {
+		this.mval = data.val;
+		this.setValue();
 	}
 	
 	drawOb(ctx) {
@@ -3570,7 +3656,8 @@ class ENVContainer extends SynthModContainer {
 		this.addINode(this.w*0.1, this.h-2*noder, noder, TYPE_VALUE, [TYPE_VALUE], "env multi");
 		this.inNodes[1].setObject(this.adsr);
 		this.addINode(0, this.h*0.8-noder, noder, TYPE_TRIGGER, [TYPE_KEY, TYPE_TRIGGER], "env trigger", "T");
-		this.inNodes[2].setObject(this.adsr);
+		this.gt = new GainTrigger();
+		this.inNodes[2].setObject(this.gt);
 		this.addONode(this.w-2*noder, this.h*0.5-noder, noder, TYPE_VALUE, [TYPE_VALUE], "env");
 		this.outNodes[0].env = this;
 		this.outNodes[0].setObject(this.adsr);
@@ -3578,13 +3665,6 @@ class ENVContainer extends SynthModContainer {
 		for (var i = 0; i < sound.numpianos; i++) {
 			this.adsr[i].isval = true;
 		}
-	}
-	
-	save() {
-		var t = '{"type":"SynthADSRContainer" , ' + super.save();
-		t += ' , ' + this.mod.save();
-		t += '}';
-		return t;
 	}
 	
 	drawOb(ctx) {
@@ -3628,7 +3708,6 @@ class ENVContainer extends SynthModContainer {
 	}
 	
 	disconnectSource(node) {
-		console.log("disconnect source");
 		if (node.ntype == TYPE_AUDIO) {
 			for (var i = 0; i < sound.numpianos; i++) {
 				this.adsr[i].removeObject(this.gains[i]);
@@ -3654,7 +3733,6 @@ class ENVContainer extends SynthModContainer {
 	
 	trigger(on, knum, onum, f) {
 		if (on) {
-			//console.log("turn on envelope " + onum);
 			this.adsr[onum].noteON(sound.ctx.currentTime, f);
 		} else {
 			this.adsr[onum].noteOFF(sound.ctx.currentTime, f);
@@ -3674,6 +3752,17 @@ class SynthADSRContainer extends ENVContainer {
 		var mod = new ADSRModule(0, 0, w*0.8, h*0.8, 0, envs);
 		super(x, y, w, h, bl, br, bt, bb, noder, envs, mod);
 	}
+	
+	save() {
+		var t = '{"type":"SynthADSRContainer" , ' + super.save();
+		t += ' , ' + this.mod.save();
+		t += '}';
+		return t;
+	}
+	
+	load(data) {
+		this.mod.load(data);
+	}
 }
 
 class SynthENVLPContainer extends ENVContainer {
@@ -3686,6 +3775,17 @@ class SynthENVLPContainer extends ENVContainer {
 		}
 		var mod = new ENVLPModule(0, 0, w*0.8, h*0.8, 0, envs);
 		super(x, y, w, h, bl, br, bt, bb, noder, envs, mod);
+	}
+	
+	save() {
+		var t = '{"type":"SynthENVLPContainer" , ' + super.save();
+		t += ' , ' + this.mod.save();
+		t += '}';
+		return t;
+	}
+	
+	load(data) {
+		this.mod.load(data);
 	}
 }
 
@@ -3711,6 +3811,12 @@ class SynthModKeyboard extends SynthModContainer {
 		return t;
 	}
 	
+	setPos(x, y) {
+		super.setPos(x, y);
+		this.kx = x + this.w*0.05;
+		this.ky = y + this.h*0.1;
+	}
+	
 	drawOb(ctx) {
 		super.drawOb(ctx);
 		drawRect(ctx, this.x, this.y, this.w, this.h, this.stroke, this.fill, this.fillCol, this.strokeCol);
@@ -3725,17 +3831,12 @@ class SynthModKeyboard extends SynthModContainer {
 		this.kx += this.stepx;
 		this.ky += this.stepy;
 	}
-	
-	save() {
-		var t = '{"type":"SynthModKeyboard" , ' + super.save();
-		t += '}';
-		return t;
-	}
 }
 
 class MergerMod extends SynthModContainer {
 	constructor(x, y, w, h, bl, br, bt, bb, noder) {
 		super(x, y, w, h, bl, br, bt, bb);
+		this.isMerger = true;
 		this.addONode(this.w-2*noder, this.h*0.5-noder, noder, TYPE_MERGER, [TYPE_KEY, TYPE_OSC, TYPE_AUDIO, TYPE_TRIGGER, TYPE_VALUE, TYPE_MULTI, TYPE_SPLITTER], "split");
 		this.outNodes[0].setObject(this);
 		this.outNodes[0].splitter = this;
@@ -3853,6 +3954,7 @@ class MergerMod extends SynthModContainer {
 class SplitterMod extends SynthModContainer {
 	constructor(x, y, w, h, bl, br, bt, bb, noder) {
 		super(x, y, w, h, bl, br, bt, bb);
+		this.isSplitter = true;
 		this.addINode(0, this.h*0.5-noder, noder, TYPE_SPLITTER, [TYPE_KEY, TYPE_OSC, TYPE_TRIGGER, TYPE_VALUE, TYPE_MULTI, TYPE_SPLITTER, TYPE_ENV], "split");
 		this.inNodes[0].setObject(this);
 		this.inNodes[0].splitter = this;
@@ -4591,39 +4693,120 @@ class Piano {
 			if (i < this.modules.length - 1) t += ", ";
 		}
 		t += "]";
-		console.log(t);
+		//console.log(t);
+		if (document.getElementById("beattime").value.length < 1) {
+			document.getElementById("beattime").value = "synthconfig";
+		}
+		var fname = document.getElementById("beattime").value;
+		download(fname, t);
 	}
 	
-	loadModules() {
-		var mods = JSON.parse(modsaveteststring);
+	loadModules(jso) {
+		for (var i = piano.modules.length-1; i > -1; i--) {
+			piano.modules[i].trash();
+		}
+		var mods = JSON.parse(jso);
 		for (var i = 0; i < mods.length; i++) {
 			var type = mods[i].type;
 			//console.log(type);
 			var m = null;
 			if (type == "WhiteNoiseContainer") {
+				m = piano.modbar.whiteb.createMod();
 			} else if (type == "SynthFilterContainer") {
+				m = piano.modbar.filt.createMod();
 			} else if (type == "SynthCompContainer") {
+				m = piano.modbar.comp.createMod();
 			} else if (type == "SpeakerMod") {
+				m = piano.modbar.speakerb.createMod();
 			} else if (type == "SynthEqualContainer") {
+				m = piano.modbar.eqb.createMod();
 			} else if (type == "SynthConvContainer") {
+				m = piano.modbar.convb.createMod();
 			} else if (type == "SynthGainContainer") {
-			} else if (type == "ValueModContainer") {
+				m = piano.modbar.gainb.createMod();
+			} else if (type == "SynthENVLPContainer") {
+				m = piano.modbar.envlpb.createMod();
 			} else if (type == "TextField") {
+				m = piano.modbar.valb.createMod();
+				m.isValType = true;
 			} else if (type == "TimerMod") {
+				m = piano.modbar.timerb.createMod();
+				m.isValType = true;
 			} else if (type == "TextFieldMulti") {
+				m = piano.modbar.multib.createMod();
+				m.isValType = true;
 			} else if (type == "SwitchMod") {
+				m = piano.modbar.switchb.createMod();
 			} else if (type == "ClickMod") {
+				m = piano.modbar.clickb.createMod();
 			} else if (type == "SynthADSRContainer") {
+				m = piano.modbar.adsrb.createMod();
 			} else if (type == "SynthModKeyboard") {
+				m = piano.modbar.keyb.createMod();
 			} else if (type == "MergerMod") {
+				m = piano.modbar.mergerb.createMod();
 			} else if (type == "SplitterMod") {
+				m = piano.modbar.splitterb.createMod();
 			} else if (type == "SequencerMod") {
+				m = piano.modbar.seqb.createMod();
 			} else if (type == "SynthOscContainer") {
 				m = piano.modbar.oscb.createMod();
 			}
 			if (m) {
-				m.setPos(mods[i].x, mods[i].y);
+				m.create(mods[i]);
 				piano.modules.push(m);
+			}
+		}
+		for (var i = 0; i < mods.length; i++) {
+			//connect only outputs that go to splitter inputs
+			//mergers can't connect output to merger or splitter
+			//splitter: while loop up chain until we find a splitter whose input is not connected to a splitter
+			for (var j = 0; j < mods[i].outnodes.length; j++) {
+				var pmod = piano.modules[i];
+				var pnode = pmod.outNodes[j];
+				var cmod = piano.modules[mods[i].outnodes[j].mod];
+				if (!cmod || !pnode) {
+					//console.log("mods[i].outnodes[j].mod " + mods[i].outnodes[j].mod + " / " + piano.modules.length);
+					continue;
+				}
+				var cnode = cmod.inNodes[mods[i].outnodes[j].node];
+				if (cmod.isSplitter) {
+					if (pmod.isSplitter) {
+						//splitter connected to splitter
+					} else {
+						pnode.connect(cnode);
+					}
+				}
+			}
+		}
+		for (var i = 0; i < mods.length; i++) {
+			//connect the rest of the outputs
+			for (var j = 0; j < mods[i].outnodes.length; j++) {
+				var pmod = piano.modules[i];
+				var pnode = pmod.outNodes[j];
+				var cmod = piano.modules[mods[i].outnodes[j].mod];
+				if (!cmod || !pnode) {
+					//console.log("mods[i].outnodes[j].mod " + mods[i].outnodes[j].mod + " / " + piano.modules.length);
+					continue;
+				}
+				var cnode = cmod.inNodes[mods[i].outnodes[j].node];
+				if (!cmod.isSplitter) {
+					pnode.connect(cnode);
+				}
+			}
+		}
+		for (var i = 0; i < mods.length; i++) {
+			//set up each mod
+			//1. values	(textfield, textmulti, timer) and radios
+			if (piano.modules[i].isValType) {
+				piano.modules[i].load(mods[i]);
+			}
+		}
+		for (var i = 0; i < mods.length; i++) {
+			//set up each mod
+			//2. everything else: knob vals (gain, eq, env, adsr, filter, compressor)
+			if (!piano.modules[i].isValType) {
+				piano.modules[i].load(mods[i]);
 			}
 		}
 	}
@@ -4631,7 +4814,7 @@ class Piano {
 	trash(mod) {
 		for (var i = 0; i < this.modules.length; i++) {
 			if (this.modules[i] === mod) {
-				console.log("trash " + mod.name);
+				//console.log("trash " + mod.name);
 				this.modules.splice(i, 1);
 				return;
 			}
@@ -4866,8 +5049,8 @@ function setup() {
 	//var hitfncts = new Array();
 	//hitfncts.push({press: function () { console.log("ok") }, unpress: function () { console.log("unok") }});
 	piano = new Piano(10, 10, keyW, keyH);
-	initmods();
-	//piano.loadModules();
+	//initmods();
+	piano.loadModules(modsaveteststring);
 	staff = new Staff(20, 50 + keyH, keyH*2, keyH * 0.6);
 	setMsg("");
 	focusOb = qwertyboard;
@@ -5363,9 +5546,48 @@ function drawRect(ctx, x, y, width, height, stroke, fill, fillCol, strokeCol) {
     ctx.stroke();
   }
 }
+
+function download(filename, text) {
+  var element = document.createElement('a');
+  element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+  element.setAttribute('download', filename);
+
+  element.style.display = 'none';
+  document.body.appendChild(element);
+
+  element.click();
+
+  document.body.removeChild(element);
+}
+
+function updateSize() {
+  var nBytes = 0,
+      oFiles = document.getElementById("uploadInput").files,
+      nFiles = oFiles.length;
+  for (var nFileId = 0; nFileId < nFiles; nFileId++) {
+    nBytes += oFiles[nFileId].size;
+  }
+  var sOutput = nBytes + " bytes";
+  // optional code for multiples approximation
+  for (var aMultiples = ["KiB", "MiB", "GiB", "TiB", "PiB", "EiB", "ZiB", "YiB"], nMultiple = 0, nApprox = nBytes / 1024; nApprox > 1; nApprox /= 1024, nMultiple++) {
+    sOutput = nApprox.toFixed(3) + " " + aMultiples[nMultiple] + " (" + nBytes + " bytes)";
+  }
+  // end of optional code
+  document.getElementById("fileNum").innerHTML = nFiles;
+  document.getElementById("fileSize").innerHTML = sOutput;
+  var reader = new FileReader();
+  reader.onload = function(evt) {
+    //console.log(evt.target.result);]
+	piano.loadModules(evt.target.result);
+  };
+  reader.readAsText(oFiles[0]);
+}
+
 </script>
 <body onload="setup()">
 	<canvas id="myCanvas" width="200" height="200"></canvas>
+	<br>load config
+	<p><input id="uploadInput" type="file" name="myFiles" onchange="updateSize();"> selected files: <span id="fileNum">0</span>; total size: <span id="fileSize">0</span></p>
 	<br><button onclick="piano.saveModules()">Save Config</button>
 	<div id="textin">
 		<input type="text" id="beattime"/>
