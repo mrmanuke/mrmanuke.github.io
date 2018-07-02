@@ -289,9 +289,13 @@ class ENVLP {
 	disconnect(obj) {
 		if (this.iskey) {
 			this.knob = null;
+			this.iskey = false;
+			this.isval = false;
 			this.removeTarget(obj.o[this.pnum].frequency);
 		} else if (this.isval) {
 			this.knob = null;
+			this.iskey = false;
+			this.isval = false;
 			this.removeTarget(obj.targets[this.pnum]);
 		} else {
 			for (var i = 0; i < this.objects.length; i++) {
@@ -358,10 +362,11 @@ class ENVLP {
 			var kmax = this.knob.max.value - kmin;
 			var vv = kmin + this.atkv.value * kmax;
 			var vt = time+this.atkt.value;
+			var sv = kmin + this.strv.value * kmax;
 			for (var i = 0; i < this.targets.length; i++) {
 				this.targets[i].cancelScheduledValues(time);
-				console.log("set value to " + vv + " at " + vt);
-				this.targets[i].setValueAtTime(kmin + this.strv.value * kmax, time);
+				//console.log("set value to " + sv + " at " + time + " and " + vv + " at " + vt);
+				this.targets[i].setValueAtTime(sv, time);
 				this.targets[i].linearRampToValueAtTime(vv, vt);
 				this.targets[i].linearRampToValueAtTime(kmin + this.decv.value * kmax, time+this.atkt.value + this.dect.value);
 			}
@@ -434,8 +439,12 @@ class ADSR {
 		if (this.iskey) {
 			this.removeTarget(obj.o[this.pnum].frequency);
 			this.knob = null;
+			this.iskey = false;
+			this.isval = false;
 		} else if (this.isval) {
 			this.removeTarget(obj.targets[this.pnum]);
+			this.iskey = false;
+			this.isval = false;
 			this.knob = null;
 		} else {
 			for (var i = 0; i < this.objects.length; i++) {
@@ -1599,7 +1608,7 @@ class RadioB extends Drawable {
 		} else {
 			ctx.fillStyle = "black";
 		}
-		ctx.font = this.h*0.25 + "px Arial";
+		ctx.font = this.h*0.2 + "px Arial";
 		ctx.fillText(this.name, this.x + this.w*0.1, this.y + this.h*0.5);
 	}
 }
@@ -1941,7 +1950,7 @@ class ENVLPModule extends SynthModule {
 		this.knobA = new Knob(x, y, this.kw, this.kw, [1], 0.001, 10);
 		this.knobA.name = "tA";
 		this.knobA.setParentModule([this]);
-		this.knobAV = new Knob(x, y, this.kw, this.kw, [1], OFF_VOL, 1);
+		this.knobAV = new Knob(x, y, this.kw, this.kw, [0.5], OFF_VOL, 1);
 		this.knobAV.name = "vA";
 		this.knobAV.setParentModule([this]);
 		this.knobD = new Knob(x+this.kw, y, this.kw, this.kw, [1], 0.001, 10);
@@ -1970,6 +1979,14 @@ class ENVLPModule extends SynthModule {
 		this.knobAV.setValue(data.AV);
 		this.knobD.setValue(data.D);
 		this.knobDV.setValue(data.DV);
+	}
+	
+	connectValues() {
+		this.knobSV.updateValue();
+		this.knobA.updateValue();
+		this.knobAV.updateValue();
+		this.knobD.updateValue();
+		this.knobDV.updateValue();
 	}
 	
 	setPos(x, y) {
@@ -2096,6 +2113,15 @@ class ADSRModule extends SynthModule {
 		this.knobS.setValue(data.S);
 		this.knobSV.setValue(data.SV);
 		this.knobR.setValue(data.R);
+	}
+	
+	connectValues() {
+		this.knobA.updateValue();
+		this.knobD.updateValue();
+		this.knobDV.updateValue();
+		this.knobS.updateValue();
+		this.knobSV.updateValue();
+		this.knobR.updateValue();
 	}
 	
 	setPos(x, y) {
@@ -2976,32 +3002,41 @@ class SynthFilterContainer extends SynthModContainer {
 		this.filtSel.setValue(0);
 		this.addModule(this.filtSel, w*0.05, h*0.1);
 		
-		this.filtFreqKnob = new Knob(0, 0, this.filtSel.h*0.9, this.filtSel.h*0.9, [8000], 100, 24000, null, 10);
+		this.filtFreqKnob = new Knob(0, 0, this.filtSel.h*0.8, this.filtSel.h*0.9, [8000], 100, 24000, null, 10);
 		this.filtFreqKnob.setNumTarget(oscarrff);
 		this.filtFreqKnob.name = "Freq";
-		this.addModule(this.filtFreqKnob, w*0.05, h*0.55);
-		this.addINode(w*0.05 + this.filtSel.h*0.7, this.h-noder*2, noder, TYPE_VALUE, [TYPE_VALUE], "env", "E");
-		this.inNodes[0].setObject(this.filtFreqKnob);
-		this.fnode = this.inNodes[0];
+		this.addModule(this.filtFreqKnob, w*0.05 + this.filtSel.h, h*0.55);
+		this.addINode(w*0.05 + this.filtSel.h*0.7, this.h-noder*2, noder, TYPE_AUDIO, [TYPE_AUDIO], "lfo", "O");
+		this.inNodes[0].setObject(oscarrff);
+		this.lfofnode = this.inNodes[0];
+		this.addINode(w*0.05 + this.filtSel.h*1.8, this.h-noder*2, noder, TYPE_VALUE, [TYPE_VALUE], "env", "E");
+		this.inNodes[1].setObject(this.filtFreqKnob);
+		this.fnode = this.inNodes[1];
 		
-		this.filtQKnob = new Knob(0, 0, this.filtSel.h*0.9, this.filtSel.h*0.9, [1], 0.0001, 10, null, 2);
+		this.filtQKnob = new Knob(0, 0, this.filtSel.h*0.8, this.filtSel.h*0.9, [1], 0.0001, 10, null, 2);
 		this.filtQKnob.setNumTarget(oscarrfq);
 		this.filtQKnob.name = "Q";
-		this.addModule(this.filtQKnob, w*0.05 + this.filtSel.h*1.1, h*0.55);
-		this.addINode(w*0.05 + this.filtSel.h*1.8, this.h-noder*2, noder, TYPE_VALUE, [TYPE_VALUE], "env", "E");
-		this.inNodes[1].setObject(this.filtQKnob);
-		this.qnode = this.inNodes[1];
+		this.addModule(this.filtQKnob, w*0.05 + this.filtSel.h*3, h*0.55);
+		this.addINode(w*0.05 + this.filtSel.h*2.7, this.h-noder*2, noder, TYPE_AUDIO, [TYPE_AUDIO], "lfo", "O");
+		this.inNodes[2].setObject(oscarrfq);
+		this.qnode = this.inNodes[2];
+		this.addINode(w*0.05 + this.filtSel.h*3.8, this.h-noder*2, noder, TYPE_VALUE, [TYPE_VALUE], "env", "E");
+		this.inNodes[3].setObject(this.filtQKnob);
+		this.qnode = this.inNodes[3];
 		
-		this.filtGKnob = new Knob(0, 0, this.filtSel.h*0.9, this.filtSel.h*0.9, [0], -40, 40);
+		this.filtGKnob = new Knob(0, 0, this.filtSel.h*0.8, this.filtSel.h*0.9, [0], -40, 40);
 		this.filtGKnob.setNumTarget(oscarrfg);
 		this.filtGKnob.name = "Gain";
-		this.addModule(this.filtGKnob, w*0.05 + this.filtSel.h*2.2, h*0.55);
-		this.addINode(w*0.05 + this.filtSel.h*2.9, this.h-noder*2, noder, TYPE_VALUE, [TYPE_VALUE], "env", "E");
-		this.inNodes[2].setObject(this.filtGKnob);
-		this.gnode = this.inNodes[2];
+		this.addModule(this.filtGKnob, w*0.05 + this.filtSel.h*5, h*0.55);
+		this.addINode(w*0.05 + this.filtSel.h*4.7, this.h-noder*2, noder, TYPE_AUDIO, [TYPE_AUDIO], "lfo", "O");
+		this.inNodes[4].setObject(oscarrfg);
+		this.gnode = this.inNodes[4];
+		this.addINode(w*0.05 + this.filtSel.h*5.8, this.h-noder*2, noder, TYPE_VALUE, [TYPE_VALUE], "env", "E");
+		this.inNodes[5].setObject(this.filtQKnob);
+		this.qnode = this.inNodes[5];
 		
 		this.addINode(0, this.h*0.5-noder, noder, TYPE_AUDIO, [TYPE_AUDIO], "filter");
-		this.inNodes[3].setObject(this.filter);
+		this.inNodes[6].setObject(this.filter);
 		this.addONode(this.w-2*noder, this.h*0.5-noder, noder, TYPE_AUDIO, [TYPE_AUDIO], "osc");
 		this.outNodes[0].setObject(this.filter);
 	}
@@ -3672,6 +3707,11 @@ class ENVContainer extends SynthModContainer {
 		ctx.font = this.h*0.1 + "px Arial";
 		ctx.fillStyle = pianocol;
 		ctx.fillText("MULTI", this.x + this.w*0.2, this.y + this.h*0.98);
+	}
+	
+	connect(node) {
+		this.mod.connectValues();
+		super.connect(node);
 	}
 	
 	connectSource(node) {
