@@ -272,9 +272,13 @@ class ENVLP {
 	}
 	
 	connect(obj) {
-		if (this.iskey) {
+		if (obj.o && obj.o[this.pnum].frequency) {
 			this.setTarget(obj.o[this.pnum].frequency);
-		} else if (this.isval) {
+			this.iskey = true;
+			this.isval = false;
+		} else if (obj.targets && obj.targets[this.pnum]) {
+			this.isval = true;
+			this.iskey = false;
 			this.setTarget(obj.targets[this.pnum]);
 			if (obj.isknob) {
 				this.knob = obj;
@@ -287,14 +291,15 @@ class ENVLP {
 	}
 	
 	disconnect(obj) {
+		if (this.knob) {
+			this.knob.updateValue();
+		}
 		if (this.iskey) {
 			this.knob = null;
 			this.iskey = false;
-			this.isval = false;
 			this.removeTarget(obj.o[this.pnum].frequency);
 		} else if (this.isval) {
 			this.knob = null;
-			this.iskey = false;
 			this.isval = false;
 			this.removeTarget(obj.targets[this.pnum]);
 		} else {
@@ -325,6 +330,7 @@ class ENVLP {
 				return;
 			}
 		}
+		console.log("failed to remove object");
 		//this.object = null;
 	}
 	
@@ -341,7 +347,7 @@ class ENVLP {
 		for (var i = 0; i < this.targets.length; i++) {
 			if (this.targets[i] === target) {
 				this.targets.splice(i, 1);
-				console.log("found target " + i);
+				//console.log("found target " + i);
 				return;
 			}
 		}
@@ -421,9 +427,13 @@ class ADSR {
 	}
 	
 	connect(obj) {
-		if (this.iskey) {
+		if (obj.o && obj.o[this.pnum].frequency) {
 			this.setTarget(obj.o[this.pnum].frequency);
-		} else if (this.isval) {
+			this.iskey = true;
+			this.isval = false;
+		} else if (obj.targets && obj.targets[this.pnum]) {
+			this.isval = true;
+			this.iskey = false;
 			this.setTarget(obj.targets[this.pnum]);
 			if (obj.isknob) {
 				this.knob = obj;
@@ -436,14 +446,15 @@ class ADSR {
 	}
 	
 	disconnect(obj) {
+		if (this.knob) {
+			this.knob.updateValue();
+		}
 		if (this.iskey) {
 			this.removeTarget(obj.o[this.pnum].frequency);
 			this.knob = null;
 			this.iskey = false;
-			this.isval = false;
 		} else if (this.isval) {
 			this.removeTarget(obj.targets[this.pnum]);
-			this.iskey = false;
 			this.isval = false;
 			this.knob = null;
 		} else {
@@ -664,7 +675,10 @@ class AudioManager {
 			//tosc.connectToSpeakers();
 			this.pianos.push(tosc);
 		}
-		this.impulse = this.impulseResponse(0.25, 2, false);
+		this.impulse = this.impulseResponse(0.5, 2, false);
+		this.porto = false;
+		this.monophonic = false;
+		this.porttime = 0;
 	}
 	
 	impulseResponse(duration, decay, reverse) {
@@ -710,6 +724,13 @@ class AudioManager {
 	}
 	
 	getPiano(keynum, oscnum) {
+		if (this.monophonic) {
+			if (this.pianos[0].key > -1) {
+				piano.allkeys[this.pianos[0].key].oscnum = -1;
+			}
+			//this.pianos[0].noteOnNow(keynum);
+			return 0;
+		}
 		if (oscnum < this.pianos.length && oscnum > -1 && this.pianos[oscnum].key == keynum) {
 			this.pianos[oscnum].noteOnNow(keynum);
 			return oscnum;
@@ -1849,6 +1870,13 @@ class Knob extends SynthModule {
 	}
 }
 
+class PKnob extends Knob {
+	setValue(v) {
+		super.setValue(v);
+		sound.porttime = this.val;
+	}
+}
+
 class EqualModule extends SynthModule {
 	constructor(x, y, w, h, vals) {
 		super(x, y, w, h, vals);
@@ -2808,7 +2836,11 @@ class FrequencySetter {
 	noteOnNow(f, knum, onum) {
 		var val = f*this.multi;
 		//console.log("set fs val to " + val);
-		this.o[onum].frequency.setValueAtTime(val, sound.ctx.currentTime);
+		var stime = sound.ctx.currentTime;
+		if (sound.porto && sound.pianos[onum].off) {
+			stime += sound.porttime;
+		}
+		this.o[onum].frequency.setValueAtTime(val, stime);
 	}
 	
 	setValue(v) {
@@ -3009,7 +3041,7 @@ class SynthFilterContainer extends SynthModContainer {
 		this.addINode(w*0.05 + this.filtSel.h*0.7, this.h-noder*2, noder, TYPE_AUDIO, [TYPE_AUDIO], "lfo", "O");
 		this.inNodes[0].setObject(oscarrff);
 		this.lfofnode = this.inNodes[0];
-		this.addINode(w*0.05 + this.filtSel.h*1.8, this.h-noder*2, noder, TYPE_VALUE, [TYPE_VALUE], "env", "E");
+		this.addINode(w*0.05 + this.filtSel.h*1.8, this.h-noder*2, noder, TYPE_VALUE, [TYPE_VALUE, TYPE_ENV], "env", "E");
 		this.inNodes[1].setObject(this.filtFreqKnob);
 		this.fnode = this.inNodes[1];
 		
@@ -3020,7 +3052,7 @@ class SynthFilterContainer extends SynthModContainer {
 		this.addINode(w*0.05 + this.filtSel.h*2.7, this.h-noder*2, noder, TYPE_AUDIO, [TYPE_AUDIO], "lfo", "O");
 		this.inNodes[2].setObject(oscarrfq);
 		this.qnode = this.inNodes[2];
-		this.addINode(w*0.05 + this.filtSel.h*3.8, this.h-noder*2, noder, TYPE_VALUE, [TYPE_VALUE], "env", "E");
+		this.addINode(w*0.05 + this.filtSel.h*3.8, this.h-noder*2, noder, TYPE_VALUE, [TYPE_VALUE, TYPE_ENV], "env", "E");
 		this.inNodes[3].setObject(this.filtQKnob);
 		this.qnode = this.inNodes[3];
 		
@@ -3031,7 +3063,7 @@ class SynthFilterContainer extends SynthModContainer {
 		this.addINode(w*0.05 + this.filtSel.h*4.7, this.h-noder*2, noder, TYPE_AUDIO, [TYPE_AUDIO], "lfo", "O");
 		this.inNodes[4].setObject(oscarrfg);
 		this.gnode = this.inNodes[4];
-		this.addINode(w*0.05 + this.filtSel.h*5.8, this.h-noder*2, noder, TYPE_VALUE, [TYPE_VALUE], "env", "E");
+		this.addINode(w*0.05 + this.filtSel.h*5.8, this.h-noder*2, noder, TYPE_VALUE, [TYPE_VALUE, TYPE_ENV], "env", "E");
 		this.inNodes[5].setObject(this.filtQKnob);
 		this.qnode = this.inNodes[5];
 		
@@ -3261,7 +3293,7 @@ class SynthGainContainer extends SynthModContainer {
 		this.inNodes[2].setObject(this.knob.max);
 		this.addINode(this.w*0.78, this.h-noder*2, noder, TYPE_AUDIO, [TYPE_AUDIO], "LFO", "F");
 		this.inNodes[3].setObject(oscggarr);
-		this.addINode(this.w*0.5-noder, 0, noder, TYPE_VALUE, [TYPE_VALUE], "env", "E");
+		this.addINode(this.w*0.5-noder, 0, noder, TYPE_VALUE, [TYPE_VALUE, TYPE_ENV], "env", "E");
 		this.inNodes[4].setObject(this.knob);
 		this.envnode = this.inNodes[4];
 	}
@@ -3332,6 +3364,62 @@ class Switch extends Drawable {
 	
 	disconnect(obj) {
 		obj.connected = false;
+	}
+}
+
+class PortBtn extends Drawable {
+	constructor(x, y, w, h) {
+		super(x, y, w, h);
+		this.fillCol = keypresscol;
+		this.name = "porto";
+		this.tx = this.x + this.w*0.15;
+		this.ty = this.y + this.h*0.9;
+	}
+	
+	hitCheck(isdown, coords) {
+		var hit = super.hitCheck(isdown, coords);
+		if (hit) {
+			if (!isdown) {
+				this.fill = !this.fill;
+				sound.porto = this.fill;
+			}
+		}
+		return hit;
+	}
+	
+	drawOb(ctx) {
+		super.drawOb(ctx);
+		ctx.font = this.h*0.26 + "px Arial";
+		ctx.fillStyle = pianocol;
+		ctx.fillText(this.name, this.tx, this.ty);
+	}
+}
+
+class MBtn extends Drawable {
+	constructor(x, y, w, h) {
+		super(x, y, w, h);
+		this.fillCol = keypresscol;
+		this.name = "monoph";
+		this.tx = this.x + this.w*0.05;
+		this.ty = this.y + this.h*0.9;
+	}
+	
+	hitCheck(isdown, coords) {
+		var hit = super.hitCheck(isdown, coords);
+		if (hit) {
+			if (!isdown) {
+				this.fill = !this.fill;
+				sound.monophonic = this.fill;
+			}
+		}
+		return hit;
+	}
+	
+	drawOb(ctx) {
+		super.drawOb(ctx);
+		ctx.font = this.h*0.26 + "px Arial";
+		ctx.fillStyle = pianocol;
+		ctx.fillText(this.name, this.tx, this.ty);
 	}
 }
 
@@ -3690,16 +3778,13 @@ class ENVContainer extends SynthModContainer {
 		this.inNodes[0].env = this;
 		this.addINode(this.w*0.1, this.h-2*noder, noder, TYPE_VALUE, [TYPE_VALUE], "env multi");
 		this.inNodes[1].setObject(this.adsr);
-		this.addINode(0, this.h*0.8-noder, noder, TYPE_TRIGGER, [TYPE_KEY, TYPE_TRIGGER], "env trigger", "T");
-		this.gt = new GainTrigger();
-		this.inNodes[2].setObject(this.gt);
-		this.addONode(this.w-2*noder, this.h*0.5-noder, noder, TYPE_VALUE, [TYPE_VALUE], "env");
+		//this.addINode(0, this.h*0.8-noder, noder, TYPE_TRIGGER, [TYPE_KEY, TYPE_TRIGGER], "env trigger", "T");
+		//this.gt = new GainTrigger();
+		//this.inNodes[2].setObject(this.gt);
+		this.addONode(this.w-2*noder, this.h*0.5-noder, noder, TYPE_ENV, [TYPE_ENV], "env");
 		this.outNodes[0].env = this;
 		this.outNodes[0].setObject(this.adsr);
 		this.stopTrigger = true;
-		for (var i = 0; i < sound.numpianos; i++) {
-			this.adsr[i].isval = true;
-		}
 	}
 	
 	drawOb(ctx) {
@@ -3715,6 +3800,9 @@ class ENVContainer extends SynthModContainer {
 	}
 	
 	connectSource(node) {
+		if (this.outNodes[0].con && !node.checkTypes(this.outNodes[0].con)) {
+			this.outNodes[0].disconnect();
+		}
 		if (node.ntype == TYPE_AUDIO) {
 			this.stopTrigger = false;
 			this.gains = new Array();
@@ -3722,51 +3810,31 @@ class ENVContainer extends SynthModContainer {
 				this.gains.push(sound.ctx.createGain());
 				this.gains[i].gain.value = OFF_VOL;
 				node.obj[i].connect(this.gains[i]);
-				this.adsr[i].iskey = false;
-				this.adsr[i].isval = false;
 				this.adsr[i].setTarget(this.gains[i].gain);
 				this.adsr[i].setObject(this.gains[i]);
 			}
 			this.outNodes[0].ntype = TYPE_AUDIO;
 			return true;
-		} else if (node.ntype == TYPE_KEY) {
+		} else {
+			this.outNodes[0].ntype = TYPE_ENV;
 			this.stopTrigger = true;
-			for (var i = 0; i < sound.numpianos; i++) {
-				this.adsr[i].iskey = true;
-				this.adsr[i].isval = false;
-			}
-			this.outNodes[0].ntype = TYPE_VALUE;
 			return true;
-		} else if (node.ntype == TYPE_VALUE) {
-			this.stopTrigger = true;
-			for (var i = 0; i < sound.numpianos; i++) {
-				this.adsr[i].iskey = false;
-				this.adsr[i].isval = true;
-			}
-			this.outNodes[0].ntype = TYPE_VALUE;
 		}
 	}
 	
 	disconnectSource(node) {
+		console.log("disconnect source");
+		//this.outNodes[0].disconnect();
 		if (node.ntype == TYPE_AUDIO) {
 			for (var i = 0; i < sound.numpianos; i++) {
-				this.adsr[i].removeObject(this.gains[i]);
-				this.adsr[i].removeTarget(this.gains[i].gain);
+				//this.adsr[i].removeObject(this.gains[i]);
+				//this.adsr[i].removeTarget(this.gains[i].gain);
 				node.obj[i].disconnect();
 				this.gains[i] = null;
 			}
 			this.gains = null;
-			this.outNodes[0].disconnect();
-			this.outNodes[0].ntype = TYPE_VALUE;
 			return true;
 		} else if (node.ntype == TYPE_KEY || node.ntype == TYPE_VALUE) {
-			for (var i = 0; i < sound.numpianos; i++) {
-				//this.adsr[i].removeTarget();
-				this.adsr[i].iskey = false;
-				this.adsr[i].isval = false;
-			}
-			this.outNodes[0].disconnect();
-			this.outNodes[0].ntype = TYPE_VALUE;
 			return true;
 		}
 	}
@@ -4580,6 +4648,9 @@ class KeyboardOutput {
 		for (var i = 0; i < this.triggers.length; i++) {
 			this.triggers[i].trigger(true, knum, oscnum, freq);
 		}
+		if (sound.monophonic) {
+			sound.pianos[oscnum].noteOnNow(knum);
+		}
 		return oscnum;
 	}
 }
@@ -4644,6 +4715,7 @@ class Piano {
 		this.blacks = new Array();
 		this.allkeys = new Array();
 		this.btns = new Array();
+		this.synthbtns = new Array();
 		//for (var i = 0; i < btnhits.length; i++) {
 			//this.btns.push(new PBtn(x + this.w - (i+1)*2*keyW, y + keyH * 1.5, keyW*2, keyW*2, 0, btnhits[i]));
 		//}
@@ -4665,6 +4737,15 @@ class Piano {
 		this.modbt = cony;
 		this.modbb = canH-this.modh;
 		this.noder = kw*0.08;
+		
+		var mbh = keyW*btnw*0.7;
+		this.monob = new MBtn(x, y + keyH * 1.5 + keyW*btnw - mbh, mbh, mbh);
+		this.synthbtns.push(this.monob);
+		this.portb = new PortBtn(x + mbh*1.1, y + keyH * 1.5 + keyW*btnw - mbh, mbh, mbh);
+		this.synthbtns.push(this.portb);
+		this.portk = new PKnob(x + mbh*2.2, y + keyH * 1.5 + keyW*btnw - mbh, mbh*0.9, mbh*0.9, [0.1], 0.1, 1);
+		this.portk.name = "time";
+		this.synthbtns.push(this.portk);
 		
 		rollkey = new PBtn(x + this.w - btnw*keyW, y + keyH * 1.5, keyW*btnw, keyW*btnw, 0);
 		this.btns.push(rollkey);
@@ -4865,6 +4946,9 @@ class Piano {
 		for (var i = 0; i < this.btns.length; i++) {
 			this.btns[i].drawOb(ctx);			
 		}
+		for (var i = 0; i < this.synthbtns.length; i++) {
+			this.synthbtns[i].drawOb(ctx);
+		}
 		for (var i = 0; i < this.whites.length; i++) {
 			this.whites[i].drawOb(ctx);			
 		}
@@ -4895,6 +4979,9 @@ class Piano {
 		if (this.modbar.hitCheck(isdown, coords)) return true;
 		for (var i = 0; i < this.modules.length; i++) {
 			if (this.modules[i].hitCheck(isdown, coords)) return true;
+		}
+		for (var i = 0; i < this.synthbtns.length; i++) {
+			if (this.synthbtns[i].hitCheck(isdown, coords)) return true;
 		}
 		if (isdown) {
 			for (var i = 0; i < this.btns.length; i++) {
@@ -5018,7 +5105,7 @@ class GameLoop {
 		ctx.stroke();
 		
 		if (piano) piano.drawOb(ctx);
-		if (staff) staff.drawOb(ctx);
+		//if (staff) staff.drawOb(ctx);
    }
 
    tick(time) {
@@ -5064,7 +5151,7 @@ var clicking = false;
 var dragging = false;
 var sound = new AudioManager();
 var piano;
-var staff;
+//var staff;
 var dragOb = null;
 var focusOb = null;
 var loop = new GameLoop();
@@ -5091,7 +5178,7 @@ function setup() {
 	piano = new Piano(10, 10, keyW, keyH);
 	//initmods();
 	piano.loadModules(modsaveteststring);
-	staff = new Staff(20, 50 + keyH, keyH*2, keyH * 0.6);
+	//staff = new Staff(20, 50 + keyH, keyH*2, keyH * 0.6);
 	setMsg("");
 	focusOb = qwertyboard;
 }
