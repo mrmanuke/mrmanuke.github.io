@@ -2401,6 +2401,7 @@ class ioNode extends Drawable {
 	}
 	
 	disconnectToSplitter(node) {
+		console.log("splitter asdf");
 		return node.splitter.disconnectSplit(this);
 	}
 	
@@ -2421,6 +2422,7 @@ class ioNode extends Drawable {
 	}
 	
 	disconnectToEnv(node) {
+		console.log("env asdf");
 		return node.env.disconnectSource(this);
 	}
 	
@@ -2477,7 +2479,7 @@ class ioNode extends Drawable {
 	disconnect() {
 		var node = this.con;
 		if (!node) return false;
-		if (this.con && this.con.ntype == TYPE_SPLITTER) {
+		if (node.ntype == TYPE_SPLITTER) {
 			if (!this.disconnectToSplitter(this.con)) return false;
 		} else if (this.ntype == TYPE_MERGER) {
 			if (!this.disconnectToMerger(node)) return false;
@@ -2651,6 +2653,8 @@ class SynthModContainer extends Drawable {
 			
 		}
 		piano.trash(this);
+		focusOb = qwertyboard;
+		dragOb = null;
 	}
 	
 	notifyDisconnect() {
@@ -3245,6 +3249,102 @@ class SynthEqualContainer extends SynthModContainer {
 	
 	load(data) {
 		this.mod.load(data);
+	}
+}
+
+function makeDistortionCurve(amount) {
+  var k = typeof amount === 'number' ? amount : 50,
+    n_samples = sound.ctx.sampleRate,
+    curve = new Float32Array(n_samples),
+    deg = Math.PI / 180,
+    i = 0,
+    x;
+  for ( ; i < n_samples; ++i ) {
+    x = i * 2 / n_samples - 1;
+    curve[i] = ( 3 + k ) * x * 20 * deg / ( Math.PI + k * Math.abs(x) );
+  }
+  return curve;
+};
+
+class WaveShaperContainer extends SynthModContainer {
+	constructor(x, y, w, h, bl, br, bt, bb, noder) {
+		super(x, y, w, h, bl, br, bt, bb);
+		this.shapers = new Array();
+		for (var i = 0; i < sound.numpianos; i++) {
+			this.shapers.push(sound.ctx.createWaveShaper());
+			this.shapers[i].curve = makeDistortionCurve(200);
+			this.shapers[i].oversample = '4x';
+		}
+		this.addINode(0, this.h*0.5-noder, noder, TYPE_AUDIO, [TYPE_AUDIO], "conv");
+		this.inNodes[0].setObject(this.shapers);
+		this.addONode(this.w-2*noder, this.h*0.5-noder, noder, TYPE_AUDIO, [TYPE_AUDIO], "conv");
+		this.outNodes[0].setObject(this.shapers);
+	}
+	
+	save() {
+		var t = '{"type":"WaveShaperContainer" , ' + super.save();
+		t += '}';
+		return t;
+	}
+	
+	drawOb(ctx) {
+		super.drawOb(ctx);
+		ctx.font = this.h*0.15 + "px Arial";
+		ctx.fillStyle = pianocol;
+		ctx.fillText("shape", this.x + this.w*0.23, this.y + this.h*0.95);
+	}
+}
+
+class AnalyserContainer extends SynthModContainer {
+	constructor(x, y, w, h, bl, br, bt, bb, noder) {
+		super(x, y, w, h, bl, br, bt, bb);
+		this.analyser = sound.ctx.createAnalyser();
+		this.analyser.fftSize = 2048;
+		this.bufferLength = this.analyser.frequencyBinCount;
+		this.dataArray = new Uint8Array(this.bufferLength);
+		this.analyser.getByteTimeDomainData(this.dataArray);
+		this.addINode(0, this.h*0.5-noder, noder, TYPE_AUDIO, [TYPE_AUDIO], "conv");
+		this.inNodes[0].setObject(this.analyser);
+		this.sliceWidth = w / this.bufferLength;
+	}
+	
+	notifyDisconnect() {
+		console.log("disconnect analyser");
+	}
+	
+	save() {
+		var t = '{"type":"AnalyserContainer" , ' + super.save();
+		t += '}';
+		return t;
+	}
+	
+	drawOb(ctx) {
+		super.drawOb(ctx);
+		this.analyser.getByteTimeDomainData(this.dataArray);
+		ctx.fillStyle = "rgb(200, 200, 200)";
+
+		//ctx.lineWidth = 2;
+		ctx.strokeStyle = "rgb(0, 0, 0)";
+
+		ctx.beginPath();
+		
+		var dx = this.x;
+		for (var i = 0; i < this.bufferLength; i++) {
+
+			var v = this.dataArray[i] / 128.0;
+			var dy = this.y + v * this.h * 0.5;
+
+			if (i === 0) {
+			  ctx.moveTo(dx, dy);
+			} else {
+			  ctx.lineTo(dx, dy);
+			}
+
+			dx += this.sliceWidth;
+		}
+
+		ctx.lineTo(this.x + this.w, this.y + this.h*0.5);
+		ctx.stroke();
 	}
 }
 
@@ -3857,7 +3957,7 @@ class ENVContainer extends SynthModContainer {
 	}
 	
 	connectSource(node) {
-		if (this.outNodes[0].con && !node.checkTypes(this.outNodes[0].con)) {
+		if (this.outNodes[0].con) {// && !node.checkTypes(this.outNodes[0].con)) {
 			this.outNodes[0].disconnect();
 		}
 		if (node.ntype == TYPE_AUDIO) {
@@ -3881,12 +3981,12 @@ class ENVContainer extends SynthModContainer {
 	
 	disconnectSource(node) {
 		console.log("disconnect source");
-		//this.outNodes[0].disconnect();
+		this.outNodes[0].disconnect();
 		if (node.ntype == TYPE_AUDIO) {
 			for (var i = 0; i < sound.numpianos; i++) {
 				//this.adsr[i].removeObject(this.gains[i]);
 				//this.adsr[i].removeTarget(this.gains[i].gain);
-				node.obj[i].disconnect();
+				node.obj[i].disconnect(this.gains[i]);
 				this.gains[i] = null;
 			}
 			this.gains = null;
@@ -4120,7 +4220,7 @@ class SplitterMod extends SynthModContainer {
 	constructor(x, y, w, h, bl, br, bt, bb, noder) {
 		super(x, y, w, h, bl, br, bt, bb);
 		this.isSplitter = true;
-		this.addINode(0, this.h*0.5-noder, noder, TYPE_SPLITTER, [TYPE_KEY, TYPE_OSC, TYPE_TRIGGER, TYPE_VALUE, TYPE_MULTI, TYPE_SPLITTER, TYPE_ENV], "split");
+		this.addINode(0, this.h*0.5-noder, noder, TYPE_SPLITTER, [TYPE_AUDIO, TYPE_KEY, TYPE_OSC, TYPE_TRIGGER, TYPE_VALUE, TYPE_MULTI, TYPE_SPLITTER, TYPE_ENV], "split");
 		this.inNodes[0].setObject(this);
 		this.inNodes[0].splitter = this;
 		for (var i = 0; i < 3; i++) {
@@ -4531,6 +4631,29 @@ class CompIcon extends ModuleIcon {
 	}
 }
 
+class AnalyserIcon extends ModuleIcon {
+	createMod() {
+		return new AnalyserContainer(this.x, piano.modbt, piano.modh*2, piano.modh*2, piano.modbl, piano.modbr, piano.modbt, piano.modbb, piano.noder);
+	}
+	
+	drawOb(ctx) {
+		super.drawOb(ctx);
+		ctx.font = this.h*0.22 + "px Arial";
+		ctx.fillText("ANALYSE", this.x+this.w*0, this.y+this.h*0.5);
+	}
+}
+
+class ShaperIcon extends ModuleIcon {
+	createMod() {
+		return new WaveShaperContainer(this.x, piano.modbt, piano.modh, piano.modh, piano.modbl, piano.modbr, piano.modbt, piano.modbb, piano.noder);
+	}
+	
+	drawOb(ctx) {
+		super.drawOb(ctx);
+		ctx.fillText("SHAPE", this.x+this.w*0.05, this.y+this.h*0.5);
+	}
+}
+
 class ConvIcon extends ModuleIcon {
 	createMod() {
 		return new SynthConvContainer(this.x, piano.modbt, piano.modh, piano.modh, piano.modbl, piano.modbr, piano.modbt, piano.modbb, piano.noder);
@@ -4682,6 +4805,8 @@ class ModuleBar extends Drawable {
 		a += h*0.9;
 		this.convb = new ConvIcon(x+a,y+h*0.1, h*0.8, h*0.8, 0, canW, y, canH);
 		a += h*0.9;
+		this.shapeb = new ShaperIcon(x+a,y+h*0.1, h*0.8, h*0.8, 0, canW, y, canH);
+		a += h*0.9;
 		this.valb = new ValueIcon(x+a,y+h*0.1, h*0.8, h*0.8, 0, canW, y, canH);
 		a += h*0.9;
 		this.multib = new MultiIcon(x+a,y+h*0.1, h*0.8, h*0.8, 0, canW, y, canH);
@@ -4697,6 +4822,8 @@ class ModuleBar extends Drawable {
 		this.eqb = new EQIcon(x+a,y+h*0.1, h*0.8, h*0.8, 0, canW, y, canH);
 		a += h*0.9;
 		this.speakerb = new SpeakerIcon(x+a,y+h*0.1, h*0.8, h*0.8, 0, canW, y, canH);
+		a += h*0.9;
+		this.analyseb = new AnalyserIcon(x+a,y+h*0.1, h*0.8, h*0.8, 0, canW, y, canH);
 		this.icons.push(this.keyb);
 		this.icons.push(this.oscb);
 		this.icons.push(this.gainb);
@@ -4705,6 +4832,7 @@ class ModuleBar extends Drawable {
 		this.icons.push(this.filt);
 		this.icons.push(this.comp);
 		this.icons.push(this.convb);
+		this.icons.push(this.shapeb);
 		this.icons.push(this.speakerb);
 		this.icons.push(this.clickb);
 		this.icons.push(this.valb);
@@ -4716,6 +4844,7 @@ class ModuleBar extends Drawable {
 		this.icons.push(this.seqb);
 		this.icons.push(this.timerb);
 		this.icons.push(this.eqb);
+		this.icons.push(this.analyseb);
 		this.hideicon = -1;
 	}
 	
@@ -4888,7 +5017,7 @@ class Piano {
 		var btnw = 6;
 		var kw = this.w * 0.15;
 		var cony = y + keyH * 1.7 + keyW*btnw;
-		this.modbar = new ModuleBar(x, cony, this.w, keyH*0.85);
+		this.modbar = new ModuleBar(x, cony, this.w, keyH*0.8);
 		var trashw = kw*0.6;
 		var trashh = kw*0.7;
 		this.trashcan = new TrashCan(x + this.w + kw*0.2, cony + this.modbar.h - trashh, trashw, trashh);
@@ -5009,6 +5138,10 @@ class Piano {
 				m = piano.modbar.eqb.createMod();
 			} else if (type == "SynthConvContainer") {
 				m = piano.modbar.convb.createMod();
+			} else if (type == "WaveShaperContainer") {
+				m = piano.modbar.shapeb.createMod();
+			} else if (type == "AnalyserContainer") {
+				m = piano.modbar.analyseb.createMod();
 			} else if (type == "SynthGainContainer") {
 				m = piano.modbar.gainb.createMod();
 			} else if (type == "SynthENVLPContainer") {
@@ -5340,8 +5473,8 @@ var dragOb = null;
 var focusOb = null;
 var loop = new GameLoop();
 var txtCol = "black";
-var keyW = 20;
-var keyH = 70;
+var keyW = 21;
+var keyH = 70.5;
 
 function setup() {
 	var myCanvas = document.getElementById('myCanvas');
