@@ -5231,6 +5231,7 @@ class Piano {
 				if (cmod.isSplitter || pmod.isMerger) {
 					if (pmod.isSplitter) {
 						//splitter connected to splitter
+						pnode.connect(cnode);
 					} else {
 						pnode.connect(cnode);
 					}
