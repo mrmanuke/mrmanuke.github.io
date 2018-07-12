@@ -2417,7 +2417,6 @@ class ioNode extends Drawable {
 	}
 	
 	disconnectToSplitter(node) {
-		console.log("splitter asdf");
 		return node.splitter.disconnectSplit(this);
 	}
 	
@@ -2438,7 +2437,6 @@ class ioNode extends Drawable {
 	}
 	
 	disconnectToEnv(node) {
-		console.log("env asdf");
 		return node.env.disconnectSource(this);
 	}
 	
@@ -3635,7 +3633,7 @@ class ValueModContainer extends SynthModContainer {
 		var hit = super.hitCheck(isdown, coords);
 		//if (hit) this.setValue();
 		if (!this.lockinput && hit && dragOb === this) {
-			if (this.valueOb) this.text = this.valueOb.val.toString();
+			if (this.valueOb && !this.isMulti) this.text = this.valueOb.val.toString();
 			focusOb = this;
 		} else if (isdown) {
 			if (focusOb === this) {
@@ -3864,6 +3862,7 @@ class TextFieldMulti extends ValueModContainer {
 		this.sap = "=";
 		this.subtext = "=1";
 		this.prod = 1;
+		this.isMulti = true;
 	}
 	
 	save() {
@@ -3874,7 +3873,7 @@ class TextFieldMulti extends ValueModContainer {
 	
 	load(data) {
 		this.mval = data.val;
-		this.setValue();
+		this.setValue(1);
 	}
 	
 	drawOb(ctx) {
@@ -3887,6 +3886,7 @@ class TextFieldMulti extends ValueModContainer {
 		if (v) {
 			this.prod = v*this.mval;
 			this.crossout = !this.valueOb.setValue(this.prod);
+			this.text = this.mval;
 		} else {
 			if (this.inNodes[0].con) {
 				var v = this.inNodes[0].con.obj.val;
@@ -5731,7 +5731,15 @@ function parseTime(s) {
 	return o;
 }
 
+function addSong(newsong) {
+	songs.splice(songindex+1, 0, newsong);
+	rollkey.nextSong();
+}
+
 function getroll() {
+	if (songs[songindex].roll) {
+		return songs[songindex].roll;
+	}
 	var roll = new Array();
 	var lr;
 	var ll;
@@ -5928,6 +5936,8 @@ function getroll() {
 	}
 	}
 	
+	songs[songindex].roll = roll;
+	
 	return roll;
 }
 
@@ -6069,9 +6079,487 @@ function updateSize() {
   reader.readAsText(oFiles[0]);
 }
 
+function parseMidi(data) {
+  var p = new Parser(data)
+
+  var headerChunk = p.readChunk()
+  if (headerChunk.id != 'MThd')
+    throw "Bad MIDI file.  Expected 'MHdr', got: '" + headerChunk.id + "'"
+  var header = parseHeader(headerChunk.data)
+
+  var tracks = []
+  for (var i=0; !p.eof() && i < header.numTracks; i++) {
+    var trackChunk = p.readChunk()
+    if (trackChunk.id != 'MTrk')
+      throw "Bad MIDI file.  Expected 'MTrk', got: '" + trackChunk.id + "'"
+    var track = parseTrack(trackChunk.data)
+    tracks.push(track)
+  }
+
+  return {
+    header: header,
+    tracks: tracks
+  }
+}
+
+function parseHeader(data) {
+  var p = new Parser(data)
+
+  var format = p.readUInt16()
+  var numTracks = p.readUInt16()
+
+  var result = {
+    format: format,
+    numTracks: numTracks
+  }
+
+  var timeDivision = p.readUInt16()
+  if (timeDivision & 0x8000) {
+    result.framesPerSecond = 0x100 - (timeDivision >> 8)
+    result.ticksPerFrame = timeDivision & 0xFF
+  } else {
+    result.ticksPerBeat = timeDivision
+  }
+
+  return result
+}
+
+function parseTrack(data) {
+  var p = new Parser(data)
+
+  var events = []
+  while (!p.eof()) {
+    var event = readEvent()
+    events.push(event)
+  }
+
+  return events
+
+  var lastEventTypeByte = null
+
+  function readEvent() {
+    var event = {}
+    event.deltaTime = p.readVarInt()
+
+    var eventTypeByte = p.readUInt8()
+
+    if ((eventTypeByte & 0xf0) === 0xf0) {
+      // system / meta event
+      if (eventTypeByte === 0xff) {
+        // meta event
+        event.meta = true
+        var metatypeByte = p.readUInt8()
+        var length = p.readVarInt()
+        switch (metatypeByte) {
+          case 0x00:
+            event.type = 'sequenceNumber'
+            if (length !== 2) throw "Expected length for sequenceNumber event is 2, got " + length
+            event.number = stream.readUInt16()
+            return event
+          case 0x01:
+            event.type = 'text'
+            event.text = p.readString(length)
+            return event
+          case 0x02:
+            event.type = 'copyrightNotice'
+            event.text = p.readString(length)
+            return event
+          case 0x03:
+            event.type = 'trackName'
+            event.text = p.readString(length)
+            return event
+          case 0x04:
+            event.type = 'instrumentName'
+            event.text = p.readString(length)
+            return event
+          case 0x05:
+            event.type = 'lyrics'
+            event.text = p.readString(length)
+            return event
+          case 0x06:
+            event.type = 'marker'
+            event.text = p.readString(length)
+            return event
+          case 0x07:
+            event.type = 'cuePoint'
+            event.text = p.readString(length)
+            return event
+          case 0x20:
+            event.type = 'channelPrefix'
+            if (length != 1) throw "Expected length for channelPrefix event is 1, got " + length
+            event.channel = p.readUInt8()
+            return event
+          case 0x21:
+            event.type = 'portPrefix'
+            if (length != 1) throw "Expected length for portPrefix event is 1, got " + length
+            event.port = p.readUInt8()
+            return event
+          case 0x2f:
+            event.type = 'endOfTrack'
+            if (length != 0) throw "Expected length for endOfTrack event is 0, got " + length
+            return event
+          case 0x51:
+            event.type = 'setTempo';
+            if (length != 3) throw "Expected length for setTempo event is 3, got " + length
+            event.microsecondsPerBeat = p.readUInt24()
+            return event
+          case 0x54:
+            event.type = 'smpteOffset';
+            if (length != 5) throw "Expected length for smpteOffset event is 5, got " + length
+            var hourByte = p.readUInt8()
+            var FRAME_RATES = { 0x00: 24, 0x20: 25, 0x40: 29, 0x60: 30 }
+            event.frameRate = FRAME_RATES[hourByte & 0x60]
+            event.hour = hourByte & 0x1f
+            event.min = p.readUInt8()
+            event.sec = p.readUInt8()
+            event.frame = p.readUInt8()
+            event.subFrame = p.readUInt8()
+            return event
+          case 0x58:
+            event.type = 'timeSignature'
+            if (length != 4) throw "Expected length for timeSignature event is 4, got " + length
+            event.numerator = p.readUInt8()
+            event.denominator = (1 << p.readUInt8())
+            event.metronome = p.readUInt8()
+            event.thirtyseconds = p.readUInt8()
+            return event
+          case 0x59:
+            event.type = 'keySignature'
+            if (length != 2) throw "Expected length for keySignature event is 2, got " + length
+            event.key = p.readInt8()
+            event.scale = p.readUInt8()
+            return event
+          case 0x7f:
+            event.type = 'sequencerSpecific'
+            event.data = p.readBytes(length)
+            return event
+          default:
+            event.type = 'unknownMeta'
+            event.data = p.readBytes(length)
+            event.metatypeByte = metatypeByte
+            return event
+        }
+      } else if (eventTypeByte == 0xf0) {
+        event.type = 'sysEx'
+        var length = p.readVarInt()
+        event.data = p.readBytes(length)
+        return event
+      } else if (eventTypeByte == 0xf7) {
+        event.type = 'endSysEx'
+        var length = p.readVarInt()
+        event.data = p.readBytes(length)
+        return event
+      } else {
+        throw "Unrecognised MIDI event type byte: " + eventTypeByte
+      }
+    } else {
+      // channel event
+      var param1
+      if ((eventTypeByte & 0x80) === 0) {
+        // running status - reuse lastEventTypeByte as the event type.
+        // eventTypeByte is actually the first parameter
+        if (lastEventTypeByte === null)
+          throw "Running status byte encountered before status byte"
+        param1 = eventTypeByte
+        eventTypeByte = lastEventTypeByte
+        event.running = true
+      } else {
+        param1 = p.readUInt8()
+        lastEventTypeByte = eventTypeByte
+      }
+      var eventType = eventTypeByte >> 4
+      event.channel = eventTypeByte & 0x0f
+      switch (eventType) {
+        case 0x08:
+          event.type = 'noteOff'
+          event.noteNumber = param1
+          event.velocity = p.readUInt8()
+          return event
+        case 0x09:
+          var velocity = p.readUInt8()
+          event.type = velocity === 0 ? 'noteOff' : 'noteOn'
+          event.noteNumber = param1
+          event.velocity = velocity
+          return event
+        case 0x0a:
+          event.type = 'noteAftertouch'
+          event.noteNumber = param1
+          event.amount = p.readUInt8()
+          return event
+        case 0x0b:
+          event.type = 'controller'
+          event.controllerType = param1
+          event.value = p.readUInt8()
+          return event
+        case 0x0c:
+          event.type = 'programChange'
+          event.programNumber = param1
+          return event
+        case 0x0d:
+          event.type = 'channelAftertouch'
+          event.amount = param1
+          return event
+        case 0x0e:
+          event.type = 'pitchBend'
+          event.value = (param1 + (p.readUInt8() << 7)) - 0x2000
+          return event
+        default:
+          throw "Unrecognised MIDI event type: " + eventType
+      }
+    }
+  }
+}
+
+function Parser(data) {
+  this.buffer = data
+  this.bufferLen = this.buffer.length
+  this.pos = 0
+}
+
+Parser.prototype.eof = function() {
+  return this.pos >= this.bufferLen
+}
+
+Parser.prototype.readUInt8 = function() {
+  var result = this.buffer[this.pos]
+  this.pos += 1
+  return result
+}
+
+Parser.prototype.readInt8 = function() {
+  var u = this.readUInt8()
+  if (u & 0x80)
+    return u - 0x100
+  else
+    return u
+}
+
+Parser.prototype.readUInt16 = function() {
+  var b0 = this.readUInt8(),
+      b1 = this.readUInt8()
+
+    return (b0 << 8) + b1
+}
+
+Parser.prototype.readInt16 = function() {
+  var u = this.readUInt16()
+  if (u & 0x8000)
+    return u - 0x10000
+  else
+    return u
+}
+
+Parser.prototype.readUInt24 = function() {
+  var b0 = this.readUInt8(),
+      b1 = this.readUInt8(),
+      b2 = this.readUInt8()
+
+    return (b0 << 16) + (b1 << 8) + b2
+}
+
+Parser.prototype.readInt24 = function() {
+  var u = this.readUInt24()
+  if (u & 0x800000)
+    return u - 0x1000000
+  else
+    return u
+}
+
+Parser.prototype.readUInt32 = function() {
+  var b0 = this.readUInt8(),
+      b1 = this.readUInt8(),
+      b2 = this.readUInt8(),
+      b3 = this.readUInt8()
+
+    return (b0 << 24) + (b1 << 16) + (b2 << 8) + b3
+}
+
+Parser.prototype.readBytes = function(len) {
+  var bytes = this.buffer.slice(this.pos, this.pos + len)
+  this.pos += len
+  return bytes
+}
+
+Parser.prototype.readString = function(len) {
+  var bytes = this.readBytes(len)
+  return String.fromCharCode.apply(null, bytes)
+}
+
+Parser.prototype.readVarInt = function() {
+  var result = 0
+  while (!this.eof()) {
+    var b = this.readUInt8()
+    if (b & 0x80) {
+      result += (b & 0x7f)
+      result <<= 7
+    } else {
+      // b is last byte
+      return result + b
+    }
+  }
+  // premature eof
+  return result
+}
+
+Parser.prototype.readChunk = function() {
+  var id = this.readString(4)
+  var length = this.readUInt32()
+  var data = this.readBytes(length)
+  return {
+    id: id,
+    length: length,
+    data: data
+  }
+}
+
+function openMidiFile() {
+  var nBytes = 0,
+      oFiles = document.getElementById("uploadMidi").files,
+      nFiles = oFiles.length;
+  for (var nFileId = 0; nFileId < nFiles; nFileId++) {
+    nBytes += oFiles[nFileId].size;
+  }
+  var sOutput = nBytes + " bytes";
+  // optional code for multiples approximation
+  for (var aMultiples = ["KiB", "MiB", "GiB", "TiB", "PiB", "EiB", "ZiB", "YiB"], nMultiple = 0, nApprox = nBytes / 1024; nApprox > 1; nApprox /= 1024, nMultiple++) {
+    sOutput = nApprox.toFixed(3) + " " + aMultiples[nMultiple] + " (" + nBytes + " bytes)";
+  }
+  // end of optional code
+  document.getElementById("fileNum").innerHTML = nFiles;
+  document.getElementById("fileSize").innerHTML = sOutput;
+  var reader = new FileReader();
+  reader.fileName = oFiles[0].name;
+  reader.onload = function(evt) {
+    //console.log(evt.target.result);]
+	loadMidi(evt.target.result, evt.target.fileName);
+  };
+  reader.readAsArrayBuffer(oFiles[0]);
+}
+
+function sortMidi(header, events, fname) {
+	//events[i].deltaTime = p.readVarInt()
+	//events[i].type = 'noteOff'
+	//events[i].velocity = p.readUInt8()
+	//events[i].noteNumber = param1
+	
+	//var timeDivision = p.readUInt16()
+	//if (timeDivision & 0x8000) {
+	//	header.framesPerSecond = 0x100 - (timeDivision >> 8)
+	//	header.ticksPerFrame = timeDivision & 0xFF
+	//} else {
+	//	header.ticksPerBeat = timeDivision
+	//}
+	var tps = 0;
+	var tpb = 0;
+	if (header.framesPerSecond) {
+		//console.log("framesPerSecond: " + header.framesPerSecond + " ticksPerFrame: " + header.ticksPerFrame);
+		tps = header.framesPerSecond * header.ticksPerFrame;
+	}
+	if (header.ticksPerBeat) {
+		//console.log("ticksPerBeat: " + header.ticksPerBeat);
+		tpb = header.ticksPerBeat;
+	}
+	for (var i = 0; i < events.length; i++) {
+		var earliest = events[i].time;
+		var eind = i;
+		for (var j = i+1; j < events.length; j++) {
+			if (events[j].time < earliest) {
+				earliest = events[j].time;
+				eind = j;
+			}
+		}
+		var elem = events[eind];
+		events.splice(eind, 1);
+		events.splice(i, 0 , elem);
+	}
+	var roll = new Array();
+	var uspb = 500000;
+	var spt = 1;
+	if (tps > 0) {
+		spt = 1/tps;
+	} else {
+		spt = uspb/(tpb*1000000);
+	}
+	var ct = 0;
+	var lt = 0;
+	var dt = 0;
+	for (var i = 0; i < events.length; i++) {
+		var rr = new Array();
+		var vols = new Array();
+		var t = events[i].time;
+		dt = t - lt;
+		ct += dt*spt;
+		var si = i
+		while (si < events.length && events[si].time == t) {
+			if (events[i].type === "setTempo") {
+				//us per beat: 120bpm => 500,000 us per beat
+				uspb = events[i].microsecondsPerBeat;
+				if (tpb > 0) {
+					spt = uspb/(tpb*1000000);
+					//console.log("spt: " + spt + " @" + ct);
+				}
+			}
+			si++;
+		}
+		while (i < events.length && events[i].time == t) {
+			if (events[i].type === "noteOn" || events[i].type === "noteOff") {
+				rr.push(events[i].noteNumber-21);
+				vols.push(events[i].velocity);
+			}
+			i++;
+		}
+		i--;
+		lt = t;
+		var time = { measure:0, beat:0, fraction0:0, secs:ct }
+		if (rr.length > 0) {
+			//console.log(rr.length + " @" + ct);
+			roll.push({time: time, notes: rr, vols: vols});
+		}
+	}
+	for (var i = 1; i < roll.length; i++) {
+		var ri = i - 1;
+		roll[ri].time.nextsecs = roll[i].time.secs - roll[ri].time.secs;
+		if (roll[ri].time.nextsecs <= 0) {
+			console.log("***************************");
+		}
+	}
+	
+	var spb = uspb * 1000000;
+	return {roll:roll, n:fname, b:spb};
+}
+
+function loadMidi(input, fname) {
+	var data = new Uint8Array(input);
+	var parsed = parseMidi(data);
+	console.log("tracks: " + parsed.tracks.length);
+	var events = new Array();
+	for (var i = 0; i < parsed.tracks.length; i++) {
+		var t = 0;
+		for (var j = 0; j < parsed.tracks[i].length; j++) {
+			t += parsed.tracks[i][j].deltaTime;
+			parsed.tracks[i][j].time = t;
+			if (parsed.tracks[i][j].type === "noteOn" || parsed.tracks[i][j].type === "noteOff") {
+				events.push(parsed.tracks[i][j]);
+			} else if (parsed.tracks[i][j].type === "setTempo") {
+				//console.log("set tempo to " + parsed.tracks[i][j].microsecondsPerBeat);
+				events.push(parsed.tracks[i][j]);
+			}
+		}
+	}
+	console.log("events: " + events.length);
+	console.log("fname: " + fname);
+	
+	//var roll = sortMidi(parsed.header, events);
+	//var newsong = {roll:roll, n:fname, b:roll};
+	//var newsong = sortMidi(parsed.header, events, fname);
+	//songs.push({r: moon3r, l: moon3l, b: moon3b, n: "moonlight3"});
+	addSong(sortMidi(parsed.header, events, fname));
+}
 </script>
 <body onload="setup()">
 	<canvas id="myCanvas" width="200" height="200"></canvas>
+	<br>load midi
+	<p><input id="uploadMidi" type="file" name="myFiles" onchange="openMidiFile();"> selected files: <span id="fileNum">0</span>; total size: <span id="fileSize">0</span></p>
 	<br>load config
 	<p><input id="uploadInput" type="file" name="myFiles" onchange="updateSize();"> selected files: <span id="fileNum">0</span>; total size: <span id="fileSize">0</span></p>
 	<br><button onclick="piano.saveModules()">Save Config</button>
