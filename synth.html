@@ -6099,7 +6099,11 @@ function updateSize() {
   var reader = new FileReader();
   reader.onload = function(evt) {
     //console.log(evt.target.result);]
+	try {
 	piano.loadModules(evt.target.result);
+	} catch (err) {
+	setMsg("config file could not be read");
+	}
   };
   reader.readAsText(oFiles[0]);
 }
@@ -6456,7 +6460,11 @@ function openMidiFile() {
   reader.fileName = oFiles[0].name;
   reader.onload = function(evt) {
     //console.log(evt.target.result);
+	try {
 	loadMidi(evt.target.result, evt.target.fileName);
+	} catch (err) {
+	setMsg("midi file could not be read");
+	}
   };
   reader.readAsArrayBuffer(oFiles[0]);
 }
