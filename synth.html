@@ -3635,7 +3635,7 @@ class ValueModContainer extends SynthModContainer {
 		if (!this.lockinput && hit && dragOb === this) {
 			if (this.valueOb && !this.isMulti) this.text = this.valueOb.val.toString();
 			focusOb = this;
-			document.getElementById("beattime2").focus();
+			document.getElementById("myCanvas").focus();
 		} else if (isdown) {
 			if (focusOb === this) {
 				focusOb = qwertyboard;
@@ -5522,6 +5522,7 @@ var keyH = 70.5;
 
 function setup() {
 	var myCanvas = document.getElementById('myCanvas');
+	myCanvas.setAttribute('tabindex','0');
 	myCanvas.addEventListener("mousedown", mouseDown);
 	myCanvas.addEventListener("mousemove", mouseMove);
 	myCanvas.addEventListener("mouseup", mouseUp);
