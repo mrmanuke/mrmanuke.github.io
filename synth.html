@@ -5958,7 +5958,7 @@ function mouseDown(event, allowdef) {
 
 function touchstart(event) {
 	//event.preventDefault();
-	if (mouseDown(event.changedTouches[0]), true) event.preventDefault();
+	if (mouseDown(event.changedTouches[0], true)) event.preventDefault();
 	//document.getElementById("msgdiv").innerHTML = "touchstart";
 }
 
@@ -5979,7 +5979,8 @@ function touchend(event) {
 	if (mouseUp(event.changedTouches[0], true)) event.preventDefault();
 }
 
-function mouseMove(event) {
+function mouseMove(event, allowdef) {
+	if (!allowdef) event.preventDefault();
 	dragCoords = document.getElementById('myCanvas').relMouseCoords(event);
 	mouseCoords = dragCoords;
 	
@@ -5995,7 +5996,7 @@ function mouseMove(event) {
 
 function touchmove(event) {
 	//event.preventDefault();
-	if (mouseMove(event.changedTouches[0])) event.preventDefault();
+	if (mouseMove(event.changedTouches[0], true)) event.preventDefault();
 	//document.getElementById("msgdiv").innerHTML = "touchmove";
 }
 
