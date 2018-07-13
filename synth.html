@@ -3635,7 +3635,7 @@ class ValueModContainer extends SynthModContainer {
 		if (!this.lockinput && hit && dragOb === this) {
 			if (this.valueOb && !this.isMulti) this.text = this.valueOb.val.toString();
 			focusOb = this;
-			document.getElementById("showkeyboard").focus();
+			document.getElementById("beattime2").focus();
 		} else if (isdown) {
 			if (focusOb === this) {
 				focusOb = qwertyboard;
@@ -6562,6 +6562,8 @@ function loadMidi(input, fname) {
 </script>
 <body onload="setup()">
 	<canvas id="myCanvas" width="200" height="200"></canvas>
+	
+	<div id="msgdiv"></div>
 	<br>load midi
 	<p><input id="uploadMidi" type="file" name="myFiles" onchange="openMidiFile();"> selected files: <span id="fileNum">0</span>; total size: <span id="fileSize">0</span></p>
 	<br>load config
@@ -6570,6 +6572,5 @@ function loadMidi(input, fname) {
 	<div id="textin">
 		<input type="text" id="beattime"/>
 	</div>
-	<div id="msgdiv"/>
-	<input hidden type="text" id="showkeyboard"/>
+	<input hidden type="text" id="beattime2"/>
 </body>
