@@ -82,6 +82,9 @@ class qwerty {
 			this.keys[code].unpress();
 		}	
 	}
+	
+	typeInValue() {
+	}
 }
 
 class qwertykey {
@@ -3635,7 +3638,6 @@ class ValueModContainer extends SynthModContainer {
 		if (!this.lockinput && hit && dragOb === this) {
 			if (this.valueOb && !this.isMulti) this.text = this.valueOb.val.toString();
 			focusOb = this;
-			document.getElementById("myCanvas").focus();
 		} else if (isdown) {
 			if (focusOb === this) {
 				focusOb = qwertyboard;
@@ -3645,6 +3647,15 @@ class ValueModContainer extends SynthModContainer {
 			this.setValue(null, null, -2);
 		}
 		return hit;
+	}
+	
+	typeInValue() {
+		var text = document.getElementById("beattime").value;
+		if (!isNaN(text)) {
+			this.text = text;
+			this.setValue(null, null, -2);
+		}
+		focusOb = qwertyboard;
 	}
 	
 	noteOnNow(f, k, o) {
@@ -5522,7 +5533,6 @@ var keyH = 70.5;
 
 function setup() {
 	var myCanvas = document.getElementById('myCanvas');
-	myCanvas.setAttribute('tabindex','0');
 	myCanvas.addEventListener("mousedown", mouseDown);
 	myCanvas.addEventListener("mousemove", mouseMove);
 	myCanvas.addEventListener("mouseup", mouseUp);
@@ -6573,6 +6583,7 @@ function loadMidi(input, fname) {
 	<br><button onclick="piano.saveModules()">Save Config</button>
 	<div id="textin">
 		<input type="text" id="beattime"/>
+		<button onclick="focusOb.typeInValue()">Submit Value</button>
 	</div>
 	<input hidden type="text" id="beattime2"/>
 </body>
