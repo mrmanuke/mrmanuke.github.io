@@ -3939,9 +3939,10 @@ class ValueModContainer extends SynthModContainer {
 			case 57: return 9; break;
 			case 48: return 0; break;
 			case 190: return "."; break;
-			case 46: return -2;//delete
-			case 13: return -3;//enter
-			case 8: return -4;//backspace
+			case 46: return -2; break;//delete
+			case 13: return -3; break;//enter
+			case 8: return -4; break;//backspace
+			case 189: return -5; break;//minus sign
 		}
 		return -1;
 	}
@@ -3963,6 +3964,15 @@ class ValueModContainer extends SynthModContainer {
 			if(this.text.length > 0) {
 				this.text = this.text.substring(0, this.text.length - 1);
 			}
+		} else if (n == -5) {
+			console.log("-");
+			if (this.text.length>0) {
+				if (this.text.charAt(0) === '-') {
+					this.text = this.text.slice(1, this.text.length);
+				} else {
+					this.text = "-" + this.text;
+				}
+			} 
 		} else if (n != -1) {
 			this.text += n;
 		}
