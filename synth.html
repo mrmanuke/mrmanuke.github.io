@@ -720,6 +720,32 @@ class AudioManager {
 		this.porttime = 0;
 	}
 	
+	updateVoices(newv) {
+		var addp = newv - numpianos;
+		if (addp == 1) {
+			this.pianos.push(new DummyInstrument());
+		} else if (addp == -1) {
+			var spos = this.pianos.length-1;
+			if (this.pianos[spos].isoff() && this.pianos[spos].key == -1) {
+				for (var i = 0; i < piano.allkeys.length; i++) {
+					var k = piano.allkeys[i];
+					if (k.oscnum == spos) {
+						k.keyout.noteOFF(k.oscnum, k.num, null, k.freq);
+						k.oscnum = -1;
+					}
+				}
+				this.pianos.splice(spos, 1);
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
+		numpianos = newv;
+		this.numpianos = newv;
+		return true;
+	}
+	
 	impulseResponse(duration, decay, reverse) {
 		var sampleRate = this.ctx.sampleRate;
 		var length = sampleRate * duration;
@@ -3098,12 +3124,12 @@ class SynthPWMContainer extends SynthModContainer {
 		this.inNodes[0].setObject(this.fs);
 		this.addONode(this.w-2*noder, this.h*0.5-noder, noder, TYPE_AUDIO, [TYPE_AUDIO], "osc out");
 		this.outNodes[0].setObject(this.shapers);
-		this.addINode(this.w*0.5-2*noder, this.h-noder*2, noder, TYPE_AUDIO, [TYPE_AUDIO], "osc LFO", "F");
+		this.addINode(this.w*0.5-2*noder, this.h-noder*2, noder, TYPE_AUDIO, [TYPE_AUDIO], "osc LFO", "L");
 		this.inNodes[1].setObject(this.gfs);
 		this.addINode(this.w*0.26-2*noder, this.h-2*noder, noder, TYPE_VALUE, [TYPE_VALUE, TYPE_MULTI], "f multi", null, this);
 		this.inNodes[2].setObject(this.ms);
 		
-		this.addINode(this.w*0.63-2*noder, this.h-2*noder, noder, TYPE_AUDIO, [TYPE_AUDIO], "width LFO", "F");
+		this.addINode(this.w*0.63-2*noder, this.h-2*noder, noder, TYPE_AUDIO, [TYPE_AUDIO], "width LFO", "L");
 		this.inNodes[3].setObject(this.widthgains);
 		this.addINode(this.w*0.9-2*noder, this.h-2*noder, noder, TYPE_VALUE, [TYPE_VALUE, TYPE_ENV], "width env", "E");
 		this.inNodes[4].setObject(this.knob);
@@ -3170,7 +3196,7 @@ class SynthOscContainer extends SynthModContainer {
 		//this.addINode(0, this.h*0.67-noder, noder, TYPE_TRIGGER, [TYPE_KEY, TYPE_TRIGGER], "osc g", "T", this.trigprop);
 		//this.inNodes[1].setObject(this.trigprop);
 		//->outnode.obj.connect(innode.obj)
-		this.addINode(w*0.7, h-2*noder, noder, TYPE_AUDIO, [TYPE_AUDIO], "f LFO", "F");
+		this.addINode(w*0.7, h-2*noder, noder, TYPE_AUDIO, [TYPE_AUDIO], "f LFO", "L");
 		this.inNodes[1].setObject(this.gfs);
 		this.addINode(w*0.21+noder*3, h-2*noder, noder, TYPE_VALUE, [TYPE_VALUE, TYPE_MULTI], "f multi", null, this);
 		this.inNodes[2].setObject(this.ms);
@@ -3229,7 +3255,7 @@ class SynthFilterContainer extends SynthModContainer {
 		this.filtFreqKnob.setNumTarget(oscarrff);
 		this.filtFreqKnob.name = "Freq";
 		this.addModule(this.filtFreqKnob, w*0.05 + this.filtSel.h, h*0.55);
-		this.addINode(w*0.05 + this.filtSel.h*0.7, this.h-noder*2, noder, TYPE_AUDIO, [TYPE_AUDIO], "lfo", "O");
+		this.addINode(w*0.05 + this.filtSel.h*0.7, this.h-noder*2, noder, TYPE_AUDIO, [TYPE_AUDIO], "lfo", "L");
 		this.inNodes[0].setObject(oscarrff);
 		this.lfofnode = this.inNodes[0];
 		this.addINode(w*0.05 + this.filtSel.h*1.8, this.h-noder*2, noder, TYPE_VALUE, [TYPE_VALUE, TYPE_ENV], "env", "E");
@@ -3240,7 +3266,7 @@ class SynthFilterContainer extends SynthModContainer {
 		this.filtQKnob.setNumTarget(oscarrfq);
 		this.filtQKnob.name = "Q";
 		this.addModule(this.filtQKnob, w*0.05 + this.filtSel.h*3, h*0.55);
-		this.addINode(w*0.05 + this.filtSel.h*2.7, this.h-noder*2, noder, TYPE_AUDIO, [TYPE_AUDIO], "lfo", "O");
+		this.addINode(w*0.05 + this.filtSel.h*2.7, this.h-noder*2, noder, TYPE_AUDIO, [TYPE_AUDIO], "lfo", "L");
 		this.inNodes[2].setObject(oscarrfq);
 		this.qnode = this.inNodes[2];
 		this.addINode(w*0.05 + this.filtSel.h*3.8, this.h-noder*2, noder, TYPE_VALUE, [TYPE_VALUE, TYPE_ENV], "env", "E");
@@ -3251,7 +3277,7 @@ class SynthFilterContainer extends SynthModContainer {
 		this.filtGKnob.setNumTarget(oscarrfg);
 		this.filtGKnob.name = "Gain";
 		this.addModule(this.filtGKnob, w*0.05 + this.filtSel.h*5, h*0.55);
-		this.addINode(w*0.05 + this.filtSel.h*4.7, this.h-noder*2, noder, TYPE_AUDIO, [TYPE_AUDIO], "lfo", "O");
+		this.addINode(w*0.05 + this.filtSel.h*4.7, this.h-noder*2, noder, TYPE_AUDIO, [TYPE_AUDIO], "lfo", "L");
 		this.inNodes[4].setObject(oscarrfg);
 		this.gnode = this.inNodes[4];
 		this.addINode(w*0.05 + this.filtSel.h*5.8, this.h-noder*2, noder, TYPE_VALUE, [TYPE_VALUE, TYPE_ENV], "env", "E");
@@ -3578,7 +3604,7 @@ class SynthGainContainer extends SynthModContainer {
 		this.inNodes[1].setObject(this.knob.min);
 		this.addINode(this.w-2*noder, 0, noder, TYPE_VALUE, [TYPE_VALUE], "max", "M");
 		this.inNodes[2].setObject(this.knob.max);
-		this.addINode(this.w-2*noder, this.h-noder*2, noder, TYPE_AUDIO, [TYPE_AUDIO], "LFO", "F");
+		this.addINode(this.w-2*noder, this.h-noder*2, noder, TYPE_AUDIO, [TYPE_AUDIO], "LFO", "L");
 		this.inNodes[3].setObject(oscggarr);
 		this.addINode(0, this.h-2*noder, noder, TYPE_VALUE, [TYPE_VALUE, TYPE_ENV], "env", "E");
 		this.inNodes[4].setObject(this.knob);
@@ -3679,6 +3705,70 @@ class PortBtn extends Drawable {
 		ctx.font = this.h*0.26 + "px Arial";
 		ctx.fillStyle = pianocol;
 		ctx.fillText(this.name, this.tx, this.ty);
+	}
+}
+
+class VBtn extends Drawable {
+	constructor(x, y, w, h) {
+		super(x, y, w, h);
+		this.y1 = y + h*0.25;
+		this.y2 = y + h*0.75;
+		this.tx = x;
+		this.ty = y + h*0.6;
+		this.setText();
+		this.text2 = "voices";
+		this.tx2 = x;
+		this.ty2 = y + h*1.17;
+		this.ax1 = x + w*0.4;
+		this.ax2 = x + w*0.5;
+		this.ax3 = x + w*0.6;
+		this.ay1 = y + h*0.2;
+		this.ay2 = y + h*0.1;
+		this.ay3 = y + h*0.8;
+		this.ay4 = y + h*0.9;
+	}
+	
+	setText() {
+		this.text = numpianos;
+		if (numpianos > 9) {
+			this.tx = this.x + this.w*0.25;
+		} else {
+			this.tx = this.x + this.w*0.38;
+		}
+	}
+	
+	hitCheck(isdown, coords) {
+		var hit = super.hitCheck(isdown, coords);
+		if (hit && !isdown) {
+			if (coords.y < this.y1) {
+				piano.incrementVoices(1);
+			} else if (coords.y > this.y2) {
+				piano.incrementVoices(-1);
+			}
+			this.setText();
+		}
+		return hit;
+	}
+	
+	drawOb(ctx) {
+		super.drawOb(ctx);
+		ctx.beginPath();
+		ctx.moveTo(this.x, this.y1);
+		ctx.lineTo(this.x + this.w, this.y1);
+		ctx.moveTo(this.x, this.y2);
+		ctx.lineTo(this.x + this.w, this.y2);
+		ctx.moveTo(this.ax1, this.ay1);
+		ctx.lineTo(this.ax2, this.ay2);
+		ctx.lineTo(this.ax3, this.ay1);
+		ctx.moveTo(this.ax1, this.ay3);
+		ctx.lineTo(this.ax2, this.ay4);
+		ctx.lineTo(this.ax3, this.ay3);
+		ctx.stroke();
+		ctx.font = this.h*0.3 + "px Arial";
+		ctx.fillStyle = pianocol;
+		ctx.fillText(this.text, this.tx, this.ty);
+		ctx.font = this.h*0.23 + "px Arial";
+		ctx.fillText(this.text2, this.tx2, this.ty2);
 	}
 }
 
@@ -5311,6 +5401,9 @@ class Piano {
 		this.portk.name = "time";
 		this.synthbtns.push(this.portk);
 		
+		this.voiceb = new VBtn(x + mbh*3.3, y + keyH * 1.5 + keyW*btnw - mbh, mbh*0.6, mbh*0.9);
+		this.synthbtns.push(this.voiceb);
+		
 		rollkey = new PBtn(x + this.w - btnw*keyW, y + keyH * 1.5, keyW*btnw, keyW*btnw, 0);
 		this.btns.push(rollkey);
 		this.btns.push(new BBtn(x + this.w - (btnw*2+1)*keyW, y + keyH * 1.5, keyW*btnw, keyW*btnw));
@@ -5368,7 +5461,13 @@ class Piano {
 		}
 	}
 	
-	saveModules() {
+	incrementVoices(amt) {
+		var newv = numpianos + amt;
+		if (newv < 1) return false;
+		if(sound.updateVoices(newv)) this.loadModules(this.getModuleSaveText());
+	}
+	
+	getModuleSaveText() {
 		var t = "[";
 		for (var i = 0; i < this.modules.length; i++) {
 			this.modules[i].setModNum(i);
@@ -5378,6 +5477,11 @@ class Piano {
 			if (i < this.modules.length - 1) t += ", ";
 		}
 		t += "]";
+		return t;
+	}
+	
+	saveModules() {
+		var t = this.getModuleSaveText();
 		//console.log(t);
 		if (document.getElementById("beattime").value.length < 1) {
 			document.getElementById("beattime").value = "synthconfig";
