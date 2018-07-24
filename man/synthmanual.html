@@ -1,0 +1,599 @@
+<html>
+<head>
+<script>
+</script>
+<style>
+ul {
+    list-style-type: disc;
+}
+
+div.modicon {
+	font-size: 20px;
+	font-weight: bold;
+	text-decoration: underline;
+}
+
+div.description, div.inputs, div.outputs {
+	font-size: 16px;
+}
+
+div.io {
+	font-weight: bold;
+}
+
+</style>
+<body>
+	<div class="modicon">
+		Basics
+	</div>
+		<p>This is a modular sythesizer that runs in your web browser. I have only tested it in Google Chrome
+		on PC and Android, so it may not work on other browsers or operating systems.
+		<p>There is a piano roll
+		that can be used to play back songs. Songs can be loaded into the roll from midi files. All midi notes
+		will be played through the same synthesizer, so files with drum tracks are not going to sound good.
+		<p>Synthesizer patches can be saved using the "save config" box at the bottom of the page. If
+		no file name is entered into the text field, the file will be saved as "synthconfig" by default.
+		<p>Patches can be loaded from saved files using the "load config" box. There are also a few sample
+		patches there.
+		
+	<br><br>
+	<div class="modicon">
+		Keyboard<br>
+		<img src="keyboard.png">
+	</div>
+	<p>You can click on the virtual keyboard to play notes. If you're using a computer, the physical keyboard
+	will be tied to the virtual keyboard.
+	<br><br>
+	<div class="modicon">
+		Play Controls<br>
+		<img src="playbar.png">
+	</div>
+	<p>"monoph": disables polyphony
+	<p>"porto": enables portomento if polyphony is disabled
+	<p>"time": controls how fast the frequency slides if portomento is enabled
+	<p>"voices": controls how many voices are available to the synthesizer. Song playback will
+	fail if the number of keys pressed simultaneously is more than the number of voices.
+	<p>Fast Forward button: loads up the next song in the playlist
+	<p>Play button: plays the currently loaded song
+	<p>GoTo button: ignore this
+	<p>Step Back button: steps backwards through the piano roll
+	<p>Step Forward button: hmmm
+	<br><br>
+	<div class="modicon">
+		Module Bar<br>
+		<img src="modbar.png">
+	</div>
+	<p>Drag a synthesizer module from this bar to create a new copy of the module. You can remove
+	modules by dragging them into the trash can.
+	<br><br>
+	<div class="modicon">
+		<img src="keymodicon.png">
+		Keyboard Module
+	</div><p>
+	<div class="modimage">
+		<img src="keymod.png">
+	</div><p>
+	<div class="description">
+		This module is hardwired to the keyboard. It receives every key press and release.
+	</div><p>	
+	<div class="io">Inputs:</div>
+	<div class="inputs"><ul>
+		<li>Multi: Accepts values only. The frequency input to the module will be multiplied by the input value
+		before being passed to the output.</li>
+	</ul></ul></div><p>
+	<div class="io">Outputs:</div>
+	<div class="outputs"><ul>
+		<li>For convenience, there are two output nodes. Both nodes output the same information: 1) an on/off trigger
+		signal, 2) a voice ID if polyphony is enabled (25 voices are enabled by default), and 3) a frequency value.</li>
+	</ul></div><p>
+	<br>
+	
+	<div class="modicon">
+		<img src="buttonicon.png">
+		Button Module
+	</div><p>
+	<div class="modimage">
+		<img src="btnmod.png">
+	</div><p>
+	<div class="description">
+		This module outputs an on trigger when the mouse is pressed and an off trigger when the mouse is released.
+	</div><p>
+	<div class="io">Inputs:</div>
+	<div class="inputs"><ul>
+		None
+	</ul></div><p>
+	<div class="io">Outputs:</div>
+	<div class="outputs"><ul>
+		<li>An on or off trigger.</li>
+	</ul></div><p>
+	<br>
+	
+	<div class="modicon">
+		<img src="switchicon.png">
+		Switch Module
+	</div><p>
+	<div class="modimage">
+		<img src="switchmod.png">
+	</div><p>
+	<div class="description">
+		This module outputs an on trigger when it is toggled on by a mouse click and an off trigger when it
+		is toggled off by a mouse click.
+	</div><p>
+	<div class="io">Inputs:</div>
+	<div class="inputs"><ul>
+		None
+	</ul></div><p>
+	<div class="io">Outputs:</div>
+	<div class="outputs"><ul>
+		<li>An on or off trigger.</li>
+	</ul></div><p>
+	<br>
+	
+	<div class="modicon">
+		<img src="oscicon.png">
+		Osc Module
+	</div><p>
+	<div class="modimage">
+		<img src="oscmod.png">
+	</div><p>
+	<div class="description">
+		This module contains a single oscillator for each voice of the synthesizer.
+	</div><p>
+	<div class="io">Inputs:</div>
+	<div class="inputs"><ul>
+		<li>F (frequency input): If a keyboard module is plugged into this input, the osc module will receive
+		the voice ID and frequency value, and assign the frequency value only to the oscillator matching
+		the voice ID. If a value is received without a corresponding voice ID, all voices' frequencies will
+		be set to the received value.
+		<p>An envelope can also be plugged into this input in order to produce a time-varied pitch.
+		</li>
+		<li>MULTI: This can accept a numerical value. The oscillator's frequency will be multiplied
+		by this input value.</li>
+		<li>L (LFO input): This can accept any audio source for frequency modulation.</li>
+	</ul></div><p>
+	<div class="io">Outputs:</div>
+	<div class="outputs"><ul>
+		<li>Audio</li>
+	</ul></div><p>
+	<br>
+	
+	<div class="modicon">
+		<img src="pwmicon.png">
+		PWM Module
+	</div><p>
+	<div class="modimage">
+		<img src="pwmmod.png">
+	</div><p>
+	<div class="description">
+		This module contains a pulse width modified oscillator and a knob to control the duty cycle.
+	</div><p>
+	<div class="io">Inputs:</div>
+	<div class="inputs"><ul>
+		<li>F (frequency input): same as the Osc Module.</li>
+		<li>MULTI: same as the Osc Module.</li>
+		<li>L (LFO Input): same as the Osc Module.</li>
+		<li>Knob L (LFO Input): This can accept any audio source for modulation of the duty cycle.</li>
+		<li>Knob E (Envelope Input): This can accept an envelope or a numerical value to set the duty cycle.</li>
+	</ul></div><p>
+	<div class="io">Outputs:</div>
+	<div class="outputs"><ul>
+		<li>Audio</li>
+	</ul></div><p>
+	<br>
+	
+	<div class="modicon">
+		<img src="whiteicon.png">
+		White Noise Module
+	</div><p>
+	<div class="modimage">
+		<img src="whitemod.png">
+	</div><p>
+	<div class="description">
+		This module outputs white noise.
+	</div><p>
+	<div class="io">Inputs:</div>
+	<div class="inputs"><ul>
+		<li>T (Trigger): used only as a pass-through for a trigger signal.</li>
+	</ul></div><p>
+	<div class="io">Outputs:</div>
+	<div class="outputs"><ul>
+		<li>Audio</li>
+	</ul></div><p>
+	<br>
+	
+	<div class="modicon">
+		<img src="gainicon.png">
+		Gain Module
+	</div><p>
+	<div class="modimage">
+		<img src="gainmod.png">
+	</div><p>
+	<div class="description">
+		This is a VCA with a gain knob for controlling the volume of an audio signal. 
+	</div><p>
+	<div class="io">Inputs:</div>
+	<div class="inputs"><ul>
+		<li>Audio Input</li>
+		<li>E (Envelope): this can accept an ADSR or other envelope type, or a numerical value for fine
+		tuning of the knob.</li>
+		<li>L (LFO): this can accept an audio signal to modulate the gain.</li>
+		<li>m (minimum): this can accept a numerical value, to set the minimum of the gain's range.
+		By default, the minimum is 0.</li>
+		<li>M (maximum): this can accept a numerical value, to set the maximum of the gain's range.
+		By default, the maximum is 1.
+		<p>An example of when you would want to increase the maximum of the gain is when using an
+		oscillator as an LFO to modulate the frequency of an oscillator. An oscillator will normally
+		output a signal with values ranging from -1 to 1, meaning the frequency of the modulated
+		oscillator will only vary in a range of +/-1Hz of the base frequency. Connecting the LFO through
+		a gain module with maximum set to 100, for example, will allow frequency modulation ranging from +/-100.
+	</ul></div><p>
+	<div class="io">Outputs:</div>
+	<div class="outputs"><ul>
+		<li>Audio</li>
+	</ul></div><p>
+	<br>
+	
+	<div class="modicon">
+		<img src="adsricon.png">
+		ADSR Module
+	</div><p>
+	<div class="modimage">
+		<img src="adsrmod.png">
+	</div><p>
+	<div class="description">
+		This is an envelope whose main purpose is to turn a gain icon into an ADSR. To do so, plug
+		a keyboard module into the trigger (T) input of the ADSR, and the output of the ADSR into the
+		envelope (E) input of the gain icon.
+	</div><p>
+	<div class="io">Controls:</div>
+	<div class="controls"><ul>
+		<li>tA: time duration of attack</li>
+		<li>tD: time duration of decay</li>
+		<li>vD: volume to decay to</li>
+		<li>tS: time duration of sustain</li>
+		<li>vS: final volume at the end of the sustain duration</li>
+		<li>tR: time duration of release</li>
+	</ul></div>
+	<div class="io">Inputs:</div>
+	<div class="inputs"><ul>
+		<li>T (Trigger): This can accept an on/off trigger input.</li>
+		<li>F (Frequency): This can accept a trigger event with an associated frequency, such as from a
+		keyboard module. The frequency value will be added to the envelope value. This is useful for
+		adding a pitch envelope to an oscillator.</li>
+		<li>MULTI: This can accept a numerical value. The envelope value will be multiplied by this value.
+		For example, if you use the ADSR to add a pitch envelope to an oscillator, the MULTI value will
+		represent the range of the pitch envelope in Hz.</li>
+	</ul></div><p>
+	<div class="io">Outputs:</div>
+	<div class="outputs"><ul>
+		<li>Envelope: can be applied to an oscillator frequency input, or the envelope input of a knob</li>
+	</ul></div><p>
+	<br>
+	
+	<div class="modicon">
+		<img src="envicon.png">
+		Envelope Module
+	</div><p>
+	<div class="modimage">
+		<img src="envmod.png">
+	</div><p>
+	<div class="description">
+		This is a general purpose envelope that can be used for pitch, volume, or other knob settings.
+	</div><p>
+	<div class="io">Controls:</div>
+	<div class="controls"><ul>
+		<li>vS: start value</li>
+		<li>tA: time duration of 1st leg of envelope </li>
+		<li>vA: final value of 1st leg of envelope</li>
+		<li>tD: time duration of 2nd leg of envelope</li>
+		<li>vD: final value of 2nd leg of envelope</li>
+	</ul></div>
+	<div class="io">Inputs:</div>
+	<div class="inputs"><ul>
+		<li>T (Trigger): This can accept an on/off trigger input.</li>
+		<li>F (Frequency): This can accept a trigger event with an associated frequency, such as from a
+		keyboard module. The frequency value will be added to the envelope value. This is useful for
+		adding a pitch envelope to an oscillator.</li>
+		<li>MULTI: This can accept a numerical value. The envelope value will be multiplied by this value.
+		For example, if you use the ADSR to add a pitch envelope to an oscillator, the MULTI value will
+		represent the range of the pitch envelope in Hz.</li>
+		<li>V (Knob value): These can accept numerical values for fine tuning of each knob setting.</li>
+	</ul></div><p>
+	<div class="io">Outputs:</div>
+	<div class="outputs"><ul>
+		<li>Envelope: can be applied to an oscillator frequency input, or the envelope input of a knob</li>
+	</ul></div><p>
+	<br>
+	
+	<div class="modicon">
+		<img src="filtericon.png">
+		Filter Module
+	</div><p>
+	<div class="modimage">
+		<img src="filtermod.png">
+	</div><p>
+	<div class="description">
+		An audio filter.
+	</div><p>
+	<div class="io">Inputs:</div>
+	<div class="inputs"><ul>
+		<li>Audio Input</li>
+		<li>Knob O (Oscillator): This can accept an oscillator input to oscillate the knob value. To oscillate
+		the value beyond the range of +/-1, the input oscillator will have to be amplified through a gain
+		module.</li>
+		<li>Knob E (Envelope): This can accept an envelope to time-vary the knob value.</li>
+	</ul></div><p>
+	<div class="io">Outputs:</div>
+	<div class="outputs"><ul>
+		<li>Audio</li>
+	</ul></div><p>
+	<br>
+	
+	<div class="modicon">
+		<img src="compicon.png">
+		Compressor Module
+	</div><p>
+	<div class="modimage">
+		<img src="compmod.png">
+	</div><p>
+	<div class="description">
+		A compressor. This module isn't fully developed yet.
+	</div><p>
+	<div class="io">Inputs:</div>
+	<div class="inputs"><ul>
+		<li>Audio</li>
+	</ul></div><p>
+	<div class="io">Outputs:</div>
+	<div class="outputs"><ul>
+		<li>Audio</li>
+	</ul></div><p>
+	<br>
+	
+	<div class="modicon">
+		<img src="convicon.png">
+		Convolver Module
+	</div><p>
+	<div class="modimage">
+		<img src="convmod.png">
+	</div><p>
+	<div class="description">
+		A convolver. This module isn't fully developed yet. Currently it only does a basic reverb. It seems
+		to require a lot of processing power as well, so it may work better if you lower the voice count.
+	</div><p>
+	<div class="io">Inputs:</div>
+	<div class="inputs"><ul>
+		<li>Audio</li>
+	</ul></div><p>
+	<div class="io">Outputs:</div>
+	<div class="outputs"><ul>
+		<li>Audio</li>
+	</ul></div><p>
+	<br>
+	
+	<div class="modicon">
+		<img src="shapericon.png">
+		Shaper Module
+	</div><p>
+	<div class="modimage">
+		<img src="shapermod.png">
+	</div><p>
+	<div class="description">
+		A convolver. This module isn't fully developed yet. Currently it only does distortion.
+	</div><p>
+	<div class="io">Inputs:</div>
+	<div class="inputs"><ul>
+		<li>Audio</li>
+	</ul></div><p>
+	<div class="io">Outputs:</div>
+	<div class="outputs"><ul>
+		<li>Audio</li>
+	</ul></div><p>
+	<br>
+	
+	<div class="modicon">
+		<img src="valueicon.png">
+		Value Module
+	</div><p>
+	<div class="modimage">
+		<img src="valuemod.png">
+	</div><p>
+	<div class="description">
+		This module is used to set a numerical value. It can also receive a value from a keyboard module
+		and pass the keyboard's trigger event through to the output as well. This is useful if you want
+		to perform some arithmetic on the frequency value before passing it to an oscillator. See the
+		sample config for an example.
+	</div><p>
+	<div class="io">Inputs:</div>
+	<div class="inputs"><ul>
+		<li>Keyboard Module: receives the frequency value from key presses and passes on the
+		trigger event.</li>
+		<li>Text Input: to edit the value, click on the module. The module border will become red. Click
+		outside of the module or hit the Enter key to end editing. Currently you can't select a position
+		to enter text into. You can only enter digits and erase the last digit by pressing backspace.
+		You can also erase the whole thing by pressing delete. Press the minus key to flip the value
+		between negative and positive. If you're using a mobile browser, entering values directly into
+		the module doesn't seem to work, so you will need to use the text
+		field and button labeled "Submit Value" near the bottom of the page.
+	</ul></div><p>
+	<div class="io">Outputs:</div>
+	<div class="outputs"><ul>
+		<li>Value: sets the value of the object it is plugged into.
+	</ul></div><p>
+	<br>
+	
+	<div class="modicon">
+		<img src="multiicon.png">
+		Multiplier Module
+	</div><p>
+	<div class="modimage">
+		<img src="multimod.png">
+	</div><p>
+	<div class="description">
+		This module outputs a value like the Value Module, but accepts a value as it's input and 
+		multiplies the input value before passing it to the output.
+	</div><p>
+	<div class="io">Inputs:</div>
+	<div class="inputs"><ul>
+		<li>Value</li>
+	</ul></div><p>
+	<div class="io">Outputs:</div>
+	<div class="outputs"><ul>
+		<li>Value</li>
+	</ul></div><p>
+	<br>
+	
+	<div class="modicon">
+		<img src="splittericon.png">
+		Splitter Module
+	</div><p>
+	<div class="modimage">
+		<img src="splittermod.png">
+	</div><p>
+	<div class="description">
+		This module takes various types of inputs and copies the input to multiple outputs. Note
+		that the outputs can't be connected unless an input is connected. Disconnecting an input
+		will reset all of the output connections.
+	</div><p>
+	<div class="io">Inputs:</div>
+	<div class="inputs"><ul>
+		<li>Accepts audio, keyboard, values, and envelopes</li>
+	</ul></div><p>
+	<div class="io">Outputs:</div>
+		<li>Three copies of the input</li>
+	<div class="outputs"><ul>
+	</ul></div><p>
+	<br>
+	
+	<div class="modicon">
+		<img src="mergericon.png">
+		Merger Module
+	</div><p>
+	<div class="modimage">
+		<img src="mergermod.png">
+	</div><p>
+	<div class="description">
+		This module takes three inputs and combines them into one output. It can perform numerical 
+		addition if connecting multiple values and outputting to a value module. Note that the inputs
+		can't be connected unless the output is connected. Disconnecting the output will reset
+		all of the input connections.
+	</div><p>
+	<div class="io">Inputs:</div>
+	<div class="inputs"><ul>
+		<li>Accepts audio or values.</li>
+	</ul></div><p>
+	<div class="io">Outputs:</div>
+	<div class="outputs"><ul>
+		<li>Audio or values.</li>
+	</ul></div><p>
+	<br>
+	
+	<div class="modicon">
+		<img src="seqicon.png">
+		Sequence Module
+	</div><p>
+	<div class="modimage">
+		<img src="seqmod.png">
+	</div><p>
+	<div class="description">
+		This module is not fully developed. Currently it can record and play back a sequence of keyboard
+		inputs. To begin recording, connect a keyboard module. To end recording, disconnect the keyboard
+		module. To play back the sequence, click the button on the sequence module.
+	</div><p>
+	<div class="io">Inputs:</div>
+	<div class="inputs"><ul>
+		<li>Keyboard Module</li>
+	</ul></div><p>
+	<div class="io">Outputs:</div>
+	<div class="outputs">
+		<p>
+		Like the keyboard module, there are two outputs that both output a frequency and a trigger event.
+		<ul>
+		<li>If recording: pass-through of keyboard module.</li>
+		<li>If not recording: replay of recorded sequence.</li>
+	</ul></div><p>
+	<br>
+	
+	<div class="modicon">
+		<img src="timericon.png">
+		Timer Module
+	</div><p>
+	<div class="modimage">
+		<img src="timermod.png">
+	</div><p>
+	<div class="description">
+		This module is not fully developed. Currently it alternates between outputting an on trigger and
+		an off trigger with the specified time interval.
+	</div><p>
+	<div class="io">Inputs:</div>
+	<div class="inputs"><ul>
+		<li>Trigger: The timer will start operating when it receives an on trigger, and stop when
+		it receives an off trigger.</li>
+	</ul></div><p>
+	<div class="io">Outputs:</div>
+	<div class="outputs"><ul>
+		<li>Text: a value can be entered the same way as the Value Module. The value will be the
+		timer interval in seconds.</li>
+		<li>On and off triggers at the specified interval.</li>
+	</ul></div><p>
+	<br>
+	
+	<div class="modicon">
+		<img src="eqicon.png">
+		Equalizer Module
+	</div><p>
+	<div class="modimage">
+		<img src="eqmod.png">
+	</div><p>
+	<div class="description">
+		A simple equalizer.
+	</div><p>
+	<div class="io">Inputs:</div>
+	<div class="inputs"><ul>
+		<li>Audio</li>
+	</ul></div><p>
+	<div class="io">Outputs:</div>
+	<div class="outputs"><ul>
+		<li>Audio</li>
+	</ul></div><p>
+	<br>
+	
+	<div class="modicon">
+		<img src="speakericon.png">
+		Speaker Module
+	</div><p>
+	<div class="modimage">
+		<img src="speakermod.png">
+	</div><p>
+	<div class="description">
+		This module takes any audio input and connects it to your device's speakers.
+	</div><p>
+	<div class="io">Inputs:</div>
+	<div class="inputs"><ul>
+		<li>Audio</li>
+	</ul></div><p>
+	<div class="io">Outputs:</div>
+	<div class="outputs"><ul>
+		None
+	</ul></div><p>
+	<br>
+	
+	<div class="modicon">
+		<img src="analysericon.png">
+		Analyser Module
+	</div><p>
+	<div class="modimage">
+		<img src="analysermod.png">
+	</div><p>
+	<div class="description">
+		This module visualizes any audio signal.
+	</div><p>
+	<div class="io">Inputs:</div>
+	<div class="inputs"><ul>
+		<li>Audio. You will need to use a splitter if you want to send the audio signal anywhere else</li>
+	</ul></div><p>
+	<div class="io">Outputs:</div>
+	<div class="outputs"><ul>
+		none
+	</ul></div><p>
+	<br>
+</body>

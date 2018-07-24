@@ -4350,19 +4350,19 @@ class SynthENVLPContainer extends ENVContainer {
 		var mod = new ENVLPModule(0, 0, w*0.8, h*0.8, 0, envs);
 		super(x, y, w, h, bl, br, bt, bb, noder, envs, mod);
 		
-		this.addINode(this.w*0.2-noder, 0, noder, TYPE_VALUE, [TYPE_VALUE, TYPE_ENV], "svenv", "E");
+		this.addINode(this.w*0.2-noder, 0, noder, TYPE_VALUE, [TYPE_VALUE], "svenv", "V");
 		this.svnode = this.inNodes[this.inNodes.length-1];
 		this.svnode.setObject(this.mod.knobSV);
-		this.addINode(this.w*0.35-noder, 0, noder, TYPE_VALUE, [TYPE_VALUE, TYPE_ENV], "aenv", "E");
+		this.addINode(this.w*0.35-noder, 0, noder, TYPE_VALUE, [TYPE_VALUE], "aenv", "V");
 		this.anode = this.inNodes[this.inNodes.length-1];
 		this.anode.setObject(this.mod.knobA);
-		this.addINode(this.w*0.5-noder, 0, noder, TYPE_VALUE, [TYPE_VALUE, TYPE_ENV], "avenv", "E");
+		this.addINode(this.w*0.5-noder, 0, noder, TYPE_VALUE, [TYPE_VALUE], "avenv", "V");
 		this.avnode = this.inNodes[this.inNodes.length-1];
 		this.avnode.setObject(this.mod.knobAV);
-		this.addINode(this.w*0.65-noder, 0, noder, TYPE_VALUE, [TYPE_VALUE, TYPE_ENV], "denv", "E");
+		this.addINode(this.w*0.65-noder, 0, noder, TYPE_VALUE, [TYPE_VALUE], "denv", "V");
 		this.dnode = this.inNodes[this.inNodes.length-1];
 		this.dnode.setObject(this.mod.knobD);
-		this.addINode(this.w*0.8-noder, 0, noder, TYPE_VALUE, [TYPE_VALUE, TYPE_ENV], "dvenv", "E");
+		this.addINode(this.w*0.8-noder, 0, noder, TYPE_VALUE, [TYPE_VALUE], "dvenv", "V");
 		this.dvnode = this.inNodes[this.inNodes.length-1];
 		this.dvnode.setObject(this.mod.knobDV);
 	}
@@ -6969,4 +6969,5 @@ function loadMidi(input, fname) {
 		<br><input type="text" id="beattime"/><br>
 	</div>
 	<br>
+	<h1><a href="./man/synthmanual.html">Manual</a></h1>
 </body>
