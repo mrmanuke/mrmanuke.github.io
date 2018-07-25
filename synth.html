@@ -74,7 +74,7 @@ class qwerty {
 		this.keys = new Array();
 		this.numkeys = 90;
 		for (var i = 0; i <= this.numkeys; i++) {
-			this.keys.push(new qwertykey(i));
+			this.keys.push(new qwertykey2(i));
 		}
 	}
 	
@@ -91,6 +91,64 @@ class qwerty {
 	}
 	
 	typeInValue() {
+	}
+}
+
+class qwertykey2 {
+	constructor(code) {
+		this.code = code;
+		this.pressed = false;
+		this.startpos = 38;
+		this.pos = -1;
+		switch (code) {
+			case 50: this.pos = 2; break;//2/
+			case 51: this.pos = 4; break;//3/
+			case 53: this.pos = 7; break;//5/
+			case 54: this.pos = 9; break;//6/
+			case 55: this.pos = 11; break;//7/
+			case 57: this.pos = 14; break;//9/
+			case 48: this.pos = 16; break;//0/
+			case 66: this.pos = 25; break;//b/
+			case 67: this.pos = 22; break;//c/
+			case 68: this.pos = 21; break;//d/
+			case 69: this.pos = 5; break;//e/
+			case 70: this.pos = 23; break;//f/
+			case 72: this.pos = 26; break;//h/
+			case 73: this.pos = 13; break;//i/
+			case 74: this.pos = 28; break;//j/
+			case 77: this.pos = 29; break;//m/
+			case 78: this.pos = 27; break;//n/
+			case 79: this.pos = 15; break;//o/
+			case 80: this.pos = 17; break;//p/
+			case 81: this.pos = 1; break;//q/
+			case 82: this.pos = 6; break;//r/
+			case 83: this.pos = 19; break;//s/
+			case 84: this.pos = 8; break;//t/
+			case 85: this.pos = 12; break;//u/
+			case 86: this.pos = 24; break;//v/
+			case 87: this.pos = 3; break;//w/
+			case 88: this.pos = 20; break;//x/
+			case 89: this.pos = 10; break;//y/
+			case 90: this.pos = 18; break;//z/
+		}
+	}
+	
+	press() {
+		if (!this.pressed) {
+			this.pressed = true;
+			if (this.pos >= 0) {
+				piano.allkeys[this.pos + this.startpos].press(true, 0, false, true);
+			}
+		}
+	}
+	
+	unpress() {
+		if (this.pressed) {
+			this.pressed = false;
+			if (this.pos >= 0) {
+				piano.allkeys[this.pos + this.startpos].press(false, 0, false, true);
+			}
+		}
 	}
 }
 
@@ -5893,6 +5951,45 @@ function setup() {
 	//staff = new Staff(20, 50 + keyH, keyH*2, keyH * 0.6);
 	//setMsg("");
 	focusOb = qwertyboard;
+	
+	setupMidi();
+}
+
+function setupMidi() {
+	navigator.requestMIDIAccess().then(onMIDISuccess, onMIDIFailure);
+}
+
+function onMIDISuccess(midiAccess) {
+	var inputfound = false;
+	for (var input of midiAccess.inputs.values()) {
+		inputfound = true;
+		input.onmidimessage = rcvMIDIMessage;
+		console.log("found midi device");
+	}
+	if (!inputfound) alert("No MIDI device found. Proceeding without MIDI device");
+}
+
+function onMIDIFailure() {
+	console.log('Could not access your MIDI devices.');
+}
+
+function rcvMIDIMessage(message) {
+	var command = message.data[0];
+    var note = message.data[1]-21;
+    var velocity = (message.data.length > 2) ? message.data[2] : 0;
+	if (note < 0 || note > piano.allkeys.length-1) return;
+    switch (command) {
+        case 144: // noteOn
+            if (velocity > 0) {
+				piano.allkeys[note].press(true, 0, false, true);
+            } else {
+				piano.allkeys[note].press(false, 0, false, true);
+            }
+            break;
+        case 128: // noteOff
+			piano.allkeys[note].press(false, 0, false, true);
+            break;
+	}
 }
 
 function initmods() {

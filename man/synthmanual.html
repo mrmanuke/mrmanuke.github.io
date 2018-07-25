@@ -297,7 +297,11 @@ div.io {
 		<li>MULTI: This can accept a numerical value. The envelope value will be multiplied by this value.
 		For example, if you use the ADSR to add a pitch envelope to an oscillator, the MULTI value will
 		represent the range of the pitch envelope in Hz.</li>
-		<li>V (Knob value): These can accept numerical values for fine tuning of each knob setting.</li>
+		<li>V (Knob value): These can accept numerical values for fine tuning of each knob setting. The
+		default range of the volume knobs is 0 to 1, but if the envelope output is plugged into another
+		knob, the volume knobs will take on the range of that knob. For example, the filter frequency
+		knob range is 100 to 24,000Hz, so plugging an envelope into that will automatically set the
+		envelope's range to 100 to 24,000.</li>
 	</ul></div><p>
 	<div class="io">Outputs:</div>
 	<div class="outputs"><ul>
