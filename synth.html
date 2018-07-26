@@ -6010,6 +6010,7 @@ function rcvMIDIMessage(message) {
 }
 
 function selectMidiDevice() {
+	if (!midiAccessObject) return;
 	var s = document.getElementById("inputportselector");
 	console.log(s.value + " selected at index " + s.selectedIndex);
 	var all = (s.value === "all");
