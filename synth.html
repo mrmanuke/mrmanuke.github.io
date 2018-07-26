@@ -43,6 +43,8 @@ var rollkey;
 var pianocol = "#666666";//"#000000";
 var keypresscol = "#ff9999";//"#ffb8b8";//"#ff0000";
 var lastkeycol = "#fff0f0";//"#ddddff";//"#aaaaff";
+var highlightcol = "#3333aa";
+var highlightcolb = "#b9b9ff";
 var playing = false;
 var OFF_VOL = 0;//0.00001;
 var OFF_VOL_E = OFF_VOL*1.1;
@@ -57,6 +59,8 @@ var constantOneCurve=new Float32Array(2);
 constantOneCurve[0]=1;
 constantOneCurve[1]=1;
 var midiAccessObject = null;
+var piano;
+var qwertyboard;// = new qwerty();
 
 var TYPE_NULL = -1;
 var TYPE_KEY = 0;
@@ -72,16 +76,50 @@ var TYPE_ENV = 9;
 
 class qwerty {
 	constructor() {
-		this.keys = new Array();
 		this.numkeys = 90;
+		this.startpos = 38;
+		this.keys = new Array();
+		this.k1 = new Array();
+		this.k2 = new Array();
 		for (var i = 0; i <= this.numkeys; i++) {
-			this.keys.push(new qwertykey2(i));
+			this.k1.push(new qwertykey(i));
 		}
+		for (var i = 0; i <= this.numkeys; i++) {
+			this.k2.push(new qwertykey2(i));
+		}
+		this.toggleLayout();
+	}
+	
+	toggleLayout() {
+		if (this.keys === this.k1) {
+			this.keys = this.k2;
+		} else {
+			this.keys = this.k1;
+		}
+		if (this.startpos > piano.allkeys.length-this.keys[0].maxpos-1) {
+			this.startpos = piano.allkeys.length-this.keys[0].maxpos-1;
+		}
+		this.setHighlights();
+	}
+	
+	setHighlights() {
+		piano.resetKeyboardHighlights();
+		for (var i = 0; i < this.keys.length; i++) {
+			var k = this.keys[i];
+			if (k.pos > -1) piano.allkeys[k.pos + this.startpos].highlight(true, k.txt);
+		}
+	}
+	
+	incrementHalfSteps(amt) {
+		var ns = this.startpos + amt;
+		if (ns < 0 || ns > piano.allkeys.length-this.keys[0].maxpos-1) return;
+		this.startpos = ns;
+		this.setHighlights();
 	}
 	
 	press(code) {
 		if (code >= 0 && code <= this.numkeys) {
-			this.keys[code].press();
+			this.keys[code].press(this.startpos);
 		}
 	}
 	
@@ -99,46 +137,48 @@ class qwertykey2 {
 	constructor(code) {
 		this.code = code;
 		this.pressed = false;
-		this.startpos = 38;
 		this.pos = -1;
+		this.pressedpos = -1;
 		switch (code) {
-			case 50: this.pos = 2; break;//2/
-			case 51: this.pos = 4; break;//3/
-			case 53: this.pos = 7; break;//5/
-			case 54: this.pos = 9; break;//6/
-			case 55: this.pos = 11; break;//7/
-			case 57: this.pos = 14; break;//9/
-			case 48: this.pos = 16; break;//0/
-			case 66: this.pos = 25; break;//b/
-			case 67: this.pos = 22; break;//c/
-			case 68: this.pos = 21; break;//d/
-			case 69: this.pos = 5; break;//e/
-			case 70: this.pos = 23; break;//f/
-			case 72: this.pos = 26; break;//h/
-			case 73: this.pos = 13; break;//i/
-			case 74: this.pos = 28; break;//j/
-			case 77: this.pos = 29; break;//m/
-			case 78: this.pos = 27; break;//n/
-			case 79: this.pos = 15; break;//o/
-			case 80: this.pos = 17; break;//p/
-			case 81: this.pos = 1; break;//q/
-			case 82: this.pos = 6; break;//r/
-			case 83: this.pos = 19; break;//s/
-			case 84: this.pos = 8; break;//t/
-			case 85: this.pos = 12; break;//u/
-			case 86: this.pos = 24; break;//v/
-			case 87: this.pos = 3; break;//w/
-			case 88: this.pos = 20; break;//x/
-			case 89: this.pos = 10; break;//y/
-			case 90: this.pos = 18; break;//z/
+			case 50: this.pos = 2; this.txt = "2"; break;//2/
+			case 51: this.pos = 4; this.txt = "3"; break;//3/
+			case 53: this.pos = 7; this.txt = "5"; break;//5/
+			case 54: this.pos = 9; this.txt = "6"; break;//6/
+			case 55: this.pos = 11; this.txt = "7"; break;//7/
+			case 57: this.pos = 14; this.txt = "9"; break;//9/
+			case 48: this.pos = 16; this.txt = "0"; break;//0/
+			case 66: this.pos = 25; this.txt = "b"; break;//b/
+			case 67: this.pos = 22; this.txt = "c"; break;//c/
+			case 68: this.pos = 21; this.txt = "d"; break;//d/
+			case 69: this.pos = 5; this.txt = "e"; break;//e/
+			case 70: this.pos = 23; this.txt = "f"; break;//f/
+			case 72: this.pos = 26; this.txt = "h"; break;//h/
+			case 73: this.pos = 13; this.txt = "i"; break;//i/
+			case 74: this.pos = 28; this.txt = "j"; break;//j/
+			case 77: this.pos = 29; this.txt = "m"; break;//m/
+			case 78: this.pos = 27; this.txt = "n"; break;//n/
+			case 79: this.pos = 15; this.txt = "o"; break;//o/
+			case 80: this.pos = 17; this.txt = "p"; break;//p/
+			case 81: this.pos = 1; this.txt = "q"; break;//q/
+			case 82: this.pos = 6; this.txt = "r"; break;//r/
+			case 83: this.pos = 19; this.txt = "s"; break;//s/
+			case 84: this.pos = 8; this.txt = "t"; break;//t/
+			case 85: this.pos = 12; this.txt = "u"; break;//u/
+			case 86: this.pos = 24; this.txt = "v"; break;//v/
+			case 87: this.pos = 3; this.txt = "w"; break;//w/
+			case 88: this.pos = 20; this.txt = "x"; break;//x/
+			case 89: this.pos = 10; this.txt = "y"; break;//y/
+			case 90: this.pos = 18; this.txt = "z"; break;//z/
 		}
+		this.maxpos = 29;
 	}
 	
-	press() {
+	press(sp) {
 		if (!this.pressed) {
 			this.pressed = true;
 			if (this.pos >= 0) {
-				piano.allkeys[this.pos + this.startpos].press(true, 0, false, true);
+				this.pressedpos = this.pos + sp;
+				piano.allkeys[this.pressedpos].press(true, 0, false, true);
 			}
 		}
 	}
@@ -146,8 +186,8 @@ class qwertykey2 {
 	unpress() {
 		if (this.pressed) {
 			this.pressed = false;
-			if (this.pos >= 0) {
-				piano.allkeys[this.pos + this.startpos].press(false, 0, false, true);
+			if (this.pressedpos >= 0) {
+				piano.allkeys[this.pressedpos].press(false, 0, false, true);
 			}
 		}
 	}
@@ -158,53 +198,55 @@ class qwertykey {
 	constructor(code) {
 		this.code = code;
 		this.pressed = false;
-		this.startpos = 40;
 		this.pos = -1;
+		this.pressedpos = -1;
 		switch (code) {
-			case 49: this.pos = 1; break;//1
-			case 50: this.pos = 2; break;//2
-			case 51: this.pos = 3; break;//3
-			case 52: this.pos = 4; break;//4
-			case 53: this.pos = 5; break;//5
-			case 54: this.pos = 6; break;//6
-			case 55: this.pos = 7; break;//7
-			case 56: this.pos = 8; break;//8
-			case 57: this.pos = 9; break;//9
-			case 48: this.pos = 10; break;//0
-			case 65: this.pos = 21; break;//a
-			case 66: this.pos = 34; break;//b
-			case 67: this.pos = 32; break;//c
-			case 68: this.pos = 23; break;//d
-			case 69: this.pos = 13; break;//e
-			case 70: this.pos = 24; break;//f
-			case 71: this.pos = 25; break;//g
-			case 72: this.pos = 26; break;//h
-			case 73: this.pos = 18; break;//i
-			case 74: this.pos = 27; break;//j
-			case 75: this.pos = 28; break;//k
-			case 76: this.pos = 29; break;//l
-			case 77: this.pos = 36; break;//m
-			case 78: this.pos = 35; break;//n
-			case 79: this.pos = 19; break;//o
-			case 80: this.pos = 20; break;//p
-			case 81: this.pos = 11; break;//q
-			case 82: this.pos = 14; break;//r
-			case 83: this.pos = 22; break;//s
-			case 84: this.pos = 15; break;//t
-			case 85: this.pos = 17; break;//u
-			case 86: this.pos = 33; break;//v
-			case 87: this.pos = 12; break;//w
-			case 88: this.pos = 31; break;//x
-			case 89: this.pos = 16; break;//y
-			case 90: this.pos = 30; break;//z
+			case 49: this.pos = 1; this.txt = "1"; break;//1
+			case 50: this.pos = 2; this.txt = "2"; break;//2
+			case 51: this.pos = 3; this.txt = "3"; break;//3
+			case 52: this.pos = 4; this.txt = "4"; break;//4
+			case 53: this.pos = 5; this.txt = "5"; break;//5
+			case 54: this.pos = 6; this.txt = "6"; break;//6
+			case 55: this.pos = 7; this.txt = "7"; break;//7
+			case 56: this.pos = 8; this.txt = "8"; break;//8
+			case 57: this.pos = 9; this.txt = "9"; break;//9
+			case 48: this.pos = 10; this.txt = "0"; break;//0
+			case 65: this.pos = 21; this.txt = "a"; break;//a
+			case 66: this.pos = 34; this.txt = "b"; break;//b
+			case 67: this.pos = 32; this.txt = "c"; break;//c
+			case 68: this.pos = 23; this.txt = "d"; break;//d
+			case 69: this.pos = 13; this.txt = "e"; break;//e
+			case 70: this.pos = 24; this.txt = "f"; break;//f
+			case 71: this.pos = 25; this.txt = "g"; break;//g
+			case 72: this.pos = 26; this.txt = "h"; break;//h
+			case 73: this.pos = 18; this.txt = "i"; break;//i
+			case 74: this.pos = 27; this.txt = "j"; break;//j
+			case 75: this.pos = 28; this.txt = "k"; break;//k
+			case 76: this.pos = 29; this.txt = "l"; break;//l
+			case 77: this.pos = 36; this.txt = "m"; break;//m
+			case 78: this.pos = 35; this.txt = "n"; break;//n
+			case 79: this.pos = 19; this.txt = "o"; break;//o
+			case 80: this.pos = 20; this.txt = "p"; break;//p
+			case 81: this.pos = 11; this.txt = "q"; break;//q
+			case 82: this.pos = 14; this.txt = "r"; break;//r
+			case 83: this.pos = 22; this.txt = "s"; break;//s
+			case 84: this.pos = 15; this.txt = "t"; break;//t
+			case 85: this.pos = 17; this.txt = "u"; break;//u
+			case 86: this.pos = 33; this.txt = "v"; break;//v
+			case 87: this.pos = 12; this.txt = "w"; break;//w
+			case 88: this.pos = 31; this.txt = "x"; break;//x
+			case 89: this.pos = 16; this.txt = "y"; break;//y
+			case 90: this.pos = 30; this.txt = "z"; break;//z
 		}
+		this.maxpos = 36;
 	}
 	
-	press() {
+	press(sp) {
 		if (!this.pressed) {
 			this.pressed = true;
 			if (this.pos >= 0) {
-				piano.allkeys[this.pos + this.startpos].press(true, 0, false, true);
+				this.pressedpos = this.pos + sp;
+				piano.allkeys[this.pressedpos].press(true, 0, false, true);
 			}
 		}
 	}
@@ -212,14 +254,12 @@ class qwertykey {
 	unpress() {
 		if (this.pressed) {
 			this.pressed = false;
-			if (this.pos >= 0) {
-				piano.allkeys[this.pos + this.startpos].press(false, 0, false, true);
+			if (this.pressedpos >= 0) {
+				piano.allkeys[this.pressedpos].press(false, 0, false, true);
 			}
 		}
 	}
 }
-
-var qwertyboard = new qwerty();
 
 class Instrument {
 	constructor(audi) {
@@ -987,17 +1027,22 @@ class PKey extends Drawable {
 		this.draggable = false;
 		this.fill = true;
 		this.secondcolor = lastkeycol;
+		this.bordercolor = pianocol;
 		this.names = new Array();
 		this.oscnum = -1;
+		this.fh = h*0.2;
 		if (iswhite) {
 			this.x = x + w * num;
 			this.h = h;
+			this.ty = y + h*0.9;
 			this.assignWhiteKey(num);
 		} else {
 			this.h = h*0.5;
 			this.assignBlackKey(num);
 			this.w = w * 0.6666;
+			this.ty = y + h*0.4;
 		}
+		this.tx = this.x + this.w*0.3;
 		if (this.letter) {
 			this.names.push(this.letter + this.octave);
 		}
@@ -1006,6 +1051,17 @@ class PKey extends Drawable {
 		}
 		if (this.flatLetter) {
 			this.names.push(this.flatLetter + "b" + this.flatOctave);
+		}
+	}
+	
+	highlight(on, txt) {
+		this.highlighted = on;
+		if (on) {
+			this.bordercolor = highlightcol;
+			this.txt = txt;
+		} else {
+			this.bordercolor = pianocol;
+			this.txt = "";
 		}
 	}
 	
@@ -1161,6 +1217,17 @@ class PKey extends Drawable {
 	
 	noteOFF() {
 		if(this.oscnum > -1) this.keyout.noteOFF(this.oscnum, this.num);
+	}
+	
+	drawOb(ctx) {
+		drawRect(ctx, this.x, this.y, this.w, this.h, this.stroke, this.fill, this.fillCol, this.bordercolor);
+		if (this.isblack) {
+			ctx.fillStyle = highlightcolb;
+		} else {
+			ctx.fillStyle = highlightcol;
+		}
+		ctx.font = this.fh + "px Arial";
+		ctx.fillText(this.txt, this.tx, this.ty);
 	}
 }
 
@@ -3774,6 +3841,85 @@ class PortBtn extends Drawable {
 	}
 }
 
+class LBtn extends Drawable {
+	constructor(x, y, w, h) {
+		super(x, y, w, h);
+		this.fillCol = keypresscol;
+		this.y1 = y + h*0.25;
+		this.y2 = y + h*0.75;
+		this.tx = x;
+		this.ty = y + h*0.6;
+		this.x1 = x + w*0.25;
+		this.x2 = x + w*0.75;
+		this.ty2 = y + h*1.17;
+		this.ax1 = x + w*0.4;
+		this.ax2 = x + w*0.5;
+		this.ax3 = x + w*0.6;
+		this.ay1 = y + h*0.2;
+		this.ay2 = y + h*0.1;
+		this.ay3 = y + h*0.8;
+		this.ay4 = y + h*0.9;
+		this.by1 = y + h*0.4;
+		this.by2 = y + h*0.5;
+		this.by3 = y + h*0.6;
+		this.bx1 = x + w*0.2;
+		this.bx2 = x + w*0.1;
+		this.bx3 = x + w*0.8;
+		this.bx4 = x + w*0.9;
+		this.text2 = "layout";
+		this.tx2 = x;
+		this.ty2 = y + h*1.25;
+	}
+	
+	hitCheck(isdown, coords) {
+		var hit = super.hitCheck(isdown, coords);
+		if (hit) {
+			if (!isdown && coords.y < this.y1) {
+				qwertyboard.incrementHalfSteps(12);
+			} else if (!isdown && coords.y > this.y2) {
+				qwertyboard.incrementHalfSteps(-12);
+			} else if (!isdown && coords.x < this.x1) {
+				qwertyboard.incrementHalfSteps(-1);
+			} else if (!isdown && coords.x > this.x2) {
+				qwertyboard.incrementHalfSteps(1);
+			} else {
+				this.fill = isdown;
+				if (!isdown) qwertyboard.toggleLayout();
+			}
+		}
+		return hit;
+	}
+	
+	drawOb(ctx) {
+		super.drawOb(ctx);
+		ctx.beginPath();
+		ctx.moveTo(this.x, this.y1);
+		ctx.lineTo(this.x + this.w, this.y1);
+		ctx.moveTo(this.x, this.y2);
+		ctx.lineTo(this.x + this.w, this.y2);
+		ctx.moveTo(this.x1, this.y1);
+		ctx.lineTo(this.x1, this.y2);
+		ctx.moveTo(this.x2, this.y1);
+		ctx.lineTo(this.x2, this.y2);
+		ctx.moveTo(this.ax1, this.ay1);
+		ctx.lineTo(this.ax2, this.ay2);
+		ctx.lineTo(this.ax3, this.ay1);
+		ctx.moveTo(this.ax1, this.ay3);
+		ctx.lineTo(this.ax2, this.ay4);
+		ctx.lineTo(this.ax3, this.ay3);
+		ctx.moveTo(this.bx1, this.by1);
+		ctx.lineTo(this.bx2, this.by2);
+		ctx.lineTo(this.bx1, this.by3);
+		ctx.moveTo(this.bx3, this.by1);
+		ctx.lineTo(this.bx4, this.by2);
+		ctx.lineTo(this.bx3, this.by3);
+		ctx.stroke();
+		ctx.fillStyle = pianocol;
+		ctx.font = this.h*0.3 + "px Arial";
+		ctx.fillText(this.text2, this.tx2, this.ty2);
+	}
+}
+
 class VBtn extends Drawable {
 	constructor(x, y, w, h) {
 		super(x, y, w, h);
@@ -5480,6 +5626,9 @@ class Piano {
 		this.voiceb = new VBtn(x + mbh*3.3, y + keyH * 1.5 + keyW*btnw - mbh, mbh*0.6, mbh*0.9);
 		this.synthbtns.push(this.voiceb);
 		
+		this.layoutb = new LBtn(x + this.w + mbh*0.2, y, mbh, mbh);
+		this.synthbtns.push(this.layoutb);
+		
 		rollkey = new PBtn(x + this.w - btnw*keyW, y + keyH * 1.5, keyW*btnw, keyW*btnw, 0);
 		this.btns.push(rollkey);
 		this.btns.push(new BBtn(x + this.w - (btnw*2+1)*keyW, y + keyH * 1.5, keyW*btnw, keyW*btnw));
@@ -5529,6 +5678,12 @@ class Piano {
 		this.allkeys.push(this.whites[wi++]);
 		this.whites[wi].num = ki++;
 		this.allkeys.push(this.whites[wi++]);
+	}
+	
+	resetKeyboardHighlights() {
+		for (var i = 0; i < this.allkeys.length; i++) {
+			this.allkeys[i].highlight(false);
+		}	
 	}
 	
 	allkeysoff() {
@@ -5724,10 +5879,16 @@ class Piano {
 			this.synthbtns[i].drawOb(ctx);
 		}
 		for (var i = 0; i < this.whites.length; i++) {
-			this.whites[i].drawOb(ctx);			
+			if (!this.whites[i].highlighted) this.whites[i].drawOb(ctx);			
+		}
+		for (var i = 0; i < this.whites.length; i++) {
+			if (this.whites[i].highlighted) this.whites[i].drawOb(ctx);			
 		}
 		for (var i = 0; i < this.blacks.length; i++) {
-			this.blacks[i].drawOb(ctx);			
+			if (!this.blacks[i].highlighted) this.blacks[i].drawOb(ctx);			
+		}
+		for (var i = 0; i < this.blacks.length; i++) {
+			if (this.blacks[i].highlighted) this.blacks[i].drawOb(ctx);			
 		}
 		for (var i = 0; i < this.modules.length; i++) {
 			this.modules[i].drawOb(ctx);
@@ -5924,7 +6085,6 @@ var dragThresh = 5;
 var clicking = false;
 var dragging = false;
 var sound = new AudioManager();
-var piano;
 //var staff;
 var dragOb = null;
 var focusOb = null;
@@ -5954,6 +6114,7 @@ function setup() {
 	//var hitfncts = new Array();
 	//hitfncts.push({press: function () { console.log("ok") }, unpress: function () { console.log("unok") }});
 	piano = new Piano(10, 10, keyW, keyH);
+	qwertyboard = new qwerty();
 	//initmods();
 	piano.loadModules(modsaveteststring);
 	//staff = new Staff(20, 50 + keyH, keyH*2, keyH * 0.6);
@@ -6012,7 +6173,6 @@ function rcvMIDIMessage(message) {
 function selectMidiDevice() {
 	if (!midiAccessObject) return;
 	var s = document.getElementById("inputportselector");
-	console.log(s.value + " selected at index " + s.selectedIndex);
 	var all = (s.value === "all");
 	for (var input of midiAccessObject.inputs.values()) {
 		if (all || s.value === input.name) {
@@ -6317,9 +6477,9 @@ function getroll() {
 			}
 			rr.push(k);
 			if (nn.length < 2) {
-				vols.push(100);
+				vols.push(100/127);
 			} else {
-				vols.push(parseInt(nn[1].split("=")[1]));
+				vols.push(parseInt(nn[1].split("=")[1])/127);
 			}
 		}
 		roll.push({time: m[i].time, notes: rr, vols: vols});
