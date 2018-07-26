@@ -56,6 +56,7 @@ var pulseCurve = new Float32Array(256);
 var constantOneCurve=new Float32Array(2);
 constantOneCurve[0]=1;
 constantOneCurve[1]=1;
+var midiAccessObject = null;
 
 var TYPE_NULL = -1;
 var TYPE_KEY = 0;
@@ -242,7 +243,7 @@ class Instrument {
 	}
 	
 	noteOnNow(freq) {
-		this.noteON(freq, this.aud.ctx.currentTime + 0.01, );
+		this.noteON(freq, this.aud.ctx.currentTime + 0.01);
 	}
 	
 	noteON(freq, time, vol) {
@@ -822,16 +823,16 @@ class AudioManager {
 	makeOsc(typei, freqi, desti, startgain) {
 		var osc = this.ctx.createOscillator();
 		osc.defaultFreq = freqi;
-		//var g = this.ctx.createGain();
-		//g.gain.value = startgain || OFF_VOL;
+		var g = this.ctx.createGain();
+		g.gain.value = startgain || OFF_VOL;
 		osc.type = typei;
 		osc.frequency.value = freqi;
 		osc.fmulti = new Object();
 		osc.fmulti.value = 1;
-		//osc.connect(g);
+		osc.connect(g);
 		//if (desti) g.connect(desti);
 		osc.start(0);
-		//osc.g = g;
+		osc.g = g;
 		return osc;
 	}
 	
@@ -1109,7 +1110,8 @@ class PKey extends Drawable {
 		}
 	}
 	
-	press(isdown, pnum, holdColor, manual) {
+	press(isdown, pnum, holdColor, manual, vol) {
+		vol = vol || 1;
 		manual = false;
 		if (isdown === this.pressed && (this.oscnum == -1 && !manual)) {
 			return;
@@ -1128,7 +1130,7 @@ class PKey extends Drawable {
 				//sound.manNoteOnNow(this.freq, this.num);
 			} else {
 				this.pressed = true;
-				this.oscnum = this.keyout.noteOnNow(this.freq, this.num, this.oscnum);
+				this.oscnum = this.keyout.noteOnNow(this.freq, this.num, this.oscnum, vol);
 			}
 		} else {
 			//if (pnum || pnum == 0) {
@@ -1563,7 +1565,10 @@ class PBtn extends Drawable { //roll next button
 				} else {
 					var t = this.roll[this.rolli].time;
 					//console.log("press key " + this.roll[this.rolli].notes[i] + " at " + t.measure + ":" + t.beat + ":" + t.fraction);
-					piano.allkeys[this.roll[this.rolli].notes[i]].press(true, i);
+					//noteOnNow(this.freq, this.num, this.oscnum, vol);
+					//press(isdown, pnum, holdColor, manual, vol)
+					var vol = this.roll[this.rolli].vols[i];
+					piano.allkeys[this.roll[this.rolli].notes[i]].press(true, i, false, false, vol);
 				}
 			}
 		}
@@ -3005,9 +3010,12 @@ class FrequencySetter {
 		this.noteOnNow(f, knum, onum);
 	}
 	
-	noteOnNow(f, knum, onum) {
+	noteOnNow(f, knum, onum, vol) {
 		var val = f*this.multi;
 		var stime = sound.ctx.currentTime;
+		if (vol) {
+			this.o[onum].g.gain.setValueAtTime(vol, stime);
+		}
 		if (sound.porto && !sound.pianos[onum].off) {
 			stime += sound.porttime;
 			this.o[onum].frequency.linearRampToValueAtTime(val, stime);
@@ -3231,13 +3239,13 @@ class SynthOscContainer extends SynthModContainer {
 		this.name = "osc con";
 		this.oscTypeSel = new RBPanel(0, 0, w*0.8, w*0.8*0.25, osctypes, true);
 		this.oscs = new Array();
-		//this.gains = new Array();
+		this.gains = new Array();
 		//this.ggs = new Array();
 		this.gfs = new Array();
 		for (var i = 0; i < sound.numpianos; i++) {
-			var osc = sound.makeOsc("sine", 220, null, OFF_VOL)
+			var osc = sound.makeOsc("sine", 220, null, 1);
 			this.oscs.push(osc);
-			//this.gains.push(osc.g);
+			this.gains.push(osc.g);
 			//this.ggs.push(osc.g.gain);
 			this.gfs.push(osc.frequency);
 		}
@@ -3248,7 +3256,7 @@ class SynthOscContainer extends SynthModContainer {
 		this.oscTypeSel.setValue(0);
 		this.addModule(this.oscTypeSel, w*0.1, h*0.1);
 		this.addONode(this.w-2*noder, this.h*0.5-noder, noder, TYPE_AUDIO, [TYPE_AUDIO], "osc", null, this.trigprop);
-		this.outNodes[0].setObject(this.oscs);//this.gains);
+		this.outNodes[0].setObject(this.gains);
 		this.addINode(0, this.h*0.5-noder, noder, TYPE_KEY, [TYPE_KEY, TYPE_VALUE, TYPE_ENV], "osc f", "F", this);
 		this.inNodes[0].setObject(this.fs);
 		//this.addINode(0, this.h*0.67-noder, noder, TYPE_TRIGGER, [TYPE_KEY, TYPE_TRIGGER], "osc g", "T", this.trigprop);
@@ -3270,7 +3278,7 @@ class SynthOscContainer extends SynthModContainer {
 		this.oscTypeSel.setValue(data.osc);
 	}
 	
-	trigger(on, knum, onum, f) {
+	trigger(on, knum, onum, f, vol) {
 	}
 	
 	hitCheck(isdown, coords) {
@@ -5356,7 +5364,7 @@ class KeyboardOutput {
 		sound.returnPiano(oscnum);
 	}
 	
-	noteOnNow(freq, knum, onum) {
+	noteOnNow(freq, knum, onum, vol) {
 		var oscnum = sound.getPiano(knum, onum);
 		if (oscnum < 0) {
 			var t = rollkey.roll[rollkey.rolli].time;
@@ -5365,10 +5373,10 @@ class KeyboardOutput {
 		}
 		lastonum = oscnum;
 		for (var i = 0; i < this.outputs.length; i++) {
-			this.outputs[i].noteOnNow(freq*this.multi, knum, oscnum);
+			this.outputs[i].noteOnNow(freq*this.multi, knum, oscnum, vol);
 		}
 		for (var i = 0; i < this.triggers.length; i++) {
-			this.triggers[i].trigger(true, knum, oscnum, freq);
+			this.triggers[i].trigger(true, knum, oscnum, freq, vol);
 		}
 		if (sound.monophonic) {
 			sound.pianos[oscnum].noteOnNow(knum);
@@ -5956,17 +5964,26 @@ function setup() {
 }
 
 function setupMidi() {
+	var opt = document.createElement("option");
+	opt.text = "all";
+	document.getElementById("inputportselector").add(opt);
+	opt = document.createElement("option");
+	opt.text = "none";
+	document.getElementById("inputportselector").add(opt);
 	navigator.requestMIDIAccess().then(onMIDISuccess, onMIDIFailure);
 }
 
 function onMIDISuccess(midiAccess) {
 	var inputfound = false;
+	midiAccessObject = midiAccess;
 	for (var input of midiAccess.inputs.values()) {
 		inputfound = true;
 		input.onmidimessage = rcvMIDIMessage;
-		console.log("found midi device");
+		var opt = document.createElement("option");
+		opt.text = input.name;
+		document.getElementById("inputportselector").add(opt);
 	}
-	if (!inputfound) alert("No MIDI device found. Proceeding without MIDI device");
+	if (!inputfound) setMsg("No MIDI device found. Proceeding without MIDI device");
 }
 
 function onMIDIFailure() {
@@ -5981,7 +5998,7 @@ function rcvMIDIMessage(message) {
     switch (command) {
         case 144: // noteOn
             if (velocity > 0) {
-				piano.allkeys[note].press(true, 0, false, true);
+				piano.allkeys[note].press(true, 0, false, true, velocity/127);
             } else {
 				piano.allkeys[note].press(false, 0, false, true);
             }
@@ -5989,6 +6006,19 @@ function rcvMIDIMessage(message) {
         case 128: // noteOff
 			piano.allkeys[note].press(false, 0, false, true);
             break;
+	}
+}
+
+function selectMidiDevice() {
+	var s = document.getElementById("inputportselector");
+	console.log(s.value + " selected at index " + s.selectedIndex);
+	var all = (s.value === "all");
+	for (var input of midiAccessObject.inputs.values()) {
+		if (all || s.value === input.name) {
+			input.onmidimessage = rcvMIDIMessage;
+		} else {
+			input.onmidimessage = null;
+		}
 	}
 }
 
@@ -6990,7 +7020,7 @@ function sortMidi(header, events, fname) {
 		while (i < events.length && events[i].time == t) {
 			if (events[i].type === "noteOn" || events[i].type === "noteOff") {
 				rr.push(events[i].noteNumber-21);
-				vols.push(events[i].velocity);
+				vols.push(events[i].velocity/127);
 			}
 			i++;
 		}
@@ -7066,5 +7096,10 @@ function loadMidi(input, fname) {
 		<br><input type="text" id="beattime"/><br>
 	</div>
 	<br>
+	<br>midi device selector
+	<div id="selector"">
+		<select id="inputportselector" onchange="selectMidiDevice()">
+		</select>
+	</div>
 	<h1><a href="./man/synthmanual.html">Manual</a></h1>
 </body>
