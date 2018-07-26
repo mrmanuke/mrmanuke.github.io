@@ -76,6 +76,7 @@ var TYPE_ENV = 9;
 
 class qwerty {
 	constructor() {
+		this.wb = false;
 		this.numkeys = 90;
 		this.startpos = 38;
 		this.keys = new Array();
@@ -93,11 +94,18 @@ class qwerty {
 	toggleLayout() {
 		if (this.keys === this.k1) {
 			this.keys = this.k2;
+			this.wb = true;
 		} else {
 			this.keys = this.k1;
+			this.wb = false;
 		}
 		if (this.startpos > piano.allkeys.length-this.keys[0].maxpos-1) {
 			this.startpos = piano.allkeys.length-this.keys[0].maxpos-1;
+		}
+		if (this.wb && this.startpos%12 != 2) {
+			var ns = this.startpos - this.startpos%12 + 2;
+			if (ns < 0) ns += 12;
+			this.startpos = ns;
 		}
 		this.setHighlights();
 	}
@@ -111,6 +119,9 @@ class qwerty {
 	}
 	
 	incrementHalfSteps(amt) {
+		if (this.wb && (amt == -1 || amt == 1)) {
+			amt = amt*12;
+		}
 		var ns = this.startpos + amt;
 		if (ns < 0 || ns > piano.allkeys.length-this.keys[0].maxpos-1) return;
 		this.startpos = ns;
@@ -1221,7 +1232,7 @@ class PKey extends Drawable {
 	
 	drawOb(ctx) {
 		drawRect(ctx, this.x, this.y, this.w, this.h, this.stroke, this.fill, this.fillCol, this.bordercolor);
-		if (this.isblack) {
+		if (this.isblack && !this.pressed) {
 			ctx.fillStyle = highlightcolb;
 		} else {
 			ctx.fillStyle = highlightcol;
@@ -3883,9 +3894,9 @@ class LBtn extends Drawable {
 			} else if (!isdown && coords.x > this.x2) {
 				qwertyboard.incrementHalfSteps(1);
 			} else {
-				this.fill = isdown;
 				if (!isdown) qwertyboard.toggleLayout();
 			}
+			this.fill = isdown;
 		}
 		return hit;
 	}
