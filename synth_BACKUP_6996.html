@@ -4533,12 +4533,24 @@ class SHMod extends SynthModContainer {
 			var split1 = sound.ctx.createChannelSplitter(1);
 			var split2 = sound.ctx.createChannelSplitter(1);
 			var merger = sound.ctx.createChannelMerger(2);
+<<<<<<< HEAD
+			var gain1 = sound.ctx.createGain();
+			gain1.gain.value = 1;
+			var gain2 = sound.ctx.createGain();
+			gain2.gain.value = 1;
+			gain1.connect(merger, 0, 0);
+			gain2.connect(merger, 0, 1);
+			gain1s.push(gain1);
+			gain2s.push(gain2);
+			merger.connect(scriptNode);
+=======
 			split1.connect(merger, 0, 0);
 			split2.connect(merger, 0, 1);
 			console.log(merger.channelCount);
 			merger.connect(scriptNode);
 			this.splits1.push(split1);
 			this.splits2.push(split2);
+>>>>>>> 0c5b742bee2d23631c62a87b2360005de63489a3
 			scriptNode.onaudioprocess = proc.process.bind(proc);
 			this.scripts.push(scriptNode);
 			//this.processors.push(proc);
