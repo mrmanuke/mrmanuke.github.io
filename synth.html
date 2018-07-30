@@ -4545,6 +4545,7 @@ class SHMod extends SynthModContainer {
 			gain2.connect(merger, 0, 1);
 			gain1s.push(gain1);
 			gain2s.push(gain2);
+			merger.connect(scriptNode);
 			scriptNode.onaudioprocess = proc.process.bind(proc);
 			this.scripts.push(scriptNode);
 			this.processors.push(proc);
