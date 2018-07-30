@@ -1043,6 +1043,8 @@ class PKey extends Drawable {
 		this.names = new Array();
 		this.oscnum = -1;
 		this.fh = h*0.2;
+		this.ww = w;
+		this.xx = x;
 		if (iswhite) {
 			this.x = x + w * num;
 			this.h = h;
@@ -1050,8 +1052,8 @@ class PKey extends Drawable {
 			this.assignWhiteKey(num);
 		} else {
 			this.h = h*0.5;
+			this.w = w * 7/12;
 			this.assignBlackKey(num);
-			this.w = w * 0.6666;
 			this.ty = y + h*0.4;
 		}
 		this.tx = this.x + this.w*0.3;
@@ -1132,34 +1134,34 @@ class PKey extends Drawable {
 		this.unpressFillCol = pianocol;
 		var lnum = num % 5;
 		this.octave = Math.floor((num + 4)/5);
-		var xo = this.octave * this.w * 7 - this.w * 4;
+		var xo = this.octave * this.ww * 7 - this.ww * 5 + this.xx;
 		switch (lnum) {
 			case 0:
-				this.x = xo + 5.23 * this.w;
+				this.x = xo + 10 * this.w;
 				this.sharpLetter = "A";
 				this.freq = 29.1352;
 				this.flatLetter = "B";
 				break;
 			case 1:
-				this.x = xo + 0.23 * this.w;
+				this.x = xo + 1 * this.w;
 				this.sharpLetter = "C";
 				this.freq = 34.6478*0.5;
 				this.flatLetter = "D";
 				break;
 			case 2:
-				this.x = xo + 1.23 * this.w;
+				this.x = xo + 3 * this.w;
 				this.sharpLetter = "D";
 				this.freq = 38.8909*0.5;
 				this.flatLetter = "E";
 				break;
 			case 3:
-				this.x = xo + 3.23 * this.w;
+				this.x = xo + 6.05 * this.w;
 				this.sharpLetter = "F";
 				this.freq = 46.2493*0.5;
 				this.flatLetter = "G";
 				break;
 			case 4:
-				this.x = xo + 4.23 * this.w;
+				this.x = xo + 8 * this.w;
 				this.sharpLetter = "G";
 				this.freq = 51.9131*0.5;
 				this.flatLetter = "A";
@@ -3176,7 +3178,7 @@ class WhiteNoiseContainer extends SynthModContainer {
 	constructor(x, y, w, h, bl, br, bt, bb, noder) {
 		super(x, y, w, h, bl, br, bt, bb);
 		this.oscs = new Array();
-		var bufferSize = sound.ctx.sampleRate;
+		var bufferSize = sound.ctx.sampleRate + 10;
 		for (var i = 0; i < sound.numpianos; i++) {
 			var buffer = sound.ctx.createBuffer(1, bufferSize, sound.ctx.sampleRate);
 			var output = buffer.getChannelData(0);
@@ -5404,7 +5406,7 @@ class AnalyserIcon extends ModuleIcon {
 	drawOb(ctx) {
 		super.drawOb(ctx);
 		ctx.font = this.h*0.22 + "px Arial";
-		ctx.fillText("ANALYSE", this.x+this.w*0, this.y+this.h*0.5);
+		ctx.fillText("SCOPE", this.x+this.w*0.1, this.y+this.h*0.5);
 	}
 }
 
