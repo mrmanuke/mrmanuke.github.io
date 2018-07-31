@@ -51,6 +51,7 @@ var OFF_VOL = 0;//0.00001;
 var OFF_VOL_E = OFF_VOL*1.1;
 var DEC_VOL = 0.15;
 var osctypes = ["sine", "square", "sawtooth", "triangle"];
+var arptypes = ["up", "dn", "ud", "rnd"];
 var filtypes = ["lowpass", "highpass", "bandpass", "lowshelf", "highshelf", "peaking", "notch", "allpass"];
 //var pianocol = "#000000";
 //var keypresscol = "#ff0000";
@@ -1814,6 +1815,15 @@ class RadioB extends Drawable {
 		this.on = false;
 		this.r = this.w*0.5;
 		this.pressed = false;
+		this.fsize = 0.2;
+		this.tx = w*0.1;
+		this.ty = h*0.5;
+	}
+	
+	setFSize(fs, tx, ty) {
+		this.fsize = fs;
+		this.tx = this.w*tx;
+		this.ty = this.h*ty;
 	}
 	
 	setPos(x, y) {
@@ -1838,8 +1848,8 @@ class RadioB extends Drawable {
 		} else {
 			ctx.fillStyle = "black";
 		}
-		ctx.font = this.h*0.2 + "px Arial";
-		ctx.fillText(this.name, this.x + this.w*0.1, this.y + this.h*0.5);
+		ctx.font = this.h*this.fsize + "px Arial";
+		ctx.fillText(this.name, this.x + this.tx, this.y + this.ty);
 	}
 }
 
@@ -1860,6 +1870,12 @@ class RBPanel extends SynthModule {
 			this.btns[this.btns.length-1].name = this.vals[i];
 		}
 		this.setPos(x, y);
+	}
+	
+	setFSize(fs, tx, ty) {
+		for (var i = 0; i < this.btns.length; i++) {
+			this.btns[i].setFSize(fs, tx, ty);
+		}
 	}
 	
 	setPos(x, y) {
@@ -3016,7 +3032,14 @@ class SynthModContainer extends Drawable {
 	
 	drawObs(ctx, obs) {
 		for (var i = 0; i < obs.length; i++) {
-			obs[i].drawOb(ctx);
+			if (!obs[i].highlight) {
+				obs[i].drawOb(ctx);
+			}
+		}
+		for (var i = 0; i < obs.length; i++) {
+			if (obs[i].highlight) {
+				obs[i].drawOb(ctx);
+			}
 		}
 	}
 }
@@ -3318,7 +3341,6 @@ class SynthOscContainer extends SynthModContainer {
 	constructor(x, y, w, h, bl, br, bt, bb, noder) {
 		super(x, y, w, h, bl, br, bt, bb);
 		this.name = "osc con";
-		this.oscTypeSel = new RBPanel(0, 0, w*0.8, w*0.8*0.25, osctypes, true);
 		this.oscs = new Array();
 		this.gains = new Array();
 		//this.ggs = new Array();
@@ -3333,6 +3355,7 @@ class SynthOscContainer extends SynthModContainer {
 		this.fs = new FrequencySetter(this.oscs);
 		this.ms = new MultiSetter(this.fs);
 		this.trigprop = new GainTrigger();
+		this.oscTypeSel = new RBPanel(0, 0, w*0.8, w*0.8*0.25, osctypes, true);
 		this.oscTypeSel.setTypeTarget(this.oscs);
 		this.oscTypeSel.setValue(0);
 		this.addModule(this.oscTypeSel, w*0.1, h*0.1);
@@ -5160,6 +5183,391 @@ class SequencerMod extends SynthModContainer {
 	}
 }
 
+class ArpFrame extends Drawable {
+	constructor(x, y, w, h, i, p) {
+		super(x, y, w, h);
+		this.parent = p;
+		this.num = i;
+		this.highlight = false;
+		this.keysdown = false;
+		this.keys = new Array();
+		this.lines = new Array();
+		this.downkeys = new Array();
+		this.curpos = -1;
+		this.playcount = 0;
+		this.upping = true;
+	}
+	
+	save() {
+		var t = "[ ";
+		for (var i = 0; i < this.keys.length; i++) {
+			t += this.keys[i];
+			if (i < this.keys.length - 1) {
+				t+= " , ";
+			}
+		}
+		t += " ]";
+		return t;
+	}
+	
+	load(data) {
+		this.clearkeys();
+		for (var i = 0; i < data.length; i++) {
+			this.presskey(data[i]);
+		}
+		this.downkeys.length = 0;
+	}
+	
+	reset() {
+		this.curpos = -1;
+		this.playcount = 0;
+		this.highlight = false;
+	}
+	
+	hitCheck(isdown, coords) {
+		var hit = super.hitCheck(isdown, coords);
+		if (hit && !isdown) this.parent.hitFrame(this.num);
+		return hit;
+	}
+	
+	toggleActive() {
+		this.activate(!this.highlight);
+		return this.highlight;
+	}
+	
+	activate(on, col) {
+		this.highlight = on;
+		col = col || keypresscol;
+		if (on) {
+			this.strokeCol = col;
+		} else {
+			this.strokeCol = pianocol;
+		}
+	}
+	
+	clearkeys() {
+		this.keys.length = 0;
+		this.downkeys.length = 0;
+		this.lines.length = 0;
+	}
+	
+	drawOb(ctx) {
+		super.drawOb(ctx);
+		for (var i = 0; i < this.lines.length; i++) {//todo: what happens if lines are erased mid-draw?
+			var sc = this.strokeCol;
+			if (i == this.curpos && this.highlight) {
+				sc = keypresscol;
+			}
+			ctx.beginPath();
+			ctx.moveTo(this.x, this.y + this.lines[i]);
+			ctx.lineTo(this.x + this.w, this.y + this.lines[i]);
+			ctx.strokeStyle = sc;
+			ctx.stroke();
+		}
+	}
+	
+	presskey(kn) {
+		var found = false;
+		for (var i = 0; i < this.keys.length; i++) {
+			if (kn === this.keys[i]) {
+				found = true;
+				break;
+			}
+		}
+		if (!found) {
+			this.downkeys.push(kn);
+			this.keys.push(kn);
+			this.lines.push(this.h*(1-kn/piano.allkeys.length));
+		}
+	}
+	
+	liftkey(kn) {
+		for (var i = 0; i < this.downkeys.length; i++) {
+			if (kn === this.downkeys[i]) {
+				this.downkeys.splice(i, 1);
+				break;
+			}
+		}
+		return (this.downkeys.length > 0);
+	}
+	
+	incrementpos() {
+		if (this.parent.up) {
+			this.curpos = (this.curpos+1)%this.keys.length;
+		} else if (this.parent.dn) {
+			var np = this.curpos-1;
+			if (np < 0) np = this.keys.length - 1;
+			this.curpos = np;
+		} else if (this.parent.ud) {
+			var np = this.curpos;
+			if (this.keys.length < 2) return;
+			if (this.upping) {
+				np++;
+				if (np > this.keys.length-1) {
+					this.upping = false;
+					np -= 2;
+				}
+			} else {
+				np--;
+				if (np < 0) {
+					this.upping = true;
+					np += 2;
+				}
+			}
+			this.curpos = np;
+		} else if (this.parent.rnd) {
+			this.curpos = Math.floor(Math.random() * this.keys.length);
+		}
+	}
+	
+	nextkey() {
+		this.incrementpos();
+		var k = this.keys[this.curpos];
+		this.playcount++;
+		return k;
+	}
+	
+	record(on, kn) {
+		if (on) {
+			if (!this.keysdown) {
+				this.clearkeys();
+			}
+			this.presskey(kn);
+			this.keysdown = true;
+		} else {
+			this.keysdown = this.liftkey(kn);
+		}
+		var txt = "";
+		for (var i = 0; i < this.downkeys.length; i++) {
+			txt += this.downkeys[i] + ", ";
+		}
+		if (!on && !this.keysdown) {
+			this.parent.hitFrame(this.num);
+		}
+	}
+}
+
+class ArpMod extends SynthModContainer {
+	constructor(x, y, w, h, bl, br, bt, bb, noder) {
+		super(x, y, w, h, bl, br, bt, bb);
+		this.activeframe = -1;
+		this.bpf = 16;
+		this.btime = 250;
+		this.addINode(0, this.h*0.5-noder, noder, TYPE_KEY, [TYPE_KEY], "arp");
+		this.inNodes[0].setObject(this);
+		this.addINode(0, this.h-noder*2, noder, TYPE_VALUE, [TYPE_VALUE], "time", "V");
+		this.inNodes[1].setObject(this);
+		this.addONode(this.w-2*noder, this.h*0.4-noder, noder, TYPE_KEY, [TYPE_KEY], "seq");
+		this.outNodes[0].setObject(this);
+		this.addONode(this.w-2*noder, this.h*0.6-noder, noder, TYPE_KEY, [TYPE_KEY], "seq");
+		this.outNodes[1].setObject(this);
+		this.frames = new Array();
+		this.curframe = 0;
+		var fx = this.w*0.03;
+		var fw = this.w*0.12;
+		var fy = this.h*0.05;
+		var fh = this.h*0.9;
+		for (var i = 0; i < 4; i++) {
+			fx += fw;
+			var frame = new ArpFrame(0, 0, fw, fh, i, this);
+			this.frames.push(frame);
+			this.addModule(frame, fx, fy);
+		}
+		this.c = new ClickChild(0, 0, h*0.2, h*0.2, this);
+		this.addModule(this.c, w*0.7, h*0.75);
+		this.bx = this.c.w*0.2;
+		this.by = this.c.h*0.2;
+		this.bw = this.c.w * 0.6;
+		this.bh = this.c.h * 0.6;
+		this.x1 = this.c.w * 0.35;
+		this.x2 = this.c.w * 0.75;
+		this.x3 = this.x1;
+		this.y1 = this.c.h * 0.25;
+		this.y2 = this.c.h * 0.5;
+		this.y3 = this.c.h * 0.75;
+		this.fcol = "white";
+		this.typeSel = new RBPanel(0, 0, w*0.2, h*0.6, arptypes, false);
+		this.typeSel.setFSize(0.5, 0.1, 0.6);
+		this.typeSel.setValue(0);
+		this.typeSel.setParentModule([this]);
+		this.addModule(this.typeSel, w*0.7, h*0.05);
+		this.events = new Array();
+		this.events.push(new SequenceEvent(true, sound.getKeyNum(), -1, 220, 0));
+		this.events.push(new SequenceEvent(true, sound.getKeyNum(), -1, 220, 0));
+		this.curevent = 0;
+		this.lastevent = -1;
+		this.replaying = false;
+		this.stop = false;
+		this.up = true;
+		this.dn = false;
+		this.ud = false;
+		this.rnd = false;
+	}
+	
+	save() {
+		var t = '{"type":"ArpMod" , ' + super.save() + ' , "frames" : [';
+		var ft =  "";
+		for (var i = 0; i < this.frames.length; i++) {
+			ft += this.frames[i].save();
+			if (i < this.frames.length-1) {
+				ft += " , ";
+			}
+		}
+		t += ft + '] , "pat":"' + this.typeSel.ind + '"}';
+		return t;
+	}
+	
+	load(data) {
+		this.typeSel.setValue(data.pat);
+		for (var i = 0; i < this.frames.length; i++) {
+			this.frames[i].load(data.frames[i]);
+		}
+	}
+	
+	setValue(bt) {
+		if (bt <= 1) return false;
+		this.btime = bt;
+		return true;
+	}
+	
+	update() {
+		var v = this.typeSel.val;
+		this.up = (v === "up");
+		this.dn = (v === "dn");
+		this.ud = (v === "ud");
+		this.rnd = (v === "rnd");
+	}
+	
+	drawOb(ctx) {
+		super.drawOb(ctx);
+		ctx.strokeStyle = pianocol;
+		if (this.replaying) {
+			drawRect(ctx, this.c.x + this.bx, this.c.y + this.by, this.bw, this.bh, true, true, this.fcol, pianocol);
+		} else {
+			ctx.beginPath();
+			ctx.moveTo(this.c.x + this.x1, this.c.y + this.y1);
+			ctx.lineTo(this.c.x + this.x2, this.c.y + this.y2);
+			ctx.lineTo(this.c.x + this.x3, this.c.y + this.y3);
+			ctx.closePath();
+			ctx.fillStyle = this.fcol;
+			ctx.fill();
+			ctx.stroke();
+		}
+		ctx.fillStyle = pianocol;
+		ctx.font = this.h*0.1 + "px Arial";
+		ctx.fillText("ms", this.x, this.y+this.h*0.85);
+	}
+	
+	hitFrame(num) {
+		if (this.replaying) return;
+		var active = false;
+		for (var i = 0; i < this.frames.length; i++) {
+			if (i == num) {
+				active = this.frames[num].toggleActive();
+			} else {
+				this.frames[i].activate(false);
+			}
+		}
+		if (active) {
+			this.activeframe = num;
+		} else {
+			this.activeframe = -1;
+		}
+	}
+	
+	noteOnNow(freq, knum, oscnum) {
+	}
+	
+	trigger(on, knum, onum, f) {
+		if (this.activeframe > -1) {
+			this.frames[this.activeframe].record(on, knum);
+		}
+		super.trigger(on, knum, onum, f);
+	}
+	
+	click() {
+		if (this.replaying) {
+			this.stop = true;
+		} else {
+			this.replay();
+		}
+	}
+	
+	replay() {
+		if (!this.replaying) {
+			var foundkeys = false;
+			for (var i = 0; i < this.frames.length; i++) {
+				if (this.frames[i].keys.length > 0) {
+					foundkeys = true;
+					break;
+				}
+			}
+			if (!foundkeys) return false;
+			this.replaying = true;
+			this.curframe = 0;
+			this.activeframe = -1;
+			for (var i = 0; i < this.frames.length; i++) {
+				this.frames[i].reset();
+			}
+			this.frames[0].activate(true, highlightcol);
+			this.play();
+			return true;
+		}
+		return false;
+	}
+	
+	stop() {
+		this.stop = true;
+	}
+	
+	end() {
+		var le = this.events[this.lastevent];
+		this.trigger(false, le.knum, le.onum, le.f);
+		sound.returnPiano(le.onum);
+		this.lastevent = -1;
+		this.replaying = false;
+		this.stop = false;
+		for (var i = 0; i < this.frames.length; i++) {
+			this.frames[i].activate(false);
+		}
+	}
+	
+	play() {
+		if (this.frames[this.curframe].playcount == this.bpf) {
+			this.frames[this.curframe].playcount = 0;
+			var klen = 0;
+			while (klen == 0) {
+				this.curframe = (this.curframe+1)%this.frames.length;
+				klen = this.frames[this.curframe].keys.length;
+			}
+			for (var i = 0; i < this.frames.length; i++) {
+				this.frames[i].activate(false);
+			}
+			this.frames[this.curframe].activate(true, highlightcol);
+		}
+		var k = this.frames[this.curframe].nextkey();
+		var e = this.events[this.curevent];
+		e.f = piano.allkeys[k].freq;
+		e.onum = sound.getPiano(e.knum);
+		this.trigger(true, e.knum, e.onum, e.f);
+		
+		if (this.lastevent > -1) {
+			var le = this.events[this.lastevent];
+			this.trigger(false, le.knum, le.onum, le.f);
+			sound.returnPiano(le.onum);
+		}
+		
+		this.lastevent = this.curevent;
+		this.curevent = (this.curevent+1)%this.events.length;
+		
+		if (!this.stop) {
+			setTimeout(this.play.bind(this), this.btime);
+		} else if (this.lastevent > -1) {
+			setTimeout(this.end.bind(this), this.btime);
+		}
+	}
+}
+
 function drawLittleKnob(ctx, x, y, w, h, fcol, scol) {
 	ctx.beginPath();
 	var r = w*0.5;
@@ -5557,6 +5965,18 @@ class SplitTestIcon extends ModuleIcon {
 	}
 }
 
+class ArpIcon extends ModuleIcon {
+	createMod() {
+		return new ArpMod(this.x, piano.modbt, piano.modh*2.5, piano.modh*2, piano.modbl, piano.modbr, piano.modbt, piano.modbb, piano.noder);
+	}
+	
+	drawOb(ctx) {
+		super.drawOb(ctx);
+		ctx.font = this.h*0.22 + "px Arial";
+		ctx.fillText("ARP", this.x+this.w*0.25, this.y+this.h*0.5);
+	}
+}
+
 class SHIcon extends ModuleIcon {
 	createMod() {
 		return new SHMod(this.x, piano.modbt, piano.modh, piano.modh, piano.modbl, piano.modbr, piano.modbt, piano.modbb, piano.noder);
@@ -5624,6 +6044,8 @@ class ModuleBar extends Drawable {
 		this.shb = new SHIcon(x+a, y+b, h*0.8, h*0.8, 0, canW, y, canH);
 		//a += h*0.9;
 		//this.sptb = new SplitTestIcon(x+a, y+b, h*0.8, h*0.8, 0, canW, y, canH);
+		a += h*0.9;
+		this.arpb = new ArpIcon(x+a, y+b, h*0.8, h*0.8, 0, canW, y, canH);
 		
 		this.icons.push(this.keyb);
 		this.icons.push(this.oscb);
@@ -5648,6 +6070,7 @@ class ModuleBar extends Drawable {
 		this.icons.push(this.analyseb);
 		this.icons.push(this.pwmb);
 		this.icons.push(this.shb);
+		this.icons.push(this.arpb);
 		//this.icons.push(this.sptb);
 		this.hideicon = -1;
 	}
@@ -6005,6 +6428,8 @@ class Piano {
 				m = piano.modbar.pwmb.createMod();
 			} else if (type == "SHMod") {
 				m = piano.modbar.shb.createMod();
+			} else if (type == "ArpMod") {
+				m = piano.modbar.arpb.createMod();
 			}
 			if (m) {
 				m.create(mods[i]);
