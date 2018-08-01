@@ -6858,7 +6858,31 @@ function setup() {
 	piano = new Piano(10, 10, keyW, keyH);
 	qwertyboard = new qwerty();
 	//initmods();
-	piano.loadModules(modsaveteststring);
+	var s = window.location.href.split("?");
+	var loadedmod = false;
+	if (s.length > 1) {
+		switch(s[1]) {
+			case "sh":
+				loadSH();
+				break;
+			case "ai":
+				loadAi();
+				break;
+			case "pwm":
+				loadPWM();
+				break;
+			case "sample":
+				loadSqueaky();
+				break;
+			case "arp":
+				loadARP();
+				break;
+			default:
+				loadBasicConfig();
+		}
+	} else {
+		loadBasicConfig();
+	}
 	//staff = new Staff(20, 50 + keyH, keyH*2, keyH * 0.6);
 	//setMsg("");
 	focusOb = qwertyboard;
