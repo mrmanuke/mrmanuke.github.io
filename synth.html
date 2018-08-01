@@ -3118,6 +3118,7 @@ class FrequencySetter {
 	}
 	
 	trigger(on, knum, onum, f) {
+		if (!on) return;
 		this.noteOnNow(f, knum, onum);
 	}
 	
