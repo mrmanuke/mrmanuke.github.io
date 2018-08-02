@@ -2102,6 +2102,42 @@ class Knob extends SynthModule {
 	}
 }
 
+class XKnob extends Knob {
+	setXTargets(t1, t2) {
+		this.targets = t1;
+		this.targets2 = t2;
+	}
+	
+	setValue(v) {
+		var inrange = true;
+		if (v > this.max.value) {
+			v = this.max.value;
+			inrange = false;
+		} else if (v < this.min.value) {
+			v = this.min.value;
+			inrange = false;
+		}
+		if (this.discreet) {
+			this.val = this.vals[v-this.min.value];
+			this.dota = -v * this.step;
+		} else {
+			//console.log((new Error()).stack);
+			this.val = v;
+			this.dota = -v * Math.PI * this.turns / (0.55 * (this.max.value - this.min.value));
+			this.calcDotPos();
+		}
+		if (this.targets && this.targets2) this.setTargetValues();
+		return inrange;
+	} 
+	
+	setTargetValues() {
+		for (var i = 0; i < this.targets.length; i++) {
+			this.targets[i].value = this.val;
+			this.targets2[i].value = 1-this.val;
+		}
+	}
+}
+
 class PKnob extends Knob {
 	setValue(v) {
 		super.setValue(v);
@@ -2867,6 +2903,27 @@ class ioNode extends Drawable {
 	}
 }
 
+function copyMod(m) {
+	for (var i = 0; i < piano.modules.length; i++) {
+		piano.modules[i].setModNum(i);
+	}
+	piano.loadSingleMod(m.save());
+}
+
+function saveMod(m) {
+	//console.log(m.save());
+	var fname = window.prompt("enter filename","mod.txt");
+	if (fname == null || fname == "") {
+		setMsg("mod save cancelled");
+	} else {
+		for (var i = 0; i < piano.modules.length; i++) {
+			piano.modules[i].setModNum(i);
+		}
+		download(fname, m.save());
+		setMsg("saved mod to " + fname);
+	}
+}
+
 class SynthModContainer extends Drawable {
 	constructor(x, y, w, h, bl, br, bt, bb) {
 		super(x, y, w, h);
@@ -2979,6 +3036,14 @@ class SynthModContainer extends Drawable {
 			if (piano.trashcan.highlight) {
 				this.trash();
 				return true;
+			} else if (piano.savecan.highlight) {
+				this.setPos(this.startx, this.starty);
+				saveMod(this);
+				return true;
+			} else if (piano.copycan.highlight) {
+				this.setPos(this.startx, this.starty);
+				copyMod(this);
+				return true;
 			}
 			dragOb = null;
 		}
@@ -3005,8 +3070,20 @@ class SynthModContainer extends Drawable {
 		super.drag(dcoords, ccoords);
 		if (piano.trashcan.inBounds(dcoords.x, dcoords.y)) {
 			piano.trashcan.highlight = true;
+			piano.savecan.highlight = false;
+			piano.copycan.highlight = false;
+		} else if (piano.savecan.inBounds(dcoords.x, dcoords.y)) {
+			piano.savecan.highlight = true;
+			piano.trashcan.highlight = false;
+			piano.copycan.highlight = false;
+		} else if (piano.copycan.inBounds(dcoords.x, dcoords.y)) {
+			piano.copycan.highlight = true;
+			piano.trashcan.highlight = false;
+			piano.savecan.highlight = false;
 		} else {
 			piano.trashcan.highlight = false;
+			piano.savecan.highlight = false;
+			piano.copycan.highlight = false;
 		}
 		this.dragObs(this.inNodes);
 		this.dragObs(this.outNodes);
@@ -3254,6 +3331,63 @@ class WhiteNoiseContainer extends SynthModContainer {
 	}
 }
 
+class XFadeMod extends SynthModContainer {
+	constructor(x, y, w, h, bl, br, bt, bb, noder) {
+		super(x, y, w, h, bl, br, bt, bb);
+		this.gains1 = new Array();
+		this.gains2 = new Array();
+		this.gains1g = new Array();
+		this.gains2g = new Array();
+		this.ogains = new Array();
+		this.pgains = new Array();
+		this.ngains = new Array();//negative gains to invert LFO into xknob
+		for (var i = 0; i < sound.numpianos; i++) {
+			var pgain = sound.ctx.createGain();
+			this.pgains.push(pgain);
+			var ngain = sound.ctx.createGain();
+			this.ngains.push(ngain);
+			var ogain = sound.ctx.createGain();
+			this.ogains.push(ogain);
+			var gain1 = sound.ctx.createGain();
+			this.gains1.push(gain1);
+			this.gains1g.push(gain1.gain);
+			var gain2 = sound.ctx.createGain();
+			this.gains2.push(gain2);
+			this.gains2g.push(gain2.gain);
+			pgain.connect(ngain);
+			ngain.gain.value = -1;
+			pgain.connect(gain1.gain);
+			ngain.connect(gain2.gain);
+			gain1.connect(ogain);
+			gain2.connect(ogain);
+		}
+		this.knob = new XKnob(0, 0, h*0.6, h*0.6, [0], 0, 1, null, 2);
+		this.knob.name = "xfade";
+		this.knob.setXTargets(this.gains1g, this.gains2g);
+		this.addModule(this.knob, w*0.22, h*0.05);
+		this.addONode(this.w-2*noder, this.h*0.5-noder, noder, TYPE_AUDIO, [TYPE_AUDIO], "xfade");
+		this.outNodes[0].setObject(this.ogains);
+		this.addINode(0, this.h*0.3-noder, noder, TYPE_AUDIO, [TYPE_AUDIO], "xfade1");
+		this.inNodes[0].setObject(this.gains1);
+		this.addINode(0, this.h*0.7-noder, noder, TYPE_AUDIO, [TYPE_AUDIO], "xfade2");
+		this.inNodes[1].setObject(this.gains2);
+		this.addINode(this.w*0.3-noder, this.h-2*noder, noder, TYPE_ENV, [TYPE_ENV, TYPE_VALUE], "xenv", "E");
+		this.inNodes[2].setObject(this.knob);
+		this.addINode(this.w*0.8-noder, this.h-2*noder, noder, TYPE_AUDIO, [TYPE_AUDIO], "xlfo", "L");
+		this.inNodes[3].setObject(this.pgains);
+	}
+	
+	save() {
+		var t = '{"type":"SynthPWMContainer" , ' + super.save();
+		t += ' , "fade":"' + this.knob.val + '"}';
+		return t;
+	}
+	
+	load(data) {
+		this.knob.setValue(data.fade);
+	}
+}
+
 class SynthPWMContainer extends SynthModContainer {
 	constructor(x, y, w, h, bl, br, bt, bb, noder) {
 		super(x, y, w, h, bl, br, bt, bb);
@@ -3300,7 +3434,7 @@ class SynthPWMContainer extends SynthModContainer {
 		this.addModule(this.knob, w*0.55, 0);
 		this.addINode(0, this.h*0.5-noder, noder, TYPE_KEY, [TYPE_KEY, TYPE_VALUE, TYPE_ENV], "osc f", "F", this);
 		this.inNodes[0].setObject(this.fs);
-		this.addONode(this.w-2*noder, this.h*0.5-noder, noder, TYPE_AUDIO, [TYPE_AUDIO], "osc out");
+		this.addONode(this.w-2*noder, this.h*0.5-noder, noder, TYPE_AUDIO, [TYPE_AUDIO], "osc");
 		this.outNodes[0].setObject(this.shapers);
 		this.addINode(this.w*0.5-2*noder, this.h-noder*2, noder, TYPE_AUDIO, [TYPE_AUDIO], "osc LFO", "L");
 		this.inNodes[1].setObject(this.gfs);
@@ -4308,8 +4442,11 @@ class TextField extends ValueModContainer {
 	}
 	
 	trigger(on, knum, onum, f) {
-		//if (on) this.valueOb.setValue(this.val, knum, onum);
+		if (on) this.setValue(f, knum, onum);
 		super.trigger(on, knum, onum, f);
+	}
+	
+	noteOnNow(f, k, o) {
 	}
 	
 	notifyConnect() {
@@ -5434,6 +5571,10 @@ class ArpMod extends SynthModContainer {
 		this.outNodes[0].setObject(this);
 		this.addONode(this.w-2*noder, this.h*0.6-noder, noder, TYPE_KEY, [TYPE_KEY], "seq");
 		this.outNodes[1].setObject(this);
+		this.addONode(this.w-2*noder, this.h*0.2-noder, noder, TYPE_KEY, [TYPE_KEY], "seq");
+		this.outNodes[2].setObject(this);
+		this.addONode(this.w-2*noder, this.h*0.8-noder, noder, TYPE_KEY, [TYPE_KEY], "seq");
+		this.outNodes[3].setObject(this);
 		this.frames = new Array();
 		this.curframe = 0;
 		var fx = this.w*0.03;
@@ -6062,6 +6203,18 @@ class ArpIcon extends ModuleIcon {
 	}
 }
 
+class XFadeIcon extends ModuleIcon {
+	createMod() {
+		return new XFadeMod(this.x, piano.modbt, piano.modh*1.4, piano.modh*1.3, piano.modbl, piano.modbr, piano.modbt, piano.modbb, piano.noder);
+	}
+	
+	drawOb(ctx) {
+		super.drawOb(ctx);
+		ctx.font = this.h*0.22 + "px Arial";
+		ctx.fillText("XFADE", this.x+this.w*0.15, this.y+this.h*0.5);
+	}
+}
+
 class SHIcon extends ModuleIcon {
 	createMod() {
 		return new SHMod(this.x, piano.modbt, piano.modh, piano.modh, piano.modbl, piano.modbr, piano.modbt, piano.modbb, piano.noder);
@@ -6133,6 +6286,8 @@ class ModuleBar extends Drawable {
 		this.arpb = new ArpIcon(x+a, y+b, h*0.8, h*0.8, 0, canW, y, canH);
 		a += h*0.9;
 		this.fmixb = new FMixIcon(x+a, y+b, h*0.8, h*0.8, 0, canW, y, canH);
+		a += h*0.9;
+		this.xfadeb = new XFadeIcon(x+a, y+b, h*0.8, h*0.8, 0, canW, y, canH);
 		
 		this.icons.push(this.keyb);
 		this.icons.push(this.oscb);
@@ -6159,6 +6314,7 @@ class ModuleBar extends Drawable {
 		this.icons.push(this.shb);
 		this.icons.push(this.arpb);
 		this.icons.push(this.fmixb);
+		this.icons.push(this.xfadeb);
 		//this.icons.push(this.sptb);
 		this.hideicon = -1;
 	}
@@ -6266,6 +6422,98 @@ class KeyboardOutput {
 	}
 }
 
+class CopyCan extends Drawable {
+	constructor(x, y, w, h) {
+		super(x, y, w, h);
+		this.highlight = false;
+		var off = 0.1;
+		this.x1 = x + w*off;
+		this.x2 = x + w*(1-off);
+		this.y1 = y + h*off;
+		this.y2 = y + h*(1-off);
+		this.r = x + w;
+		this.b = y + h;
+	}	
+	
+	drawOb(ctx) {
+		ctx.beginPath();
+		ctx.moveTo(this.x1, this.y);
+		ctx.lineTo(this.r, this.y);
+		ctx.lineTo(this.r, this.y2);
+		ctx.moveTo(this.x, this.y1);
+		ctx.lineTo(this.x2, this.y1);
+		ctx.lineTo(this.x2, this.b);
+		ctx.lineTo(this.x, this.b);
+		ctx.lineTo(this.x, this.y1);
+		if (this.highlight) {
+			ctx.strokeStyle = keypresscol;
+		} else {
+			ctx.strokeStyle = pianocol;
+		}
+		ctx.stroke();
+	}
+}
+
+class SaveCan extends Drawable {
+	constructor(x, y, w, h) {
+		super(x, y, w, h);
+		this.highlight = false;
+		var cor = 0.12;
+		var hh = 0.3;
+		var hhb = 0.4;
+		var ww = 0.8;
+		var wwb = 0.9;
+		this.by = y + h;
+		this.rx = x + w;
+		this.yc = y + h*(1-cor);
+		this.xc = x + w*cor;
+		this.xt1 = x + w*0.2;
+		this.yt1 = y + h*0.06;
+		this.xt2 = x + w*ww;
+		this.yt2 = this.yt1;
+		this.xt3 = this.xt2;
+		this.yt3 = this.yt1 + h*hh;
+		this.xt4 = this.xt1;
+		this.yt4 = this.yt3;
+		
+		this.xb1 = x + w*cor;
+		this.yb1 = y + h*0.94;
+		this.xb2 = x + w*wwb;
+		this.yb2 = this.yb1;
+		this.xb3 = this.xb2;
+		this.yb3 = this.yb2 - h*hhb;
+		this.xb4 = this.xb1;
+		this.yb4 = this.yb3;
+	}
+	
+	drawOb(ctx) {
+		ctx.beginPath();
+		ctx.moveTo(this.x, this.y);
+		ctx.lineTo(this.x, this.yc);
+		ctx.lineTo(this.xc, this.by);
+		ctx.lineTo(this.rx, this.by);
+		ctx.lineTo(this.rx, this.y);
+		ctx.lineTo(this.x, this.y);
+		ctx.moveTo(this.xt1, this.yt1);
+		ctx.lineTo(this.xt2, this.yt2);
+		ctx.lineTo(this.xt3, this.yt3);
+		ctx.lineTo(this.xt4, this.yt4);
+		ctx.lineTo(this.xt1, this.yt1);
+		ctx.moveTo(this.xb1, this.yb1);
+		ctx.lineTo(this.xb2, this.yb2);
+		ctx.lineTo(this.xb3, this.yb3);
+		ctx.lineTo(this.xb4, this.yb4);
+		ctx.lineTo(this.xb1, this.yb1);
+		if (this.highlight) {
+			ctx.strokeStyle = keypresscol;
+		} else {
+			ctx.strokeStyle = pianocol;
+		}
+		ctx.stroke();
+	}
+	
+}
+
 class TrashCan extends Drawable {
 	constructor(x, y, w, h) {
 		super(x, y, w, h);
@@ -6337,6 +6585,8 @@ class Piano {
 		var trashw = kw*0.6;
 		var trashh = kw*0.7;
 		this.trashcan = new TrashCan(x + this.w + kw*0.2, cony + this.modbar.h - trashh, trashw, trashh);
+		this.savecan = new SaveCan(this.trashcan.x + this.trashcan.w*1.4, this.trashcan.y, trashw, trashh);
+		this.copycan = new CopyCan(this.savecan.x + this.savecan.w*1.4, this.trashcan.y, trashw, trashh);
 		
 		this.modules = new Array();
 		var tw = keyW*btnw*2;
@@ -6456,6 +6706,79 @@ class Piano {
 		download(fname, t);
 	}
 	
+	createModFromType(type) {
+		var m = null;
+		if (type == "WhiteNoiseContainer") {
+			m = piano.modbar.whiteb.createMod();
+		} else if (type == "SynthFilterContainer") {
+			m = piano.modbar.filt.createMod();
+		} else if (type == "SynthCompContainer") {
+			m = piano.modbar.comp.createMod();
+		} else if (type == "SpeakerMod") {
+			m = piano.modbar.speakerb.createMod();
+		} else if (type == "SynthEqualContainer") {
+			m = piano.modbar.eqb.createMod();
+		} else if (type == "SynthConvContainer") {
+			m = piano.modbar.convb.createMod();
+		} else if (type == "WaveShaperContainer") {
+			m = piano.modbar.shapeb.createMod();
+		} else if (type == "AnalyserContainer") {
+			m = piano.modbar.analyseb.createMod();
+		} else if (type == "SynthGainContainer") {
+			m = piano.modbar.gainb.createMod();
+		} else if (type == "SynthENVLPContainer") {
+			m = piano.modbar.envlpb.createMod();
+			m.isEnv = true;
+		} else if (type == "TextField") {
+			m = piano.modbar.valb.createMod();
+			m.isValType = true;
+		} else if (type == "TimerMod") {
+			m = piano.modbar.timerb.createMod();
+			m.isValType = true;
+		} else if (type == "TextFieldMulti") {
+			m = piano.modbar.multib.createMod();
+			m.isValType = true;
+		} else if (type == "SwitchMod") {
+			m = piano.modbar.switchb.createMod();
+		} else if (type == "ClickMod") {
+			m = piano.modbar.clickb.createMod();
+		} else if (type == "SynthADSRContainer") {
+			m = piano.modbar.adsrb.createMod();
+			m.isEnv = true;
+		} else if (type == "SynthModKeyboard") {
+			m = piano.modbar.keyb.createMod();
+		} else if (type == "MergerMod") {
+			m = piano.modbar.mergerb.createMod();
+		} else if (type == "SplitterMod") {
+			m = piano.modbar.splitterb.createMod();
+		} else if (type == "SequencerMod") {
+			m = piano.modbar.seqb.createMod();
+		} else if (type == "SynthOscContainer") {
+			m = piano.modbar.oscb.createMod();
+		} else if (type == "SynthPWMContainer") {
+			m = piano.modbar.pwmb.createMod();
+		} else if (type == "SHMod") {
+			m = piano.modbar.shb.createMod();
+		} else if (type == "ArpMod") {
+			m = piano.modbar.arpb.createMod();
+		} else if (type == "FMixMod") {
+			m = piano.modbar.fmixb.createMod();
+		} else if (type == "XFadeMod") {
+			m = piano.modbar.xfadeb.createMod();
+		}
+		if (m) {
+			piano.modules.push(m);
+		}
+		return m;
+	}
+	
+	loadSingleMod(jso) {
+		var data = JSON.parse(jso);
+		var m = this.createModFromType(data.type);
+		m.load(data);
+		//m.setPos(data.x, data.y);
+	}
+	
 	loadModules(jso) {
 		for (var i = piano.modules.length-1; i > -1; i--) {
 			piano.modules[i].trash();
@@ -6465,67 +6788,8 @@ class Piano {
 			//mods[i].y += fix;
 			var type = mods[i].type;
 			//console.log(type);
-			var m = null;
-			if (type == "WhiteNoiseContainer") {
-				m = piano.modbar.whiteb.createMod();
-			} else if (type == "SynthFilterContainer") {
-				m = piano.modbar.filt.createMod();
-			} else if (type == "SynthCompContainer") {
-				m = piano.modbar.comp.createMod();
-			} else if (type == "SpeakerMod") {
-				m = piano.modbar.speakerb.createMod();
-			} else if (type == "SynthEqualContainer") {
-				m = piano.modbar.eqb.createMod();
-			} else if (type == "SynthConvContainer") {
-				m = piano.modbar.convb.createMod();
-			} else if (type == "WaveShaperContainer") {
-				m = piano.modbar.shapeb.createMod();
-			} else if (type == "AnalyserContainer") {
-				m = piano.modbar.analyseb.createMod();
-			} else if (type == "SynthGainContainer") {
-				m = piano.modbar.gainb.createMod();
-			} else if (type == "SynthENVLPContainer") {
-				m = piano.modbar.envlpb.createMod();
-				m.isEnv = true;
-			} else if (type == "TextField") {
-				m = piano.modbar.valb.createMod();
-				m.isValType = true;
-			} else if (type == "TimerMod") {
-				m = piano.modbar.timerb.createMod();
-				m.isValType = true;
-			} else if (type == "TextFieldMulti") {
-				m = piano.modbar.multib.createMod();
-				m.isValType = true;
-			} else if (type == "SwitchMod") {
-				m = piano.modbar.switchb.createMod();
-			} else if (type == "ClickMod") {
-				m = piano.modbar.clickb.createMod();
-			} else if (type == "SynthADSRContainer") {
-				m = piano.modbar.adsrb.createMod();
-				m.isEnv = true;
-			} else if (type == "SynthModKeyboard") {
-				m = piano.modbar.keyb.createMod();
-			} else if (type == "MergerMod") {
-				m = piano.modbar.mergerb.createMod();
-			} else if (type == "SplitterMod") {
-				m = piano.modbar.splitterb.createMod();
-			} else if (type == "SequencerMod") {
-				m = piano.modbar.seqb.createMod();
-			} else if (type == "SynthOscContainer") {
-				m = piano.modbar.oscb.createMod();
-			} else if (type == "SynthPWMContainer") {
-				m = piano.modbar.pwmb.createMod();
-			} else if (type == "SHMod") {
-				m = piano.modbar.shb.createMod();
-			} else if (type == "ArpMod") {
-				m = piano.modbar.arpb.createMod();
-			} else if (type == "FMixMod") {
-				m = piano.modbar.fmixb.createMod();
-			}
-			if (m) {
-				m.create(mods[i]);
-				piano.modules.push(m);
-			}
+			var m = this.createModFromType(type);
+			m.create(mods[i]);
 		}
 		for (var i = 0; i < mods.length; i++) {
 			//connect only merger outputs and outputs that go to splitter inputs
@@ -6637,6 +6901,8 @@ class Piano {
 		}
 		this.modbar.drawOb(ctx);
 		this.trashcan.drawOb(ctx);
+		this.savecan.drawOb(ctx);
+		this.copycan.drawOb(ctx);
 	}
 
 	hit(coords) {
@@ -7376,6 +7642,8 @@ function mouseUp(event, allowdef) {
 	var r = piano.hitCheck(clickCoords, false);
 	dragOb = null;
 	piano.trashcan.highlight = false;
+	piano.savecan.highlight = false;
+	piano.copycan.highlight = false;
 	clicking = false;
 	dragging = false;
 	return r;
@@ -7498,6 +7766,37 @@ function loadARP() {
 function loadBasicConfig() {
 	piano.loadModules(modsaveteststring);
 	setMsg('loaded basic config');
+}
+
+function openModFile() {
+  var nBytes = 0,
+      oFiles = document.getElementById("uploadMod").files,
+      nFiles = oFiles.length;
+  for (var nFileId = 0; nFileId < nFiles; nFileId++) {
+    nBytes += oFiles[nFileId].size;
+  }
+  var sOutput = nBytes + " bytes";
+  // optional code for multiples approximation
+  for (var aMultiples = ["KiB", "MiB", "GiB", "TiB", "PiB", "EiB", "ZiB", "YiB"], nMultiple = 0, nApprox = nBytes / 1024; nApprox > 1; nApprox /= 1024, nMultiple++) {
+    sOutput = nApprox.toFixed(3) + " " + aMultiples[nMultiple] + " (" + nBytes + " bytes)";
+  }
+  // end of optional code
+  document.getElementById("fileNum").innerHTML = nFiles;
+  document.getElementById("fileSize").innerHTML = sOutput;
+  var reader = new FileReader();
+  reader.fileName = oFiles[0].name;
+  reader.onload = function(evt) {
+    //console.log(evt.target.result);]
+	try {
+	piano.loadSingleMod(evt.target.result);
+	setMsg('loaded mod from ' + evt.target.fileName);
+	} catch (err) {
+	setMsg("mod file could not be read");
+	console.log(err.message);
+	console.log(err.stack);
+	}
+  };
+  reader.readAsText(oFiles[0]);
 }
 
 function updateSize() {
@@ -8019,6 +8318,10 @@ function loadMidi(input, fname) {
 	<br>load midi
 	<div style="border:1px solid #000;">
 		<p><input id="uploadMidi" type="file" name="myFiles" onchange="openMidiFile();"> selected files: <span id="fileNum">0</span>; total size: <span id="fileSize">0</span></p>
+	</div>
+	<br>load module
+	<div style="border:1px solid #000;">
+		<p><input id="uploadMod" type="file" name="myFiles" onchange="openModFile();"> selected files: <span id="fileNum">0</span>; total size: <span id="fileSize">0</span></p>
 	</div>
 	<br>load patch
 	<div style="border:1px solid #000;">
