@@ -1190,11 +1190,27 @@ class PKey extends Drawable {
 		}
 	}
 	
+	unsustain() {
+		if (this.sustaining) this.press(false, 0, false, false, 0);
+		this.sustaining = false;
+	}
+	
 	press(isdown, pnum, holdColor, manual, vol) {
 		vol = vol || 1;
 		manual = false;
 		if (isdown === this.pressed && (this.oscnum == -1 && !manual)) {
 			return;
+		}
+		if (piano.sustain) {
+			if (!isdown) {
+				this.pressed = false;
+				this.sustaining = true;
+				return;
+			} else if (this.sustaining) {
+				this.pressed = true;
+				this.sustaining = false;
+				return;
+			}
 		}
 		if (isdown) {
 			//var txt = "";
@@ -4114,11 +4130,19 @@ class PortBtn extends Drawable {
 		var hit = super.hitCheck(isdown, coords);
 		if (hit) {
 			if (!isdown) {
-				this.fill = !this.fill;
-				sound.porto = this.fill;
+				this.toggle();
 			}
 		}
 		return hit;
+	}
+	
+	toggle() {
+		this.setOn(!this.fill);
+	}
+	
+	setOn(on) {
+		this.fill = on;
+		sound.porto = on;
 	}
 	
 	drawOb(ctx) {
@@ -6938,6 +6962,8 @@ class Piano {
 		this.midiline1 = this.textlines[1];
 		this.midiline2 = this.textlines[2];
 		this.midiline2.txtsize = keyW*1.2;
+		this.midiline3 = this.textlines[3];
+		this.midiline3.txtsize = keyW*1.2;
 		
 		rollkey = new PBtn(x + this.w - btnw*keyW, y + keyH * 1.5, keyW*btnw, keyW*btnw, 0);
 		this.btns.push(rollkey);
@@ -6988,6 +7014,27 @@ class Piano {
 		this.allkeys.push(this.whites[wi++]);
 		this.whites[wi].num = ki++;
 		this.allkeys.push(this.whites[wi++]);
+	}
+	
+	setSustain(on) {
+		this.sustain = on;
+		if (!on) {
+			for (var i = 0; i < this.allkeys.length; i++) {
+				this.allkeys[i].unsustain();
+			}
+			this.midiline3.txt = "sustain off";
+		} else {
+			this.midiline3.txt = "sustain on";
+		}
+	}
+	
+	setPorto(on) {
+		this.portb.setOn(on);
+		if (on) {
+			this.midiline3.txt = "portamento on";
+		} else {
+			this.midiline3.txt = "portamento off";
+		}
 	}
 	
 	unhighlightCans() {
@@ -7252,10 +7299,19 @@ class Piano {
 		//console.log("doCC: n:" + note + " v:" + velocity);
 		piano.midiline1.txt = "last received midi CC message:";
 		piano.midiline2.txt = "control: " + note + ", value: " + velocity;
+		piano.midiline3.txt = "";
+		if (note == 64) {
+			//sustain
+			piano.setSustain(velocity > 63);
+			return;
+		} else if (note == 65) {
+			piano.setPorto(velocity > 63);
+			return;
+		}
 		var t = sound.ctx.currentTime;
 		for (var i = 0; i < this.ccmods.length; i++) {
 			if (this.ccmods[i].id == note) {
-				this.ccmods[i].sendValue(velocity/127);
+				this.ccmods[i].sendValue(velocity/127, t);
 			}
 		}
 	}
