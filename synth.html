@@ -571,6 +571,7 @@ class ADSR {
 		this.targets = new Array();
 		this.objects = new Array();
 		this.knob = null;
+		this.starttime = 0;
 	}
 	
 	connect(obj) {
@@ -662,6 +663,7 @@ class ADSR {
 	
 	noteON(time, f) {
 		//if (!this.target) return;
+		this.starttime = time;
 		var f = f || 0;
 		if (!this.iskey) f = 0;
 		if (this.knob) {
@@ -699,10 +701,12 @@ class ADSR {
 		var f = f || 0;
 		if (!this.iskey) f = 0;
 		for (var i = 0; i < this.targets.length; i++) {
-			this.targets[i].cancelScheduledValues(time);
-			this.targets[i].linearRampToValueAtTime(f + this.relv * this.multi, time+this.relt.value);
+			this.targets[i].cancelScheduledValues(this.starttime);
+			var v = f + this.relv * this.multi;
+			var t = time+this.relt.value;
+			this.targets[i].exponentialRampToValueAtTime(v, t);
+			//console.log("adsr note off from " + this.targets[i].value + " to " + this.relv + " at time " + t + " + " + this.relt.value);
 		}
-		//console.log("adsr note off to " + this.relv + " at time " + time + " + " + this.relt);
 	}
 }
 
