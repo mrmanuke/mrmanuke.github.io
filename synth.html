@@ -395,6 +395,8 @@ class ENVLP {
 		this.targets = new Array();
 		this.objects = new Array();
 		this.knob = null;
+		this.ontime = 0;
+		this.offtime = 0;
 	}
 	
 	connect(obj) {
@@ -496,6 +498,7 @@ class ENVLP {
 	}
 	
 	noteON(time, f) {
+		this.ontime = time;
 		//if (!this.target) return;
 		var f = f || 0;
 		if (this.knob || !this.iskey) f = 0;
@@ -517,7 +520,7 @@ class ENVLP {
 			var vt = time+this.atkt.value;
 			var sv = this.strv.value;
 			for (var i = 0; i < this.targets.length; i++) {
-				this.targets[i].cancelScheduledValues(time);
+				this.targets[i].cancelScheduledValues(this.offtime);
 				//console.log("set value to " + sv + " at " + time + " and " + vv + " at " + vt);
 				this.targets[i].setValueAtTime(sv, time);
 				this.targets[i].linearRampToValueAtTime(vv, vt);
@@ -526,7 +529,7 @@ class ENVLP {
 		} else {
 			for (var i = 0; i < this.targets.length; i++) {
 				var m = this.targets[i].multi || 1;
-				this.targets[i].cancelScheduledValues(time);
+				this.targets[i].cancelScheduledValues(this.offtime);
 				//console.log("set value to " + vv + " at " + vt);
 				this.targets[i].setValueAtTime((f+this.strv.value * this.multi)*m, time);
 				this.targets[i].linearRampToValueAtTime((f+this.atkv.value * this.multi)*m, time+this.atkt.value);
@@ -537,11 +540,12 @@ class ENVLP {
 	
 	noteOFF(time, f) {
 		//if (!this.target) return;
+		this.offtime = time;
 		var f = f || 0;
 		if (!this.iskey) f = 0;
 		for (var i = 0; i < this.targets.length; i++) {
 			var m = this.targets[i].multi || 1;
-			this.targets[i].cancelScheduledValues(time);
+			this.targets[i].cancelScheduledValues(this.starttime);
 			this.targets[i].linearRampToValueAtTime((f+OFF_VOL)*m, time);
 		}
 		//console.log("adsr note off to " + this.relv + " at time " + time + " + " + this.relt);
@@ -571,7 +575,8 @@ class ADSR {
 		this.targets = new Array();
 		this.objects = new Array();
 		this.knob = null;
-		this.starttime = 0;
+		this.ontime = 0;
+		this.offtime = 0;
 	}
 	
 	connect(obj) {
@@ -663,15 +668,14 @@ class ADSR {
 	
 	noteON(time, f) {
 		//if (!this.target) return;
-		this.starttime = time;
+		this.ontime = time;
 		var f = f || 0;
 		if (!this.iskey) f = 0;
 		if (this.knob) {
 			var kmin = this.knob.min.value;
 			var kmax = this.knob.max.value - kmin;
 			for (var i = 0; i < this.targets.length; i++) {
-				this.targets[i].cancelScheduledValues(time);
-				this.targets[i].cancelScheduledValues(time);
+				this.targets[i].cancelScheduledValues(this.offtime);
 				this.targets[i].setValueAtTime(OFF_VOL, time);
 				this.targets[i].linearRampToValueAtTime(kmin + this.atkv * kmax, time+this.atkt.value);
 				this.targets[i].linearRampToValueAtTime(kmin + this.decv.value * kmax, time+this.atkt.value + this.dect.value);
@@ -680,7 +684,7 @@ class ADSR {
 		} else {
 			for (var i = 0; i < this.targets.length; i++) {
 				var m = this.targets[i].multi || 1;
-				this.targets[i].cancelScheduledValues(time);
+				this.targets[i].cancelScheduledValues(this.offtime);
 				this.targets[i].setValueAtTime(OFF_VOL, time);
 				this.targets[i].linearRampToValueAtTime((f + this.atkv * this.multi)*m, time+this.atkt.value);
 				this.targets[i].linearRampToValueAtTime((f + this.decv.value * this.multi)*m, time+this.atkt.value + this.dect.value);
@@ -691,17 +695,18 @@ class ADSR {
 	
 	reset(time) {
 		for (var i = 0; i < this.targets.length; i++) {
-			this.targets[i].cancelScheduledValues(time);
+			this.targets[i].cancelScheduledValues(this.ontime);
 			this.targets[i].setValueAtTime(0, time+0.001);
 		}
 	}
 	
 	noteOFF(time, f) {
 		//if (!this.target) return;
+		this.offtime = time;
 		var f = f || 0;
 		if (!this.iskey) f = 0;
 		for (var i = 0; i < this.targets.length; i++) {
-			this.targets[i].cancelScheduledValues(this.starttime);
+			this.targets[i].cancelScheduledValues(this.ontime);
 			var v = f + this.relv * this.multi;
 			var t = time+this.relt.value;
 			this.targets[i].exponentialRampToValueAtTime(v, t);
