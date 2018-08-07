@@ -4065,6 +4065,8 @@ class SynthGainContainer extends SynthModContainer {
 		this.addINode(0, this.h-2*noder, noder, TYPE_VALUE, [TYPE_VALUE, TYPE_ENV], "env", "E");
 		this.inNodes[4].setObject(this.knob);
 		this.envnode = this.inNodes[4];
+		this.addINode(0, 0, noder, TYPE_TRIGGER, [TYPE_TRIGGER, TYPE_KEY], "mute switch", "S");
+		this.inNodes[5].setObject(this);
 	}
 	
 	save() {
@@ -4084,8 +4086,17 @@ class SynthGainContainer extends SynthModContainer {
 		}
 	}
 	
+	trigger(on, knum, onum, f) {
+		this.c.fill = on;
+		this.setMute(!on);
+	}
+	
 	click() {
-		this.muted = !this.c.fill;
+		this.setMute(!this.c.fill);
+	}
+	
+	setMute(on) {
+		this.muted = on;
 		if (this.muted) {
 			for (var i = 0; i < this.mutearr.length; i++) {
 				this.mutearr[i].gain.value = OFF_VOL;
@@ -4094,7 +4105,7 @@ class SynthGainContainer extends SynthModContainer {
 			for (var i = 0; i < this.mutearr.length; i++) {
 				this.mutearr[i].gain.value = 1;
 			}
-		}
+		}		
 	}
 	
 	notifyConnect(node) {
@@ -4126,6 +4137,8 @@ class Switch extends Drawable {
 		this.oscnum = -1;
 		this.knum = sound.getKeyNum();
 		this.fillCol = keypresscol;
+		this.tx = w*0.1;
+		this.ty = h*0.55;
 	}
 
 	hitCheck(isdown, coords) {
@@ -4152,6 +4165,13 @@ class Switch extends Drawable {
 	
 	disconnect(obj) {
 		obj.connected = false;
+	}
+	
+	drawOb(ctx) {
+		super.drawOb(ctx);
+		ctx.font = this.h*0.3 + "px Arial";
+		ctx.fillStyle = pianocol;
+		ctx.fillText("switch", this.x + this.tx, this.y + this.ty);
 	}
 }
 
