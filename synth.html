@@ -2958,7 +2958,7 @@ function copyMod(m) {
 	for (var i = 0; i < piano.modules.length; i++) {
 		piano.modules[i].setModNum(i);
 	}
-	piano.loadSingleMod(m.save());
+	return piano.loadSingleMod(m.save());
 }
 
 function saveMod(m) {
@@ -4029,26 +4029,35 @@ class SynthConvContainer extends SynthModContainer {
 class SynthGainContainer extends SynthModContainer {
 	constructor(x, y, w, h, bl, br, bt, bb, noder) {
 		super(x, y, w, h, bl, br, bt, bb);
+		this.muted = false;
 		this.knob = new Knob(0, 0, w*0.6, w*0.6, [OFF_VOL], OFF_VOL, 1, null, 2);
 		this.knob.name = "";
 		this.knob.color = "green";
 		var oscggarr = new Array();
 		var oscgarr = new Array();
+		this.mutearr = new Array();
 		for (var i = 0; i < sound.numpianos; i++) {
 			var gain = sound.ctx.createGain();
 			gain.gain.value = OFF_VOL;
+			var mute = sound.ctx.createGain();
+			mute.gain.value = 1;
 			oscgarr.push(gain);
 			oscggarr.push(gain.gain);
+			this.mutearr.push(mute);
+			gain.connect(mute);
 		}
+		this.c = new ToggleChild(0, 0, w*0.2, w*0.2, this);
+		this.c.fill = true;
+		this.addModule(this.c, w*0.75, h*0.05);
 		this.knob.setNumTarget(oscggarr);
 		this.addModule(this.knob, w*0.2, h*0.2);
 		this.addINode(0, this.h*0.5-noder, noder, TYPE_AUDIO, [TYPE_AUDIO], "gain");
 		this.inNodes[0].setObject(oscgarr, true);
 		this.addONode(this.w-2*noder, this.h*0.5-noder, noder, TYPE_AUDIO, [TYPE_AUDIO], "gain");
-		this.outNodes[0].setObject(oscgarr, true);
-		this.addINode(0, 0, noder, TYPE_VALUE, [TYPE_VALUE], "min", "m");
+		this.outNodes[0].setObject(this.mutearr, true);
+		this.addINode(this.w*0.4-noder, 0, noder, TYPE_VALUE, [TYPE_VALUE], "min", "m");
 		this.inNodes[1].setObject(this.knob.min);
-		this.addINode(this.w-2*noder, 0, noder, TYPE_VALUE, [TYPE_VALUE], "max", "M");
+		this.addINode(this.w*0.6-noder, 0, noder, TYPE_VALUE, [TYPE_VALUE], "max", "M");
 		this.inNodes[2].setObject(this.knob.max);
 		this.addINode(this.w-2*noder, this.h-noder*2, noder, TYPE_AUDIO, [TYPE_AUDIO], "LFO", "L");
 		this.inNodes[3].setObject(oscggarr);
@@ -4058,14 +4067,33 @@ class SynthGainContainer extends SynthModContainer {
 	}
 	
 	save() {
+		var m = 0;
+		if (this.muted) m = 1;
 		var t = '{"type":"SynthGainContainer" , ' + super.save();
-		t += ' , "gain":' + this.knob.val;
+		t += ' , "gain":' + this.knob.val + ' , "mute":' + m;
 		t += '}';
 		return t;
 	}
 	
 	load(data) {
 		this.knob.setValue(data.gain);
+		if (data.mute == 1) {
+			this.c.fill = false;
+			this.click();
+		}
+	}
+	
+	click() {
+		this.muted = !this.c.fill;
+		if (this.muted) {
+			for (var i = 0; i < this.mutearr.length; i++) {
+				this.mutearr[i].gain.value = OFF_VOL;
+			}
+		} else {
+			for (var i = 0; i < this.mutearr.length; i++) {
+				this.mutearr[i].gain.value = 1;
+			}
+		}
 	}
 	
 	notifyConnect(node) {
@@ -4383,6 +4411,26 @@ class ClickChild extends Drawable {
 			} else if (!isdown) {
 				this.par.click();
 				this.fill = false;
+			}
+		}
+		return hit;
+	}
+}
+
+class ToggleChild extends Drawable {
+	constructor(x, y, w, h, par) {
+		super(x, y, w, h);
+		this.par = par;
+		this.fillCol = keypresscol;
+	}
+	
+	hitCheck(isdown, coords) {
+		var hit = super.hitCheck(isdown, coords);
+		if (hit) {
+			if (isdown) {
+				this.fill = !this.fill;
+			} else if (!isdown) {
+				this.par.click();
 			}
 		}
 		return hit;
@@ -6722,13 +6770,23 @@ class CopyCan extends Drawable {
 		this.b = y + h;
 	}
 	
-	act (mod) {
-		mod.setPos(mod.startx, mod.starty);
-		copyMod(mod);
+	act (mod, nomove) {
+		if (!nomove) mod.setPos(mod.startx, mod.starty);
+		dragOb = copyMod(mod);		
+		dragOb.startx = clickCoords.x;
+		dragOb.starty = clickCoords.y;
+		dragOb.setPos(clickCoords.x, clickCoords.y);
+		this.highlight = false;
+		setMsg("copied module");
 	}
 	
 	click(isdown) {
-		this.highlight = isdown;
+		if (!isdown) {
+			this.active = true;
+			setMsg("drag the module you want to copy");
+		} else {
+			this.highlight = isdown;
+		}
 	}
 	
 	drawOb(ctx) {
@@ -6795,8 +6853,8 @@ class SaveCan extends Drawable {
 		}
 	}
 	
-	act(mod) {
-		mod.setPos(mod.startx, mod.starty);
+	act(mod, nomove) {
+		if (!nomove) mod.setPos(mod.startx, mod.starty);
 		saveMod(mod);
 	}
 	
@@ -7048,7 +7106,7 @@ class Piano {
 	
 	unhighlightCans() {
 		for (var i = 0; i < this.cans.length; i++) {
-			this.cans[i].highlight = false;
+			if (!this.cans[i].active) this.cans[i].highlight = false;
 		}
 	}
 	
@@ -7187,6 +7245,7 @@ class Piano {
 		var m = this.createModFromType(data.type);
 		m.load(data);
 		//m.setPos(data.x, data.y);
+		return m;
 	}
 	
 	loadModules(jso) {
@@ -7364,6 +7423,31 @@ class Piano {
 	}
 	
 	drag(dcoords, ccoords) {
+		var pressedkey = null;
+		for (var i = 0; i < this.blacks.length; i++) {
+			if (this.blacks[i].inBounds(dcoords.x, dcoords.y)) {
+				if (this.blacks[i] != this.lastpressedkey) {
+					this.blacks[i].press(true, 0, false, true);
+				}
+				pressedkey = this.blacks[i];
+				break;
+			}
+		}
+		if (!pressedkey) {
+			for (var i = 0; i < this.whites.length; i++) {
+				if (this.whites[i].inBounds(dcoords.x, dcoords.y)) {
+					if (this.whites[i] != this.lastpressedkey) {
+						this.whites[i].press(true, 0, false, true);
+					}
+					pressedkey = this.whites[i];
+					break;
+				}
+			}
+		}
+		if (pressedkey && pressedkey != this.lastpressedkey) {
+			this.lastpressedkey.press(false, 0, false, true);
+			this.lastpressedkey = pressedkey;
+		}
 	}
 	
 	step(deltaTime) {
@@ -7371,8 +7455,25 @@ class Piano {
 
 	hitCheck(coords, isdown) {
 		if (this.modbar.hitCheck(isdown, coords)) return true;
-		for (var i = 0; i < this.modules.length; i++) {
-			if (this.modules[i].hitCheck(isdown, coords)) return true;
+		var can = null;
+		for (var i = 0; i < this.cans.length; i++) {
+			if (this.cans[i].active) {
+				can = this.cans[i];
+				can.active = false;
+				break;
+			}
+		}
+		if (can) {
+			for (var i = 0; i < this.modules.length; i++) {
+				if (this.modules[i].inBounds(coords.x, coords.y)) {
+					can.act(this.modules[i], true);
+					return true;
+				}
+			}			
+		} else {
+			for (var i = 0; i < this.modules.length; i++) {
+				if (this.modules[i].hitCheck(isdown, coords)) return true;
+			}
 		}
 		for (var i = 0; i < this.synthbtns.length; i++) {
 			if (this.synthbtns[i].hitCheck(isdown, coords)) return true;
@@ -7397,12 +7498,16 @@ class Piano {
 			for (var i = 0; i < this.blacks.length; i++) {
 				if (this.blacks[i].hitCheck(isdown, coords)) {
 					this.blacks[i].press(isdown, 0, false, true);
+					dragOb = this;
+					this.lastpressedkey = this.blacks[i];
 					return true;
 				}
 			}
 			for (var i = 0; i < this.whites.length; i++) {
 				if (this.whites[i].hitCheck(isdown, coords)) {
 					this.whites[i].press(isdown, 0, false, true);
+					dragOb = this;
+					this.lastpressedkey = this.whites[i];
 					return true;
 				}
 			}
@@ -8262,9 +8367,11 @@ function updateSize() {
     //console.log(evt.target.result);]
 	try {
 	piano.loadModules(evt.target.result);
-	setMsg('loaded config from ' + evt.target.fileName);
+	setMsg('loaded patch from ' + evt.target.fileName);
 	} catch (err) {
-	setMsg("config file could not be read");
+	setMsg("patch file could not be read");
+	console.log(err.message);
+	console.log(err.stack);
 	}
   };
   reader.readAsText(oFiles[0]);
