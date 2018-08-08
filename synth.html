@@ -93,7 +93,7 @@ class qwerty {
 			this.k1.push(new qwertykey(i));
 		}
 		for (var i = 0; i <= this.numkeys; i++) {
-			this.k2.push(new qwertykey2(i));
+			this.k2.push(new qwertykey3(i));
 		}
 		this.toggleLayout();
 	}
@@ -148,6 +148,66 @@ class qwerty {
 	}
 	
 	typeInValue() {
+	}
+}
+
+class qwertykey3 {
+	constructor(code) {
+		this.code = code;
+		this.pressed = false;
+		this.pos = -1;
+		this.pressedpos = -1;
+		switch (code) {
+			case 50: this.pos = 14; this.txt = "2"; break;//2
+			case 51: this.pos = 16; this.txt = "3"; break;//3
+			case 53: this.pos = 19; this.txt = "5"; break;//5
+			case 54: this.pos = 21; this.txt = "6"; break;//6
+			case 55: this.pos = 23; this.txt = "7"; break;//7
+			case 57: this.pos = 26; this.txt = "9"; break;//9
+			case 48: this.pos = 28; this.txt = "0"; break;//0
+			case 66: this.pos = 8; this.txt = "b"; break;//b
+			case 67: this.pos = 5; this.txt = "c"; break;//c
+			case 68: this.pos = 4; this.txt = "d"; break;//d
+			case 69: this.pos = 17; this.txt = "e"; break;//e
+			case 71: this.pos = 7; this.txt = "g"; break;//g
+			case 72: this.pos = 9; this.txt = "h"; break;//h
+			case 73: this.pos = 25; this.txt = "i"; break;//i
+			case 74: this.pos = 11; this.txt = "j"; break;//j
+			case 77: this.pos = 12; this.txt = "m"; break;//m
+			case 78: this.pos = 10; this.txt = "n"; break;//n
+			case 79: this.pos = 27; this.txt = "o"; break;//o
+			case 80: this.pos = 29; this.txt = "p"; break;//p
+			case 81: this.pos = 13; this.txt = "q"; break;//q
+			case 82: this.pos = 18; this.txt = "r"; break;//r
+			case 83: this.pos = 2; this.txt = "s"; break;//s
+			case 84: this.pos = 20; this.txt = "t"; break;//t
+			case 85: this.pos = 24; this.txt = "u"; break;//u
+			case 86: this.pos = 6; this.txt = "v"; break;//v
+			case 87: this.pos = 15; this.txt = "w"; break;//w
+			case 88: this.pos = 3; this.txt = "x"; break;//x
+			case 89: this.pos = 22; this.txt = "y"; break;//y
+			case 90: this.pos = 1; this.txt = "z"; break;//z
+		}
+		this.maxpos = 29;
+	}
+	
+	press(sp) {
+		if (!this.pressed) {
+			this.pressed = true;
+			if (this.pos >= 0) {
+				this.pressedpos = this.pos + sp;
+				piano.allkeys[this.pressedpos].press(true, 0, false, true);
+			}
+		}
+	}
+	
+	unpress() {
+		if (this.pressed) {
+			this.pressed = false;
+			if (this.pressedpos >= 0) {
+				piano.allkeys[this.pressedpos].press(false, 0, false, true);
+			}
+		}
 	}
 }
 
@@ -255,6 +315,15 @@ class qwertykey {
 			case 88: this.pos = 31; this.txt = "x"; break;//x
 			case 89: this.pos = 16; this.txt = "y"; break;//y
 			case 90: this.pos = 30; this.txt = "z"; break;//z
+		}
+		if (this.pos > 29) {
+			this.pos -= 29;
+		} else if (this.pos > 20) {
+			this.pos -= 13;
+		} else if (this.pos > 10) {
+			this.pos += 6;
+		} else {
+			this.pos += 26;
 		}
 		this.maxpos = 36;
 	}
@@ -1067,6 +1136,7 @@ class PKey extends Drawable {
 		this.xx = x;
 		if (iswhite) {
 			this.x = x + w * num;
+			this.tx = this.x + this.w*0.25;
 			this.h = h;
 			this.ty = y + h*0.9;
 			this.assignWhiteKey(num);
@@ -1075,8 +1145,8 @@ class PKey extends Drawable {
 			this.w = w * 7/12;
 			this.assignBlackKey(num);
 			this.ty = y + h*0.4;
+			this.tx = this.x + this.w*0.1;
 		}
-		this.tx = this.x + this.w*0.3;
 		if (this.letter) {
 			this.names.push(this.letter + this.octave);
 		}
@@ -4495,7 +4565,6 @@ class Clicker extends Drawable {
 class CCMod extends SynthModContainer {
 	constructor(x, y, w, h, bl, br, bt, bb, noder) {
 		super(x, y, w, h, bl, br, bt, bb);
-		this.valueOb = new ValueSetter();
 		this.isCC = true;
 		this.id = 0;
 		var vw = w*0.9-noder*2;
@@ -4879,6 +4948,18 @@ class TimerMod extends ValueModContainer {
 	}
 }
 
+class MoreThanMod extends ValueModContainer {
+
+}
+
+class LessThanMod extends ValueModContainer {
+
+}
+
+class EqualToMod extends ValueModContainer {
+
+}
+
 class TextFieldMulti extends ValueModContainer {
 	constructor(x, y, w, h, bl, br, bt, bb, noder) {
 		super(x, y, w, h, bl, br, bt, bb, noder);
@@ -4939,7 +5020,6 @@ class TextFieldMulti extends ValueModContainer {
 class SwitchMod extends SynthModContainer {
 	constructor(x, y, w, h, bl, br, bt, bb, noder) {
 		super(x, y, w, h, bl, br, bt, bb);
-		this.r = w*0.3;
 		this.addONode(this.w-2*noder, this.h*0.5-noder, noder, TYPE_TRIGGER, [TYPE_TRIGGER], "switch");
 		this.c = new Switch(0, 0, w*0.6, w*0.6, this.trigprop);
 		this.addModule(this.c, w*0.1, h*0.2);
@@ -4954,6 +5034,83 @@ class SwitchMod extends SynthModContainer {
 
 	drawOb(ctx) {
 		super.drawOb(ctx);
+	}
+}
+
+class ResetTrigger {
+	constructor(p) {
+		this.parent = p;
+		this.triggeronon = true;
+	}
+	
+	trigger(on, knum, onum, f) {
+		if (on != this.triggeronon) return;
+		this.parent.reset();
+	}
+	
+	noteOnNow() {
+		this.parent.reset();
+	}
+}
+
+class CountTrigger {
+	constructor(p) {
+		this.parent = p;
+		this.triggeronon = true;
+	}
+	
+	trigger(on, knum, onum, f) {
+		if (on != this.triggeronon) return;
+		this.parent.docount();
+	}
+	
+	noteOnNow() {
+		this.parent.docount();
+	}
+}
+
+class CountMod extends SynthModContainer {
+	constructor(x, y, w, h, bl, br, bt, bb, noder) {
+		super(x, y, w, h, bl, br, bt, bb);
+		this.tx = this.w * 0.4;
+		this.ty = this.h * 0.4;
+		this.count = 0;
+		var ct = new CountTrigger(this);
+		this.addINode(0, this.h*0.5-noder, noder, TYPE_TRIGGER, [TYPE_TRIGGER, TYPE_KEY], "counter");
+		this.inNodes[0].setObject(ct);
+		var rt = new ResetTrigger(this);
+		this.addINode(0, this.h-2*noder, noder, TYPE_TRIGGER, [TYPE_TRIGGER, TYPE_KEY], "count reset", "R");
+		this.inNodes[1].setObject(rt);
+		this.addONode(this.w-2*noder, this.h*0.5-noder, noder, TYPE_VALUE, [TYPE_VALUE], "counter");
+		this.valueOb = new ValueSetter();
+		this.outNodes[0].setObject(this.valueOb);
+	}
+	
+	save() {
+		var t = '{"type":"CountMod" , ' + super.save();
+		t += '}';
+		return t;
+	}
+	
+	docount() {
+		this.count++;
+		//console.log("count: " + this.count);
+		this.valueOb.setValue(this.count);
+	}
+	
+	noteOnNow(freq, knum, oscnum) {
+	}
+	
+	reset() {
+		this.count = 0;
+		this.valueOb.setValue(this.count);
+	}
+
+	drawOb(ctx) {
+		super.drawOb(ctx);
+		ctx.font = this.h*0.15 + "px Arial";
+		ctx.fillStyle = pianocol;
+		ctx.fillText(this.count, this.x + this.tx, this.y + this.ty);
 	}
 }
 
@@ -5142,7 +5299,7 @@ class ClickMod extends SynthModContainer {
 		this.addONode(this.w-2*noder, this.h*0.5-noder, noder, TYPE_TRIGGER, [TYPE_TRIGGER], "clicker");
 		this.c = new Clicker(0, 0, w*0.6, w*0.6, this.trigprop);
 		this.addModule(this.c, w*0.1, h*0.2);
-		this.outNodes[0].setObject(this.c);
+		this.outNodes[0].setObject(this);
 	}
 	
 	save() {
@@ -6558,6 +6715,54 @@ class CCIcon extends ModuleIcon {
 	}
 }
 
+class CountIcon extends ModuleIcon {
+	createMod() {
+		return new CountMod(this.x, piano.modbt, piano.modh, piano.modh, piano.modbl, piano.modbr, piano.modbt, piano.modbb, piano.noder);
+	}
+	
+	drawOb(ctx) {
+		super.drawOb(ctx);
+		ctx.font = this.h*0.22 + "px Arial";
+		ctx.fillText("COUNT", this.x+this.w*0.15, this.y+this.h*0.5);
+	}
+}
+
+class MoreIcon extends ModuleIcon {
+	createMod() {
+		return new MoreThanMod(this.x, piano.modbt, piano.modh, piano.modh, piano.modbl, piano.modbr, piano.modbt, piano.modbb, piano.noder);
+	}
+	
+	drawOb(ctx) {
+		super.drawOb(ctx);
+		ctx.font = this.h*0.22 + "px Arial";
+		ctx.fillText("if>y", this.x+this.w*0.2, this.y+this.h*0.5);
+	}
+}
+
+class LessIcon extends ModuleIcon {
+	createMod() {
+		return new LessThanMod(this.x, piano.modbt, piano.modh, piano.modh, piano.modbl, piano.modbr, piano.modbt, piano.modbb, piano.noder);
+	}
+	
+	drawOb(ctx) {
+		super.drawOb(ctx);
+		ctx.font = this.h*0.22 + "px Arial";
+		ctx.fillText("if<y", this.x+this.w*0.2, this.y+this.h*0.5);
+	}
+}
+
+class EqualIcon extends ModuleIcon {
+	createMod() {
+		return new EqualToMod(this.x, piano.modbt, piano.modh, piano.modh, piano.modbl, piano.modbr, piano.modbt, piano.modbb, piano.noder);
+	}
+	
+	drawOb(ctx) {
+		super.drawOb(ctx);
+		ctx.font = this.h*0.22 + "px Arial";
+		ctx.fillText("if=y", this.x+this.w*0.2, this.y+this.h*0.5);
+	}
+}
+
 class SHIcon extends ModuleIcon {
 	createMod() {
 		return new SHMod(this.x, piano.modbt, piano.modh, piano.modh, piano.modbl, piano.modbr, piano.modbt, piano.modbb, piano.noder);
@@ -6637,6 +6842,14 @@ class ModuleBar extends Drawable {
 		//this.testb = new TestModIcon(x+a, y+b, h*0.8, h*0.8, 0, canW, y, canH);
 		a += h*0.9;		
 		this.ccb = new CCIcon(x+a, y+b, h*0.8, h*0.8, 0, canW, y, canH);
+		a += h*0.9;		
+		this.countb = new CountIcon(x+a, y+b, h*0.8, h*0.8, 0, canW, y, canH);
+		a += h*0.9;		
+		this.moreb = new MoreIcon(x+a, y+b, h*0.8, h*0.8, 0, canW, y, canH);
+		a += h*0.9;		
+		this.lessb = new LessIcon(x+a, y+b, h*0.8, h*0.8, 0, canW, y, canH);
+		a += h*0.9;		
+		this.equaltob = new EqualIcon(x+a, y+b, h*0.8, h*0.8, 0, canW, y, canH);
 		
 		this.icons.push(this.keyb);
 		this.icons.push(this.oscb);
@@ -6666,6 +6879,10 @@ class ModuleBar extends Drawable {
 		this.icons.push(this.xfadeb);
 		this.icons.push(this.flangeb);
 		this.icons.push(this.ccb);
+		this.icons.push(this.countb);
+		//this.icons.push(this.moreb);
+		//this.icons.push(this.lessb);
+		//this.icons.push(this.equalb);
 		//this.icons.push(this.testb);
 		//this.icons.push(this.sptb);
 		this.hideicon = -1;
@@ -7255,6 +7472,17 @@ class Piano {
 			m = this.modbar.flangeb.createMod();
 		} else if (type == "CCMod") {
 			m = this.modbar.ccb.createMod();
+		} else if (type == "CountMod") {
+			m = this.modbar.countb.createMod();
+		} else if (type == "MoreThanMod") {
+			m.isValType = true;
+			m = this.modbar.moreb.createMod();
+		} else if (type == "LessThanMod") {
+			m = this.modbar.lessb.createMod();
+			m.isValType = true;
+		} else if (type == "EqualMod") {
+			m = this.modbar.equaltob.createMod();
+			m.isValType = true;
 		}
 		if (m) {
 			this.pushModule(m);
