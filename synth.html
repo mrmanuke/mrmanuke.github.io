@@ -1859,7 +1859,7 @@ class SynthModule extends Drawable {
 	}
 	
 	setValue(onum) {
-		var haveonum = onum || onum > -1;
+		var haveonum = false;//onum || onum > -1;
 		if (this.targets) {
 			if (this.targetType == "type") {
 				if (haveonum) {
