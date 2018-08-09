@@ -4218,8 +4218,8 @@ class Switch extends Drawable {
 	constructor(x, y, w, h, trigprop) {
 		super(x, y, w, h);
 		this.trigprop = trigprop;
-		this.oscnum = -1;
-		this.knum = sound.getKeyNum();
+		//this.oscnum = -1;
+		//this.knum = sound.getKeyNum();
 		this.fillCol = keypresscol;
 		this.tx = w*0.1;
 		this.ty = h*0.55;
@@ -4230,12 +4230,13 @@ class Switch extends Drawable {
 		if (hit) {
 			if (isdown) {
 				if (!this.fill) {
-					this.oscnum = sound.getPiano(this.knum, this.oscnum);
-					if (this.oscnum > -1) this.trigprop.trigger(true, this.knum, this.oscnum, 0);
+					//this.oscnum = sound.getPiano(this.knum, this.oscnum);
+					//if (this.oscnum > -1)
+					this.trigprop.trigger(true, this.knum, this.oscnum, 0);
 					this.fill = true;
 				} else {
 					this.trigprop.trigger(false, this.knum, this.oscnum, 0);
-					sound.returnPiano(this.oscnum);
+					//sound.returnPiano(this.oscnum);
 					this.fill = false;
 				}
 			}
@@ -4546,8 +4547,8 @@ class Clicker extends Drawable {
 	constructor(x, y, w, h, trigprop) {
 		super(x, y, w, h);
 		this.trigprop = trigprop;
-		this.oscnum = -1;
-		this.knum = sound.getKeyNum();
+		//this.oscnum = -1;
+		//this.knum = sound.getKeyNum();
 		this.fillCol = keypresscol;
 	}
 	
@@ -4555,12 +4556,13 @@ class Clicker extends Drawable {
 		var hit = super.hitCheck(isdown, coords);
 		if (hit) {
 			if (isdown) {
-				this.oscnum = sound.getPiano(this.knum, this.oscnum);
-				if (this.oscnum > -1) this.trigprop.trigger(true, this.knum, this.oscnum, 0);
+				//this.oscnum = sound.getPiano(this.knum, this.oscnum);
+				//if (this.oscnum > -1)
+				this.trigprop.trigger(true, this.knum, this.oscnum, 0);
 				this.fill = true;
 			} else if (!isdown) {
 				this.trigprop.trigger(false, this.knum, this.oscnum, 0);
-				sound.returnPiano(this.oscnum);
+				//sound.returnPiano(this.oscnum);
 				this.fill = false;
 			}
 		}
@@ -4968,8 +4970,8 @@ class TimerMod extends ValueModContainer {
 class MoreThanMod extends ValueModContainer {
 	constructor(x, y, w, h, bl, br, bt, bb, noder) {
 		super(x, y, w, h, bl, br, bt, bb, noder);
-		this.oscnums = new Array();
-		this.knum = sound.getKeyNum();
+		//this.oscnums = new Array();
+		//this.knum = sound.getKeyNum();
 		this.cname = "MoreThanMod";
 		this.text = "1";
 		this.ap = ">";
@@ -5006,25 +5008,25 @@ class MoreThanMod extends ValueModContainer {
 		if (baton === this.baton) {
 			return;
 		}
-		knum = this.knum;
+		//knum = this.knum;
 		this.on = this.eval(n);
-		var haveonum = (onum || onum === 0);
-		if (this.on && !haveonum) {
-			onum = sound.getPiano(knum, this.oscnum);
-			this.oscnums.push(onum);
-		} else if (this.on && haveonum) {
-			this.oscnums.push(onum);
-		}
-		if (this.on) {
+		//var haveonum = (onum || onum === 0);
+		//if (this.on && !haveonum) {
+		//	onum = sound.getPiano(knum, this.oscnum);
+		//	this.oscnums.push(onum);
+		//} else if (this.on && haveonum) {
+		//	this.oscnums.push(onum);
+		//}
+		//if (this.on) {
 			super.trigger(this.on, knum, onum, f, this.baton);
-		} else {
-			for (var i = 0; i < this.oscnums.length; i++) {
-				onum = this.oscnums[i];
-				super.trigger(this.on, knum, onum, f, this.baton);
-				sound.returnPiano(onum);
-			}
-			this.oscnums.length = 0;
-		}
+		//} else {
+		//	for (var i = 0; i < this.oscnums.length; i++) {
+		//		onum = this.oscnums[i];
+		//		super.trigger(this.on, knum, onum, f, this.baton);
+		//		sound.returnPiano(onum);
+		//	}
+		//	this.oscnums.length = 0;
+		//}
 	}
 	
 	eval(n) {
@@ -5452,7 +5454,7 @@ class ENVContainer extends SynthModContainer {
 		this.inNodes[0].env = this;
 		this.addINode(this.w*0.1, this.h-2*noder, noder, TYPE_VALUE, [TYPE_VALUE], "env multi");
 		this.inNodes[1].setObject(this.adsr);
-		this.addINode(0, this.h*0.8-noder, noder, TYPE_ENV, [TYPE_KEY, TYPE_TRIGGER], "env trigger", "T");
+		this.addINode(0, this.h*0.8-noder, noder, TYPE_ENV, [TYPE_KEY], "env trigger", "T");
 		this.inNodes[2].setObject(this.adsr);
 		this.inNodes[2].env = this;
 		this.inNodes[2].ignoreF = true;
