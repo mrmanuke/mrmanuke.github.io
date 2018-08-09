@@ -616,7 +616,7 @@ class ENVLP {
 		for (var i = 0; i < this.targets.length; i++) {
 			var m = this.targets[i].multi || 1;
 			this.targets[i].cancelScheduledValues(this.ontime);
-			this.targets[i].linearRampToValueAtTime((f+OFF_VOL)*m, time);
+			//this.targets[i].linearRampToValueAtTime((f+OFF_VOL)*m, time);
 		}
 		//console.log("adsr note off to " + f + " at time " + time);
 	}
