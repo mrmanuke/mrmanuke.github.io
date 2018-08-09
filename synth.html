@@ -1858,23 +1858,41 @@ class SynthModule extends Drawable {
 	update() {
 	}
 	
-	setValue(val) {
+	setValue(onum) {
+		var haveonum = onum || onum > -1;
 		if (this.targets) {
 			if (this.targetType == "type") {
-				for (var i = 0; i < this.targets.length; i++) {
-					this.targets[i].type = this.val;
+				if (haveonum) {
+					this.targets[onum].type = this.val;
+				} else {
+					for (var i = 0; i < this.targets.length; i++) {
+						this.targets[i].type = this.val;
+					}
 				}
 			} else if (this.targetType == "num") {
-				for (var i = 0; i < this.targets.length; i++) {
-					this.targets[i].value = this.val;
+				if (haveonum) {
+					console.log(onum);
+					this.targets[onum].value = this.val;
+				} else {
+					for (var i = 0; i < this.targets.length; i++) {
+						this.targets[i].value = this.val;
+					}
 				}
 			} else if (this.targetType == "toggle") {
-				for (var i = 0; i < this.targets.length; i++) {
-					this.targets[i].toggle(this.val);
+				if (haveonum) {
+					this.targets[onum].toggle(this.val);
+				} else {
+					for (var i = 0; i < this.targets.length; i++) {
+						this.targets[i].toggle(this.val);
+					}
 				}
 			} else if (this.targetType == "timevalue") {
-				for (var i = 0; i < this.targets.length; i++) {
-					this.targets[i].setValueAtTime(this.val, sound.ctx.currentTime);
+				if (haveonum) {
+					this.targets[onum].setValueAtTime(this.val, sound.ctx.currentTime);
+				} else {
+					for (var i = 0; i < this.targets.length; i++) {
+						this.targets[i].setValueAtTime(this.val, sound.ctx.currentTime);
+					}
 				}
 			}
 		}
@@ -2197,7 +2215,7 @@ class Knob extends SynthModule {
 		this.setValue(nv);
 	}
 	
-	setValue(v) {
+	setValue(v, onum) {
 		var inrange = true;
 		if (v > this.max.value) {
 			v = this.max.value;
@@ -2215,7 +2233,7 @@ class Knob extends SynthModule {
 			this.dota = -v * Math.PI * this.turns / (0.55 * (this.max.value - this.min.value));
 			this.calcDotPos();
 		}
-		super.setValue();
+		super.setValue(onum);
 		return inrange;
 	}
 }
