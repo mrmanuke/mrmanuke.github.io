@@ -981,6 +981,11 @@ class AudioManager {
 		if (oscnum < this.pianos.length && oscnum > -1) {
 			this.pianos[oscnum].noteOFF(this.ctx.currentTime);
 		}
+		var freep = 0;
+		for (var i = 0; i < this.pianos.length; i++) {
+			if (this.pianos[i].isoff()) freep++;
+		}
+		piano.freepline.txt = "Free voices left: " + freep;
 	}
 	
 	getKeyNum() {
@@ -1003,17 +1008,22 @@ class AudioManager {
 		var ind = -1;
 		var maxtime = 0;
 		var ctime = this.ctx.currentTime;
+		var freep = this.numpianos;
 		for (var i = 0; i < this.numpianos; i++) {
 			if (this.pianos[i].isoff() && this.pianos[i].key == -1) {
 				if (ctime - this.pianos[i].offtime > maxtime) {
 					maxtime = ctime - this.pianos[i].offtime;
 					ind = i;
 				}
-			}			
+			} else {
+				freep -= 1;
+			}
 		}
 		if (ind > -1) {
+			freep -= 1;
 			this.pianos[ind].noteOnNow(keynum);
 		}
+		piano.freepline.txt = "Free voices left: " + freep;
 		return ind;
 	}
 	
@@ -3131,10 +3141,10 @@ class SynthModContainer extends Drawable {
 		}
 	}
 	
-	trigger(on, knum, onum, f) {
+	trigger(on, knum, onum, f, baton) {
 		if (this.stopTrigger) return;
 		for (var i = 0; i < this.triggers.length; i++) {
-			this.triggers[i].trigger(on, knum, onum, f);
+			this.triggers[i].trigger(on, knum, onum, f, baton);
 		}
 	}
 	
@@ -3390,6 +3400,10 @@ class GainTrigger {
 				return;
 			}
 		}
+	}
+	
+	setValue() {
+		this.trigger(true);
 	}
 	
 	trigger(on, knum, onum, f) {
@@ -4644,10 +4658,10 @@ class ValueModContainer extends SynthModContainer {
 		} else if (isdown) {
 			if (focusOb === this) {
 				focusOb = qwertyboard;
-				if (!hit) this.setValue(null, null, -2);
+				if (!hit) this.setValue(null, null, -2, true);
 			}
 		} else if (hit && !focusOb === this) {
-			this.setValue(null, null, -2);
+			this.setValue(null, null, -2, true);
 		}
 		return hit;
 	}
@@ -4656,7 +4670,7 @@ class ValueModContainer extends SynthModContainer {
 		var text = document.getElementById("valin").value;
 		if (!isNaN(text)) {
 			this.text = text;
-			this.setValue(null, null, -2);
+			this.setValue(null, null, -2, true);
 		}
 		focusOb = qwertyboard;
 	}
@@ -4723,7 +4737,7 @@ class ValueModContainer extends SynthModContainer {
 			this.text = "";
 		} else if (n == -3) {
 			focusOb = qwertyboard;
-			this.setValue(null, null, -2);
+			this.setValue(null, null, -2, true);
 		} else if (n == -4) {
 			if(this.text.length > 0) {
 				this.text = this.text.substring(0, this.text.length - 1);
@@ -4770,7 +4784,7 @@ class ValueModContainer extends SynthModContainer {
 		ctx.font = this.h*0.25 + "px Arial";
 		ctx.fillStyle = "blue";
 		var t = this.text;
-		if (tt) t += tt;
+		if (tt) t = tt + t;
 		ctx.fillText(t, this.x + this.w*0.03, y);
 	}
 }
@@ -4825,7 +4839,7 @@ class TimerMod extends ValueModContainer {
 		this.cw = w*0.5;
 		this.addONode(w-2*noder, this.h-2*noder, noder, TYPE_TRIGGER, [TYPE_TRIGGER], "trigger");
 		this.c = new Clicker(0, 0, w*0.6, w*0.6, this.trigprop);
-		this.outNodes[0].setObject(this.c);
+		this.outNodes[0].setObject(this);
 		this.started = false;
 		this.time = 1000;//ms
 		this.addINode(0, this.h-2*noder, noder, TYPE_TRIGGER, [TYPE_TRIGGER], "trigger");
@@ -4919,18 +4933,21 @@ class TimerMod extends ValueModContainer {
 	
 	pulse(mod) {
 		//console.log("pulse " + mod.time + mod.started);
-		mod.onum = sound.getPiano(mod.knum, mod.onum);
+		if (!mod.pulseon) mod.onum = sound.getPiano(mod.knum, mod.onum);
 		if (mod.onum > -1) {
 			mod.pulseon = !mod.pulseon;
-			mod.supertrigger(mod.pulseon, mod.knum, mod.onum, 0);
+			if (mod.started || !mod.pulseon) mod.supertrigger(mod.pulseon, mod.knum, mod.onum, 0);
 			if (mod.started) {
 				setTimeout(mod.pulse, mod.time, mod);
+			} else {
+				mod.pulseon = false;
 			}
 		}
 	}
 	
 	supertrigger(on, knum, onum, f) {
 		super.trigger(on, knum, onum, f);
+		if (!on) sound.returnPiano(onum);
 	}
 	
 	trigger(on, knum, onum, f) {
@@ -4949,15 +4966,114 @@ class TimerMod extends ValueModContainer {
 }
 
 class MoreThanMod extends ValueModContainer {
-
+	constructor(x, y, w, h, bl, br, bt, bb, noder) {
+		super(x, y, w, h, bl, br, bt, bb, noder);
+		this.oscnums = new Array();
+		this.knum = sound.getKeyNum();
+		this.cname = "MoreThanMod";
+		this.text = "1";
+		this.ap = ">";
+		this.addONode(w-2*noder, this.h*0.5-noder, noder, TYPE_TRIGGER, [TYPE_TRIGGER], "value");
+		this.valueOb = new ValueSetter();
+		this.gt = new GainTrigger();
+		this.gt.connect(this);
+		this.valueOb.connect(this.gt);
+		this.outNodes[0].setObject(this);
+		this.addINode(0, this.h*0.5-noder, noder, TYPE_VALUE, [TYPE_VALUE], "value");
+		this.inNodes[0].setObject(this);
+		this.ty = this.h*0.23;
+		this.setValue(1, 0, 0, true);
+		this.baton = new Object();
+	}
+	
+	save() {
+		var t = '{"type":"' + this.cname + '" , ' + super.save();
+		t += ' , "val":' + this.valueOb.val + '}';
+		return t;
+	}
+	
+	load(data) {
+		this.setValue(data.val, 0, 0, true);
+	}
+	
+	notifyDisconnect() {
+		this.trigger(false);
+	}
+	
+	trigger(on, knum, onum, f, baton) {
+		var n = this.inNodes[0];
+		if (!n || !n.con) return;
+		if (baton === this.baton) {
+			return;
+		}
+		knum = this.knum;
+		this.on = this.eval(n);
+		var haveonum = (onum || onum === 0);
+		if (this.on && !haveonum) {
+			onum = sound.getPiano(knum, this.oscnum);
+			this.oscnums.push(onum);
+		} else if (this.on && haveonum) {
+			this.oscnums.push(onum);
+		}
+		if (this.on) {
+			super.trigger(this.on, knum, onum, f, this.baton);
+		} else {
+			for (var i = 0; i < this.oscnums.length; i++) {
+				onum = this.oscnums[i];
+				super.trigger(this.on, knum, onum, f, this.baton);
+				sound.returnPiano(onum);
+			}
+			this.oscnums.length = 0;
+		}
+	}
+	
+	eval(n) {
+		return n.con.obj.val > this.valueOb.val;
+	}
+	
+	drawOb(ctx) {
+		super.drawOb(ctx, this.ap, this.ty);
+	}
+	
+	setValue(v, k, o, me) {
+		if (!me) {
+			this.trigger();
+			return true;
+		}
+		if (v) {
+			this.valueOb.setValue(v);
+		} else {
+			v = parseFloat(this.text);
+			if (isNaN(v)) v = 0;
+			this.valueOb.setValue(v);
+		}
+		this.text = this.valueOb.val.toString();
+		return true;
+	}
 }
 
-class LessThanMod extends ValueModContainer {
-
+class LessThanMod extends MoreThanMod {
+	constructor(x, y, w, h, bl, br, bt, bb, noder) {
+		super(x, y, w, h, bl, br, bt, bb, noder);
+		this.cname = "LessThanMod";
+		this.ap = "<";
+	}
+	
+	eval(n) {
+		return n.con.obj.val < this.valueOb.val;
+	}	
 }
 
-class EqualToMod extends ValueModContainer {
-
+class EqualToMod extends MoreThanMod {
+	constructor(x, y, w, h, bl, br, bt, bb, noder) {
+		super(x, y, w, h, bl, br, bt, bb, noder);
+		this.cname = "EqualToMod";
+		this.ap = "=";
+	}
+	
+	eval(n) {
+		return (n.con.obj.val == this.valueOb.val);
+	}
 }
 
 class TextFieldMulti extends ValueModContainer {
@@ -5057,15 +5173,15 @@ class CountTrigger {
 	constructor(p) {
 		this.parent = p;
 		this.triggeronon = true;
+		this.triggeronboth = false;
 	}
 	
-	trigger(on, knum, onum, f) {
-		if (on != this.triggeronon) return;
-		this.parent.docount();
+	trigger(on, knum, onum, f, baton) {
+		if (this.triggeronboth || (on == this.triggeronon)) this.parent.docount(on, f, knum, oscnum, baton);
 	}
 	
-	noteOnNow() {
-		this.parent.docount();
+	noteOnNow(f, knum, oscnum, v) {
+		this.parent.docount(true, f, knum, oscnum, null);
 	}
 }
 
@@ -5074,7 +5190,7 @@ class CountMod extends SynthModContainer {
 		super(x, y, w, h, bl, br, bt, bb);
 		this.tx = this.w * 0.4;
 		this.ty = this.h * 0.4;
-		this.count = 0;
+		this.val = 0;//count
 		var ct = new CountTrigger(this);
 		this.addINode(0, this.h*0.5-noder, noder, TYPE_TRIGGER, [TYPE_TRIGGER, TYPE_KEY], "counter");
 		this.inNodes[0].setObject(ct);
@@ -5083,7 +5199,8 @@ class CountMod extends SynthModContainer {
 		this.inNodes[1].setObject(rt);
 		this.addONode(this.w-2*noder, this.h*0.5-noder, noder, TYPE_VALUE, [TYPE_VALUE], "counter");
 		this.valueOb = new ValueSetter();
-		this.outNodes[0].setObject(this.valueOb);
+		//this.valueOb.connect(this);
+		this.outNodes[0].setObject(this);
 	}
 	
 	save() {
@@ -5092,25 +5209,36 @@ class CountMod extends SynthModContainer {
 		return t;
 	}
 	
-	docount() {
-		this.count++;
+	docount(on, f, knum, oscnum, baton) {
+		this.val++;
 		//console.log("count: " + this.count);
-		this.valueOb.setValue(this.count);
+		this.valueOb.setValue(this.val);
+		super.trigger(on, knum, oscnum, this.valueOb.val, baton);
 	}
 	
 	noteOnNow(freq, knum, oscnum) {
 	}
 	
 	reset() {
-		this.count = 0;
-		this.valueOb.setValue(this.count);
+		this.val = 0;
+		this.valueOb.setValue(this.val);
+		super.trigger(false);
+	}
+	
+	//setValue() {
+	//	this.trigger();
+	//}
+	
+	trigger(on, knum, onum, f, baton) {
+		//console.log((new Error()).stack);
+		//console.log("onum: " + onum);
 	}
 
 	drawOb(ctx) {
 		super.drawOb(ctx);
 		ctx.font = this.h*0.15 + "px Arial";
 		ctx.fillStyle = pianocol;
-		ctx.fillText(this.count, this.x + this.tx, this.y + this.ty);
+		ctx.fillText(this.val, this.x + this.tx, this.y + this.ty);
 	}
 }
 
@@ -5399,10 +5527,12 @@ class ENVContainer extends SynthModContainer {
 		if (this.ignoreF) {
 			freq = 0;
 		}
-		if (on) {
-			this.adsr[onum].noteON(sound.ctx.currentTime, freq);
-		} else {
-			this.adsr[onum].noteOFF(sound.ctx.currentTime, freq);
+		if (onum === 0 || (onum && onum > -1)) {
+			if (on) {
+				this.adsr[onum].noteON(sound.ctx.currentTime, freq);
+			} else {
+				this.adsr[onum].noteOFF(sound.ctx.currentTime, freq);
+			}
 		}
 		super.trigger(on, knum, onum, f);
 	}
@@ -6734,8 +6864,8 @@ class MoreIcon extends ModuleIcon {
 	
 	drawOb(ctx) {
 		super.drawOb(ctx);
-		ctx.font = this.h*0.22 + "px Arial";
-		ctx.fillText("if>y", this.x+this.w*0.2, this.y+this.h*0.5);
+		ctx.font = this.h*0.4 + "px Arial";
+		ctx.fillText("IF>y", this.x+this.w*0.1, this.y+this.h*0.55);
 	}
 }
 
@@ -6746,8 +6876,8 @@ class LessIcon extends ModuleIcon {
 	
 	drawOb(ctx) {
 		super.drawOb(ctx);
-		ctx.font = this.h*0.22 + "px Arial";
-		ctx.fillText("if<y", this.x+this.w*0.2, this.y+this.h*0.5);
+		ctx.font = this.h*0.4 + "px Arial";
+		ctx.fillText("IF<y", this.x+this.w*0.1, this.y+this.h*0.55);
 	}
 }
 
@@ -6758,8 +6888,8 @@ class EqualIcon extends ModuleIcon {
 	
 	drawOb(ctx) {
 		super.drawOb(ctx);
-		ctx.font = this.h*0.22 + "px Arial";
-		ctx.fillText("if=y", this.x+this.w*0.2, this.y+this.h*0.5);
+		ctx.font = this.h*0.4 + "px Arial";
+		ctx.fillText("IF=y", this.x+this.w*0.1, this.y+this.h*0.55);
 	}
 }
 
@@ -6784,10 +6914,6 @@ class ModuleBar extends Drawable {
 		var b = h*0.1;
 		this.keyb = new KeyboardIcon(x+a, y+b, h*0.8, h*0.8, 0, canW, y, canH);
 		a += h*0.9;
-		this.clickb = new ClickIcon(x+a, y+b, h*0.8, h*0.8, 0, canW, y, canH);
-		a += h*0.9;
-		this.switchb = new SwitchIcon(x+a, y+b, h*0.8, h*0.8, 0, canW, y, canH);
-		a += h*0.9;
 		this.oscb = new OscIcon(x+a, y+b, h*0.8, h*0.8, 0, canW, y, canH);
 		a += h*0.9;
 		this.pwmb = new PWMIcon(x+a, y+b, h*0.8, h*0.8, 0, canW, y, canH);
@@ -6802,31 +6928,6 @@ class ModuleBar extends Drawable {
 		a += h*0.9;
 		this.filt = new FiterIcon(x+a,y+b, h*0.8, h*0.8, 0, canW, y, canH);
 		a += h*0.9;
-		this.comp = new CompIcon(x+a,y+b, h*0.8, h*0.8, 0, canW, y, canH);
-		a += h*0.9;
-		this.convb = new ConvIcon(x+a,y+b, h*0.8, h*0.8, 0, canW, y, canH);
-		a += h*0.9;
-		this.shapeb = new ShaperIcon(x+a,y+b, h*0.8, h*0.8, 0, canW, y, canH);
-		a += h*0.9;
-		this.valb = new ValueIcon(x+a,y+b, h*0.8, h*0.8, 0, canW, y, canH);
-		a += h*0.9;
-		this.multib = new MultiIcon(x+a,y+b, h*0.8, h*0.8, 0, canW, y, canH);
-		a += h*0.9;
-		this.splitterb = new SplitterIcon(x+a,y+b, h*0.8, h*0.8, 0, canW, y, canH);
-		a += h*0.9;
-		this.mergerb = new MergerIcon(x+a,y+b, h*0.8, h*0.8, 0, canW, y, canH);
-		a += h*0.9;
-		this.seqb = new SequencerIcon(x+a,y+b, h*0.8, h*0.8, 0, canW, y, canH);
-		a += h*0.9;
-		this.timerb = new TimerIcon(x+a,y+b, h*0.8, h*0.8, 0, canW, y, canH);
-		a += h*0.9;
-		this.eqb = new EQIcon(x+a,y+b, h*0.8, h*0.8, 0, canW, y, canH);
-		a += h*0.9;
-		this.speakerb = new SpeakerIcon(x+a,y+b, h*0.8, h*0.8, 0, canW, y, canH);
-		a += h*0.9;
-		this.analyseb = new AnalyserIcon(x+a,y+b, h*0.8, h*0.8, 0, canW, y, canH);
-		b += h*0.9;//next row
-		a = h*0.1;
 		this.shb = new SHIcon(x+a, y+b, h*0.8, h*0.8, 0, canW, y, canH);
 		//a += h*0.9;
 		//this.sptb = new SplitTestIcon(x+a, y+b, h*0.8, h*0.8, 0, canW, y, canH);
@@ -6841,7 +6942,32 @@ class ModuleBar extends Drawable {
 		//a += h*0.9;
 		//this.testb = new TestModIcon(x+a, y+b, h*0.8, h*0.8, 0, canW, y, canH);
 		a += h*0.9;		
+		this.comp = new CompIcon(x+a,y+b, h*0.8, h*0.8, 0, canW, y, canH);
+		a += h*0.9;
+		this.convb = new ConvIcon(x+a,y+b, h*0.8, h*0.8, 0, canW, y, canH);
+		a += h*0.9;
+		this.shapeb = new ShaperIcon(x+a,y+b, h*0.8, h*0.8, 0, canW, y, canH);
+		a += h*0.9;
+		this.eqb = new EQIcon(x+a,y+b, h*0.8, h*0.8, 0, canW, y, canH);
+		a += h*0.9;
+		this.analyseb = new AnalyserIcon(x+a,y+b, h*0.8, h*0.8, 0, canW, y, canH);
+		a += h*0.9;
+		this.speakerb = new SpeakerIcon(x+a,y+b, h*0.8, h*0.8, 0, canW, y, canH);
+		b += h*0.9;//next row
+		a = h*0.1;
+		this.valb = new ValueIcon(x+a,y+b, h*0.8, h*0.8, 0, canW, y, canH);
+		a += h*0.9;
+		this.multib = new MultiIcon(x+a,y+b, h*0.8, h*0.8, 0, canW, y, canH);
+		a += h*0.9;
 		this.ccb = new CCIcon(x+a, y+b, h*0.8, h*0.8, 0, canW, y, canH);
+		a += h*0.9;
+		this.timerb = new TimerIcon(x+a,y+b, h*0.8, h*0.8, 0, canW, y, canH);
+		a += h*0.9;
+		this.seqb = new SequencerIcon(x+a,y+b, h*0.8, h*0.8, 0, canW, y, canH);
+		a += h*0.9;
+		this.clickb = new ClickIcon(x+a, y+b, h*0.8, h*0.8, 0, canW, y, canH);
+		a += h*0.9;
+		this.switchb = new SwitchIcon(x+a, y+b, h*0.8, h*0.8, 0, canW, y, canH);
 		a += h*0.9;		
 		this.countb = new CountIcon(x+a, y+b, h*0.8, h*0.8, 0, canW, y, canH);
 		a += h*0.9;		
@@ -6850,6 +6976,10 @@ class ModuleBar extends Drawable {
 		this.lessb = new LessIcon(x+a, y+b, h*0.8, h*0.8, 0, canW, y, canH);
 		a += h*0.9;		
 		this.equaltob = new EqualIcon(x+a, y+b, h*0.8, h*0.8, 0, canW, y, canH);
+		a += h*0.9;
+		this.splitterb = new SplitterIcon(x+a,y+b, h*0.8, h*0.8, 0, canW, y, canH);
+		a += h*0.9;
+		this.mergerb = new MergerIcon(x+a,y+b, h*0.8, h*0.8, 0, canW, y, canH);
 		
 		this.icons.push(this.keyb);
 		this.icons.push(this.oscb);
@@ -6880,9 +7010,9 @@ class ModuleBar extends Drawable {
 		this.icons.push(this.flangeb);
 		this.icons.push(this.ccb);
 		this.icons.push(this.countb);
-		//this.icons.push(this.moreb);
-		//this.icons.push(this.lessb);
-		//this.icons.push(this.equalb);
+		this.icons.push(this.moreb);
+		this.icons.push(this.lessb);
+		this.icons.push(this.equaltob);
 		//this.icons.push(this.testb);
 		//this.icons.push(this.sptb);
 		this.hideicon = -1;
@@ -7270,6 +7400,7 @@ class Piano {
 		this.midiline2.txtsize = keyW*1.2;
 		this.midiline3 = this.textlines[3];
 		this.midiline3.txtsize = keyW*1.2;
+		this.freepline = this.textlines[4];
 		
 		rollkey = new PBtn(x + this.w - btnw*keyW, y + keyH * 1.5, keyW*btnw, keyW*btnw, 0);
 		this.btns.push(rollkey);
@@ -7475,8 +7606,8 @@ class Piano {
 		} else if (type == "CountMod") {
 			m = this.modbar.countb.createMod();
 		} else if (type == "MoreThanMod") {
-			m.isValType = true;
 			m = this.modbar.moreb.createMod();
+			m.isValType = true;
 		} else if (type == "LessThanMod") {
 			m = this.modbar.lessb.createMod();
 			m.isValType = true;
