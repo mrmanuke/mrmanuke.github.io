@@ -4197,7 +4197,7 @@ class SynthFilterContainer extends SynthModContainer {
 		this.filtSel.setValue(0);
 		this.addModule(this.filtSel, w*0.05, h*0.1);
 		
-		this.filtFreqKnob = new Knob(0, 0, this.filtSel.h*0.8, this.filtSel.h*0.9, [8000], 100, 24000, null, 10);
+		this.filtFreqKnob = new Knob(0, 0, this.filtSel.h*0.8, this.filtSel.h*0.9, [8000], 10, 24000, null, 10);
 		this.filtFreqKnob.setNumTarget(oscarrff);
 		this.filtFreqKnob.name = "Freq";
 		this.filtFreqKnob.color = "purple";
