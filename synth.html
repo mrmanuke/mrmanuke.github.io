@@ -6053,7 +6053,7 @@ class SynthADSRContainer extends ENVContainer {
 		this.knobnodes = new Array();
 		for (var i = 0; i < this.mod.knobs.length; i++) {
 			var modknob = this.mod.knobs[i];
-			var kx = modknob.x - this.w - noder;
+			var kx = modknob.x - this.mod.x + w*0.1;
 			this.addINode(kx, 0, noder, TYPE_VALUE, [TYPE_VALUE], modknob.name, "V");
 			this.inNodes[this.inNodes.length-1].setObject(modknob);
 			this.knobnodes.push(this.inNodes[this.inNodes.length-1]);
@@ -6104,7 +6104,7 @@ class SynthENVLPContainer extends ENVContainer {
 		this.knobnodes = new Array();
 		for (var i = 0; i < this.mod.knobs.length; i++) {
 			var modknob = this.mod.knobs[i];
-			var kx = modknob.x - this.w - modknob.w - noder;
+			var kx = modknob.x - this.mod.x + w*0.1;
 			this.addINode(kx, 0, noder, TYPE_VALUE, [TYPE_VALUE], modknob.name, "V");
 			this.inNodes[this.inNodes.length-1].setObject(modknob);
 			this.knobnodes.push(this.inNodes[this.inNodes.length-1]);
