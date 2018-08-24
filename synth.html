@@ -8952,6 +8952,9 @@ function setup() {
 			case "fm2":
 				loadFM2();
 				break;
+			case "fm3";
+				loadFM3();
+				break;
 			case "uni":
 				loadUnison();
 				break;
@@ -9625,6 +9628,11 @@ function loadFM2() {
 	setMsg('loaded fm2 patch');
 }
 
+function loadFM3() {
+	piano.loadModules(samplefm3);
+	setMsg('loaded fm3 patch');
+}
+
 function loadUnison() {
 	piano.loadModules(sampleunison);
 	setMsg('loaded unison patch');
@@ -10227,6 +10235,7 @@ function loadMidi(input, fname) {
 		<button onclick="loadWhistle()">Load Whistle Patch</button>
 		<button onclick="loadFM()">Load FM Patch</button>
 		<button onclick="loadFM2()">Load FM2 Patch</button>
+		<button onclick="loadFM3()">Load FM3 Patch</button>
 		<button onclick="loadUnison()">Load Unison Patch</button>
 		<button onclick="loadChoral()">Load Choral Patch</button>
 		<p><input id="uploadInput" type="file" name="myFiles" onchange="updateSize();"> selected files: <span id="fileNum">0</span>; total size: <span id="fileSize">0</span></p>
