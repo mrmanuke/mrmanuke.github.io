@@ -7082,6 +7082,7 @@ class ModuleIcon extends Drawable {
 	
 	dragMod(m) {
 		addDragOb(m);
+		copiedMod = true;
 		clickCoords.y = m.y + m.h*0.5;
 	}
 	
@@ -8635,6 +8636,13 @@ class Piano {
 		}
 	}
 	
+	transferGatherObs() {
+		for (var i = this.gatherOb.length-1; i > -1; i--) {
+			addDragOb(this.gatherOb[i]);
+			this.gatherOb.splice(i, 1);
+		}
+	}
+	
 	doSquare(coords, isdown) {
 		if (isdown) {
 			this.square.show(coords.x, coords.y);
@@ -8642,9 +8650,9 @@ class Piano {
 		} else {
 			this.square.hide();
 			removeDragOb(this.square);
-			for (var i = 0; i < this.gatherOb.length; i++) {
-				addDragOb(this.gatherOb[i]);
-			}
+			this.transferGatherObs();
+			copiedMod = true;
+			return true;
 		}
 	}
 
@@ -8660,20 +8668,17 @@ class Piano {
 				}
 			}
 		}
-		if (ctrlOn && (!found || this.square.visible)) {
+		if (this.square.visible || ((ctrlOn || getDragObLength == 0) && !found)) {
 			this.doSquare(coords, isdown);
 		}
-		if (!isdown && dragOb.length > 1) {
-			//for (var i = dragOb.length-1; i > -1; i--) {
-			//	piano.checkCans(dragOb[i], true);
-			//}
+		if (!isdown && dragOb.length > 0) {
 			piano.checkCans(dragOb, true);
 			removeDragOb(this.square);
 		}
 	}
 	
 	hitCheck(coords, isdown) {
-		if (ctrlOn || getDragObLength() > 1) {
+		if (ctrlOn || getDragObLength() > 0) {
 			this.ctrlHitCheck(coords, isdown);
 			return;
 		}
@@ -8747,6 +8752,7 @@ class Piano {
 				this.whites[i].press(isdown, 0, false, true);
 			}
 		}
+		if (this.doSquare(coords, isdown)) return;
 		return false;
 	}
 }
@@ -9471,7 +9477,9 @@ function mouseUp(event, allowdef) {
 	if (!allowdef) event.preventDefault();
 	mouseCoords = document.getElementById('myCanvas').relMouseCoords(event);
 	var r = piano.hitCheck(clickCoords, false);
-	if (!ctrlOn && !copiedMod) releaseDragObs();
+	if (!ctrlOn && !copiedMod) {
+		releaseDragObs();
+	}
 	copiedMod = false;
 	piano.unhighlightCans();
 	clicking = false;
