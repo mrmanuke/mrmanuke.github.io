@@ -6842,8 +6842,8 @@ class ArpMod extends SynthModContainer {
 	noteOnNow(freq, knum, oscnum) {
 	}
 	
-	trigger(on, knum, onum, f) {
-		if(!f || !onum || onum < 0) return;
+	trigger(on, knum, onum, f) { 
+		if(!f || (!onum === 0 && !onum) || onum < 0) return;
 		super.trigger(on, knum, onum, f);
 	}
 	
@@ -9503,6 +9503,8 @@ function mouseMove(event, allowdef) {
 	mouseCoords = dragCoords;
 	
 	if (!clicking || dragOb.length == 0) return;
+	
+	copiedMod = false;
 	
 	if (dragCoords.x - clickCoords.x > dragThresh || dragCoords.x - clickCoords.x < -dragThresh ||
 		dragCoords.y - clickCoords.y > dragThresh || dragCoords.y - clickCoords.y < -dragThresh) {
