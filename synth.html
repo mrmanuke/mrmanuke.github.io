@@ -5,7 +5,7 @@
 var numpianos = 25;
 var lastonum = 0;
 var playcount = 0;
-var testconfig = '{"voices":4, "mods":[{"type":"SynthModKeyboard" , "x":236 , "y":1080.0375 , "w":126 , "h":120.96000000000001 , "outnodes" : [{"mod":3 , "node":0} , {"mod":-1 , "node":-1} , {"mod":-1 , "node":-1}]}, {"type":"SynthGainContainer" , "x":692 , "y":1008.0374999999999 , "w":141.12 , "h":131.04000000000002 , "outnodes" : [{"mod":12 , "node":6}] , "gain":0 , "mute":0}, {"type":"SpeakerMod" , "x":1844.4 , "y":388.03749999999997 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : []}, {"type":"SynthADSRContainer" , "x":378.20000000000005 , "y":1010.0374999999999 , "w":302.40000000000003 , "h":201.60000000000002 , "outnodes" : [{"mod":1 , "node":4}] , "A":0.11503175821440688 , "D":0.20754763732161036 , "DV":0.6218478552136566 , "S":7.542011058888767 , "SV":0.20167880545105282 , "R":0.08404296961442123}, {"type":"AnalyserContainer" , "x":1626.8400000000001 , "y":388.03749999999997 , "w":201.60000000000002 , "h":201.60000000000002 , "outnodes" : [{"mod":2 , "node":0}]}, {"type":"SynthGainContainer" , "x":1471.44 , "y":388.03749999999997 , "w":141.12 , "h":131.04000000000002 , "outnodes" : [{"mod":4 , "node":0}] , "gain":0.6953774389221125 , "mute":0}, {"type":"SynthMultiOscContainer" , "x":144.15875000000005 , "y":668.0374999999999 , "w":352.80000000000007 , "h":120.96000000000001 , "outnodes" : [{"mod":10 , "node":0}] , "osc":"2" , "ratio":0.01 , "spread":[1, 1.01, 0.99]}, {"type":"TextField" , "x":349.46375 , "y":926.7199999999998 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":9 , "node":3}] , "val":0.015 , "digs":3}, {"type":"SynthModKeyboard" , "x":0 , "y":713.52 , "w":126 , "h":120.96000000000001 , "outnodes" : [{"mod":6 , "node":0} , {"mod":9 , "node":0} , {"mod":-1 , "node":-1}]}, {"type":"SynthMultiOscContainer" , "x":142.15875000000005 , "y":799.52 , "w":352.80000000000007 , "h":120.96000000000001 , "outnodes" : [{"mod":11 , "node":0}] , "osc":"0" , "ratio":0.015 , "spread":[1, 1.015, 0.985]}, {"type":"MergerMod" , "x":655.5487499999999 , "y":763.5999999999999 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : [{"mod":1 , "node":0}]}, {"type":"SynthGainContainer" , "x":506.5062499999999 , "y":788.48 , "w":141.12 , "h":131.04000000000002 , "outnodes" : [{"mod":10 , "node":2}] , "gain":0.36449431223406187 , "mute":0}, {"type":"SynthFilterContainer" , "x":804.0275000000001 , "y":794.0374999999999 , "w":604.8000000000001 , "h":201.60000000000002 , "outnodes" : [{"mod":17 , "node":0}] , "filter":"2" , "F":440 , "Q":0.17600000000000002 , "G":1}, {"type":"SynthModKeyboard" , "x":875.4637499999999 , "y":1007.52 , "w":126 , "h":120.96000000000001 , "outnodes" : [{"mod":14 , "node":0} , {"mod":15 , "node":0} , {"mod":-1 , "node":-1}]}, {"type":"TextField" , "x":1015.4637499999999 , "y":1006.7199999999998 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":12 , "node":1}] , "val":440 , "digs":2}, {"type":"TextField" , "x":1017.4637499999999 , "y":1086.7199999999998 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":16 , "node":0}] , "val":440 , "digs":1}, {"type":"TextFieldMulti" , "x":1098.6374999999998 , "y":1005.5999999999999 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : [{"mod":12 , "node":3}] , "val":0.0004}, {"type":"FlangeMod" , "x":537.8962500000002 , "y":388.03749999999997 , "w":141.12 , "h":131.04000000000002 , "outnodes" : [{"mod":22 , "node":6}] , "delay":"0.0013130282805081368"}, {"type":"SynthOscContainer" , "x":170.63750000000005 , "y":388.03749999999997 , "w":352.80000000000007 , "h":120.96000000000001 , "outnodes" : [{"mod":19 , "node":0}] , "osc":"0"}, {"type":"SynthGainContainer" , "x":384.5062499999999 , "y":518.48 , "w":141.12 , "h":131.04000000000002 , "outnodes" : [{"mod":17 , "node":1}] , "gain":0.1 , "mute":0}, {"type":"TextField" , "x":303.4637499999999 , "y":520.7199999999998 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":19 , "node":4}] , "val":0.1 , "digs":1}, {"type":"SynthConvContainer" , "x":1360.24375 , "y":388.03749999999997 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : [{"mod":5 , "node":0}]}, {"type":"SynthFilterContainer" , "x":734.0274999999999 , "y":388.03749999999997 , "w":604.8000000000001 , "h":201.60000000000002 , "outnodes" : [{"mod":21 , "node":0}] , "filter":"0" , "F":1320 , "Q":1 , "G":0}, {"type":"SynthModKeyboard" , "x":703.46375 , "y":605.52 , "w":126 , "h":120.96000000000001 , "outnodes" : [{"mod":-1 , "node":-1} , {"mod":24 , "node":0} , {"mod":-1 , "node":-1}]}, {"type":"TextField" , "x":839.46375 , "y":638.7199999999999 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":25 , "node":0}] , "val":440 , "digs":2}, {"type":"TextFieldMulti" , "x":920.6375 , "y":625.5999999999999 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : [{"mod":22 , "node":1}] , "val":3}, {"type":"TextField" , "x":91.46375 , "y":388.03749999999997 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":18 , "node":0}] , "val":1 , "digs":2}]}';
+var testconfig = '{"voices":25, "mods":[{"type":"SynthModKeyboard" , "x":18 , "y":1040.0375 , "w":126 , "h":120.96000000000001 , "outnodes" : [{"mod":4 , "node":2} , {"mod":-1 , "node":-1} , {"mod":-1 , "node":-1}]}, {"type":"SynthOscContainer" , "x":144 , "y":388.03749999999997 , "w":352.80000000000007 , "h":120.96000000000001 , "outnodes" : [{"mod":2 , "node":0}] , "osc":"0"}, {"type":"SynthGainContainer" , "x":506 , "y":388.03749999999997 , "w":141.12 , "h":131.04000000000002 , "outnodes" : [{"mod":6 , "node":0}] , "gain":0 , "mute":0}, {"type":"SpeakerMod" , "x":1014.4000000000001 , "y":388.03749999999997 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : []}, {"type":"SynthADSRContainer" , "x":226.20000000000005 , "y":975.8375000000001 , "w":302.40000000000003 , "h":201.60000000000002 , "outnodes" : [{"mod":2 , "node":4}] , "A":0.0001 , "D":0.09201270328576275 , "DV":0.6995802986372368 , "S":1 , "SV":0.1 , "R":0.05253060600901327}, {"type":"AnalyserContainer" , "x":804.8400000000001 , "y":388.03749999999997 , "w":201.60000000000002 , "h":201.60000000000002 , "outnodes" : [{"mod":3 , "node":0}]}, {"type":"SynthGainContainer" , "x":655.44 , "y":388.03749999999997 , "w":141.12 , "h":131.04000000000002 , "outnodes" : [{"mod":5 , "node":0}] , "gain":1 , "mute":0}, {"type":"SynthModKeyboard" , "x":0 , "y":465.52 , "w":126 , "h":120.96000000000001 , "outnodes" : [{"mod":1 , "node":0} , {"mod":9 , "node":0} , {"mod":-1 , "node":-1}]}, {"type":"SynthOscContainer" , "x":150.63750000000005 , "y":727.52 , "w":352.80000000000007 , "h":120.96000000000001 , "outnodes" : [{"mod":11 , "node":0}] , "osc":"0"}, {"type":"TextField" , "x":47.463750000000005 , "y":606.7199999999998 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":10 , "node":0}] , "val":82.4068 , "digs":2}, {"type":"TextFieldMulti" , "x":8.637499999999989 , "y":689.5999999999999 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : [{"mod":8 , "node":0}] , "val":1}, {"type":"SynthGainContainer" , "x":362.50625 , "y":588.48 , "w":141.12 , "h":131.04000000000002 , "outnodes" : [{"mod":1 , "node":1}] , "gain":311.1272 , "mute":0}, {"type":"TextField" , "x":285.46375 , "y":586.7199999999998 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":11 , "node":2}] , "val":50000 , "digs":2}]}';
 var testconfig3 = '[{"type":"SynthModKeyboard" , "x":10 , "y":388.03749999999997 , "w":126 , "h":120.96000000000001 , "outnodes" : [{"mod":20 , "node":0} , {"mod":1 , "node":0}]}, {"type":"SynthOscContainer" , "x":182 , "y":532.0374999999999 , "w":352.80000000000007 , "h":120.96000000000001 , "outnodes" : [{"mod":19 , "node":2}] , "osc":"0"}, {"type":"SynthGainContainer" , "x":1294 , "y":388.03749999999997 , "w":141.12 , "h":131.04000000000002 , "outnodes" : [{"mod":5 , "node":0}] , "gain":0 , "mute":0}, {"type":"SpeakerMod" , "x":1664.4 , "y":388.03749999999997 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : []}, {"type":"SynthADSRContainer" , "x":984.1999999999998 , "y":462.0374999999999 , "w":302.40000000000003 , "h":201.60000000000002 , "outnodes" : [{"mod":2 , "node":4}] , "A":0.0001 , "D":0.16553493403584754 , "DV":0.32772952037983405 , "S":4.243695710427313 , "SV":0.2331914841832482 , "R":0.11555533321982922}, {"type":"AnalyserContainer" , "x":1448.8400000000001 , "y":388.03749999999997 , "w":201.60000000000002 , "h":201.60000000000002 , "outnodes" : [{"mod":3 , "node":0}]}, {"type":"SynthGainContainer" , "x":835.44 , "y":388.03749999999997 , "w":141.12 , "h":131.04000000000002 , "outnodes" : [{"mod":2 , "node":0}] , "gain":0.41176333033235474 , "mute":0}, {"type":"SynthModKeyboard" , "x":849.4637499999999 , "y":541.52 , "w":126 , "h":120.96000000000001 , "outnodes" : [{"mod":4 , "node":2} , {"mod":-1 , "node":-1}]}, {"type":"SynthModKeyboard" , "x":184 , "y":803.52 , "w":126 , "h":120.96000000000001 , "outnodes" : [{"mod":14 , "node":0} , {"mod":12 , "node":0}]}, {"type":"SynthOscContainer" , "x":184.63750000000005 , "y":675.52 , "w":352.80000000000007 , "h":120.96000000000001 , "outnodes" : [{"mod":10 , "node":0}] , "osc":"0"}, {"type":"SynthGainContainer" , "x":508.15875000000005 , "y":804.48 , "w":141.12 , "h":131.04000000000002 , "outnodes" : [{"mod":17 , "node":0}] , "gain":244.997 , "mute":0}, {"type":"TextField" , "x":545.4637499999999 , "y":724.7199999999998 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":10 , "node":2}] , "val":42000 , "digs":2}, {"type":"TextField" , "x":319.46375 , "y":804.7199999999998 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":13 , "node":0}] , "val":48.9994 , "digs":2}, {"type":"TextFieldMulti" , "x":398.63750000000005 , "y":805.5999999999999 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : [{"mod":10 , "node":4}] , "val":5}, {"type":"TextField" , "x":97.46375 , "y":798.7199999999998 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":15 , "node":0}] , "val":48.9994 , "digs":2}, {"type":"TextFieldMulti" , "x":74.63749999999999 , "y":679.5999999999999 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : [{"mod":9 , "node":0}] , "val":18}, {"type":"SynthADSRContainer" , "x":183.33249999999998 , "y":937.1999999999998 , "w":302.40000000000003 , "h":201.60000000000002 , "outnodes" : [{"mod":17 , "node":4}] , "A":0.0001 , "D":0.16553493403584757 , "DV":1 , "S":2.731087131281941 , "SV":1 , "R":0.33614187845768484}, {"type":"SynthGainContainer" , "x":658.15875 , "y":804.4799999999999 , "w":141.12 , "h":131.04000000000002 , "outnodes" : [{"mod":1 , "node":1}] , "gain":0 , "mute":0}, {"type":"SynthModKeyboard" , "x":49.463750000000005 , "y":881.52 , "w":126 , "h":120.96000000000001 , "outnodes" : [{"mod":-1 , "node":-1} , {"mod":16 , "node":2}]}, {"type":"MergerMod" , "x":727.5487499999999 , "y":388.03749999999997 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : [{"mod":6 , "node":0}]}, {"type":"SynthOscContainer" , "x":184.63750000000005 , "y":388.03749999999997 , "w":352.80000000000007 , "h":120.96000000000001 , "outnodes" : [{"mod":19 , "node":1}] , "osc":"0"}]';
 var testconfig2 = '[{"type":"SynthModKeyboard" , "x":36 , "y":778.0374999999999 , "w":126 , "h":120.96000000000001 , "outnodes" : [{"mod":16 , "node":0} , {"mod":4 , "node":2}]}, {"type":"SynthOscContainer" , "x":120 , "y":388.03749999999997 , "w":352.80000000000007 , "h":120.96000000000001 , "outnodes" : [{"mod":12 , "node":0}] , "osc":"0"}, {"type":"SynthGainContainer" , "x":650 , "y":782.0374999999999 , "w":141.12 , "h":131.04000000000002 , "outnodes" : [{"mod":36 , "node":0}] , "gain":0 , "mute":0}, {"type":"SpeakerMod" , "x":1874 , "y":388.03749999999997 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : []}, {"type":"SynthADSRContainer" , "x":338.1999999999998 , "y":781.8375000000001 , "w":302.40000000000003 , "h":201.60000000000002 , "outnodes" : [{"mod":2 , "node":4}] , "A":0.020503175821440702 , "D":0.1597459342847451 , "DV":0.4516817284947989 , "S":10 , "SV":0 , "R":0.27311715124686897}, {"type":"AnalyserContainer" , "x":1652.8400000000001 , "y":388.03749999999997 , "w":201.60000000000002 , "h":201.60000000000002 , "outnodes" : [{"mod":3 , "node":0}]}, {"type":"SynthGainContainer" , "x":1505.44 , "y":458.0374999999999 , "w":141.12 , "h":131.04000000000002 , "outnodes" : [{"mod":5 , "node":0}] , "gain":0.3329816335018665 , "mute":0}, {"type":"SynthENVLPContainer" , "x":1046.50625 , "y":500.0374999999999 , "w":302.40000000000003 , "h":201.60000000000002 , "outnodes" : [{"mod":30 , "node":4}] , "SV":1 , "A":1.156349340358476 , "AV":0.3046225610778877 , "D":1.13777456 , "DV":0.30462256107788765}, {"type":"SynthOscContainer" , "x":120 , "y":650 , "w":352.80000000000007 , "h":120.96000000000001 , "outnodes" : [{"mod":12 , "node":2}] , "osc":"0"}, {"type":"SynthOscContainer" , "x":120 , "y":516 , "w":352.80000000000007 , "h":120.96000000000001 , "outnodes" : [{"mod":12 , "node":1}] , "osc":"0"}, {"type":"TextField" , "x":255.46375 , "y":780.7199999999998 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":9 , "node":2}] , "val":1.00042 , "digs":5}, {"type":"TextField" , "x":175.46375 , "y":780.7199999999998 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":8 , "node":2}] , "val":1.00087 , "digs":5}, {"type":"MergerMod" , "x":481.5487499999999 , "y":523.5999999999999 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : [{"mod":2 , "node":0}]}, {"type":"SynthOscContainer" , "x":120 , "y":1036 , "w":352.80000000000007 , "h":120.96000000000001 , "outnodes" : [{"mod":21 , "node":0}] , "osc":"0"}, {"type":"SynthOscContainer" , "x":122 , "y":1168 , "w":352.80000000000007 , "h":120.96000000000001 , "outnodes" : [{"mod":21 , "node":2}] , "osc":"0"}, {"type":"SynthModKeyboard" , "x":39.463750000000005 , "y":1337.52 , "w":126 , "h":120.96000000000001 , "outnodes" : [{"mod":24 , "node":0} , {"mod":19 , "node":2}]}, {"type":"TextField" , "x":37.463750000000005 , "y":698.7199999999998 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":18 , "node":0}] , "val":311.1272 , "digs":2}, {"type":"SplitterMod" , "x":8.375 , "y":477.5999999999999 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : [{"mod":1 , "node":0} , {"mod":9 , "node":0} , {"mod":8 , "node":0}]}, {"type":"TextFieldMulti" , "x":8.637500000000003 , "y":589.5999999999999 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : [{"mod":17 , "node":0}] , "val":1.0005}, {"type":"SynthADSRContainer" , "x":255.33249999999998 , "y":1295.1999999999998 , "w":302.40000000000003 , "h":201.60000000000002 , "outnodes" : [{"mod":20 , "node":4}] , "A":0.0001 , "D":0.05000000000000002 , "DV":1 , "S":1 , "SV":0 , "R":0.00001}, {"type":"SynthGainContainer" , "x":592.15875 , "y":1032.48 , "w":141.12 , "h":131.04000000000002 , "outnodes" : [{"mod":37 , "node":0}] , "gain":0 , "mute":0}, {"type":"MergerMod" , "x":481.5487499999999 , "y":1033.6 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : [{"mod":20 , "node":0}]}, {"type":"SplitterMod" , "x":8.375 , "y":1035.6 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : [{"mod":13 , "node":0} , {"mod":-1 , "node":-1} , {"mod":14 , "node":0}]}, {"type":"TextFieldMulti" , "x":8.637500000000045 , "y":1150.0375 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : [{"mod":22 , "node":0}] , "val":1.2}, {"type":"TextField" , "x":37.46374999999989 , "y":1258.7199999999998 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":23 , "node":0}] , "val":311.1272 , "digs":2}, {"type":"TextField" , "x":175.4637499999999 , "y":1338.7199999999998 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":14 , "node":2}] , "val":1.0021 , "digs":4}, {"type":"SynthFilterContainer" , "x":1003.6800000000003 , "y":774.0374999999999 , "w":604.8000000000001 , "h":201.60000000000002 , "outnodes" : [{"mod":30 , "node":0}] , "filter":"0" , "F":466.6908 , "Q":1 , "G":0}, {"type":"SynthModKeyboard" , "x":1003.4637499999999 , "y":985.52 , "w":126 , "h":120.96000000000001 , "outnodes" : [{"mod":-1 , "node":-1} , {"mod":28 , "node":0}]}, {"type":"TextField" , "x":1139.46375 , "y":984.7199999999998 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":29 , "node":0}] , "val":311.1272 , "digs":2}, {"type":"TextFieldMulti" , "x":1222 , "y":986 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : [{"mod":26 , "node":1}] , "val":1.5}, {"type":"SynthGainContainer" , "x":1356.15875 , "y":456.0374999999999 , "w":141.12 , "h":131.04000000000002 , "outnodes" : [{"mod":6 , "node":0}] , "gain":0 , "mute":0}, {"type":"SynthModKeyboard" , "x":829.4637499999999 , "y":388.03749999999997 , "w":126 , "h":120.96000000000001 , "outnodes" : [{"mod":34 , "node":0} , {"mod":-1 , "node":-1}]}, {"type":"TextFieldMulti" , "x":1046 , "y":388.03749999999997 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : [{"mod":33 , "node":0}] , "val":-0.0002}, {"type":"MergerMod" , "x":1155.54875 , "y":388.03749999999997 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : [{"mod":7 , "node":6}]}, {"type":"TextField" , "x":966 , "y":388.03749999999997 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":32 , "node":0}] , "val":311.1272 , "digs":2}, {"type":"TextField" , "x":966 , "y":468 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":33 , "node":2}] , "val":1.2 , "digs":1}, {"type":"MergerMod" , "x":889.5487499999999 , "y":825.5999999999999 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : [{"mod":26 , "node":6}]}, {"type":"SynthGainContainer" , "x":742.15875 , "y":1032.48 , "w":141.12 , "h":131.04000000000002 , "outnodes" : [{"mod":36 , "node":2}] , "gain":0.1470591674169113 , "mute":0}]';
 var samplewhistle = '[{"type":"SynthModKeyboard" , "x":610 , "y":663.0374999999999 , "w":126 , "h":120.96000000000001 , "outnodes" : [{"mod":8 , "node":0} , {"mod":12 , "node":2}]}, {"type":"SynthGainContainer" , "x":1449 , "y":622.0374999999999 , "w":141.12 , "h":131.04000000000002 , "outnodes" : [{"mod":4 , "node":0}] , "gain":0 , "mute":0}, {"type":"SpeakerMod" , "x":1862.4 , "y":388.03749999999997 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : []}, {"type":"SynthADSRContainer" , "x":1123.1999999999998 , "y":867.0374999999999 , "w":302.40000000000003 , "h":201.60000000000002 , "outnodes" : [{"mod":1 , "node":4}] , "A":0.193805576875212 , "D":0.17603810985728824 , "DV":1 , "S":5 , "SV":1 , "R":0.3991666056685008}, {"type":"AnalyserContainer" , "x":1628.8400000000001 , "y":388.03749999999997 , "w":201.60000000000002 , "h":201.60000000000002 , "outnodes" : [{"mod":2 , "node":0}]}, {"type":"SynthGainContainer" , "x":689.44 , "y":388.03749999999997 , "w":141.12 , "h":131.04000000000002 , "outnodes" : [{"mod":6 , "node":6}] , "gain":19.117457920698772 , "mute":0}, {"type":"SynthFilterContainer" , "x":983.6800000000003 , "y":388.03749999999997 , "w":604.8000000000001 , "h":201.60000000000002 , "outnodes" : [{"mod":1 , "node":0}] , "filter":"2" , "F":100 , "Q":0.0001 , "G":0}, {"type":"WhiteNoiseContainer" , "x":564.9850000000001 , "y":427.0374999999999 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : [{"mod":5 , "node":0}]}, {"type":"TextField" , "x":606.4637499999999 , "y":556.7199999999998 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":13 , "node":0}] , "val":391.9952 , "digs":2}, {"type":"TextField" , "x":871.4637499999999 , "y":388.03749999999997 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":5 , "node":2}] , "val":100 , "digs":2}, {"type":"SynthENVLPContainer" , "x":1103.50625 , "y":632.1999999999998 , "w":302.40000000000003 , "h":201.60000000000002 , "outnodes" : [{"mod":6 , "node":3}] , "SV":152.31136530781583 , "A":1.630190549286441 , "AV":1000 , "D":1 , "DV":1000}, {"type":"SynthModKeyboard" , "x":972.4637499999999 , "y":869.52 , "w":126 , "h":120.96000000000001 , "outnodes" : [{"mod":10 , "node":2} , {"mod":3 , "node":2}]}, {"type":"SynthENVLPContainer" , "x":770.5062499999999 , "y":641.1999999999998 , "w":302.40000000000003 , "h":201.60000000000002 , "outnodes" : [{"mod":6 , "node":1}] , "SV":391.9952 , "A":0.001 , "AV":391.9952 , "D":0.3 , "DV":431.1947200000001}, {"type":"SplitterMod" , "x":701.375 , "y":526.5999999999999 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : [{"mod":14 , "node":0} , {"mod":12 , "node":5} , {"mod":12 , "node":3}]}, {"type":"TextFieldMulti" , "x":848.6375 , "y":496.5999999999999 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : [{"mod":12 , "node":7}] , "val":1.1}, {"type":"TextField" , "x":887.46375 , "y":860.7199999999999 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":12 , "node":6}] , "val":0.3 , "digs":1}]';
@@ -58,6 +58,8 @@ var keypresscol = "#ff9999";//"#ffb8b8";//"#ff0000";
 var lastkeycol = "#fff0f0";//"#ddddff";//"#aaaaff";
 var highlightcol = "#3333aa";
 var highlightcolb = "#b9b9ff";
+var dragCol = "blue";
+var focusCol = keypresscol;
 var cccol = "blue";
 var playing = false;
 var OFF_VOL = 0;//0.00001;
@@ -76,6 +78,7 @@ var pulseCurve = new Float32Array(256);
 var midiAccessObject = null;
 var piano;
 var qwertyboard;// = new qwerty();
+var ctrlOn = false;
 
 var TYPE_NULL = -1;
 var TYPE_KEY = 0;
@@ -324,6 +327,8 @@ class qwertykey {
 			case 89: this.pos = 16; this.txt = "y"; break;//y
 			case 90: this.pos = 30; this.txt = "z"; break;//z
 		}
+		this.maxpos = 36;
+		if (this.pos < 0) return;
 		if (this.pos > 29) {
 			this.pos -= 29;
 		} else if (this.pos > 20) {
@@ -333,7 +338,6 @@ class qwertykey {
 		} else {
 			this.pos += 26;
 		}
-		this.maxpos = 36;
 	}
 	
 	press(sp) {
@@ -1093,10 +1097,10 @@ class Drawable {
 	
 	hitCheck(isdown, coords) {
 		var hit = this.inBounds(coords.x, coords.y);
-		if (this.draggable && hit && isdown && !dragOb) {
+		if (this.draggable && hit && isdown) {
 			this.startx = this.x;
 			this.starty = this.y;
-			dragOb = this;
+			addDragOb(this);
 		}
 		return hit;
 	}
@@ -2177,11 +2181,11 @@ class Knob extends SynthModule {
 	}
 	
 	hitCheck(isdown, coords) {
-		if (dragOb == this && !isdown) {
+		if (this.dragging && !isdown) {
 			setMsg("set value to " + this.val);
 		}
 		if (this.inBounds(coords.x, coords.y)) {
-			if (isdown && !dragOb) dragOb = this;
+			if (isdown && getDragObLength() == 0) addDragOb(this);
 			this.startdota = this.dota;
 			return true;
 		}
@@ -2584,7 +2588,7 @@ class ADSRModule extends SynthModule {
 		this.knobDV.color = "green";
 		this.knobDV.setParentModule([this]);
 		this.knobs.push(this.knobDV);
-		this.knobS = new Knob(x+this.kw*3, y, this.kw, this.kw, [5], 1, 10);
+		this.knobS = new Knob(x+this.kw*3, y, this.kw, this.kw, [5], 0.0001, 10);
 		this.knobS.name = "tS";
 		this.knobS.color = "blue";
 		this.knobS.setParentModule([this]);
@@ -2790,7 +2794,7 @@ class ioNode extends Drawable {
 			ctx.closePath();
 			ctx.stroke();
 		}
-		if (this.crossout && dragOb !== this) {
+		if (this.crossout && !this.dragging) {
 			ctx.beginPath();
 			ctx.moveTo(this.x + this.r * 0.3, this.y + this.r * 0.3);
 			ctx.lineTo(this.x + this.r * 1.7, this.y + this.r * 1.7);
@@ -3030,8 +3034,8 @@ class ioNode extends Drawable {
 	
 	hitCheck(isdown, coords) {
 		if (!isdown) this.highlightNodes(false);
-		if (dragOb == this && !isdown) {
-			dragOb = null;
+		if (this.dragging && !isdown) {
+			removeDragOb(this);
 			var node = null;
 			if (this.isInput) {
 				node = this.checkONodes(mouseCoords);
@@ -3057,9 +3061,9 @@ class ioNode extends Drawable {
 		}
 		if (!isdown) this.crossoutNodes(false);
 		if (this.inBounds(coords.x, coords.y)) {
-			if (isdown && !dragOb) {
+			if (isdown && getDragObLength() == 0) {
 				if (this.isInput && this.con) {
-					dragOb = this.con;
+					addDragOb(this.con);
 					this.con.drawline = true;
 					this.con.crossoutNodes(true);
 					this.con.startx = this.con.x;
@@ -3067,7 +3071,7 @@ class ioNode extends Drawable {
 					clickCoords.x = this.con.x;
 					clickCoords.y = this.con.y;
 				} else {
-					dragOb = this;
+					addDragOb(this);
 					this.drawline = true;
 					this.crossoutNodes(true);
 					this.startx = this.x;
@@ -3089,7 +3093,21 @@ function copyMod(m) {
 	for (var i = 0; i < piano.modules.length; i++) {
 		piano.modules[i].setModNum(i);
 	}
-	return piano.loadSingleMod(m.save());
+	return piano.loadSingleMod(JSON.parse(m.save()));
+}
+
+function copyMultiMod(mods) {
+	var data = new Array();
+	for (var i = 0; i < piano.modules.length; i++) {
+		piano.modules[i].setModNum(-1);
+	}
+	for (var i = 0; i < mods.length; i++) {
+		mods[i].setModNum(i);
+	}
+	for (var i = 0; i < mods.length; i++) {
+		data.push(JSON.parse(mods[i].save()));
+	}
+	return data;
 }
 
 function saveMod(m) {
@@ -3118,6 +3136,7 @@ class SynthModContainer extends Drawable {
 		this.trigprop = this;
 		this.triggers = new Array();
 		this.stopTrigger = false;
+		this.dragging = false;
 	}
 	
 	save() {
@@ -3166,7 +3185,7 @@ class SynthModContainer extends Drawable {
 		}
 		piano.trash(this);
 		focusOb = qwertyboard;
-		dragOb = null;
+		removeDragOb(this);
 	}
 	
 	notifyDisconnect() {
@@ -3220,16 +3239,16 @@ class SynthModContainer extends Drawable {
 	}
 	
 	hitCheck(isdown, coords) {
-		if (dragOb == this && !isdown) {
+		if (this.dragging && !isdown) {
 			piano.checkCans(this);
-			dragOb = null;
+			removeDragOb(this);
 		}
 		if (coords.x > this.x && coords.y > this.y && coords.x < this.x + this.w && coords.y < this.y + this.h) {
 			if (this.hitCheckObs(this.inNodes, isdown, coords)) return true;
 			if (this.hitCheckObs(this.outNodes, isdown, coords)) return true;
-			if (this.hitCheckObs(this.modules, isdown, coords)) return true;			
-			if (isdown && !dragOb) {
-				dragOb = this;
+			if (this.hitCheckObs(this.modules, isdown, coords)) return true;
+			if (isdown && getDragObLength() == 0) {
+				addDragOb(this);
 				this.startx = this.x;
 				this.starty = this.y;
 			}
@@ -3269,7 +3288,14 @@ class SynthModContainer extends Drawable {
 	
 	drawOb(ctx) {
 		//console.log("draw synthcon x:" + this.x + " y:" + this.y);
-		drawRect(ctx, this.x, this.y, this.w, this.h, this.stroke, this.fill, this.fillCol, this.strokeCol);
+		var sc = this.strokeCol;
+		if (this.dragging) {
+			sc = dragCol;
+		} else if (focusOb === this) {
+			sc = focusCol;
+		}
+		drawRect(ctx, this.x, this.y, this.w, this.h, this.stroke, this.fill, this.fillCol, sc);
+		ctx.strokeStyle = this.strokeCol;
 		this.drawObs(ctx, this.inNodes);
 		this.drawObs(ctx, this.outNodes);
 		this.drawObs(ctx, this.modules);
@@ -5097,7 +5123,7 @@ class ValueModContainer extends SynthModContainer {
 	hitCheck(isdown, coords) {
 		var hit = super.hitCheck(isdown, coords);
 		//if (hit) this.setValue();
-		if (!this.lockinput && hit && dragOb === this) {
+		if (!this.lockinput && hit && this.dragging) {
 			if (this.valueOb && !this.isMulti) this.text = this.valueOb.val.toString();
 			focusOb = this;
 		} else if (isdown) {
@@ -5215,9 +5241,9 @@ class ValueModContainer extends SynthModContainer {
 		var h = h || this.h*0.5;
 		var y = this.y + h;
 		super.drawOb(ctx);
-		if (focusOb === this) {
-			drawRect(ctx, this.x, this.y, this.w, this.h, true, this.fill, this.fillCol, keypresscol);
-		}
+		//if (focusOb === this) {
+		//	drawRect(ctx, this.x, this.y, this.w, this.h, true, this.fill, this.fillCol, keypresscol);
+		//}
 		if (this.crossout) {
 			ctx.beginPath();
 			ctx.moveTo(this.x, this.y);
@@ -5353,7 +5379,7 @@ class TimerMod extends ValueModContainer {
 	hitCheck(isdown, coords) {
 		var hit = super.hitCheck(isdown, coords);
 		//if (hit) this.setValue();
-		if (!this.lockinput && hit && dragOb === this) {
+		if (!this.lockinput && hit && this.dragging) {
 			if (this.valueOb && !this.isMulti) this.text = this.valueOb.val.toString();
 			focusOb = this;
 		} else if (isdown) {
@@ -6177,7 +6203,7 @@ class SynthModKeyboard extends SynthModContainer {
 	
 	drawOb(ctx) {
 		super.drawOb(ctx);
-		drawRect(ctx, this.x, this.y, this.w, this.h, this.stroke, this.fill, this.fillCol, this.strokeCol);
+		//drawRect(ctx, this.x, this.y, this.w, this.h, this.stroke, this.fill, this.fillCol, this.strokeCol);
 		drawLittleKeyboard(ctx, this.kx, this.ky, this.kw, this.kh, this.fillCol, this.strokeCol);
 		ctx.font = this.h*0.1 + "px Arial";
 		ctx.fillStyle = pianocol;
@@ -7055,7 +7081,7 @@ class ModuleIcon extends Drawable {
 	}
 	
 	dragMod(m) {
-		dragOb = m;
+		addDragOb(m);
 		clickCoords.y = m.y + m.h*0.5;
 	}
 	
@@ -7762,14 +7788,46 @@ class CopyCan extends Drawable {
 		this.b = y + h;
 	}
 	
-	act (mod, nomove) {
+	act (mod, nomove, keephighlight) {
+		if (Array.isArray(mod)) {
+			this.copyMods(mod, nomove, keephighlight);
+			return;
+		}
+		this.copyOneMod(mod, null, nomove, keephighlight);
+	}
+	
+	copyOneMod(mod, m, nomove, keephighlight, d) {
+		if (!m) m = copyMod(mod);
 		if (!nomove) mod.setPos(mod.startx, mod.starty);
-		dragOb = copyMod(mod);		
-		dragOb.startx = clickCoords.x;
-		dragOb.starty = clickCoords.y;
-		dragOb.setPos(clickCoords.x, clickCoords.y);
-		this.highlight = false;
-		setMsg("copied module");
+		if (!d) removeDragOb(mod);
+		addDragOb(m);
+		copiedMod = true;
+		m.startx = clickCoords.x;
+		m.starty = clickCoords.y;
+		if (!nomove) {
+			m.startx = mod.x + canW * 0.01;
+			m.starty = mod.y + canH * 0.01;
+		}
+		m.setPos(m.startx, m.starty);
+		if (!keephighlight) this.highlight = false;
+	}
+	
+	copyMods(omods, nomove, keephighlight) {
+		var data = copyMultiMod(omods);
+		var omocopy = new Array();
+		var newmods = new Array();
+		for (var i = 0; i < omods.length; i++) {
+			omocopy.push(omods[i]);
+		}
+		for (var i = 0; i < data.length; i++) {
+			var m = piano.loadSingleMod(data[i]);
+			newmods.push(m);
+			this.copyOneMod(omods[i], m, nomove, keephighlight, true);
+		}
+		piano.hookUpModules(data, newmods);
+		for (var i = 0; i < omocopy.length; i++) {
+			removeDragOb(omocopy[i]);
+		}
 	}
 	
 	click(isdown) {
@@ -7845,7 +7903,8 @@ class SaveCan extends Drawable {
 		}
 	}
 	
-	act(mod, nomove) {
+	act(mod, nomove, khl) {
+		if (khl) return;
 		if (!nomove) mod.setPos(mod.startx, mod.starty);
 		saveMod(mod);
 	}
@@ -7898,6 +7957,12 @@ class TrashCan extends Drawable {
 	}
 	
 	act(mod) {
+		if (Array.isArray(mod)) {
+			for (var i = mod.length-1; i > -1; i--) {
+				mod[i].trash();
+			}
+			return;
+		}
 		mod.trash();
 	}
 	
@@ -7944,9 +8009,50 @@ class TextLine extends Drawable {
 	}
 }
 
+class HighlightSquare {
+	constructor() {
+		this.x = 0;
+		this.y = 0;
+		this.x2 = 0;
+		this.y2 = 0;
+		this.visible = false;
+	}
+	
+	show(x, y) {
+		this.x = x;
+		this.y = y;
+		this.x2 = x;
+		this.y2 = y;
+		this.visible = true;
+	}
+
+	hide() {
+		this.visible = false;
+	}
+	
+	drag(dcoords) {
+		this.x2 = dcoords.x;
+		this.y2 = dcoords.y;
+		piano.gatherObs();
+	}
+	
+	drawOb(ctx) {
+		if (!this.visible) return;
+		ctx.beginPath();
+		ctx.moveTo(this.x, this.y);
+		ctx.lineTo(this.x2, this.y);
+		ctx.lineTo(this.x2, this.y2);
+		ctx.lineTo(this.x, this.y2);
+		ctx.lineTo(this.x, this.y);
+		ctx.stroke();
+	}
+}
+
 class Piano {
 	constructor(x, y, keyW, keyH) {
 		this.keyout = new KeyboardOutput();
+		this.square = new HighlightSquare();
+		this.gatherOb = new Array();
 		this.x = x;
 		this.y = y;
 		this.w = keyW * 52;
@@ -8113,10 +8219,10 @@ class Piano {
 		}
 	}
 	
-	checkCans(mod) {
+	checkCans(mod, khl) {
 		for (var i = 0; i < this.cans.length; i++) {
 			if (this.cans[i].highlight) {
-				this.cans[i].act(mod);
+				this.cans[i].act(mod, false, khl);
 				return true;
 			}
 		}
@@ -8248,12 +8354,89 @@ class Piano {
 		return m;
 	}
 	
-	loadSingleMod(jso) {
-		var data = JSON.parse(jso);
+	loadSingleMod(data) {
+		//var data = JSON.parse(jso);
 		var m = this.createModFromType(data.type);
 		m.load(data);
 		//m.setPos(data.x, data.y);
 		return m;
+	}
+	
+	hookUpModules(mods, modules) {
+		for (var i = 0; i < mods.length; i++) {
+			//connect only merger outputs and outputs that go to splitter inputs
+			//mergers can't connect output to merger or splitter
+			//splitter: while loop up chain until we find a splitter whose input is not connected to a splitter
+			for (var j = 0; j < mods[i].outnodes.length; j++) {
+				var pmod = modules[i];
+				var pnode = pmod.outNodes[j];
+				var cmod = modules[mods[i].outnodes[j].mod];
+				if (!cmod || !pnode) {
+					//console.log("mods[i].outnodes[j].mod " + mods[i].outnodes[j].mod + " / " + modules.length);
+					continue;
+				}
+				var cnode = cmod.inNodes[mods[i].outnodes[j].node];
+				if (cmod.isSplitter || pmod.isMerger) {
+					if (pmod.isSplitter) {
+						//splitter connected to splitter
+						pnode.connect(cnode);
+					} else {
+						pnode.connect(cnode);
+					}
+				}
+			}
+		}
+		for (var i = 0; i < mods.length; i++) {
+			//connect the rest of the outputs
+			for (var j = 0; j < mods[i].outnodes.length; j++) {
+				var pmod = modules[i];
+				var pnode = pmod.outNodes[j];
+				var cmod = modules[mods[i].outnodes[j].mod];
+				if (!cmod || !pnode) {
+					//console.log("mods[i].outnodes[j].mod " + mods[i].outnodes[j].mod + " / " + modules.length);
+					continue;
+				}
+				var cnode = cmod.inNodes[mods[i].outnodes[j].node];
+				if (!cmod.isSplitter && !pmod.isMerger && !pmod.isEnv) {
+					pnode.connect(cnode);
+				}
+			}
+		}
+		for (var i = 0; i < mods.length; i++) {
+			//connect envelopes last
+			for (var j = 0; j < mods[i].outnodes.length; j++) {
+				var pmod = modules[i];
+				var pnode = pmod.outNodes[j];
+				var cmod = modules[mods[i].outnodes[j].mod];
+				if (!cmod || !pnode) {
+					//console.log("mods[i].outnodes[j].mod " + mods[i].outnodes[j].mod + " / " + modules.length);
+					continue;
+				}
+				var cnode = cmod.inNodes[mods[i].outnodes[j].node];
+				if (pmod.isEnv) {
+					pnode.connect(cnode);
+				}
+			}
+		}
+		for (var i = 0; i < mods.length; i++) {
+			//set up each mod
+			//1. values	(textfield, textmulti, timer) and radios
+			if (modules[i].isValType) {
+				modules[i].load(mods[i]);
+			}
+		}
+		for (var i = 0; i < mods.length; i++) {
+			//set up each mod
+			//2. everything else: knob vals (gain, eq, env, adsr, filter, compressor)
+			if (!modules[i].isValType) {
+				modules[i].load(mods[i]);
+			}
+		}
+		for (var i = 0; i < mods.length; i++) {
+			if (mods[i].isEnv) {
+				mods[i].resetValueConnections();
+			}
+		}
 	}
 	
 	loadModules(jso) {
@@ -8274,80 +8457,7 @@ class Piano {
 			var m = this.createModFromType(type);
 			m.create(mods[i]);
 		}
-		for (var i = 0; i < mods.length; i++) {
-			//connect only merger outputs and outputs that go to splitter inputs
-			//mergers can't connect output to merger or splitter
-			//splitter: while loop up chain until we find a splitter whose input is not connected to a splitter
-			for (var j = 0; j < mods[i].outnodes.length; j++) {
-				var pmod = this.modules[i];
-				var pnode = pmod.outNodes[j];
-				var cmod = this.modules[mods[i].outnodes[j].mod];
-				if (!cmod || !pnode) {
-					//console.log("mods[i].outnodes[j].mod " + mods[i].outnodes[j].mod + " / " + this.modules.length);
-					continue;
-				}
-				var cnode = cmod.inNodes[mods[i].outnodes[j].node];
-				if (cmod.isSplitter || pmod.isMerger) {
-					if (pmod.isSplitter) {
-						//splitter connected to splitter
-						pnode.connect(cnode);
-					} else {
-						pnode.connect(cnode);
-					}
-				}
-			}
-		}
-		for (var i = 0; i < mods.length; i++) {
-			//connect the rest of the outputs
-			for (var j = 0; j < mods[i].outnodes.length; j++) {
-				var pmod = this.modules[i];
-				var pnode = pmod.outNodes[j];
-				var cmod = this.modules[mods[i].outnodes[j].mod];
-				if (!cmod || !pnode) {
-					//console.log("mods[i].outnodes[j].mod " + mods[i].outnodes[j].mod + " / " + this.modules.length);
-					continue;
-				}
-				var cnode = cmod.inNodes[mods[i].outnodes[j].node];
-				if (!cmod.isSplitter && !pmod.isMerger && !pmod.isEnv) {
-					pnode.connect(cnode);
-				}
-			}
-		}
-		for (var i = 0; i < mods.length; i++) {
-			//connect envelopes last
-			for (var j = 0; j < mods[i].outnodes.length; j++) {
-				var pmod = this.modules[i];
-				var pnode = pmod.outNodes[j];
-				var cmod = this.modules[mods[i].outnodes[j].mod];
-				if (!cmod || !pnode) {
-					//console.log("mods[i].outnodes[j].mod " + mods[i].outnodes[j].mod + " / " + this.modules.length);
-					continue;
-				}
-				var cnode = cmod.inNodes[mods[i].outnodes[j].node];
-				if (pmod.isEnv) {
-					pnode.connect(cnode);
-				}
-			}
-		}
-		for (var i = 0; i < mods.length; i++) {
-			//set up each mod
-			//1. values	(textfield, textmulti, timer) and radios
-			if (this.modules[i].isValType) {
-				this.modules[i].load(mods[i]);
-			}
-		}
-		for (var i = 0; i < mods.length; i++) {
-			//set up each mod
-			//2. everything else: knob vals (gain, eq, env, adsr, filter, compressor)
-			if (!this.modules[i].isValType) {
-				this.modules[i].load(mods[i]);
-			}
-		}
-		for (var i = 0; i < mods.length; i++) {
-			if (mods[i].isEnv) {
-				mods[i].resetValueConnections();
-			}
-		}
+		this.hookUpModules(mods, this.modules);
 	}
 	
 	pushModule(mod) {
@@ -8427,6 +8537,7 @@ class Piano {
 		for (var i = 0; i < this.textlines.length; i++) {
 			this.textlines[i].drawOb(ctx);
 		}
+		this.square.drawOb(ctx);
 	}
 
 	hit(coords) {
@@ -8467,7 +8578,105 @@ class Piano {
 	step(deltaTime) {
 	}
 
+	removeGatherOb(ob) {
+		for (var i = 0; i < dragOb.length; i++) {
+			if (dragOb[i] === ob) return;
+		}
+		var ind = -1;
+		for (var i = 0; i < this.gatherOb.length; i++) {
+			if (this.gatherOb[i] === ob) {
+				ind = i;
+				break;
+			}
+		}
+		if (ind < 0) return;
+		this.gatherOb.splice(ind, 1);
+		ob.dragging = false;
+	}
+
+	addGatherOb(ob) {
+		for (var i = 0; i < dragOb.length; i++) {
+			if (dragOb[i] === ob) return;
+		}
+		for (var i = 0; i < this.gatherOb.length; i++) {
+			if (this.gatherOb[i] === ob) {
+				return;
+			}
+		}
+		this.gatherOb.push(ob);
+		ob.dragging = true;
+	}
+	
+	gatherObs() {
+		var l, r, t, b;
+		if (this.square.x < this.square.x2) {
+			l = this.square.x;
+			r = this.square.x2;
+		} else {
+			l = this.square.x2;
+			r = this.square.x;
+		}
+		if (this.square.y < this.square.y2) {
+			t = this.square.y;
+			b = this.square.y2;
+		} else {
+			t = this.square.y2;
+			b = this.square.y;
+		}
+		for (var i = 0; i < this.modules.length; i++) {
+			var m = this.modules[i];
+			if (l < m.x + m.w && r > m.x && t < m.y + m.h && b > m.y) {
+				this.addGatherOb(m);
+				m.startx = m.x;
+				m.starty = m.y;
+			} else {
+				this.removeGatherOb(m);
+			}
+		}
+	}
+	
+	doSquare(coords, isdown) {
+		if (isdown) {
+			this.square.show(coords.x, coords.y);
+			addDragOb(this.square);
+		} else {
+			this.square.hide();
+			removeDragOb(this.square);
+			for (var i = 0; i < this.gatherOb.length; i++) {
+				addDragOb(this.gatherOb[i]);
+			}
+		}
+	}
+
+	ctrlHitCheck(coords, isdown) {
+		var found = false;
+		for (var i = 0; i < this.modules.length; i++) {
+			if (this.modules[i].inBounds(coords.x, coords.y)) {
+				found = true;
+				if (isdown) {
+					addDragOb(this.modules[i]);
+					this.modules[i].startx = this.modules[i].x;
+					this.modules[i].starty = this.modules[i].y;
+				}
+			}
+		}
+		if (ctrlOn && (!found || this.square.visible)) {
+			this.doSquare(coords, isdown);
+		}
+		if (!isdown && dragOb.length > 1) {
+			//for (var i = dragOb.length-1; i > -1; i--) {
+			//	piano.checkCans(dragOb[i], true);
+			//}
+			piano.checkCans(dragOb, true);
+			removeDragOb(this.square);
+		}
+	}
+	
 	hitCheck(coords, isdown) {
+		if (ctrlOn || getDragObLength() > 1) {
+			this.ctrlHitCheck(coords, isdown);
+			return;
+		}
 		if (this.modbar.hitCheck(isdown, coords)) return true;
 		var can = null;
 		for (var i = 0; i < this.cans.length; i++) {
@@ -8512,7 +8721,7 @@ class Piano {
 			for (var i = 0; i < this.blacks.length; i++) {
 				if (this.blacks[i].hitCheck(isdown, coords)) {
 					this.blacks[i].press(isdown, 0, false, true);
-					dragOb = this;
+					addDragOb(this);
 					this.lastpressedkey = this.blacks[i];
 					return true;
 				}
@@ -8520,7 +8729,7 @@ class Piano {
 			for (var i = 0; i < this.whites.length; i++) {
 				if (this.whites[i].hitCheck(isdown, coords)) {
 					this.whites[i].press(isdown, 0, false, true);
-					dragOb = this;
+					addDragOb(this);
 					this.lastpressedkey = this.whites[i];
 					return true;
 				}
@@ -8669,7 +8878,8 @@ var clicking = false;
 var dragging = false;
 var sound = new AudioManager();
 //var staff;
-var dragOb = null;
+var dragOb = new Array();
+var copiedMod = false;
 var focusOb = null;
 var loop = new GameLoop();
 var txtCol = "black";
@@ -8824,7 +9034,11 @@ function selectMidiDevice() {
 }
 
 function keystart(event) {
-	//document.getElementById("msgdiv").innerHTML = event.keyCode + ' was pressed';
+	setMsg(event.keyCode + ' was pressed');
+	if (event.keyCode == 17 && !clicking) {
+		ctrlOn = true;
+		return;
+	}
 	if (focusOb) {
 		if(focusOb.press(event.keyCode)) event.preventDefault();
 		//event.preventDefault();
@@ -8832,7 +9046,11 @@ function keystart(event) {
 };
 
 function keyend(event) {
-	//document.getElementById("msgdiv").innerHTML = event.keyCode + ' was unpressed';
+	setMsg(event.keyCode + ' was unpressed');
+	if (event.keyCode == 17) {
+		ctrlOn = false;
+		return;	
+	}
 	if (focusOb) focusOb.unpress(event.keyCode);
 };
 
@@ -9215,11 +9433,46 @@ function touchstart(event) {
 	//document.getElementById("msgdiv").innerHTML = "touchstart";
 }
 
+function getDragObLength() {
+	return dragOb.length;
+}
+
+function releaseDragObs() {
+	for (var i = dragOb.length-1; i > -1; i--) {
+		dragOb[i].dragging = false;
+	}
+	dragOb.length = 0;
+}
+
+function removeDragOb(ob) {
+	var ind = -1;
+	for (var i = 0; i < dragOb.length; i++) {
+		if (dragOb[i] === ob) {
+			ind = i;
+			break;
+		}
+	}
+	if (ind < 0) return;
+	dragOb.splice(ind, 1);
+	ob.dragging = false;
+}
+
+function addDragOb(ob) {
+	for (var i = 0; i < dragOb.length; i++) {
+		if (dragOb[i] === ob) {
+			return;
+		}
+	}
+	dragOb.push(ob);
+	ob.dragging = true;
+}
+
 function mouseUp(event, allowdef) {
 	if (!allowdef) event.preventDefault();
 	mouseCoords = document.getElementById('myCanvas').relMouseCoords(event);
 	var r = piano.hitCheck(clickCoords, false);
-	dragOb = null;
+	if (!ctrlOn && !copiedMod) releaseDragObs();
+	copiedMod = false;
 	piano.unhighlightCans();
 	clicking = false;
 	dragging = false;
@@ -9237,13 +9490,21 @@ function mouseMove(event, allowdef) {
 	dragCoords = document.getElementById('myCanvas').relMouseCoords(event);
 	mouseCoords = dragCoords;
 	
-	if (!clicking || !dragOb) return;
+	if (!clicking || dragOb.length == 0) return;
 	
 	if (dragCoords.x - clickCoords.x > dragThresh || dragCoords.x - clickCoords.x < -dragThresh ||
 		dragCoords.y - clickCoords.y > dragThresh || dragCoords.y - clickCoords.y < -dragThresh) {
 		dragging = true;
 	}
-	if (dragging) dragOb.drag(dragCoords, clickCoords);
+	if (dragging) {
+		if (piano.square.visible) {
+			piano.square.drag(dragCoords, clickCoords);
+		} else {
+			for (var i = 0; i < dragOb.length; i++) {
+				dragOb[i].drag(dragCoords, clickCoords);
+			}
+		}
+	}
 	return dragging;
 }
 
@@ -9405,7 +9666,7 @@ function openModFile() {
   reader.onload = function(evt) {
     //console.log(evt.target.result);]
 	try {
-	piano.loadSingleMod(evt.target.result);
+	piano.loadSingleMod(JSON.parse(evt.target.result));
 	setMsg('loaded mod from ' + evt.target.fileName);
 	} catch (err) {
 	setMsg("mod file could not be read");
