@@ -80,6 +80,7 @@ var midiAccessObject = null;
 var piano;
 var qwertyboard;// = new qwerty();
 var ctrlOn = false;
+var shiftOn = false;
 
 var TYPE_NULL = -1;
 var TYPE_KEY = 0;
@@ -148,6 +149,7 @@ class qwerty {
 	}
 	
 	press(code) {
+		if (code >= 97) code -= 32;
 		if (code >= 0 && code <= this.numkeys) {
 			this.keys[code].press(this.startpos);
 		}
@@ -2186,7 +2188,7 @@ class Knob extends SynthModule {
 			setMsg("set value to " + this.val);
 		}
 		if (this.inBounds(coords.x, coords.y)) {
-			if (isdown && getDragObLength() == 0) addDragOb(this);
+			if (isdown && getNumDragMods() == 0) addDragOb(this);
 			this.startdota = this.dota;
 			return true;
 		}
@@ -2730,6 +2732,7 @@ class ADSRModule extends SynthModule {
 class ioNode extends Drawable {
 	constructor(x, y, r, inp, trigprop, ntype, acceptTypes, name, l) {
 		super(x, y, r*2, r*2);
+		this.isNode = true;
 		this.trigprop = trigprop;
 		this.name = name || "ionode";
 		this.r = r;
@@ -3062,7 +3065,7 @@ class ioNode extends Drawable {
 		}
 		if (!isdown) this.crossoutNodes(false);
 		if (this.inBounds(coords.x, coords.y)) {
-			if (isdown && getDragObLength() == 0) {
+			if (isdown) {
 				if (this.isInput && this.con) {
 					addDragOb(this.con);
 					this.con.drawline = true;
@@ -3248,7 +3251,7 @@ class SynthModContainer extends Drawable {
 			if (this.hitCheckObs(this.inNodes, isdown, coords)) return true;
 			if (this.hitCheckObs(this.outNodes, isdown, coords)) return true;
 			if (this.hitCheckObs(this.modules, isdown, coords)) return true;
-			if (isdown && getDragObLength() == 0) {
+			if (isdown) {
 				addDragOb(this);
 				this.startx = this.x;
 				this.starty = this.y;
@@ -5100,6 +5103,142 @@ class CCMod extends SynthModContainer {
 	}
 }
 
+class ExpMod extends SynthModContainer {
+	constructor(x, y, w, h, bl, br, bt, bb, noder) {
+		super(x, y, w, h, bl, br, bt, bb);
+		this.xSetter = new SelfLevelSetter(this);
+		this.addINode(0, h*0.2-noder, noder, TYPE_VALUE, [TYPE_VALUE], "X val", "X");
+		this.inNodes[0].setObject(this.xSetter);
+		this.ySetter = new ModLevelSetter(this);
+		this.addINode(0, h*0.8-noder, noder, TYPE_VALUE, [TYPE_VALUE], "Y val", "Y");
+		this.inNodes[1].setObject(this.ySetter);
+		this.addONode(w-2*noder, h*0.2-noder, noder, TYPE_VALUE, [TYPE_VALUE], "out val");
+		this.valueOb = new ValueSetter();
+		this.outNodes[0].setObject(this.valueOb);
+		this.xval = 0;
+		this.yval = 0;
+		this.expression = "x+y";
+	}
+	
+	save() {
+		var t = '{"type":"ExpMod" , ' + super.save();
+		t += ' , "exp":"' + this.expression + '"}';
+		return t;
+	}
+	
+	load(data) {
+		this.expression = data.exp;
+	}
+	
+	setSelfLevel(v) {//set X value
+		this.xval = v;
+		this.doEval();
+	}
+	
+	setModLevel(v) {//set Y value
+		this.yval = v;
+		this.doEval();
+	}
+	
+	doEval() {
+		var exp = this.expression.replace("x", this.xval).replace("y", this.yval);
+		try {
+			var ev = eval(exp);
+		} catch (err) {
+			setMsg("expression evaluation failed");
+			this.crossout = true;
+			return;
+		}
+		this.crossout = false;
+		//console.log(exp+"="+ev);
+		//console.log("exp:" + this.expression);
+		this.valueOb.setValue(ev);
+	}
+	
+	hitCheck(isdown, coords) {
+		var hit = super.hitCheck(isdown, coords);
+		//if (hit) this.setValue();
+		if (!this.lockinput && hit && this.dragging) {
+			focusOb = this;
+		} else if (isdown) {
+			if (focusOb === this) {
+				focusOb = qwertyboard;
+				if (!hit) this.doEval();
+			}
+		} else if (hit && !focusOb === this) {
+			this.doEval();
+		}
+		return hit;
+	}
+	
+	codeToNum(c) {
+		//console.log(c);
+		//console.log(String.fromCharCode(c));
+		switch(c) {
+			case 49: return 1; break;
+			case 50: return 2; break;
+			case 51: return 3; break;
+			case 52: return 4; break;
+			case 53: return 5; break;
+			case 54: return 6; break;
+			case 55: return 7; break;
+			case 56: return 8; break;
+			case 57: return 9; break;
+			case 48: return 0; break;
+			case 46: return "."; break;
+			case 42: return "*"; break;
+			case 47: return "/"; break;
+			case 37: return "%"; break;
+			case 40: return "("; break;
+			case 41: return ")"; break;
+			case 43: return "+"; break;
+			case 45: return "-"; break;
+			case 120: return "x"; break;
+			case 121: return "y"; break;
+			//case 46: return -2; break;//delete
+			case 13: return -3; break;//enter
+			case 8: return -4; break;//backspace
+			case 189: return -5; break;//minus sign
+		}
+		return -1;
+	}
+	
+	press(code) {
+		var n = this.codeToNum(code);
+		if (n == -2) {
+			this.expression = "";
+		} else if (n == -3) {
+			focusOb = qwertyboard;
+			this.doEval();
+		} else if (n == -4) {
+			if(this.expression.length > 0) {
+				this.expression = this.expression.substring(0, this.expression.length - 1);
+			}
+		} else if (n != -1) {
+			this.expression += n;
+		}
+		return (n == -3);
+	}
+	
+	unpress(code) {
+	}
+	
+	drawOb(ctx) {
+		super.drawOb(ctx);
+		ctx.font = this.h*0.25 + "px Arial";
+		ctx.fillStyle = pianocol;
+		ctx.fillText(this.expression, this.x, this.y + this.h*0.55);
+		if (this.crossout) {
+			ctx.beginPath();
+			ctx.moveTo(this.x, this.y);
+			ctx.lineTo(this.x + this.w, this.y + this.h);
+			ctx.moveTo(this.x, this.y + this.h);
+			ctx.lineTo(this.x + this.w, this.y);
+			ctx.stroke();
+		}
+	}
+}
+
 class ValueModContainer extends SynthModContainer {
 	constructor(x, y, w, h, bl, br, bt, bb, noder) {
 		super(x, y, w, h, bl, br, bt, bb);
@@ -5188,11 +5327,11 @@ class ValueModContainer extends SynthModContainer {
 			case 56: return 8; break;
 			case 57: return 9; break;
 			case 48: return 0; break;
-			case 190: return "."; break;
-			case 46: return -2; break;//delete
+			case 46: return "."; break;
+			//case 46: return -2; break;//delete
 			case 13: return -3; break;//enter
 			case 8: return -4; break;//backspace
-			case 189: return -5; break;//minus sign
+			case 45: return -5; break;//minus sign
 		}
 		return -1;
 	}
@@ -7504,6 +7643,18 @@ class EqualIcon extends ModuleIcon {
 	}
 }
 
+class ExpIcon extends ModuleIcon {
+	createMod() {
+		return new ExpMod(this.x, piano.modbt, piano.modh, piano.modh, piano.modbl, piano.modbr, piano.modbt, piano.modbb, piano.noder);
+	}
+	
+	drawOb(ctx) {
+		super.drawOb(ctx);
+		ctx.font = this.h*0.22 + "px Arial";
+		ctx.fillText("EXP", this.x+this.w*0.25, this.y+this.h*0.5);
+	}
+}
+
 class SHIcon extends ModuleIcon {
 	createMod() {
 		return new SHMod(this.x, piano.modbt, piano.modh, piano.modh, piano.modbl, piano.modbr, piano.modbt, piano.modbb, piano.noder);
@@ -7592,6 +7743,8 @@ class ModuleBar extends Drawable {
 		a += h*0.9;		
 		this.equaltob = new EqualIcon(x+a, y+b, h*0.8, h*0.8, 0, canW, y, canH);
 		a += h*0.9;
+		this.expb = new ExpIcon(x+a, y+b, h*0.8, h*0.8, 0, canW, y, canH);
+		a += h*0.9;
 		this.splitterb = new SplitterIcon(x+a,y+b, h*0.8, h*0.8, 0, canW, y, canH);
 		a += h*0.9;
 		this.mergerb = new MergerIcon(x+a,y+b, h*0.8, h*0.8, 0, canW, y, canH);
@@ -7630,6 +7783,7 @@ class ModuleBar extends Drawable {
 		this.icons.push(this.moreb);
 		this.icons.push(this.lessb);
 		this.icons.push(this.equaltob);
+		this.icons.push(this.expb);
 		//this.icons.push(this.testb);
 		//this.icons.push(this.sptb);
 		this.hideicon = -1;
@@ -7834,8 +7988,12 @@ class CopyCan extends Drawable {
 	
 	click(isdown) {
 		if (!isdown) {
-			this.active = true;
-			setMsg("drag the module you want to copy");
+			if (getNumDragMods() > 0) {
+				this.act(dragOb, false, false);
+			} else {
+				this.active = true;
+				setMsg("drag the module you want to copy");
+			}
 		} else {
 			this.highlight = isdown;
 		}
@@ -7895,6 +8053,10 @@ class SaveCan extends Drawable {
 	click(isdown) {
 		this.highlight = isdown;
 		if (!isdown) {
+			if (getNumDragMods() > 0) {
+				this.act(dragOb);
+				return;
+			}
 			var fname = window.prompt("enter patch filename","patch.txt");
 			if (fname == null || fname == "") {
 				setMsg("patch save cancelled");
@@ -7906,7 +8068,17 @@ class SaveCan extends Drawable {
 	}
 	
 	act(mod, nomove, khl) {
-		if (khl) return;
+		if (Array.isArray(mod)) {
+			if (mod.length == 1) {
+				this.act(mod[0]);
+			} else {
+				setMsg("select one module at a time to save individual modules");
+				for (var i = 0; i < mod.length; i++) {
+					mod[i].setPos(mod[i].startx, mod[i].starty);
+				}
+			}
+			return;
+		}
 		if (!nomove) mod.setPos(mod.startx, mod.starty);
 		saveMod(mod);
 	}
@@ -7969,6 +8141,11 @@ class TrashCan extends Drawable {
 	}
 	
 	click(isdown) {
+		if (!isdown) {
+			if (getNumDragMods() > 0) {
+				this.act(dragOb);
+			}
+		}
 		this.highlight = isdown;
 	}
 	
@@ -8349,6 +8526,8 @@ class Piano {
 		} else if (type == "EqualMod") {
 			m = this.modbar.equaltob.createMod();
 			m.isValType = true;
+		} else if (type == "ExpMod") {
+			m = this.modbar.expb.createMod();
 		}
 		if (m) {
 			this.pushModule(m);
@@ -8669,17 +8848,22 @@ class Piano {
 				}
 			}
 		}
-		if (this.square.visible || ((ctrlOn || getDragObLength == 0) && !found)) {
+		if (this.square.visible || ((ctrlOn || getNumDragMods() == 0) && !found)) {
 			this.doSquare(coords, isdown);
 		}
-		if (!isdown && dragOb.length > 1) {
+		if (!isdown && getNumDragMods() > 0) {
 			piano.checkCans(dragOb, true);
+			for (var i = 0; i < this.cans.length; i++) {
+				if (this.cans[i].inBounds(coords.x, coords.y)) {
+					this.cans[i].click(isdown);
+				}
+			}
 			removeDragOb(this.square);
 		}
 	}
 	
 	hitCheck(coords, isdown) {
-		if (ctrlOn || getDragObLength() > 1) {
+		if (ctrlOn || getNumDragMods() > 0) {
 			this.ctrlHitCheck(coords, isdown);
 			return;
 		}
@@ -8753,7 +8937,7 @@ class Piano {
 				this.whites[i].press(isdown, 0, false, true);
 			}
 		}
-		if (this.doSquare(coords, isdown)) return;
+		if (!copiedMod) if (this.doSquare(coords, isdown)) return;
 		return false;
 	}
 }
@@ -8903,8 +9087,9 @@ function setup() {
 	myCanvas.addEventListener("touchmove", touchmove);
 	myCanvas.addEventListener("touchend", touchend);
 	myCanvas.addEventListener("touchcancel", touchend);
-	document.addEventListener('keydown', keystart);
 	document.addEventListener('keyup', keyend);
+	document.addEventListener('keydown', keystart);
+	document.addEventListener('keypress', onkeypress);
 	myCanvas.width = canW;
 	myCanvas.height = canH;
 	for (var i=0; i<128; i++){
@@ -9043,20 +9228,66 @@ function selectMidiDevice() {
 	}
 }
 
+function isKPPrintableCode(keycode) {
+	var printable = 
+        //(keycode > 47 && keycode < 58)   || // number keys
+		keycode == 43 || keycode == 45   || //+
+        keycode == 32 || keycode == 13   || // spacebar & return key(s) (if you want to allow carriage returns)
+        (keycode > 96 && keycode < 123)   || // letter keys
+        //(keycode > 48 && keycode < 58)  || // numpad keys
+		keycode == 46 || keycode == 42 || //. or *
+		keycode == 47 || keycode == 37 || // / or %
+		keycode == 40 || keycode == 41 || // () 
+        (keycode > 185 && keycode < 193) || // ;=,-./` (in order)
+        (keycode > 218 && keycode < 223);   // [\]' (in order)
+		
+	return printable;
+}
+
+function isKSPrintableCode(keycode) {
+	var printable = 
+        //(keycode > 47 && keycode < 58)   || // number keys
+        keycode == 32 || keycode == 13   || // spacebar & return key(s) (if you want to allow carriage returns)
+        (keycode > 64 && keycode < 91)   || // letter keys
+        (keycode > 95 && keycode < 112)  || // numpad keys
+		keycode == 46 || // .
+        (keycode > 185 && keycode < 193) || // ;=,-./` (in order)
+        (keycode > 218 && keycode < 223);   // [\]' (in order)
+		
+	return printable;
+}
+
+function onkeypress(event) {
+	//console.log("keypress: " + event.keyCode + ' was pressed ' + isKPPrintableCode(event.keyCode));
+	if (!isKPPrintableCode(event.keyCode)) return;
+	if (focusOb) {
+		if(focusOb.press(event.keyCode)) event.preventDefault();
+		//event.preventDefault();
+	}
+}
+
 function keystart(event) {
-	setMsg(event.keyCode + ' was pressed');
+	if (event.keyCode == 16) {
+		shiftOn = true;
+	}
+	if (shiftOn) return;
+	if (isKSPrintableCode(event.keyCode)) return;
+	//console.log("keystart: " + event.keyCode + ' was pressed');		
 	if (event.keyCode == 17 && !clicking) {
 		ctrlOn = true;
 		return;
 	}
-	if (focusOb) {
+	if (focusOb ) {
 		if(focusOb.press(event.keyCode)) event.preventDefault();
 		//event.preventDefault();
 	}
 };
 
 function keyend(event) {
-	setMsg(event.keyCode + ' was unpressed');
+	//console.log(event.keyCode + ' was unpressed');
+	if (event.keyCode == 16) {
+		shiftOn = false;
+	}
 	if (event.keyCode == 17) {
 		ctrlOn = false;
 		return;	
@@ -9443,8 +9674,13 @@ function touchstart(event) {
 	//document.getElementById("msgdiv").innerHTML = "touchstart";
 }
 
-function getDragObLength() {
-	return dragOb.length;
+function getNumDragMods() {
+	var l = dragOb.length;
+	if (piano.square.visible) l--;
+	for (var i = 0; i < dragOb.length; i++) {
+		if (dragOb[i].isNode) l--;
+	}
+	return l;
 }
 
 function releaseDragObs() {
