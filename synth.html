@@ -2091,6 +2091,7 @@ class RBPanel extends SynthModule {
 		if (!isdown) {
 			this.abtn = -1;
 		}
+		return hit;
 	}
 }
 
@@ -2541,11 +2542,11 @@ class ENVLPModule extends SynthModule {
 	}
 	
 	hitCheck(isdown, coords) {
-		this.knobSV.hitCheck(isdown, coords);
-		this.knobA.hitCheck(isdown, coords);
-		this.knobAV.hitCheck(isdown, coords);
-		this.knobD.hitCheck(isdown, coords);
-		this.knobDV.hitCheck(isdown, coords);
+		if (this.knobSV.hitCheck(isdown, coords)) return true;
+		if (this.knobA.hitCheck(isdown, coords)) return true;
+		if (this.knobAV.hitCheck(isdown, coords)) return true;
+		if (this.knobD.hitCheck(isdown, coords)) return true;
+		if (this.knobDV.hitCheck(isdown, coords)) return true;
 	}
 	
 	drawOb(ctx) {
@@ -8853,7 +8854,7 @@ class Piano {
 		if (this.square.visible || ((ctrlOn || getNumDragMods() == 0) && !found)) {
 			this.doSquare(coords, isdown);
 		}
-		if (!isdown && getNumDragMods() > 1) {
+		if (!isdown && getNumDragMods() > 0) {
 			piano.checkCans(dragOb, true);
 			for (var i = 0; i < this.cans.length; i++) {
 				if (this.cans[i].inBounds(coords.x, coords.y)) {
@@ -8865,7 +8866,7 @@ class Piano {
 	}
 	
 	hitCheck(coords, isdown) {
-		if (ctrlOn || getNumDragMods() > 1) {
+		if (ctrlOn || getNumDragMods() > 0) {
 			this.ctrlHitCheck(coords, isdown);
 			return;
 		}
