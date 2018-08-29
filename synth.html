@@ -5,7 +5,7 @@
 var numpianos = 25;
 var lastonum = 0;
 var playcount = 0;
-var testconfig = '{"voices":25, "mods":[{"type":"SynthModKeyboard" , "x":10 , "y":388.03749999999997 , "w":126 , "h":120.96000000000001 , "outnodes" : [{"mod":1 , "node":0} , {"mod":4 , "node":2} , {"mod":-1 , "node":-1}]}, {"type":"SynthOscContainer" , "x":144 , "y":388.03749999999997 , "w":352.80000000000007 , "h":120.96000000000001 , "outnodes" : [{"mod":2 , "node":0}] , "osc":"2"}, {"type":"SynthGainContainer" , "x":506 , "y":388.03749999999997 , "w":141.12 , "h":131.04000000000002 , "outnodes" : [{"mod":6 , "node":0}] , "gain":0 , "mute":0}, {"type":"SpeakerMod" , "x":1014.4000000000001 , "y":388.03749999999997 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : []}, {"type":"SynthADSRContainer" , "x":168.20000000000005 , "y":517.8375000000001 , "w":302.40000000000003 , "h":201.60000000000002 , "outnodes" : [{"mod":2 , "node":4}] , "A":0.01 , "D":0.05 , "DV":0.5 , "S":5 , "SV":0.1 , "R":0.00001}, {"type":"AnalyserContainer" , "x":804.8400000000001 , "y":388.03749999999997 , "w":201.60000000000002 , "h":201.60000000000002 , "outnodes" : [{"mod":3 , "node":0}]}, {"type":"SynthGainContainer" , "x":655.44 , "y":388.03749999999997 , "w":141.12 , "h":131.04000000000002 , "outnodes" : [{"mod":5 , "node":0}] , "gain":1 , "mute":0}, {"type":"SynthModKeyboard" , "x":315.46375 , "y":753.52 , "w":126 , "h":120.96000000000001 , "outnodes" : [{"mod":14 , "node":0} , {"mod":-1 , "node":-1} , {"mod":-1 , "node":-1}]}, {"type":"CountMod" , "x":729.6800000000001 , "y":819.5999999999999 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : [{"mod":9 , "node":1}]}, {"type":"ExpMod" , "x":864.375 , "y":669.5999999999999 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : [{"mod":10 , "node":0}] , "exp":"x+y"}, {"type":"TextField" , "x":1065.46375 , "y":641.7199999999998 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":11 , "node":0}] , "val":1 , "digs":2}, {"type":"MoreThanMod" , "x":1004.85375 , "y":773.5999999999999 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : [{"mod":13 , "node":0}] , "val":3}, {"type":"CountMod" , "x":1187.6800000000003 , "y":789.5999999999999 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : [{"mod":-1 , "node":-1}]}, {"type":"SplitterMod" , "x":1021.5487499999999 , "y":907.5999999999999 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : [{"mod":12 , "node":0} , {"mod":-1 , "node":-1} , {"mod":8 , "node":1}]}, {"type":"CountMod" , "x":477.68000000000006 , "y":789.5999999999999 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : [{"mod":15 , "node":0}]}, {"type":"MoreThanMod" , "x":590.85375 , "y":815.5999999999999 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : [{"mod":8 , "node":0}] , "val":2}, {"type":"TextField" , "x":767.4637499999999 , "y":664.7199999999998 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":9 , "node":0}] , "val":1 , "digs":2}, {"type":"ClickMod" , "x":1169.3325 , "y":921.5999999999999 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : [{"mod":12 , "node":1}]}, {"type":"ClickMod" , "x":397.3325 , "y":921.5999999999999 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : [{"mod":14 , "node":1}]}]}';
+var testconfig = '{"voices":25, "mods":[{"type":"SynthModKeyboard" , "x":10 , "y":388.03749999999997 , "w":126 , "h":120.96000000000001 , "outnodes" : [{"mod":1 , "node":0} , {"mod":4 , "node":2} , {"mod":-1 , "node":-1}]}, {"type":"SynthOscContainer" , "x":144 , "y":388.03749999999997 , "w":352.80000000000007 , "h":120.96000000000001 , "outnodes" : [{"mod":2 , "node":0}] , "osc":"2"}, {"type":"SynthGainContainer" , "x":506 , "y":388.03749999999997 , "w":141.12 , "h":131.04000000000002 , "outnodes" : [{"mod":6 , "node":0}] , "gain":0 , "mute":0}, {"type":"SpeakerMod" , "x":1014.4000000000001 , "y":388.03749999999997 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : []}, {"type":"SynthADSRContainer" , "x":168.20000000000005 , "y":517.8375000000001 , "w":302.40000000000003 , "h":201.60000000000002 , "outnodes" : [{"mod":2 , "node":4}] , "A":0.01 , "D":0.05 , "DV":0.5 , "S":5 , "SV":0.1 , "R":0.00001}, {"type":"AnalyserContainer" , "x":804.8400000000001 , "y":388.03749999999997 , "w":201.60000000000002 , "h":201.60000000000002 , "outnodes" : [{"mod":3 , "node":0}]}, {"type":"SynthGainContainer" , "x":655.44 , "y":388.03749999999997 , "w":141.12 , "h":131.04000000000002 , "outnodes" : [{"mod":5 , "node":0}] , "gain":1 , "mute":0}, {"type":"CountMod" , "x":497.68000000000006 , "y":801.5999999999999 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : [{"mod":9 , "node":0}]}, {"type":"SynthModKeyboard" , "x":181.46375 , "y":843.52 , "w":126 , "h":120.96000000000001 , "outnodes" : [{"mod":-1 , "node":-1} , {"mod":7 , "node":0} , {"mod":-1 , "node":-1}]}, {"type":"TextField" , "x":629.4637499999999 , "y":802.0374999999999 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":11 , "node":2}] , "val":0 , "digs":2}, {"type":"MoreThanMod" , "x":810.85375 , "y":943.5999999999999 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : [{"mod":7 , "node":1}] , "val":5}, {"type":"MergerMod" , "x":748.7225000000001 , "y":769.5999999999999 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : [{"mod":12 , "node":0}]}, {"type":"TextField" , "x":929.4637499999999 , "y":788.7199999999998 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":10 , "node":0}] , "val":6 , "digs":2}, {"type":"TextField" , "x":649.4637499999999 , "y":714.7199999999998 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":11 , "node":0}] , "val":6 , "digs":2}]}';
 var samplewhistle = '[{"type":"SynthModKeyboard" , "x":610 , "y":663.0374999999999 , "w":126 , "h":120.96000000000001 , "outnodes" : [{"mod":8 , "node":0} , {"mod":12 , "node":2}]}, {"type":"SynthGainContainer" , "x":1449 , "y":622.0374999999999 , "w":141.12 , "h":131.04000000000002 , "outnodes" : [{"mod":4 , "node":0}] , "gain":0 , "mute":0}, {"type":"SpeakerMod" , "x":1862.4 , "y":388.03749999999997 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : []}, {"type":"SynthADSRContainer" , "x":1123.1999999999998 , "y":867.0374999999999 , "w":302.40000000000003 , "h":201.60000000000002 , "outnodes" : [{"mod":1 , "node":4}] , "A":0.193805576875212 , "D":0.17603810985728824 , "DV":1 , "S":5 , "SV":1 , "R":0.3991666056685008}, {"type":"AnalyserContainer" , "x":1628.8400000000001 , "y":388.03749999999997 , "w":201.60000000000002 , "h":201.60000000000002 , "outnodes" : [{"mod":2 , "node":0}]}, {"type":"SynthGainContainer" , "x":689.44 , "y":388.03749999999997 , "w":141.12 , "h":131.04000000000002 , "outnodes" : [{"mod":6 , "node":6}] , "gain":19.117457920698772 , "mute":0}, {"type":"SynthFilterContainer" , "x":983.6800000000003 , "y":388.03749999999997 , "w":604.8000000000001 , "h":201.60000000000002 , "outnodes" : [{"mod":1 , "node":0}] , "filter":"2" , "F":100 , "Q":0.0001 , "G":0}, {"type":"WhiteNoiseContainer" , "x":564.9850000000001 , "y":427.0374999999999 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : [{"mod":5 , "node":0}]}, {"type":"TextField" , "x":606.4637499999999 , "y":556.7199999999998 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":13 , "node":0}] , "val":391.9952 , "digs":2}, {"type":"TextField" , "x":871.4637499999999 , "y":388.03749999999997 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":5 , "node":2}] , "val":100 , "digs":2}, {"type":"SynthENVLPContainer" , "x":1103.50625 , "y":632.1999999999998 , "w":302.40000000000003 , "h":201.60000000000002 , "outnodes" : [{"mod":6 , "node":3}] , "SV":152.31136530781583 , "A":1.630190549286441 , "AV":1000 , "D":1 , "DV":1000}, {"type":"SynthModKeyboard" , "x":972.4637499999999 , "y":869.52 , "w":126 , "h":120.96000000000001 , "outnodes" : [{"mod":10 , "node":2} , {"mod":3 , "node":2}]}, {"type":"SynthENVLPContainer" , "x":770.5062499999999 , "y":641.1999999999998 , "w":302.40000000000003 , "h":201.60000000000002 , "outnodes" : [{"mod":6 , "node":1}] , "SV":391.9952 , "A":0.001 , "AV":391.9952 , "D":0.3 , "DV":431.1947200000001}, {"type":"SplitterMod" , "x":701.375 , "y":526.5999999999999 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : [{"mod":14 , "node":0} , {"mod":12 , "node":5} , {"mod":12 , "node":3}]}, {"type":"TextFieldMulti" , "x":848.6375 , "y":496.5999999999999 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : [{"mod":12 , "node":7}] , "val":1.1}, {"type":"TextField" , "x":887.46375 , "y":860.7199999999999 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":12 , "node":6}] , "val":0.3 , "digs":1}]';
 var sampleconfig = '[{"type":"SynthModKeyboard" , "x":283 , "y":804.6375 , "w":126 , "h":120.96000000000001 , "outnodes" : [{"mod":4 , "node":2} , {"mod":-1 , "node":-1}]}, {"type":"SynthOscContainer" , "x":571 , "y":388.03749999999997 , "w":352.80000000000007 , "h":120.96000000000001 , "outnodes" : [{"mod":2 , "node":0}] , "osc":"2"}, {"type":"SynthGainContainer" , "x":957 , "y":596.0375000000001 , "w":141.12 , "h":131.04000000000002 , "outnodes" : [{"mod":17 , "node":0}] , "gain":0}, {"type":"SpeakerMod" , "x":1780.4 , "y":388.03749999999997 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : []}, {"type":"SynthADSRContainer" , "x":417.20000000000005 , "y":723.8374999999999 , "w":302.40000000000003 , "h":201.60000000000002 , "outnodes" : [{"mod":2 , "node":4}] , "A":0.0001 , "D":0.05 , "DV":0.5 , "S":5 , "SV":0.1 , "R":0.00001}, {"type":"AnalyserContainer" , "x":1571.8400000000001 , "y":388.03749999999997 , "w":201.60000000000002 , "h":201.60000000000002 , "outnodes" : [{"mod":3 , "node":0}]}, {"type":"SynthModKeyboard" , "x":12 , "y":388.03749999999997 , "w":126 , "h":120.96000000000001 , "outnodes" : [{"mod":7 , "node":0} , {"mod":8 , "node":0}]}, {"type":"TextField" , "x":148.76 , "y":388.03749999999997 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":11 , "node":0}] , "val":523.2512 , "digs":2}, {"type":"SynthENVLPContainer" , "x":259.96000000000004 , "y":388.03749999999997 , "w":302.40000000000003 , "h":201.60000000000002 , "outnodes" : [{"mod":1 , "node":0}] , "SV":0 , "A":0.021982969631349564 , "AV":1 , "D":1 , "DV":1}, {"type":"SynthGainContainer" , "x":1422.44 , "y":598.1175000000001 , "w":141.12 , "h":131.04000000000002 , "outnodes" : [{"mod":5 , "node":0}] , "gain":0.14443311085589508}, {"type":"SynthFilterContainer" , "x":958.7200000000003 , "y":388.03749999999997 , "w":604.8000000000001 , "h":201.60000000000002 , "outnodes" : [{"mod":9 , "node":0}] , "filter":"0" , "F":2740.4813984653783 , "Q":10 , "G":40}, {"type":"TextFieldMulti" , "x":148.51999999999998 , "y":470.2374999999999 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : [{"mod":8 , "node":1}] , "val":3}, {"type":"TextField" , "x":570.76 , "y":518.2375000000002 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":1 , "node":2}] , "val":0.25 , "digs":2}, {"type":"SynthOscContainer" , "x":367.9200000000001 , "y":595.1575 , "w":352.80000000000007 , "h":120.96000000000001 , "outnodes" : [{"mod":14 , "node":0}] , "osc":"0"}, {"type":"SynthGainContainer" , "x":730.44 , "y":518.1175000000001 , "w":141.12 , "h":131.04000000000002 , "outnodes" : [{"mod":1 , "node":1}] , "gain":2.3109297736943217}, {"type":"TextField" , "x":649.76 , "y":517.2375000000004 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":14 , "node":2}] , "val":10 , "digs":2}, {"type":"TextField" , "x":290.76 , "y":596.0375000000001 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":13 , "node":0}] , "val":2 , "digs":2}, {"type":"WaveShaperContainer" , "x":1105 , "y":596.2375000000002 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : [{"mod":10 , "node":6}]}]';
 var sampleconfigai = '[{"type":"SynthModKeyboard" , "x":10 , "y":388.03749999999997 , "w":126 , "h":120.96000000000001 , "outnodes" : [{"mod":1 , "node":0} , {"mod":4 , "node":2}]}, {"type":"SynthOscContainer" , "x":144 , "y":388.03749999999997 , "w":352.80000000000007 , "h":120.96000000000001 , "outnodes" : [{"mod":2 , "node":0}] , "osc":"2"}, {"type":"SynthGainContainer" , "x":534 , "y":388.03749999999997 , "w":141.12 , "h":131.04000000000002 , "outnodes" : [{"mod":5 , "node":0}] , "gain":0}, {"type":"SpeakerMod" , "x":1874 , "y":388.03749999999997 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : []}, {"type":"SynthADSRContainer" , "x":10.200000000000045 , "y":516.8375000000001 , "w":302.40000000000003 , "h":201.60000000000002 , "outnodes" : [{"mod":2 , "node":4}] , "A":0.05786746701792378 , "D":0.27581828016097476 , "DV":0.39075487784422464 , "S":6.3708015248504966 , "SV":0.3224774072578015 , "R":0.07353884841261857}, {"type":"SplitterMod" , "x":632.28 , "y":530.2375 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : [{"mod":8 , "node":6} , {"mod":9 , "node":6} , {"mod":10 , "node":6}]}, {"type":"AnalyserContainer" , "x":1664.8400000000001 , "y":388.03749999999997 , "w":201.60000000000002 , "h":201.60000000000002 , "outnodes" : [{"mod":3 , "node":0}]}, {"type":"SynthGainContainer" , "x":1361.44 , "y":460.0375000000001 , "w":141.12 , "h":131.04000000000002 , "outnodes" : [{"mod":13 , "node":0}] , "gain":1}, {"type":"SynthFilterContainer" , "x":743.7200000000003 , "y":388.03749999999997 , "w":604.8000000000001 , "h":201.60000000000002 , "outnodes" : [{"mod":7 , "node":0}] , "filter":"2" , "F":100 , "Q":10 , "G":0.7563978269725526}, {"type":"SynthFilterContainer" , "x":743.72 , "y":601.8375000000001 , "w":604.8000000000001 , "h":201.60000000000002 , "outnodes" : [{"mod":11 , "node":0}] , "filter":"2" , "F":100 , "Q":10 , "G":40}, {"type":"SynthFilterContainer" , "x":744.72 , "y":809.8374999999999 , "w":604.8000000000001 , "h":201.60000000000002 , "outnodes" : [{"mod":12 , "node":0}] , "filter":"2" , "F":100 , "Q":10 , "G":0}, {"type":"SynthGainContainer" , "x":1361.44 , "y":601.1175000000001 , "w":141.12 , "h":131.04000000000002 , "outnodes" : [{"mod":13 , "node":1}] , "gain":0.1990527488900366}, {"type":"SynthGainContainer" , "x":1363.44 , "y":743.1175000000001 , "w":141.12 , "h":131.04000000000002 , "outnodes" : [{"mod":13 , "node":2}] , "gain":0.10766831900166715}, {"type":"MergerMod" , "x":1515.04 , "y":598.2375000000002 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : [{"mod":14 , "node":0}]}, {"type":"SynthGainContainer" , "x":1513.44 , "y":458.1175 , "w":141.12 , "h":131.04000000000002 , "outnodes" : [{"mod":6 , "node":0}] , "gain":0.4464296153727665}, {"type":"SynthENVLPContainer" , "x":322.96000000000004 , "y":605.8375000000001 , "w":302.40000000000003 , "h":201.60000000000002 , "outnodes" : [{"mod":8 , "node":1}] , "SV":825 , "A":0.3 , "AV":370 , "D":2.545762197145765 , "DV":370}, {"type":"SynthModKeyboard" , "x":187.64 , "y":806.1575 , "w":126 , "h":120.96000000000001 , "outnodes" : [{"mod":15 , "node":2} , {"mod":-1 , "node":-1}]}, {"type":"TextField" , "x":320.76 , "y":525.3575000000001 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":15 , "node":3}] , "val":825 , "digs":2}, {"type":"TextField" , "x":396.76 , "y":525.3575000000001 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":15 , "node":5}] , "val":370 , "digs":2}, {"type":"TextField" , "x":472.76 , "y":525.3575000000001 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":15 , "node":7}] , "val":370 , "digs":2}, {"type":"TextField" , "x":130.76 , "y":955.3575000000003 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":30 , "node":0}] , "val":0.3 , "digs":1}, {"type":"TextField" , "x":322.76 , "y":819.3575000000003 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":22 , "node":3}] , "val":1125 , "digs":2}, {"type":"SynthENVLPContainer" , "x":318.96000000000004 , "y":899.8374999999999 , "w":302.40000000000003 , "h":201.60000000000002 , "outnodes" : [{"mod":9 , "node":1}] , "SV":1125 , "A":0.3 , "AV":2290 , "D":1 , "DV":2390}, {"type":"SynthENVLPContainer" , "x":316.96000000000004 , "y":1191.8374999999999 , "w":302.40000000000003 , "h":201.60000000000002 , "outnodes" : [{"mod":10 , "node":1}] , "SV":2530 , "A":0.3 , "AV":3100 , "D":1 , "DV":3100}, {"type":"TextField" , "x":400.76 , "y":819.3575000000003 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":22 , "node":5}] , "val":2290 , "digs":2}, {"type":"TextField" , "x":478.76 , "y":819.3575000000003 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":22 , "node":7}] , "val":2390 , "digs":2}, {"type":"TextField" , "x":318.76 , "y":1111.3575000000003 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":23 , "node":3}] , "val":2530 , "digs":2}, {"type":"TextField" , "x":398.76 , "y":1111.3575000000003 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":23 , "node":5}] , "val":3100 , "digs":2}, {"type":"TextField" , "x":478.76 , "y":1111.3575000000003 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":23 , "node":7}] , "val":3100 , "digs":2}, {"type":"SynthModKeyboard" , "x":185.64 , "y":1128.1575 , "w":126 , "h":120.96000000000001 , "outnodes" : [{"mod":22 , "node":2} , {"mod":23 , "node":2}]}, {"type":"SplitterMod" , "x":210.27999999999997 , "y":956.2375000000004 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : [{"mod":15 , "node":4} , {"mod":22 , "node":4} , {"mod":23 , "node":4}]}]';
@@ -3221,7 +3221,7 @@ class SynthModContainer extends Drawable {
 	}
 	
 	trigger(on, knum, onum, f, baton) {
-		if (this.stopTrigger || (baton != null && baton === this.baton)) return;
+		if (this.stopTrigger || !checkBaton(baton, this)) return;
 		for (var i = 0; i < this.triggers.length; i++) {
 			this.triggers[i].trigger(on, knum, onum, f, baton);
 		}
@@ -3346,18 +3346,18 @@ class ValueSetter {
 		}
 	}
 	
-	setCCValue(v) {
-		return this.setValue(v);
+	setCCValue(v, baton) {
+		return this.setValue(v, baton);
 	}
 	
-	setValue(v, k, o) {
+	setValue(v, k, o, baton) {
 		this.val = v;
 		var noerr = true;
 		for (var i = 0; i < this.obj.length; i++) {
 			//if(this.iskey) {
 			//	this.obj[i].noteOnNow(v, k, o);
 			//} else {
-				if (!this.obj[i].setValue(v, k, o)) noerr = false;
+				if (!this.obj[i].setValue(v, k, o, baton)) noerr = false;
 			//}
 		}
 		return noerr;
@@ -3365,12 +3365,12 @@ class ValueSetter {
 }
 
 class CCValueSetter extends ValueSetter {
-	setValue(v, k, o) {
+	setValue(v, k, o, baton) {
 		if (v === 0) this.val = 0;
 		else this.val = v || this.val;
 		var noerr = true;
 		for (var i = 0; i < this.obj.length; i++) {
-			if (!this.obj[i].setCCValue(this.val)) noerr = false;
+			if (!this.obj[i].setCCValue(this.val, baton)) noerr = false;
 		}
 		return noerr;
 	}
@@ -3441,12 +3441,12 @@ class SelfLevelSetter {
 		//this.o.setSelfLevel(f, knum, onum);
 	}
 	
-	setCCValue(v) {
-		this.o.setSelfLevel(v);
+	setCCValue(v, baton) {
+		this.o.setSelfLevel(v, null, null, baton);
 	}
 	
-	setValue(v, k, onum) {
-		this.o.setSelfLevel(v, k, onum);
+	setValue(v, k, onum, baton) {
+		this.o.setSelfLevel(v, k, onum, baton);
 		return true;
 	}
 }
@@ -3461,12 +3461,12 @@ class ModLevelSetter {
 		//this.o.setModLevel(f, knum, onum);
 	}
 	
-	setCCValue(v) {
-		this.o.setModLevel(v);
+	setCCValue(v, baton) {
+		this.o.setModLevel(v, null, null, baton);
 	}
 	
-	setValue(v, k, onum) {
-		this.o.setModLevel(v, k, onum);
+	setValue(v, k, onum, baton) {
+		this.o.setModLevel(v, k, onum, baton);
 		return true;
 	}
 }
@@ -3485,8 +3485,8 @@ class FreqRatioSetter {
 		this.o.setFreqRatio(v);
 	}
 	
-	setValue(v, k, onum) {
-		this.o.setFreqRatio(v, k, onum);
+	setValue(v, k, onum, baton) {
+		this.o.setFreqRatio(v, k, onum, baton);
 		return true;
 	}
 }
@@ -3531,14 +3531,14 @@ class FrequencySetter {
 		}
 	}
 	
-	setCCValue(v) {
+	setCCValue(v, baton) {
 		var f = v*24000;
 		if (f < 1) return;
-		this.setValue(f, -2);
+		this.setValue(f, -2, null, baton);
 		sound.setPeriod(sound.ctx.sampleRate / f);
 	}
 	
-	setValue(v, k, onum) {
+	setValue(v, k, onum, baton) {
 		if (onum == -2) {
 			var val = v*this.multi + this.foffset;
 			for (var i = 0; i < this.o.length; i++) {
@@ -3630,8 +3630,6 @@ class GainTrigger {
 		this.name = "gain trigger";
 		this.g = g;
 		this.triggers = new Array();
-		this.baton = new Object();
-		this.baton.name = this.name;
 	}
 	
 	noteOnNow(f, knum, onum) {
@@ -3659,13 +3657,12 @@ class GainTrigger {
 		}
 	}
 	
-	setValue() {
-		this.trigger(true);
+	setValue(v, k, o, baton) {
+		this.trigger(true, k, o, v, baton);
 	}
 	
 	trigger(on, knum, onum, f, baton) {
-		if (baton === this.baton) return;
-		if (!baton) baton = this.baton;
+		if (!checkBaton(baton, this)) return;
 		for (var i = 0; i < this.triggers.length; i++) {
 			this.triggers[i].trigger(on, knum, onum, null, baton);
 		}
@@ -4180,11 +4177,11 @@ class SynthFMContainer extends SynthOscContainer {
 		this.oscTypeSel.setValue(data.osc);
 	}
 	
-	setSelfLevel(v) {
+	setSelfLevel(v, k, o, baton) {
 		this.selfLevel = v;
 	}
 	
-	setModLevel(v) {
+	setModLevel(v, k, o, baton) {
 		this.modLevel = v;
 	}
 	
@@ -5080,8 +5077,8 @@ class CCMod extends SynthModContainer {
 		this.id = data.id;
 	}
 	
-	sendValue(v) {
-		this.valueOb.setValue(v);
+	sendValue(v, t, baton) {
+		this.valueOb.setValue(v, null, null, baton);
 	}
 	
 	incrementID(amt) {
@@ -5130,17 +5127,19 @@ class ExpMod extends SynthModContainer {
 		this.expression = data.exp;
 	}
 	
-	setSelfLevel(v) {//set X value
+	setSelfLevel(v, k, o, baton) {//set X value
 		this.xval = v;
-		this.doEval();
+		this.doEval(baton);
 	}
 	
-	setModLevel(v) {//set Y value
+	setModLevel(v, k, o, baton) {//set Y value
 		this.yval = v;
-		this.doEval();
+		this.doEval(baton);
 	}
 	
-	doEval() {
+	doEval(baton) {
+		baton = checkBaton(baton, this);
+		if (!baton) return;
 		var exp = this.expression.replaceAll("x", this.xval).replaceAll("y", this.yval);
 		//console.log(exp);
 		try {
@@ -5153,7 +5152,7 @@ class ExpMod extends SynthModContainer {
 		this.crossout = false;
 		//console.log(exp+"="+ev);
 		//console.log("exp:" + this.expression);
-		this.valueOb.setValue(ev);
+		this.valueOb.setValue(ev, null, null, baton);
 	}
 	
 	hitCheck(isdown, coords) {
@@ -5270,10 +5269,10 @@ class ValueModContainer extends SynthModContainer {
 		} else if (isdown) {
 			if (focusOb === this) {
 				focusOb = qwertyboard;
-				if (!hit) this.setValue(null, null, -2, true);
+				if (!hit) this.setValue(null, null, -2, null, true);
 			}
 		} else if (hit && !focusOb === this) {
-			this.setValue(null, null, -2, true);
+			this.setValue(null, null, -2, null, true);
 		}
 		return hit;
 	}
@@ -5282,20 +5281,20 @@ class ValueModContainer extends SynthModContainer {
 		var text = document.getElementById("valin").value;
 		if (!isNaN(text)) {
 			this.text = text;
-			this.setValue(null, null, -2, true);
+			this.setValue(null, null, -2, null, true);
 		}
 		focusOb = qwertyboard;
 	}
 	
-	noteOnNow(f, k, o) {
-		this.setValue(f, k, o);
+	noteOnNow(f, k, o, v, baton) {
+		this.setValue(f, k, o, v, baton);
 	}
 	
-	setCCValue(v) {
-		this.setValue(v);
+	setCCValue(v, baton) {
+		this.setValue(v, null, null, baton);
 	}
 	
-	setValue(v, k, o) {
+	setValue(v, k, o, baton) {
 		var val = 0;
 		if (v || v === 0) {
 			val = v;
@@ -5310,7 +5309,7 @@ class ValueModContainer extends SynthModContainer {
 				this.text = this.text.substring(0, 2+this.digs);
 			}
 		}
-		this.crossout = !this.valueOb.setValue(val, k, o);
+		this.crossout = !this.valueOb.setValue(val, k, o, baton);
 		return true;
 	}
 	
@@ -5349,7 +5348,7 @@ class ValueModContainer extends SynthModContainer {
 			this.text = "";
 		} else if (n == -3) {
 			focusOb = qwertyboard;
-			this.setValue(null, null, -2, true);
+			this.setValue(null, null, -2, null, true);
 		} else if (n == -4) {
 			if(this.text.length > 0) {
 				this.text = this.text.substring(0, this.text.length - 1);
@@ -5424,11 +5423,11 @@ class TextField extends ValueModContainer {
 	}
 	
 	trigger(on, knum, onum, f, baton) {
-		if (on) this.setValue(f, knum, onum);
+		if (on) this.setValue(f, knum, onum, baton);
 		//super.trigger(on, knum, onum, f, baton);
 	}
 	
-	noteOnNow(f, k, o) {
+	noteOnNow(f, k, o, v, baton) {
 	}
 	
 	notifyConnect() {
@@ -5580,7 +5579,6 @@ class TimerMod extends ValueModContainer {
 class MoreThanMod extends ValueModContainer {
 	constructor(x, y, w, h, bl, br, bt, bb, noder) {
 		super(x, y, w, h, bl, br, bt, bb, noder);
-		this.baton = new Object();
 		//this.oscnums = new Array();
 		//this.knum = sound.getKeyNum();
 		this.cname = "MoreThanMod";
@@ -5595,7 +5593,7 @@ class MoreThanMod extends ValueModContainer {
 		this.addINode(0, this.h*0.5-noder, noder, TYPE_VALUE, [TYPE_VALUE], "value");
 		this.inNodes[0].setObject(this);
 		this.ty = this.h*0.23;
-		this.setValue(1, 0, 0, true);
+		this.setValue(1, 0, 0, null, true);
 	}
 	
 	save() {
@@ -5605,7 +5603,7 @@ class MoreThanMod extends ValueModContainer {
 	}
 	
 	load(data) {
-		this.setValue(data.val, 0, 0, true);
+		this.setValue(data.val, 0, 0, null, true);
 	}
 	
 	notifyDisconnect() {
@@ -5651,17 +5649,17 @@ class MoreThanMod extends ValueModContainer {
 		super.drawOb(ctx, this.ap, this.ty);
 	}
 	
-	setValue(v, k, o, me) {
+	setValue(v, k, o, baton, me) {
 		if (!me) {
-			this.trigger();
+			this.trigger(null, null, null, null, baton);
 			return true;
 		}
 		if (v) {
-			this.valueOb.setValue(v);
+			this.valueOb.setValue(v, null, null, baton);
 		} else {
 			v = parseFloat(this.text);
 			if (isNaN(v)) v = 0;
-			this.valueOb.setValue(v);
+			this.valueOb.setValue(v, null, null, baton);
 		}
 		this.text = this.valueOb.val.toString();
 		return true;
@@ -5778,7 +5776,7 @@ class KeyTrigger {
 	trigger(on, knum, onum, f, baton) {
 	}
 	
-	noteOnNow(f, knum, oscnum, v) {
+	noteOnNow(f, knum, oscnum, v, baton) {
 		this.parent.dokey(true, knum, oscnum, f);
 	}
 	
@@ -5827,9 +5825,9 @@ class ResetTrigger {
 		this.triggeronon = true;
 	}
 	
-	trigger(on, knum, onum, f) {
+	trigger(on, knum, onum, f, baton) {
 		if (on != this.triggeronon) return;
-		this.parent.reset();
+		this.parent.reset(baton);
 	}
 	
 	noteOnNow() {
@@ -5844,7 +5842,6 @@ class ResetTrigger {
 class CountTrigger {
 	constructor(p) {
 		this.parent = p;
-		this.baton = new Object();
 		this.triggeronon = true;
 		this.triggeronboth = false;
 	}
@@ -5853,7 +5850,7 @@ class CountTrigger {
 		if (this.triggeronboth || (on == this.triggeronon)) this.parent.docount(on, f, knum, onum, baton);
 	}
 	
-	noteOnNow(f, knum, oscnum, v) {
+	noteOnNow(f, knum, oscnum, v, baton) {
 		this.parent.docount(true, f, knum, oscnum, null);
 	}
 	
@@ -5888,14 +5885,15 @@ class CountMod extends SynthModContainer {
 	
 	docount(on, f, knum, oscnum, baton) {
 		this.val++;
-		//console.log("count: " + this.count);
-		this.valueOb.setValue(this.val);
+		this.valueOb.setValue(this.val, null, null, baton);
 		//super.trigger(on, knum, oscnum, this.valueOb.val, baton);
 	}
 	
-	reset() {
+	reset(baton) {
 		this.val = 0;
-		this.valueOb.setValue(this.val);
+		baton = checkBaton(baton, this);
+		if (!baton) return;
+		this.valueOb.setValue(this.val, null, null, baton);
 		//super.trigger(true, -1, -1, this.valueOb.val);
 	}
 	
@@ -6463,12 +6461,12 @@ class MergerMod extends SynthModContainer {
 		}
 	}
 	
-	setValue() {
-		var v = 0;
+	setValue(v, k, o, baton) {
+		v = 0;
 		for (var i = 0; i < this.inNodes.length; i++) {
 			if (this.inNodes[i].con) v += this.inNodes[i].con.obj.val;
 		}
-		if (this.vs) this.vs.setValue(v);
+		if (this.vs) this.vs.setValue(v, k, o, baton);
 		//console.log("set merger value to " + v);
 		return true;
 	}
@@ -7841,9 +7839,27 @@ class VelocityOutput {
 		}
 	}
 	
-	trigger(vel, knum, onum) {
+	trigger(vel, knum, onum, baton) {
 		for (var i = 0; i < this.outputs.length; i++) {
-			this.outputs[i].setValue(vel, knum, onum);
+			this.outputs[i].setValue(vel, knum, onum, baton);
+		}
+	}
+}
+
+function checkBaton(baton, mod) {
+	if (!baton) {
+		baton = new Baton();
+	}
+	return baton.check(mod);
+}
+
+class Baton extends Array {
+	check(mod) {
+		if (this.includes(mod)) {
+			return null;
+		} else {
+			this.push(mod);
+			return this;
 		}
 	}
 }
@@ -7907,9 +7923,10 @@ class KeyboardOutput {
 			this.outputs[i].noteOFF(oscnum, knum, msg);
 		}
 		if (oscnum < 0) return;
-		this.velocityOut.trigger(0, knum, oscnum);
+		var baton = new Baton();
+		this.velocityOut.trigger(0, knum, oscnum, baton);
 		for (var i = 0; i < this.triggers.length; i++) {
-			this.triggers[i].trigger(false, knum, oscnum, f);
+			this.triggers[i].trigger(false, knum, oscnum, f, baton);
 		}
 		sound.returnPiano(oscnum);
 	}
@@ -7927,9 +7944,10 @@ class KeyboardOutput {
 		for (var i = 0; i < this.outputs.length; i++) {
 			this.outputs[i].noteOnNow(freq*this.multi, knum, oscnum, vol);
 		}
-		this.velocityOut.trigger(vol, oscnum);
+		var baton = new Baton();
+		this.velocityOut.trigger(vol, knum, oscnum, baton);
 		for (var i = 0; i < this.triggers.length; i++) {
-			this.triggers[i].trigger(true, knum, oscnum, freq, null, vol);
+			this.triggers[i].trigger(true, knum, oscnum, freq, baton, vol);
 		}
 		if (sound.monophonic) {
 			sound.pianos[oscnum].noteOnNow(knum);
@@ -8691,7 +8709,8 @@ class Piano {
 		var t = sound.ctx.currentTime;
 		for (var i = 0; i < this.ccmods.length; i++) {
 			if (this.ccmods[i].id == note) {
-				this.ccmods[i].sendValue(velocity/127, t);
+				var baton = new Baton();
+				this.ccmods[i].sendValue(velocity/127, t, baton);
 			}
 		}
 	}
