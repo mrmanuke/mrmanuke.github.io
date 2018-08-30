@@ -6769,7 +6769,6 @@ class SPXTMod extends SynthModContainer {
 		var a, b;
 		if (this.lefthand) {
 			a = this.goToRoot(this.sNode.switchnode);
-			if (!this.outNodes[s].switchnode) console.log("asdf");
 			b = this.goToEnd(this.outNodes[s].switchnode);
 			if (!a || !b) return false;
 			if (!a.obsAreConnected) return false;
@@ -6788,7 +6787,6 @@ class SPXTMod extends SynthModContainer {
 	}
 	
 	connectSwitch(node, mynode) {
-		console.log("asdf2");
 		mynode.switchnode = node;
 		if (node.ntype == TYPE_SWITCH) node.switchnode = mynode;
 		if (mynode.isSelected) this.doConnectSel(this.sel);
