@@ -5,7 +5,7 @@
 var numpianos = 25;
 var lastonum = 0;
 var playcount = 0;
-var testconfig = '{"voices":25, "mods":[{"type":"SynthModKeyboard" , "x":10 , "y":388.03749999999997 , "w":126 , "h":120.96000000000001 , "outnodes" : [{"mod":1 , "node":0} , {"mod":4 , "node":2} , {"mod":-1 , "node":-1}]}, {"type":"SynthOscContainer" , "x":144 , "y":388.03749999999997 , "w":352.80000000000007 , "h":120.96000000000001 , "outnodes" : [{"mod":2 , "node":0}] , "osc":"2"}, {"type":"SynthGainContainer" , "x":506 , "y":388.03749999999997 , "w":141.12 , "h":131.04000000000002 , "outnodes" : [{"mod":6 , "node":0}] , "gain":0 , "mute":0}, {"type":"SpeakerMod" , "x":1014.4000000000001 , "y":388.03749999999997 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : []}, {"type":"SynthADSRContainer" , "x":168.20000000000005 , "y":517.8375000000001 , "w":302.40000000000003 , "h":201.60000000000002 , "outnodes" : [{"mod":2 , "node":4}] , "A":0.01 , "D":0.05 , "DV":0.5 , "S":5 , "SV":0.1 , "R":0.00001}, {"type":"AnalyserContainer" , "x":804.8400000000001 , "y":388.03749999999997 , "w":201.60000000000002 , "h":201.60000000000002 , "outnodes" : [{"mod":3 , "node":0}]}, {"type":"SynthGainContainer" , "x":655.44 , "y":388.03749999999997 , "w":141.12 , "h":131.04000000000002 , "outnodes" : [{"mod":5 , "node":0}] , "gain":1 , "mute":0}, {"type":"CountMod" , "x":497.68000000000006 , "y":801.5999999999999 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : [{"mod":9 , "node":0}]}, {"type":"SynthModKeyboard" , "x":181.46375 , "y":843.52 , "w":126 , "h":120.96000000000001 , "outnodes" : [{"mod":-1 , "node":-1} , {"mod":7 , "node":0} , {"mod":-1 , "node":-1}]}, {"type":"TextField" , "x":629.4637499999999 , "y":802.0374999999999 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":11 , "node":2}] , "val":0 , "digs":2}, {"type":"MoreThanMod" , "x":810.85375 , "y":943.5999999999999 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : [{"mod":7 , "node":1}] , "val":5}, {"type":"MergerMod" , "x":748.7225000000001 , "y":769.5999999999999 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : [{"mod":12 , "node":0}]}, {"type":"TextField" , "x":929.4637499999999 , "y":788.7199999999998 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":10 , "node":0}] , "val":6 , "digs":2}, {"type":"TextField" , "x":649.4637499999999 , "y":714.7199999999998 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":11 , "node":0}] , "val":6 , "digs":2}]}';
+var testconfig = '{"voices":25, "mods":[{"type":"SynthModKeyboard" , "x":10 , "y":388.03749999999997 , "w":126 , "h":120.96000000000001 , "outnodes" : [{"mod":1 , "node":0} , {"mod":4 , "node":2} , {"mod":-1 , "node":-1}]}, {"type":"SynthOscContainer" , "x":144 , "y":388.03749999999997 , "w":352.80000000000007 , "h":120.96000000000001 , "outnodes" : [{"mod":2 , "node":0}] , "osc":"2"}, {"type":"SynthGainContainer" , "x":506 , "y":388.03749999999997 , "w":141.12 , "h":131.04000000000002 , "outnodes" : [{"mod":6 , "node":0}] , "gain":0 , "mute":0}, {"type":"SpeakerMod" , "x":1014.4000000000001 , "y":388.03749999999997 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : []}, {"type":"SynthADSRContainer" , "x":168.20000000000005 , "y":517.8375000000001 , "w":302.40000000000003 , "h":201.60000000000002 , "outnodes" : [{"mod":2 , "node":4}] , "A":0.01 , "D":0.05 , "DV":0.5 , "S":5 , "SV":0.1 , "R":0.00001}, {"type":"AnalyserContainer" , "x":804.8400000000001 , "y":388.03749999999997 , "w":201.60000000000002 , "h":201.60000000000002 , "outnodes" : [{"mod":3 , "node":0}]}, {"type":"SynthGainContainer" , "x":655.44 , "y":388.03749999999997 , "w":141.12 , "h":131.04000000000002 , "outnodes" : [{"mod":7 , "node":0}] , "gain":1 , "mute":0}, {"type":"SPDTLMod" , "sel":0 , "x":701.8962500000002 , "y":737.5999999999999 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : [{"mod":8 , "node":0} , {"mod":9 , "node":0}]}, {"type":"SPDTLMod" , "sel":0 , "x":855.8962500000002 , "y":611.5999999999999 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : [{"mod":5 , "node":0} , {"mod":10 , "node":0}]}, {"type":"AnalyserContainer" , "x":837.7650000000003 , "y":741.1999999999998 , "w":201.60000000000002 , "h":201.60000000000002 , "outnodes" : [{"mod":-1 , "node":-1}]}, {"type":"AnalyserContainer" , "x":1083.7650000000003 , "y":561.1999999999999 , "w":201.60000000000002 , "h":201.60000000000002 , "outnodes" : [{"mod":-1 , "node":-1}]}]}';
 var samplewhistle = '[{"type":"SynthModKeyboard" , "x":610 , "y":663.0374999999999 , "w":126 , "h":120.96000000000001 , "outnodes" : [{"mod":8 , "node":0} , {"mod":12 , "node":2}]}, {"type":"SynthGainContainer" , "x":1449 , "y":622.0374999999999 , "w":141.12 , "h":131.04000000000002 , "outnodes" : [{"mod":4 , "node":0}] , "gain":0 , "mute":0}, {"type":"SpeakerMod" , "x":1862.4 , "y":388.03749999999997 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : []}, {"type":"SynthADSRContainer" , "x":1123.1999999999998 , "y":867.0374999999999 , "w":302.40000000000003 , "h":201.60000000000002 , "outnodes" : [{"mod":1 , "node":4}] , "A":0.193805576875212 , "D":0.17603810985728824 , "DV":1 , "S":5 , "SV":1 , "R":0.3991666056685008}, {"type":"AnalyserContainer" , "x":1628.8400000000001 , "y":388.03749999999997 , "w":201.60000000000002 , "h":201.60000000000002 , "outnodes" : [{"mod":2 , "node":0}]}, {"type":"SynthGainContainer" , "x":689.44 , "y":388.03749999999997 , "w":141.12 , "h":131.04000000000002 , "outnodes" : [{"mod":6 , "node":6}] , "gain":19.117457920698772 , "mute":0}, {"type":"SynthFilterContainer" , "x":983.6800000000003 , "y":388.03749999999997 , "w":604.8000000000001 , "h":201.60000000000002 , "outnodes" : [{"mod":1 , "node":0}] , "filter":"2" , "F":100 , "Q":0.0001 , "G":0}, {"type":"WhiteNoiseContainer" , "x":564.9850000000001 , "y":427.0374999999999 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : [{"mod":5 , "node":0}]}, {"type":"TextField" , "x":606.4637499999999 , "y":556.7199999999998 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":13 , "node":0}] , "val":391.9952 , "digs":2}, {"type":"TextField" , "x":871.4637499999999 , "y":388.03749999999997 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":5 , "node":2}] , "val":100 , "digs":2}, {"type":"SynthENVLPContainer" , "x":1103.50625 , "y":632.1999999999998 , "w":302.40000000000003 , "h":201.60000000000002 , "outnodes" : [{"mod":6 , "node":3}] , "SV":152.31136530781583 , "A":1.630190549286441 , "AV":1000 , "D":1 , "DV":1000}, {"type":"SynthModKeyboard" , "x":972.4637499999999 , "y":869.52 , "w":126 , "h":120.96000000000001 , "outnodes" : [{"mod":10 , "node":2} , {"mod":3 , "node":2}]}, {"type":"SynthENVLPContainer" , "x":770.5062499999999 , "y":641.1999999999998 , "w":302.40000000000003 , "h":201.60000000000002 , "outnodes" : [{"mod":6 , "node":1}] , "SV":391.9952 , "A":0.001 , "AV":391.9952 , "D":0.3 , "DV":431.1947200000001}, {"type":"SplitterMod" , "x":701.375 , "y":526.5999999999999 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : [{"mod":14 , "node":0} , {"mod":12 , "node":5} , {"mod":12 , "node":3}]}, {"type":"TextFieldMulti" , "x":848.6375 , "y":496.5999999999999 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : [{"mod":12 , "node":7}] , "val":1.1}, {"type":"TextField" , "x":887.46375 , "y":860.7199999999999 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":12 , "node":6}] , "val":0.3 , "digs":1}]';
 var sampleconfig = '[{"type":"SynthModKeyboard" , "x":283 , "y":804.6375 , "w":126 , "h":120.96000000000001 , "outnodes" : [{"mod":4 , "node":2} , {"mod":-1 , "node":-1}]}, {"type":"SynthOscContainer" , "x":571 , "y":388.03749999999997 , "w":352.80000000000007 , "h":120.96000000000001 , "outnodes" : [{"mod":2 , "node":0}] , "osc":"2"}, {"type":"SynthGainContainer" , "x":957 , "y":596.0375000000001 , "w":141.12 , "h":131.04000000000002 , "outnodes" : [{"mod":17 , "node":0}] , "gain":0}, {"type":"SpeakerMod" , "x":1780.4 , "y":388.03749999999997 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : []}, {"type":"SynthADSRContainer" , "x":417.20000000000005 , "y":723.8374999999999 , "w":302.40000000000003 , "h":201.60000000000002 , "outnodes" : [{"mod":2 , "node":4}] , "A":0.0001 , "D":0.05 , "DV":0.5 , "S":5 , "SV":0.1 , "R":0.00001}, {"type":"AnalyserContainer" , "x":1571.8400000000001 , "y":388.03749999999997 , "w":201.60000000000002 , "h":201.60000000000002 , "outnodes" : [{"mod":3 , "node":0}]}, {"type":"SynthModKeyboard" , "x":12 , "y":388.03749999999997 , "w":126 , "h":120.96000000000001 , "outnodes" : [{"mod":7 , "node":0} , {"mod":8 , "node":0}]}, {"type":"TextField" , "x":148.76 , "y":388.03749999999997 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":11 , "node":0}] , "val":523.2512 , "digs":2}, {"type":"SynthENVLPContainer" , "x":259.96000000000004 , "y":388.03749999999997 , "w":302.40000000000003 , "h":201.60000000000002 , "outnodes" : [{"mod":1 , "node":0}] , "SV":0 , "A":0.021982969631349564 , "AV":1 , "D":1 , "DV":1}, {"type":"SynthGainContainer" , "x":1422.44 , "y":598.1175000000001 , "w":141.12 , "h":131.04000000000002 , "outnodes" : [{"mod":5 , "node":0}] , "gain":0.14443311085589508}, {"type":"SynthFilterContainer" , "x":958.7200000000003 , "y":388.03749999999997 , "w":604.8000000000001 , "h":201.60000000000002 , "outnodes" : [{"mod":9 , "node":0}] , "filter":"0" , "F":2740.4813984653783 , "Q":10 , "G":40}, {"type":"TextFieldMulti" , "x":148.51999999999998 , "y":470.2374999999999 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : [{"mod":8 , "node":1}] , "val":3}, {"type":"TextField" , "x":570.76 , "y":518.2375000000002 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":1 , "node":2}] , "val":0.25 , "digs":2}, {"type":"SynthOscContainer" , "x":367.9200000000001 , "y":595.1575 , "w":352.80000000000007 , "h":120.96000000000001 , "outnodes" : [{"mod":14 , "node":0}] , "osc":"0"}, {"type":"SynthGainContainer" , "x":730.44 , "y":518.1175000000001 , "w":141.12 , "h":131.04000000000002 , "outnodes" : [{"mod":1 , "node":1}] , "gain":2.3109297736943217}, {"type":"TextField" , "x":649.76 , "y":517.2375000000004 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":14 , "node":2}] , "val":10 , "digs":2}, {"type":"TextField" , "x":290.76 , "y":596.0375000000001 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":13 , "node":0}] , "val":2 , "digs":2}, {"type":"WaveShaperContainer" , "x":1105 , "y":596.2375000000002 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : [{"mod":10 , "node":6}]}]';
 var sampleconfigai = '[{"type":"SynthModKeyboard" , "x":10 , "y":388.03749999999997 , "w":126 , "h":120.96000000000001 , "outnodes" : [{"mod":1 , "node":0} , {"mod":4 , "node":2}]}, {"type":"SynthOscContainer" , "x":144 , "y":388.03749999999997 , "w":352.80000000000007 , "h":120.96000000000001 , "outnodes" : [{"mod":2 , "node":0}] , "osc":"2"}, {"type":"SynthGainContainer" , "x":534 , "y":388.03749999999997 , "w":141.12 , "h":131.04000000000002 , "outnodes" : [{"mod":5 , "node":0}] , "gain":0}, {"type":"SpeakerMod" , "x":1874 , "y":388.03749999999997 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : []}, {"type":"SynthADSRContainer" , "x":10.200000000000045 , "y":516.8375000000001 , "w":302.40000000000003 , "h":201.60000000000002 , "outnodes" : [{"mod":2 , "node":4}] , "A":0.05786746701792378 , "D":0.27581828016097476 , "DV":0.39075487784422464 , "S":6.3708015248504966 , "SV":0.3224774072578015 , "R":0.07353884841261857}, {"type":"SplitterMod" , "x":632.28 , "y":530.2375 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : [{"mod":8 , "node":6} , {"mod":9 , "node":6} , {"mod":10 , "node":6}]}, {"type":"AnalyserContainer" , "x":1664.8400000000001 , "y":388.03749999999997 , "w":201.60000000000002 , "h":201.60000000000002 , "outnodes" : [{"mod":3 , "node":0}]}, {"type":"SynthGainContainer" , "x":1361.44 , "y":460.0375000000001 , "w":141.12 , "h":131.04000000000002 , "outnodes" : [{"mod":13 , "node":0}] , "gain":1}, {"type":"SynthFilterContainer" , "x":743.7200000000003 , "y":388.03749999999997 , "w":604.8000000000001 , "h":201.60000000000002 , "outnodes" : [{"mod":7 , "node":0}] , "filter":"2" , "F":100 , "Q":10 , "G":0.7563978269725526}, {"type":"SynthFilterContainer" , "x":743.72 , "y":601.8375000000001 , "w":604.8000000000001 , "h":201.60000000000002 , "outnodes" : [{"mod":11 , "node":0}] , "filter":"2" , "F":100 , "Q":10 , "G":40}, {"type":"SynthFilterContainer" , "x":744.72 , "y":809.8374999999999 , "w":604.8000000000001 , "h":201.60000000000002 , "outnodes" : [{"mod":12 , "node":0}] , "filter":"2" , "F":100 , "Q":10 , "G":0}, {"type":"SynthGainContainer" , "x":1361.44 , "y":601.1175000000001 , "w":141.12 , "h":131.04000000000002 , "outnodes" : [{"mod":13 , "node":1}] , "gain":0.1990527488900366}, {"type":"SynthGainContainer" , "x":1363.44 , "y":743.1175000000001 , "w":141.12 , "h":131.04000000000002 , "outnodes" : [{"mod":13 , "node":2}] , "gain":0.10766831900166715}, {"type":"MergerMod" , "x":1515.04 , "y":598.2375000000002 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : [{"mod":14 , "node":0}]}, {"type":"SynthGainContainer" , "x":1513.44 , "y":458.1175 , "w":141.12 , "h":131.04000000000002 , "outnodes" : [{"mod":6 , "node":0}] , "gain":0.4464296153727665}, {"type":"SynthENVLPContainer" , "x":322.96000000000004 , "y":605.8375000000001 , "w":302.40000000000003 , "h":201.60000000000002 , "outnodes" : [{"mod":8 , "node":1}] , "SV":825 , "A":0.3 , "AV":370 , "D":2.545762197145765 , "DV":370}, {"type":"SynthModKeyboard" , "x":187.64 , "y":806.1575 , "w":126 , "h":120.96000000000001 , "outnodes" : [{"mod":15 , "node":2} , {"mod":-1 , "node":-1}]}, {"type":"TextField" , "x":320.76 , "y":525.3575000000001 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":15 , "node":3}] , "val":825 , "digs":2}, {"type":"TextField" , "x":396.76 , "y":525.3575000000001 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":15 , "node":5}] , "val":370 , "digs":2}, {"type":"TextField" , "x":472.76 , "y":525.3575000000001 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":15 , "node":7}] , "val":370 , "digs":2}, {"type":"TextField" , "x":130.76 , "y":955.3575000000003 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":30 , "node":0}] , "val":0.3 , "digs":1}, {"type":"TextField" , "x":322.76 , "y":819.3575000000003 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":22 , "node":3}] , "val":1125 , "digs":2}, {"type":"SynthENVLPContainer" , "x":318.96000000000004 , "y":899.8374999999999 , "w":302.40000000000003 , "h":201.60000000000002 , "outnodes" : [{"mod":9 , "node":1}] , "SV":1125 , "A":0.3 , "AV":2290 , "D":1 , "DV":2390}, {"type":"SynthENVLPContainer" , "x":316.96000000000004 , "y":1191.8374999999999 , "w":302.40000000000003 , "h":201.60000000000002 , "outnodes" : [{"mod":10 , "node":1}] , "SV":2530 , "A":0.3 , "AV":3100 , "D":1 , "DV":3100}, {"type":"TextField" , "x":400.76 , "y":819.3575000000003 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":22 , "node":5}] , "val":2290 , "digs":2}, {"type":"TextField" , "x":478.76 , "y":819.3575000000003 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":22 , "node":7}] , "val":2390 , "digs":2}, {"type":"TextField" , "x":318.76 , "y":1111.3575000000003 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":23 , "node":3}] , "val":2530 , "digs":2}, {"type":"TextField" , "x":398.76 , "y":1111.3575000000003 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":23 , "node":5}] , "val":3100 , "digs":2}, {"type":"TextField" , "x":478.76 , "y":1111.3575000000003 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":23 , "node":7}] , "val":3100 , "digs":2}, {"type":"SynthModKeyboard" , "x":185.64 , "y":1128.1575 , "w":126 , "h":120.96000000000001 , "outnodes" : [{"mod":22 , "node":2} , {"mod":23 , "node":2}]}, {"type":"SplitterMod" , "x":210.27999999999997 , "y":956.2375000000004 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : [{"mod":15 , "node":4} , {"mod":22 , "node":4} , {"mod":23 , "node":4}]}]';
@@ -91,6 +91,7 @@ var TYPE_SPLITTER = 6;
 var TYPE_MERGER = 7;
 var TYPE_SEQ = 8;
 var TYPE_ENV = 9;
+var TYPE_SWITCH = 10;
 
 class qwerty {
 	constructor() {
@@ -2882,11 +2883,27 @@ class ioNode extends Drawable {
 	}
 	
 	checkTypes(node) {
-		if (this.ntype == TYPE_MERGER) return true;
+		if (this.ntype == TYPE_MERGER || this.ntype == TYPE_SWITCH || node.ntype == TYPE_SWITCH) return true;
 		for (var i = 0; i < node.acceptTypes.length; i++) {
 			if (this.ntype != TYPE_NULL && this.ntype == node.acceptTypes[i]) return true;
 		}
 		return false;
+	}
+	
+	connectToSwitch(node) {
+		return node.spxt.connectSwitch(this, node);
+	}
+	
+	disconnectToSwitch(node) {
+		return node.spxt.disconnectSwitch(this, node);
+	}
+	
+	connectSwitchTo(node) {
+		return this.spxt.connectSwitch(node, this);
+	}
+	
+	disconnectSwitchTo(node) {
+		return this.spxt.disconnectSwitch(node, this);
 	}
 	
 	disconnectToSplitter(node) {
@@ -2921,39 +2938,14 @@ class ioNode extends Drawable {
 			if (!this.connectToMerger(node)) return false;
 		} else if (node.ntype == TYPE_ENV) {
 			if (!this.connectToEnv(node)) return false;
+		} else if (node.ntype == TYPE_SWITCH) {
+			if (!this.connectToSwitch(node)) return false;
+		} else if (this.ntype == TYPE_SWITCH) {
+			if (!this.connectSwitchTo(node)) return false;
 		} else {
 			if (!this.obj || node.connected) return false;
 			if (this.connected || this.isInput == node.isInput) return true;
-			if (this.objIsArray) {
-				if (node.objIsArray) {
-					if (this.obj.length != node.obj.length) {
-						console.log("object array lengths don't match");
-						return false;
-					} else {
-						for (var i = 0; i < this.obj.length; i++) {
-							if (this.ntype == TYPE_AUDIO && node.ntype == TYPE_AUDIO && Array.isArray(node.obj[i])) {
-								for (var j = 0; j < node.obj[i].length; j++) {
-									this.obj[i].connect(node.obj[i][j]);
-								}
-							} else {
-								this.obj[i].connect(node.obj[i]);
-							}
-						}
-					}
-				} else {
-					for (var i = 0; i < this.obj.length; i++) {
-						this.obj[i].connect(node.obj);
-					}
-				}
-			} else {
-				if (node.objIsArray) {
-					for (var i = 0; i < node.obj.length; i++) {
-						this.obj.connect(node.obj[i]);
-					}
-				} else {
-					this.obj.connect(node.obj);
-				}
-			}
+			if (!this.connectObjects(node)) return false;
 		}
 		if (this.obj === piano.keyout) {
 			piano.keyout.connectTrigger(node.trigprop);
@@ -2969,6 +2961,41 @@ class ioNode extends Drawable {
 		return true;
 	}
 	
+	connectObjects(node) {
+		if (this.objIsArray) {
+			if (node.objIsArray) {
+				if (this.obj.length != node.obj.length) {
+					console.log("object array lengths don't match");
+					return false;
+				} else {
+					for (var i = 0; i < this.obj.length; i++) {
+						if (this.ntype == TYPE_AUDIO && node.ntype == TYPE_AUDIO && Array.isArray(node.obj[i])) {
+							for (var j = 0; j < node.obj[i].length; j++) {
+								this.obj[i].connect(node.obj[i][j]);
+							}
+						} else {
+							this.obj[i].connect(node.obj[i]);
+						}
+					}
+				}
+			} else {
+				for (var i = 0; i < this.obj.length; i++) {
+					this.obj[i].connect(node.obj);
+				}
+			}
+		} else {
+			if (node.objIsArray) {
+				for (var i = 0; i < node.obj.length; i++) {
+					this.obj.connect(node.obj[i]);
+				}
+			} else {
+				this.obj.connect(node.obj);
+			}
+		}
+		this.obsAreConnected = true;
+		return true;
+	}
+	
 	disconnect() {
 		var node = this.con;
 		if (!node) return false;
@@ -2978,38 +3005,13 @@ class ioNode extends Drawable {
 			if (!this.disconnectToMerger(node)) return false;
 		} else if (node.ntype == TYPE_ENV) {
 			if (!this.disconnectToEnv(node)) return false;
+		} else if (node.ntype == TYPE_SWITCH) {
+			if (!this.disconnectToSwitch(node)) return false;
+		} else if (this.ntype == TYPE_SWITCH) {
+			if (!this.disconnectSwitchTo(node)) return false;
 		} else {
-			if (!this.obj || !this.connected || !this.con) return;
-			if (this.objIsArray) {
-				if (node.objIsArray) {
-					if (this.obj.length != node.obj.length) {
-						console.log("object array lengths don't match");
-						return false;
-					} else {
-						if (node.ntype == TYPE_AUDIO) {
-							for (var i = 0; i < this.obj.length; i++) {
-								this.obj[i].disconnect();
-							}
-						} else {
-							for (var i = 0; i < this.obj.length; i++) {
-								this.obj[i].disconnect(node.obj[i]);
-							}
-						}
-					}
-				} else {
-					for (var i = 0; i < this.obj.length; i++) {
-						this.obj[i].disconnect(node.obj);
-					}
-				}
-			} else {
-				if (node.objIsArray) {
-					for (var i = 0; i < node.obj.length; i++) {
-						this.obj.disconnect(node.obj[i]);
-					}
-				} else {
-					this.obj.disconnect(node.obj);
-				}
-			}
+			if (!this.obj || !this.connected || !this.con) return false;
+			if (!this.disconnectObjects(node)) return false;;
 		}
 		if (this.obj === piano.keyout) {
 			piano.keyout.disconnectTrigger(node.trigprop);
@@ -3023,6 +3025,41 @@ class ioNode extends Drawable {
 		this.conx = this.x+this.r;
 		this.cony = this.y+this.r;
 		this.con = null;
+	}
+	
+	disconnectObjects(node) {
+		if (this.objIsArray) {
+			if (node.objIsArray) {
+				if (this.obj.length != node.obj.length) {
+					console.log("object array lengths don't match");
+					return false;
+				} else {
+					if (node.ntype == TYPE_AUDIO) {
+						for (var i = 0; i < this.obj.length; i++) {
+							this.obj[i].disconnect();
+						}
+					} else {
+						for (var i = 0; i < this.obj.length; i++) {
+							this.obj[i].disconnect(node.obj[i]);
+						}
+					}
+				}
+			} else {
+				for (var i = 0; i < this.obj.length; i++) {
+					this.obj[i].disconnect(node.obj);
+				}
+			}
+		} else {
+			if (node.objIsArray) {
+				for (var i = 0; i < node.obj.length; i++) {
+					this.obj.disconnect(node.obj[i]);
+				}
+			} else {
+				this.obj.disconnect(node.obj);
+			}
+		}
+		this.obsAreConnected = false;
+		return true;
 	}
 	
 	connectInput(node) {
@@ -5817,16 +5854,16 @@ class SwitchTrigger {
 		this.triggeronon = true;
 	}
 	
-	trigger(on, knum, onum, f) {
-		this.parent.doswitch(on);
+	trigger(on, knum, onum, f, baton) {
+		this.parent.doswitch(on, baton);
 	}
 	
-	noteOnNow() {
-		this.parent.doswitch(true);
+	noteOnNow(f, k, o, baton) {
+		this.parent.doswitch(true, baton);
 	}
 	
-	noteOFF() {
-		this.parent.doswitch(false);
+	noteOFF(f, k, o, baton) {
+		this.parent.doswitch(false, baton);
 	}
 }
 
@@ -6560,6 +6597,256 @@ class SplitterMod extends SynthModContainer {
 	}
 }
 
+class SPXTMod extends SynthModContainer {
+	constructor(x, y, w, h, bl, br, bt, bb, noder, t, lefthand) {
+		super(x, y, w, h, bl, br, bt, bb);
+		this.throws = t;
+		this.lefthand = lefthand;
+		if (lefthand) {
+			this.x1 = noder;
+			this.x2 = w-noder;
+		} else {
+			this.x1 = w-noder;
+			this.x2 = noder;
+		}
+		this.y1 = h*0.5;
+		var nh = h*0.6;
+		var nstep = nh/(t-1);
+		var ny = (h - nh)/2;
+		this.y2 = nh;
+		if (lefthand) {
+			this.addINode(0, this.h*0.5-noder, noder, TYPE_SWITCH, [], "switch");
+			this.sNode = this.inNodes[this.inNodes.length-1];
+			this.sNode.isSelected = true;
+			for (var i = 0; i < t; i++) {
+				this.addONode(this.w-2*noder, ny-noder, noder, TYPE_SWITCH, [], "switch");
+				ny += nstep;
+			}
+		} else {
+			this.addONode(0, this.h*0.5-noder, noder, TYPE_SWITCH, [], "switch");
+			this.sNode = this.outNodes[this.outNodes.length-1];
+			this.sNode.isSelected = true;
+			for (var i = 0; i < t; i++) {
+				this.addINode(this.w-2*noder, ny-noder, noder, TYPE_SWITCH, [], "switch");
+				ny += nstep;
+			}
+		}
+		for (var i = 0; i < this.outNodes.length; i++) {
+			this.outNodes[i].setObject(this);
+			this.outNodes[i].spxt = this;
+		}
+		for (var i = 0; i < this.inNodes.length; i++) {
+			this.inNodes[i].setObject(this);
+			this.inNodes[i].spxt = this;
+		}
+		this.strigger = new SwitchTrigger(this);
+		this.addINode(this.w*0.5-noder, this.h-noder*2, noder, TYPE_TRIGGER, [TYPE_TRIGGER, TYPE_KEY], "trigger", "T");
+		this.inNodes[this.inNodes.length-1].setObject(this.strigger);
+		this.setSel(0);
+		this.c = new ClickChild(0, 0, w*0.4, w*0.4, this);
+		this.addModule(this.c, w*0.3, h*0.3);
+	}
+	
+	setSel(s) {
+		if (s < 0 || s > this.inNodes.length-1) return;
+		var p = this.sel;
+		this.sel = s;
+		if (this.lefthand) {
+			this.y2 = this.outNodes[s].y + this.outNodes[s].r - this.y;
+			for (var i = 0; i < this.outNodes.length-1; i++) {
+				this.outNodes[i].isSelected = false;
+			}
+			this.outNodes[s].isSelected = true;
+		} else {
+			this.y2 = this.inNodes[s].y + this.inNodes[s].r - this.y;
+			for (var i = 0; i < this.inNodes.length-1; i++) {
+				this.inNodes[i].isSelected = false;
+			}
+			this.inNodes[s].isSelected = true;
+		}
+		this.doConnectSel(p);
+	}
+	
+	click() {
+		this.doswitch(true);
+	}
+	
+	doswitch(on) {
+		if (!on) return;
+		var s = (this.sel + 1) % this.throws;
+		this.setSel(s);
+	}
+	
+	goToRoot(node) {
+		if (!node) return null;;
+		while (node && node.ntype == TYPE_SWITCH) {
+			if (node.isInput){
+				if (node.switchnode) {
+					node = node.switchnode;
+				} else {
+					return null;
+				}
+			} else {
+				if (node.spxt.lefthand) {
+					if (node === node.spxt.outNodes[node.spxt.sel]) {
+						node = node.spxt.sNode;
+					} else {
+						return null;
+					}
+				} else {
+					node = node.spxt.inNodes[node.spxt.sel];
+				}
+			}
+		}
+		return node;
+	}
+	
+	goToEnd(node) {
+		if (!node) return null;
+		while (node && node.ntype == TYPE_SWITCH) {
+			if (node.isInput) {
+				if (node.spxt.lefthand) {
+					node = node.spxt.outNodes[node.spxt.sel];
+				} else {
+					if (node === node.spxt.inNodes[node.spxt.sel]) {
+						node = node.spxt.sNode;
+					} else {
+						return null;
+					}
+				}
+			} else {
+				if (node.switchnode) {
+					node = node.switchnode;
+				} else {
+					return null;
+				}
+			}
+		}
+		return node;
+	}
+	
+	connectSel() {
+		var s;
+		if (this.lefthand) {
+			s = this.goToRoot(this.sNode.switchnode);
+		} else {
+			s = this.goToEnd(this.sNode.switchnode);
+		}
+		if (!s) return true;
+		/*
+		var TYPE_NULL = -1;
+		var TYPE_KEY = 0;
+		var TYPE_OSC = 1;
+		var TYPE_AUDIO = 2;
+		var TYPE_TRIGGER = 3;
+		var TYPE_VALUE = 4;
+		var TYPE_MULTI = 5;
+		var TYPE_SPLITTER = 6;
+		var TYPE_MERGER = 7;
+		var TYPE_SEQ = 8;
+		var TYPE_ENV = 9;
+		var TYPE_SWITCH = 10;
+		*/
+		console.log(s.ntype);
+		var n;
+		if (this.lefthand) {
+			n = this.goToEnd(this.outNodes[this.sel].switchnode);
+		} else {
+			n = this.goToRoot(this.inNodes[this.sel].switchnode);
+		}
+		if (!n) return true;
+		if (s.ntype != n.ntype) return false;
+		if (this.lefthand) {
+			if (!s.connectObjects(n)) return true;
+		} else {
+			if (!n.connectObjects(s)) return true;
+		}
+		return true;
+	}
+	
+	disconnectSel(s) {
+		if (!this.sNode.switchnode) return false;
+		var a, b;
+		if (this.lefthand) {
+			a = this.goToRoot(this.sNode.switchnode);
+			if (!this.outNodes[s].switchnode) console.log("asdf");
+			b = this.goToEnd(this.outNodes[s].switchnode);
+			if (!a || !b) return false;
+			if (!a.obsAreConnected) return false;
+		} else {
+			a = this.goToRoot(this.inNodes[s].switchnode);
+			b = this.goToEnd(this.sNode.switchnode);
+			if (!a || !b) return false;
+			if (!a.obsAreConnected) return false;
+		}
+		return a.disconnectObjects(b);
+	}
+	
+	doConnectSel(psel, disconnecting) {
+		this.disconnectSel(psel);
+		if (!disconnecting) this.crossout = !this.connectSel();
+	}
+	
+	connectSwitch(node, mynode) {
+		console.log("asdf2");
+		mynode.switchnode = node;
+		if (node.ntype == TYPE_SWITCH) node.switchnode = mynode;
+		if (mynode.isSelected) this.doConnectSel(this.sel);
+		return true;
+	}
+	
+	disconnectSwitch(node, mynode) {
+		if (mynode.isSelected) this.doConnectSel(this.sel, true);
+		mynode.switchnode = null;
+		if (node.ntype == TYPE_SWITCH) node.switchnode = null;
+		return true;
+	}
+	
+	drawOb(ctx) {
+		super.drawOb(ctx);
+		ctx.beginPath();
+		ctx.moveTo(this.x + this.x1, this.y + this.y1);
+		ctx.lineTo(this.x + this.x2, this.y + this.y2);
+		ctx.stroke();
+		if (this.crossout) {
+			ctx.beginPath();
+			ctx.moveTo(this.x, this.y);
+			ctx.lineTo(this.x + this.w, this.y + this.h);
+			ctx.moveTo(this.x, this.y + this.h);
+			ctx.lineTo(this.x + this.w, this.y);
+			ctx.stroke();
+		}
+	}
+	
+	load(data) {
+		this.setSel(data.sel);
+	}
+}
+
+class SPDTLMod extends SPXTMod {
+	constructor(x, y, w, h, bl, br, bt, bb, noder) {
+		super(x, y, w, h, bl, br, bt, bb, noder, 2, true);
+	}
+	
+	save() {
+		var t = '{"type":"SPDTLMod" , "sel":' + this.sel + " , " + super.save();
+		t += '}';
+		return t;
+	}
+}
+
+class SPDTRMod extends SPXTMod {
+	constructor(x, y, w, h, bl, br, bt, bb, noder) {
+		super(x, y, w, h, bl, br, bt, bb, noder, 2, false);
+	}
+	
+	save() {
+		var t = '{"type":"SPDTRMod" , "sel":' + this.sel + " , " + super.save();
+		t += '}';
+		return t;
+	}
+}
+
 class SequenceEvent {
 	constructor(on, knum, onum, f, t) {
 		this.on = on;
@@ -7188,6 +7475,46 @@ function drawLittleSplitter(ctx, x, y, w, h) {
 	ctx.stroke();
 }
 
+function drawSPDTL(ctx, x, y, w, h) {
+	ctx.beginPath();
+	ctx.moveTo(x + w*0.2, y + h*0.5);
+	ctx.lineTo(x + w*0.8, y + h*0.2);
+	ctx.stroke();
+	var r = w*0.05;
+	ctx.beginPath();
+	ctx.arc(x + w*0.2, y + h*0.5, r, 0, 2*Math.PI);
+	ctx.closePath();
+	ctx.stroke();
+	ctx.beginPath();
+	ctx.arc(x + w*0.8, y + h*0.2, r, 0, 2*Math.PI);
+	ctx.closePath();
+	ctx.stroke();
+	ctx.beginPath();
+	ctx.arc(x + w*0.8, y + h*0.8, r, 0, 2*Math.PI);
+	ctx.closePath();
+	ctx.stroke();
+}
+
+function drawSPDTR(ctx, x, y, w, h) {
+	ctx.beginPath();
+	ctx.moveTo(x + w*0.2, y + h*0.5);
+	ctx.lineTo(x + w*0.8, y + h*0.2);
+	ctx.stroke();
+	var r = w*0.05;
+	ctx.beginPath();
+	ctx.arc(x + w*0.2, y + h*0.5, r, 0, 2*Math.PI);
+	ctx.closePath();
+	ctx.stroke();
+	ctx.beginPath();
+	ctx.arc(x + w*0.8, y + h*0.2, r, 0, 2*Math.PI);
+	ctx.closePath();
+	ctx.stroke();
+	ctx.beginPath();
+	ctx.arc(x + w*0.8, y + h*0.8, r, 0, 2*Math.PI);
+	ctx.closePath();
+	ctx.stroke();
+}
+
 function drawLittleMerger(ctx, x, y, w, h) {
 	ctx.beginPath();
 	ctx.moveTo(x + w*0.25, y + h*0.5);
@@ -7671,6 +7998,17 @@ class ExpIcon extends ModuleIcon {
 	}
 }
 
+class SPDTLIcon extends ModuleIcon {
+	createMod() {
+		return new SPDTLMod(this.x, piano.modbt, piano.modh, piano.modh, piano.modbl, piano.modbr, piano.modbt, piano.modbb, piano.noder);
+	}
+	
+	drawOb(ctx) {
+		super.drawOb(ctx);
+		drawSPDTL(ctx, this.x, this.y, this.w, this.h);
+	}
+}
+
 class SHIcon extends ModuleIcon {
 	createMod() {
 		return new SHMod(this.x, piano.modbt, piano.modh, piano.modh, piano.modbl, piano.modbr, piano.modbt, piano.modbb, piano.noder);
@@ -7764,6 +8102,8 @@ class ModuleBar extends Drawable {
 		this.splitterb = new SplitterIcon(x+a,y+b, h*0.8, h*0.8, 0, canW, y, canH);
 		a += h*0.9;
 		this.mergerb = new MergerIcon(x+a,y+b, h*0.8, h*0.8, 0, canW, y, canH);
+		a += h*0.9;
+		this.spdtlb = new SPDTLIcon(x+a,y+b, h*0.8, h*0.8, 0, canW, y, canH);
 		
 		this.icons.push(this.keyb);
 		this.icons.push(this.oscb);
@@ -7800,6 +8140,7 @@ class ModuleBar extends Drawable {
 		this.icons.push(this.lessb);
 		this.icons.push(this.equaltob);
 		this.icons.push(this.expb);
+		this.icons.push(this.spdtlb);
 		//this.icons.push(this.testb);
 		//this.icons.push(this.sptb);
 		this.hideicon = -1;
@@ -7930,11 +8271,11 @@ class KeyboardOutput {
 	}
 	
 	noteOFF(oscnum, knum, msg, f) {
+		var baton = new Baton();
 		for (var i = 0; i < this.outputs.length; i++) {
-			this.outputs[i].noteOFF(oscnum, knum, msg);
+			this.outputs[i].noteOFF(oscnum, knum, msg, baton);
 		}
 		if (oscnum < 0) return;
-		var baton = new Baton();
 		this.velocityOut.trigger(0, knum, oscnum, baton);
 		for (var i = 0; i < this.triggers.length; i++) {
 			this.triggers[i].trigger(false, knum, oscnum, f, baton);
@@ -8564,6 +8905,8 @@ class Piano {
 			m.isValType = true;
 		} else if (type == "ExpMod") {
 			m = this.modbar.expb.createMod();
+		} else if (type == "SPDTLMod") {
+			m = this.modbar.spdtlb.createMod();
 		}
 		if (m) {
 			this.pushModule(m);
@@ -8905,7 +9248,7 @@ class Piano {
 			this.ctrlHitCheck(coords, isdown);
 			if (!isdown) {
 				this.modbar.hideicon = -1;
-				this.unpressAllKeys();
+				if (keyDragging) this.unpressAllKeys();
 			}
 			return;
 		}
@@ -8954,6 +9297,7 @@ class Piano {
 				if (this.blacks[i].hitCheck(isdown, coords)) {
 					this.blacks[i].press(isdown, 0, false, true);
 					addDragOb(this);
+					keyDragging = true;
 					this.lastpressedkey = this.blacks[i];
 					return true;
 				}
@@ -8962,6 +9306,7 @@ class Piano {
 				if (this.whites[i].hitCheck(isdown, coords)) {
 					this.whites[i].press(isdown, 0, false, true);
 					addDragOb(this);
+					keyDragging = true;
 					this.lastpressedkey = this.whites[i];
 					return true;
 				}
@@ -8978,13 +9323,14 @@ class Piano {
 		return false;
 	}
 	
-	unpressAllKeys() {		
+	unpressAllKeys() {
 		for (var i = 0; i < this.blacks.length; i++) {
 			this.blacks[i].press(false, 0, false, true);
 		}
 		for (var i = 0; i < this.whites.length; i++) {
 			this.whites[i].press(false, 0, false, true);
 		}
+		keyDragging = false;
 	}
 }
 
@@ -9116,6 +9462,7 @@ var dragging = false;
 var sound = new AudioManager();
 //var staff;
 var dragOb = new Array();
+var keyDragging = false;
 var copiedMod = false;
 var focusOb = null;
 var loop = new GameLoop();
