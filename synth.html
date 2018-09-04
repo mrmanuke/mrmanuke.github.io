@@ -5511,11 +5511,14 @@ class TextField extends ValueModContainer {
 	}
 	
 	trigger(on, knum, onum, f, baton) {
-		if (on) this.setValue(f, knum, onum, baton);
 		//super.trigger(on, knum, onum, f, baton);
 	}
 	
 	noteOnNow(f, k, o, v, baton) {
+		this.setValue(f, k, o, baton);
+	}
+	
+	noteOFF() {
 	}
 	
 	notifyConnect() {
@@ -6210,16 +6213,19 @@ class ENVContainer extends SynthModContainer {
 		super(x, y, w, h, bl, br, bt, bb);
 		this.adsr = envs;
 		this.mod = mod;
+		this.trigcons = new Array();
 		this.addModule(this.mod, w*0.1, h*0.1);
 		this.addINode(0, this.h*0.5-noder, noder, TYPE_ENV, [TYPE_KEY, TYPE_VALUE], "env freq", "F");
 		this.inNodes[0].setObject(this.adsr);
 		this.inNodes[0].env = this;
+		this.trigcons.push(this.inNodes[0]);
 		this.addINode(this.w*0.1, this.h-2*noder, noder, TYPE_VALUE, [TYPE_VALUE], "env multi");
 		this.inNodes[1].setObject(this.adsr);
 		this.addINode(0, this.h*0.8-noder, noder, TYPE_ENV, [TYPE_KEY], "env trigger", "T");
 		this.inNodes[2].setObject(this.adsr);
 		this.inNodes[2].env = this;
 		this.inNodes[2].ignoreF = true;
+		this.trigcons.push(this.inNodes[2]);
 		this.addONode(this.w-2*noder, this.h*0.5-noder, noder, TYPE_ENV, [TYPE_ENV], "env");
 		this.outNodes[0].env = this;
 		this.outNodes[0].setObject(this.adsr);
@@ -8349,7 +8355,7 @@ class KeyboardOutput {
 		lastonum = oscnum;
 		for (var i = 0; i < this.outputs.length; i++) {
 			this.outputs[i].noteOnNow(freq*this.multi, knum, oscnum, vol);
-		}
+		}//asdf
 		var baton = new Baton();
 		this.velocityOut.trigger(vol, knum, oscnum, baton);
 		for (var i = 0; i < this.triggers.length; i++) {
