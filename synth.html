@@ -1893,7 +1893,7 @@ class SynthModule extends Drawable {
 	update() {
 	}
 	
-	setValue(onum) {
+	setValue(onum, k, baton) {
 		var haveonum = (onum !== null) && !isNaN(onum) && onum > -1;
 		if (this.targets) {
 			if (this.targetType == "type") {
@@ -1926,6 +1926,14 @@ class SynthModule extends Drawable {
 				} else {
 					for (var i = 0; i < this.targets.length; i++) {
 						this.targets[i].setValueAtTime(this.val, sound.ctx.currentTime);
+					}
+				}
+			} else if (this.targetType == "setvalue") {
+				if (haveonum) {
+					this.targets[onum].setValue(this.val, k, onum, baton);
+				} else {
+					for (var i = 0; i < this.targets.length; i++) {
+						this.targets[i].setValue(this.val, k, onum, baton);
 					}
 				}
 			}
@@ -2116,18 +2124,19 @@ class RBPanel extends SynthModule {
 }
 
 class ValueReceiver {
-	constructor(owner, v) {
+	constructor(owner, v, name) {
 		this.value = v;
 		this.owner = owner;
+		this.name = name;
 	}
 	
 	setValue(v) {
 		if (this.min && v <= this.min.value) {
-			setMsg("you can't set the max (" + v + ") to <= the min (" + this.min.value + ")");
+			setMsg("you can't set the " + this.name + " (" + v + ") to <= the min (" + this.min.value + ")");
 			return false;
 		}
 		if (this.max && v >= this.max.value) {
-			setMsg("you can't set the min (" + v + ") to >= the max (" + this.max.value + ")");
+			setMsg("you can't set the " + this.name + " (" + v + ") to >= the max (" + this.max.value + ")");
 			return false;
 		}
 		this.value = v;
@@ -2143,7 +2152,6 @@ class Knob extends SynthModule {
 		this.locked = false;
 		this.cc = false;
 		this.name = "knob";
-		this.turns = turns || 1;
 		this.discreet = false;//(this.n > 1);
 		this.step = Math.PI * 2 / (this.n);
 		this.knobspeed = 0.03;
@@ -2155,8 +2163,10 @@ class Knob extends SynthModule {
 		this.startdota = 0;
 		this.dotx = 0;
 		this.doty = 0;
-		this.min = new ValueReceiver(this, min);
-		this.max = new ValueReceiver(this, max);
+		this.min = new ValueReceiver(this, min, "min");
+		this.max = new ValueReceiver(this, max, "max");
+		this.turns = new ValueReceiver(this, turns || 1, "turns");
+		this.turns.min = 1;
 		this.min.max = this.max;
 		this.max.min = this.min;
 		this.val = 0;
@@ -2237,7 +2247,7 @@ class Knob extends SynthModule {
 				nval = this.max.value;
 			}
 		} else {
-			nval = -ndota * (this.max.value - this.min.value) * 0.55 / (Math.PI * this.turns);
+			nval = -ndota * (this.max.value - this.min.value) * 0.55 / (Math.PI * this.turns.value);
 			if (nval < this.min.value) {
 				nval = this.min.value;
 			} else if (nval > this.max.value) {
@@ -2269,7 +2279,7 @@ class Knob extends SynthModule {
 		} else {
 			//console.log((new Error()).stack);
 			this.val = v;
-			this.dota = -v * Math.PI * this.turns / (0.55 * (this.max.value - this.min.value));
+			this.dota = -v * Math.PI * this.turns.value / (0.5 * (this.max.value - this.min.value));
 			this.calcDotPos();
 		}
 		super.setValue(onum);
@@ -4657,6 +4667,66 @@ class SynthConvContainer extends SynthModContainer {
 	}
 }
 
+class ValueKnobModule extends SynthModContainer {
+	constructor(x, y, w, h, bl, br, bt, bb, noder) {
+		super(x, y, w, h, bl, br, bt, bb);
+		this.addONode(w-2*noder, this.h*0.5-noder, noder, TYPE_VALUE, [TYPE_VALUE], "value");
+		this.text = "0";
+		this.valueOb = new ValueSetter();
+		this.outNodes[0].setObject(this.valueOb);
+		this.turns = 4;
+		this.knob = new Knob(0, 0, w*0.6, w*0.6, [0], 0, 1, null, this.turns);
+		this.addModule(this.knob, w*0.1, h*0.2);
+		this.knob.color = "blue";
+		this.knob.setParentModule([this]);
+		this.addINode(0, 0, noder, TYPE_VALUE, [TYPE_VALUE], "min", "m");
+		this.inNodes[0].setObject(this.knob.min);
+		this.addINode(this.w*0.6-noder, 0, noder, TYPE_VALUE, [TYPE_VALUE], "max", "M");
+		this.inNodes[1].setObject(this.knob.max);
+		this.addINode(0, this.h-2*noder, noder, TYPE_VALUE, [TYPE_VALUE], "max", "T");
+		this.inNodes[2].setObject(this.knob.turns);
+		this.digs = 5;
+		this.text_offset = "    ";
+		this.knob.name = this.text_offset + "0";
+		this.crossout = false;
+	}
+	
+	save() {
+		var t = '{"type":"ValueKnobModule" , ' + super.save();
+		t += ' , "val":' + this.valueOb.val + '}';
+		return t;
+	}
+	
+	load(data) {
+		this.knob.setValue(data.val);
+	}
+	
+	update() {
+		var v = this.knob.val;
+		this.crossout = !this.valueOb.setValue(v);
+		if (v >= 1000000) {
+			this.digs = 7;
+		} else if (v >= 100000) {
+			this.digs = 6;
+		} else {
+			this.digs = 5;
+		}
+		this.knob.name = this.text_offset + v.toString().substring(0, this.digs);
+	}
+	
+	drawOb(ctx) {
+		super.drawOb(ctx);
+		if (this.crossout) {
+			ctx.beginPath();
+			ctx.moveTo(this.x, this.y);
+			ctx.lineTo(this.x + this.w, this.y + this.h);
+			ctx.moveTo(this.x, this.y + this.h);
+			ctx.lineTo(this.x + this.w, this.y);
+			ctx.stroke();
+		}
+	}
+}
+
 class SynthGainContainer extends SynthModContainer {
 	constructor(x, y, w, h, bl, br, bt, bb, noder) {
 		super(x, y, w, h, bl, br, bt, bb);
@@ -5442,7 +5512,7 @@ class ValueModContainer extends SynthModContainer {
 				this.text = this.text.substring(0, this.text.length - 1);
 			}
 		} else if (n == -5) {
-			console.log("-");
+			//console.log("-");
 			if (this.text.length>0) {
 				if (this.text.charAt(0) === '-') {
 					this.text = this.text.slice(1, this.text.length);
@@ -5457,7 +5527,7 @@ class ValueModContainer extends SynthModContainer {
 		if (tsp.length > 1) {
 			this.setDigs(tsp[1].length);
 		} else {
-			this.setDigs(2);
+			this.setDigs(this.text.length);
 		}
 		return (n == -3);
 	}
@@ -8064,6 +8134,19 @@ class SPDTRIcon extends ModuleIcon {
 	}
 }
 
+class VKnobIcon extends ModuleIcon {
+	createMod() {
+		return new ValueKnobModule(this.x, piano.modbt, piano.modh, piano.modh, piano.modbl, piano.modbr, piano.modbt, piano.modbb, piano.noder);
+	}
+	
+	drawOb(ctx) {
+		super.drawOb(ctx);
+		drawLittleKnob(ctx, this.x+this.w*0.1, this.y+this.w*0.1, this.w*0.8, this.h, this.fillCol, this.strokeCol);
+		ctx.font = this.h*0.25 + "px Arial";
+		ctx.fillText("y=2", this.x+this.w*0.3, this.y+this.h*0.6);
+	}
+}
+
 class SHIcon extends ModuleIcon {
 	createMod() {
 		return new SHMod(this.x, piano.modbt, piano.modh, piano.modh, piano.modbl, piano.modbr, piano.modbt, piano.modbb, piano.noder);
@@ -8132,6 +8215,8 @@ class ModuleBar extends Drawable {
 		a = h*0.1;
 		this.valb = new ValueIcon(x+a,y+b, h*0.8, h*0.8, 0, canW, y, canH);
 		a += h*0.9;
+		this.valkb = new VKnobIcon(x+a,y+b, h*0.8, h*0.8, 0, canW, y, canH);
+		a += h*0.9;
 		this.multib = new MultiIcon(x+a,y+b, h*0.8, h*0.8, 0, canW, y, canH);
 		a += h*0.9;
 		this.ccb = new CCIcon(x+a, y+b, h*0.8, h*0.8, 0, canW, y, canH);
@@ -8176,6 +8261,7 @@ class ModuleBar extends Drawable {
 		this.icons.push(this.speakerb);
 		this.icons.push(this.clickb);
 		this.icons.push(this.valb);
+		this.icons.push(this.valkb);
 		this.icons.push(this.multib);
 		this.icons.push(this.whiteb);
 		this.icons.push(this.switchb);
@@ -8355,7 +8441,7 @@ class KeyboardOutput {
 		lastonum = oscnum;
 		for (var i = 0; i < this.outputs.length; i++) {
 			this.outputs[i].noteOnNow(freq*this.multi, knum, oscnum, vol);
-		}//asdf
+		}
 		var baton = new Baton();
 		this.velocityOut.trigger(vol, knum, oscnum, baton);
 		for (var i = 0; i < this.triggers.length; i++) {
@@ -8923,6 +9009,9 @@ class Piano {
 			m.isEnv = true;
 		} else if (type == "TextField") {
 			m = this.modbar.valb.createMod();
+			m.isValType = true;
+		} else if (type == "ValueKnobModule") {
+			m = this.modbar.valkb.createMod();
 			m.isValType = true;
 		} else if (type == "TimerMod") {
 			m = this.modbar.timerb.createMod();
