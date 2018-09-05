@@ -2173,6 +2173,7 @@ class Knob extends SynthModule {
 		if (init) this.setValue(vals[init]); else this.setValue(vals[0]);
 		this.calcDotPos();
 		this.color = pianocol;
+		this.halfTurn = 0.5;
 	}
 	
 	updateValue() {
@@ -2247,7 +2248,7 @@ class Knob extends SynthModule {
 				nval = this.max.value;
 			}
 		} else {
-			nval = -ndota * (this.max.value - this.min.value) * 0.55 / (Math.PI * this.turns.value);
+			nval = -ndota * (this.max.value - this.min.value) * this.halfTurn / (Math.PI * this.turns.value);
 			if (nval < this.min.value) {
 				nval = this.min.value;
 			} else if (nval > this.max.value) {
@@ -2279,11 +2280,85 @@ class Knob extends SynthModule {
 		} else {
 			//console.log((new Error()).stack);
 			this.val = v;
-			this.dota = -v * Math.PI * this.turns.value / (0.5 * (this.max.value - this.min.value));
+			this.dota = -v * Math.PI * this.turns.value / (this.halfTurn * (this.max.value - this.min.value));
 			this.calcDotPos();
 		}
 		super.setValue(onum);
 		return inrange;
+	}
+	
+	setSuperValue(onum) {
+		super.setValue(onum);
+	}
+}
+
+class Slider extends Knob {
+	constructor(x, y, w, h, vals, min, max, init, turns) {
+		super(x, y, w, h, vals, min, max, init, turns);
+		this.dotcol = "red";
+		this.dotr = this.r * 0.2;
+	}
+	
+	hitCheck(isdown, coords) {
+		if (this.dragging && !isdown) {
+			setMsg("set value to " + this.val);
+		}
+		if (this.inBounds(coords.x, coords.y)) {
+			if (isdown && getNumDragMods() == 0) addDragOb(this);
+			this.startdoty = this.doty;
+			return true;
+		}
+	}
+	
+	drag(dragCoords, clickCoords) {
+		if (this.locked) return;
+		var ndoty = this.startdoty - clickCoords.y + dragCoords.y;
+		if (ndoty < this.y) {
+			ndoty = this.y;
+		} else if (ndoty > this.y + this.h) {
+			ndoty = this.y + this.h;
+		}
+		this.doty = ndoty;
+		var nval = this.min.value + (this.max.value - this.min.value) * (this.y + this.h - ndoty) / this.h;
+		this.setValue(nval);
+	}
+	
+	setValue(v, k, onum) {
+		var inrange = true;
+		if (v > this.max.value) {
+			v = this.max.value;
+			inrange = false;
+		} else if (v < this.min.value) {
+			v = this.min.value;
+			inrange = false;
+		}
+		this.val = v;
+		this.calcDotPos();
+		super.setSuperValue(onum);
+		return inrange;
+	}
+	
+	calcDotPos() {
+		this.dotx = this.x + this.w*0.5;
+		this.dota = (this.val - this.min.value) / (this.max.value - this.min.value);
+		this.doty = this.y + (1 - this.dota) * this.h;
+	}
+	
+	drawOb(ctx, clear) {
+		if (clear) {
+			ctx.fillStyle = "white";
+			ctx.fill();
+		}
+		ctx.strokeStyle = this.dotcol;
+		//if (this.cc || !this.locked) {
+			ctx.beginPath();
+			ctx.arc(this.dotx + this.dotr, this.doty + this.dotr, this.dotr, 0, 2*Math.PI);
+			if (this.cc) ctx.strokeStyle = cccol;
+			ctx.stroke();
+		//}
+		ctx.fillStyle = pianocol;
+		ctx.font = this.h*0.26 + "px Arial";
+		ctx.fillText(this.name, this.x + this.w*0.1, this.y + this.h*0.8);
 	}
 }
 
@@ -3177,6 +3252,7 @@ function copyMod(m) {
 		piano.modules[i].setModNum(i);
 	}
 	var s = m.save();
+	//console.log(s);
 	return piano.loadSingleMod(JSON.parse(s));
 }
 
@@ -4489,6 +4565,85 @@ class SpeakerMod extends SynthModContainer {
 	drawOb(ctx) {
 		super.drawOb(ctx);
 		drawLittleSpeaker(ctx, this.x, this.y, this.w, this.h, this.fillCol, this.strokeCol);
+	}
+}
+
+class NineBandEqualizer extends SynthModContainer {
+	constructor(x, y, w, h, bl, br, bt, bb, noder) {
+		super(x, y, w, h, bl, br, bt, bb);
+		this.bands = 9;
+		this.sliders = new Array();
+		this.eqs = new Array();
+		var eqins = new Array();
+		var eqouts = new Array();
+		//gain values should range from -40 to 0
+		for (var i = 0; i < this.bands; i++) {
+			this.eqs.push(new Array());
+		}
+		for (var i = 0; i < sound.numpianos; i++) {
+			var ls = sound.ctx.createBiquadFilter();
+			var cf = 32;
+			ls.type = 'lowshelf';
+			ls.frequency.value = cf;
+			ls.gain.value = 0;
+			var lastfilt = ls;
+			cf = cf*2;
+			var j = 0;
+			this.eqs[j].push(ls.gain);
+			for (j = 1; j < this.bands-1; j++) {
+				var filt = sound.ctx.createBiquadFilter();
+				filt.type = 'peaking';
+				filt.frequency.value = cf;
+				filt.gain.value = 0;
+				cf = cf*2;
+				this.eqs[j].push(filt.gain);
+				lastfilt.connect(filt);
+				lastfilt = filt;
+			}
+			var hs = sound.ctx.createBiquadFilter();
+			hs.type = 'highshelf';
+			hs.frequency.value = cf;
+			hs.gain.value = 0;
+			lastfilt.connect(hs);
+			this.eqs[j].push(hs.gain);
+			eqins.push(ls);
+			eqouts.push(hs);
+		}
+		var sx = this.w*0.1;
+		var sy = this.h*0.1;
+		var sh = this.h*0.8;
+		var mw = this.w*0.8;
+		var sw = mw/this.bands;
+		for (var i = 0; i < this.bands; i++) {
+			var slider = new Slider(0, 0, sw, sh, [0], -40, 0, null, 1);
+			slider.name = "";
+			this.addModule(slider, sx, sy);
+			sx += sw;
+			slider.setTimeValueTarget(this.eqs[i]);
+			this.sliders.push(slider);
+		}
+		
+		this.addINode(0, this.h*0.5-noder, noder, TYPE_AUDIO, [TYPE_AUDIO], "eq");
+		this.inNodes[0].setObject(eqins);
+		this.addONode(this.w-2*noder, this.h*0.5-noder, noder, TYPE_AUDIO, [TYPE_AUDIO], "eq");
+		this.outNodes[0].setObject(eqouts);
+	}
+	
+	save() {
+		var t = '{"type":"NineBandEqualizer" , ' + super.save();
+		t += ' , "bands":[';
+		for (var i = 0; i < this.bands; i++) {
+			t += this.sliders[i].val;
+			if (i < this.bands-1) t += " , ";
+		}
+		t += ']}';
+		return t;
+	}
+	
+	load(data) {
+		for (var i = 0; i < this.bands; i++) {
+			this.sliders[i].setValue(data.bands[i]);
+		}
 	}
 }
 
@@ -7715,6 +7870,17 @@ class WhiteIcon extends ModuleIcon {
 	}
 }
 
+class NineEQIcon extends ModuleIcon {
+	createMod() {
+		return new NineBandEqualizer(this.x, piano.modbt, piano.modh*2, piano.modh*2, piano.modbl, piano.modbr, piano.modbt, piano.modbb, piano.noder);
+	}
+	
+	drawOb(ctx) {
+		super.drawOb(ctx);
+		ctx.fillText("TESTEQ", this.x+this.w*0, this.y+this.h*0.5);
+	}
+}
+
 class EQIcon extends ModuleIcon {
 	createMod() {
 		return new SynthEqualContainer(this.x, piano.modbt, piano.modh*2, piano.modh*2, piano.modbl, piano.modbr, piano.modbt, piano.modbb, piano.noder);
@@ -8208,6 +8374,8 @@ class ModuleBar extends Drawable {
 		a += h*0.9;
 		this.eqb = new EQIcon(x+a,y+b, h*0.8, h*0.8, 0, canW, y, canH);
 		a += h*0.9;
+		this.eq9b = new NineEQIcon(x+a,y+b, h*0.8, h*0.8, 0, canW, y, canH);
+		a += h*0.9;
 		this.analyseb = new AnalyserIcon(x+a,y+b, h*0.8, h*0.8, 0, canW, y, canH);
 		a += h*0.9;
 		this.speakerb = new SpeakerIcon(x+a,y+b, h*0.8, h*0.8, 0, canW, y, canH);
@@ -8270,6 +8438,7 @@ class ModuleBar extends Drawable {
 		this.icons.push(this.seqb);
 		this.icons.push(this.timerb);
 		this.icons.push(this.eqb);
+		this.icons.push(this.eq9b);
 		this.icons.push(this.analyseb);
 		this.icons.push(this.pwmb);
 		this.icons.push(this.shb);
@@ -8996,6 +9165,8 @@ class Piano {
 			m = this.modbar.speakerb.createMod();
 		} else if (type == "SynthEqualContainer") {
 			m = this.modbar.eqb.createMod();
+		} else if (type == "NineBandEqualizer") {
+			m = this.modbar.eq9b.createMod();
 		} else if (type == "SynthConvContainer") {
 			m = this.modbar.convb.createMod();
 		} else if (type == "WaveShaperContainer") {
