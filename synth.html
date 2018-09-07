@@ -5,7 +5,7 @@
 var numpianos = 25;
 var lastonum = 0;
 var playcount = 0;
-var testconfig = '{"voices":25, "mods":[{"type":"SynthModKeyboard" , "x":10 , "y":388.03749999999997 , "w":126 , "h":120.96000000000001 , "outnodes" : [{"mod":1 , "node":0} , {"mod":7 , "node":0} , {"mod":-1 , "node":-1}]}, {"type":"SynthOscContainer" , "x":148 , "y":388.03749999999997 , "w":352.80000000000007 , "h":120.96000000000001 , "outnodes" : [{"mod":11 , "node":0}] , "osc":"0"}, {"type":"SynthGainContainer" , "x":1122 , "y":388.03749999999997 , "w":141.12 , "h":131.04000000000002 , "outnodes" : [{"mod":6 , "node":0}] , "gain":0 , "mute":0}, {"type":"SpeakerMod" , "x":1652 , "y":388.03749999999997 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : []}, {"type":"SynthADSRContainer" , "x":808.1999999999998 , "y":388.03749999999997 , "w":302.40000000000003 , "h":201.60000000000002 , "outnodes" : [{"mod":2 , "node":4}] , "A":0.01 , "D":0.05 , "DV":0.5 , "S":5 , "SV":0.1 , "R":0.001}, {"type":"AnalyserContainer" , "x":1434.8400000000001 , "y":388.03749999999997 , "w":201.60000000000002 , "h":201.60000000000002 , "outnodes" : [{"mod":3 , "node":0}]}, {"type":"SynthGainContainer" , "x":1279.44 , "y":388.03749999999997 , "w":141.12 , "h":131.04000000000002 , "outnodes" : [{"mod":5 , "node":0}] , "gain":1 , "mute":0}, {"type":"SynthOscContainer" , "x":146.63750000000005 , "y":517.52 , "w":352.80000000000007 , "h":120.96000000000001 , "outnodes" : [{"mod":11 , "node":1}] , "osc":"1"}, {"type":"SynthOscContainer" , "x":146.63750000000005 , "y":647.52 , "w":352.80000000000007 , "h":120.96000000000001 , "outnodes" : [{"mod":12 , "node":1}] , "osc":"2"}, {"type":"SynthModKeyboard" , "x":9.463750000000005 , "y":647.52 , "w":126 , "h":120.96000000000001 , "outnodes" : [{"mod":8 , "node":0} , {"mod":-1 , "node":-1} , {"mod":-1 , "node":-1}]}, {"type":"SynthModKeyboard" , "x":671.4637499999999 , "y":388.03749999999997 , "w":126 , "h":120.96000000000001 , "outnodes" : [{"mod":4 , "node":2} , {"mod":-1 , "node":-1} , {"mod":-1 , "node":-1}]}, {"type":"SPDTRMod" , "sel":1 , "x":549.0700000000002 , "y":511.5999999999999 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : [{"mod":12 , "node":0}]}, {"type":"SPDTRMod" , "sel":0 , "x":709.0700000000002 , "y":603.5999999999999 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : [{"mod":2 , "node":0}]}, {"type":"CountMod" , "x":275.68000000000006 , "y":891.5999999999999 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : [{"mod":14 , "node":0}]}, {"type":"ExpMod" , "x":388.375 , "y":889.5999999999999 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : [{"mod":15 , "node":0}] , "exp":"x%3"}, {"type":"TextField" , "x":317.46375 , "y":806.7199999999998 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":16 , "node":0}] , "val":0 , "digs":2}, {"type":"SplitterMod" , "x":397.5487499999999 , "y":777.5999999999999 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : [{"mod":17 , "node":0} , {"mod":18 , "node":0} , {"mod":19 , "node":0}]}, {"type":"EqualToMod" , "x":511.2012500000001 , "y":747.5999999999999 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : [{"mod":20 , "node":1}] , "val":0}, {"type":"EqualToMod" , "x":511.2012500000001 , "y":859.5999999999999 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : [{"mod":21 , "node":0}] , "val":1}, {"type":"EqualToMod" , "x":511.2012500000001 , "y":967.5999999999999 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : [{"mod":22 , "node":2}] , "val":2}, {"type":"MergerMod" , "x":622.7224999999999 , "y":727.5999999999999 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : [{"mod":11 , "node":2}]}, {"type":"SplitterMod" , "x":623.5487499999999 , "y":837.5999999999999 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : [{"mod":20 , "node":2} , {"mod":-1 , "node":-1} , {"mod":22 , "node":0}]}, {"type":"MergerMod" , "x":624.7225000000001 , "y":947.5999999999999 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : [{"mod":12 , "node":2}]}, {"type":"TimerMod" , "x":158.985 , "y":893.5999999999999 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : [{"mod":13 , "node":0}] , "time":200}, {"type":"SwitchMod" , "x":48.50625000000002 , "y":893.5999999999999 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : [{"mod":23 , "node":0}]}]}';
+var testconfig = '{"voices":5, "mods":[{"type":"SynthModKeyboard" , "x":10 , "y":388.03749999999997 , "w":126 , "h":120.96000000000001 , "outnodes" : [{"mod":1 , "node":0} , {"mod":4 , "node":2} , {"mod":-1 , "node":-1}]}, {"type":"SynthOscContainer" , "x":144 , "y":388.03749999999997 , "w":352.80000000000007 , "h":120.96000000000001 , "outnodes" : [{"mod":2 , "node":0}] , "osc":"2"}, {"type":"SynthGainContainer" , "x":506 , "y":388.03749999999997 , "w":141.12 , "h":131.04000000000002 , "outnodes" : [{"mod":6 , "node":0}] , "gain":0 , "mute":0}, {"type":"SpeakerMod" , "x":1334.4 , "y":388.03749999999997 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : []}, {"type":"SynthADSRContainer" , "x":168.20000000000005 , "y":517.8375000000001 , "w":302.40000000000003 , "h":201.60000000000002 , "outnodes" : [{"mod":2 , "node":4}] , "A":0.01 , "D":0.05 , "DV":0.5 , "S":5 , "SV":0.1 , "R":0.00001}, {"type":"AnalyserContainer" , "x":1124.8400000000001 , "y":388.03749999999997 , "w":201.60000000000002 , "h":201.60000000000002 , "outnodes" : [{"mod":3 , "node":0}]}, {"type":"SynthGainContainer" , "x":655.44 , "y":388.03749999999997 , "w":141.12 , "h":131.04000000000002 , "outnodes" : [{"mod":7 , "node":0}] , "gain":1 , "mute":0}, {"type":"NineBandEqualizer" , "x":837.7650000000003 , "y":388.03749999999997 , "w":201.60000000000002 , "h":201.60000000000002 , "outnodes" : [{"mod":5 , "node":0}] , "bands":[0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0]}]}';
 var sampledrip = '{"voices":25, "mods":[{"type":"SynthModKeyboard" , "x":389 , "y":709.0374999999999 , "w":126 , "h":120.96000000000001 , "outnodes" : [{"mod":6 , "node":0} , {"mod":3 , "node":2} , {"mod":-1 , "node":-1}]}, {"type":"SynthGainContainer" , "x":733 , "y":388.03749999999997 , "w":141.12 , "h":131.04000000000002 , "outnodes" : [{"mod":5 , "node":0}] , "gain":0 , "mute":0}, {"type":"SpeakerMod" , "x":1241.4 , "y":388.03749999999997 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : []}, {"type":"SynthADSRContainer" , "x":530.2 , "y":625.8375000000001 , "w":302.40000000000003 , "h":201.60000000000002 , "outnodes" : [{"mod":1 , "node":4}] , "A":0.005 , "D":0.035 , "DV":0 , "S":0.0001 , "SV":0 , "R":0.14706769682523715}, {"type":"AnalyserContainer" , "x":1031.8400000000001 , "y":388.03749999999997 , "w":201.60000000000002 , "h":201.60000000000002 , "outnodes" : [{"mod":2 , "node":0}]}, {"type":"SynthGainContainer" , "x":882.44 , "y":388.03749999999997 , "w":141.12 , "h":131.04000000000002 , "outnodes" : [{"mod":4 , "node":0}] , "gain":1 , "mute":0}, {"type":"TextField" , "x":148.46375 , "y":684.7199999999998 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":7 , "node":1}] , "val":1661.2192 , "digs":2}, {"type":"SynthENVLPContainer" , "x":49.85374999999999 , "y":473.0374999999999 , "w":302.40000000000003 , "h":201.60000000000002 , "outnodes" : [{"mod":11 , "node":0}] , "SV":0.005 , "A":0.05 , "AV":1 , "D":1 , "DV":1}, {"type":"TextField" , "x":124.46375 , "y":392.0374999999999 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":7 , "node":4}] , "val":0.05 , "digs":2}, {"type":"TextField" , "x":528.4637499999999 , "y":541.7199999999998 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":3 , "node":3}] , "val":0.005 , "digs":3}, {"type":"TextField" , "x":608.4637499999999 , "y":538.7199999999998 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":3 , "node":4}] , "val":0.035 , "digs":3}, {"type":"SynthOscContainer" , "x":369.63750000000005 , "y":389.52 , "w":352.80000000000007 , "h":120.96000000000001 , "outnodes" : [{"mod":1 , "node":0}] , "osc":"0"}, {"type":"TextField" , "x":43.463750000000005 , "y":391.7199999999998 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":7 , "node":3}] , "val":0.005 , "digs":3}, {"type":"SynthModKeyboard" , "x":4.4637500000000045 , "y":694.52 , "w":126 , "h":120.96000000000001 , "outnodes" : [{"mod":7 , "node":2} , {"mod":-1 , "node":-1} , {"mod":-1 , "node":-1}]}]}';
 var samplewhistle = '[{"type":"SynthModKeyboard" , "x":610 , "y":663.0374999999999 , "w":126 , "h":120.96000000000001 , "outnodes" : [{"mod":8 , "node":0} , {"mod":12 , "node":2}]}, {"type":"SynthGainContainer" , "x":1449 , "y":622.0374999999999 , "w":141.12 , "h":131.04000000000002 , "outnodes" : [{"mod":4 , "node":0}] , "gain":0 , "mute":0}, {"type":"SpeakerMod" , "x":1862.4 , "y":388.03749999999997 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : []}, {"type":"SynthADSRContainer" , "x":1123.1999999999998 , "y":867.0374999999999 , "w":302.40000000000003 , "h":201.60000000000002 , "outnodes" : [{"mod":1 , "node":4}] , "A":0.193805576875212 , "D":0.17603810985728824 , "DV":1 , "S":5 , "SV":1 , "R":0.3991666056685008}, {"type":"AnalyserContainer" , "x":1628.8400000000001 , "y":388.03749999999997 , "w":201.60000000000002 , "h":201.60000000000002 , "outnodes" : [{"mod":2 , "node":0}]}, {"type":"SynthGainContainer" , "x":689.44 , "y":388.03749999999997 , "w":141.12 , "h":131.04000000000002 , "outnodes" : [{"mod":6 , "node":6}] , "gain":19.117457920698772 , "mute":0}, {"type":"SynthFilterContainer" , "x":983.6800000000003 , "y":388.03749999999997 , "w":604.8000000000001 , "h":201.60000000000002 , "outnodes" : [{"mod":1 , "node":0}] , "filter":"2" , "F":100 , "Q":0.0001 , "G":0}, {"type":"WhiteNoiseContainer" , "x":564.9850000000001 , "y":427.0374999999999 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : [{"mod":5 , "node":0}]}, {"type":"TextField" , "x":606.4637499999999 , "y":556.7199999999998 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":13 , "node":0}] , "val":391.9952 , "digs":2}, {"type":"TextField" , "x":871.4637499999999 , "y":388.03749999999997 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":5 , "node":2}] , "val":100 , "digs":2}, {"type":"SynthENVLPContainer" , "x":1103.50625 , "y":632.1999999999998 , "w":302.40000000000003 , "h":201.60000000000002 , "outnodes" : [{"mod":6 , "node":3}] , "SV":152.31136530781583 , "A":1.630190549286441 , "AV":1000 , "D":1 , "DV":1000}, {"type":"SynthModKeyboard" , "x":972.4637499999999 , "y":869.52 , "w":126 , "h":120.96000000000001 , "outnodes" : [{"mod":10 , "node":2} , {"mod":3 , "node":2}]}, {"type":"SynthENVLPContainer" , "x":770.5062499999999 , "y":641.1999999999998 , "w":302.40000000000003 , "h":201.60000000000002 , "outnodes" : [{"mod":6 , "node":1}] , "SV":391.9952 , "A":0.001 , "AV":391.9952 , "D":0.3 , "DV":431.1947200000001}, {"type":"SplitterMod" , "x":701.375 , "y":526.5999999999999 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : [{"mod":14 , "node":0} , {"mod":12 , "node":5} , {"mod":12 , "node":3}]}, {"type":"TextFieldMulti" , "x":848.6375 , "y":496.5999999999999 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : [{"mod":12 , "node":7}] , "val":1.1}, {"type":"TextField" , "x":887.46375 , "y":860.7199999999999 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":12 , "node":6}] , "val":0.3 , "digs":1}]';
 var sampleconfig = '[{"type":"SynthModKeyboard" , "x":283 , "y":804.6375 , "w":126 , "h":120.96000000000001 , "outnodes" : [{"mod":4 , "node":2} , {"mod":-1 , "node":-1}]}, {"type":"SynthOscContainer" , "x":571 , "y":388.03749999999997 , "w":352.80000000000007 , "h":120.96000000000001 , "outnodes" : [{"mod":2 , "node":0}] , "osc":"2"}, {"type":"SynthGainContainer" , "x":957 , "y":596.0375000000001 , "w":141.12 , "h":131.04000000000002 , "outnodes" : [{"mod":17 , "node":0}] , "gain":0}, {"type":"SpeakerMod" , "x":1780.4 , "y":388.03749999999997 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : []}, {"type":"SynthADSRContainer" , "x":417.20000000000005 , "y":723.8374999999999 , "w":302.40000000000003 , "h":201.60000000000002 , "outnodes" : [{"mod":2 , "node":4}] , "A":0.0001 , "D":0.05 , "DV":0.5 , "S":5 , "SV":0.1 , "R":0.01}, {"type":"AnalyserContainer" , "x":1571.8400000000001 , "y":388.03749999999997 , "w":201.60000000000002 , "h":201.60000000000002 , "outnodes" : [{"mod":3 , "node":0}]}, {"type":"SynthModKeyboard" , "x":12 , "y":388.03749999999997 , "w":126 , "h":120.96000000000001 , "outnodes" : [{"mod":7 , "node":0} , {"mod":8 , "node":0}]}, {"type":"TextField" , "x":148.76 , "y":388.03749999999997 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":11 , "node":0}] , "val":523.2512 , "digs":2}, {"type":"SynthENVLPContainer" , "x":259.96000000000004 , "y":388.03749999999997 , "w":302.40000000000003 , "h":201.60000000000002 , "outnodes" : [{"mod":1 , "node":0}] , "SV":0 , "A":0.021982969631349564 , "AV":1 , "D":1 , "DV":1}, {"type":"SynthGainContainer" , "x":1422.44 , "y":598.1175000000001 , "w":141.12 , "h":131.04000000000002 , "outnodes" : [{"mod":5 , "node":0}] , "gain":0.14443311085589508}, {"type":"SynthFilterContainer" , "x":958.7200000000003 , "y":388.03749999999997 , "w":604.8000000000001 , "h":201.60000000000002 , "outnodes" : [{"mod":9 , "node":0}] , "filter":"0" , "F":2740.4813984653783 , "Q":10 , "G":40}, {"type":"TextFieldMulti" , "x":148.51999999999998 , "y":470.2374999999999 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : [{"mod":8 , "node":1}] , "val":3}, {"type":"TextField" , "x":570.76 , "y":518.2375000000002 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":1 , "node":2}] , "val":0.25 , "digs":2}, {"type":"SynthOscContainer" , "x":367.9200000000001 , "y":595.1575 , "w":352.80000000000007 , "h":120.96000000000001 , "outnodes" : [{"mod":14 , "node":0}] , "osc":"0"}, {"type":"SynthGainContainer" , "x":730.44 , "y":518.1175000000001 , "w":141.12 , "h":131.04000000000002 , "outnodes" : [{"mod":1 , "node":1}] , "gain":2.3109297736943217}, {"type":"TextField" , "x":649.76 , "y":517.2375000000004 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":14 , "node":2}] , "val":10 , "digs":2}, {"type":"TextField" , "x":290.76 , "y":596.0375000000001 , "w":70.56 , "h":70.56 , "outnodes" : [{"mod":13 , "node":0}] , "val":2 , "digs":2}, {"type":"WaveShaperContainer" , "x":1105 , "y":596.2375000000002 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : [{"mod":10 , "node":6}]}]';
@@ -64,7 +64,7 @@ var dragCol = "blue";
 var focusCol = keypresscol;
 var cccol = "blue";
 var playing = false;
-var OFF_VOL = 0;//0.00001;
+var OFF_VOL = 0.00000001;
 var OFF_VOL_E = OFF_VOL*1.1;
 var DEC_VOL = 0.15;
 var osctypes = ["sine", "square", "sawtooth", "triangle"];
@@ -782,8 +782,8 @@ class ADSR {
 	
 	reset(time) {
 		for (var i = 0; i < this.targets.length; i++) {
-			this.targets[i].cancelScheduledValues(this.ontime);
-			this.targets[i].setValueAtTime(0, time+0.001);
+			if (this.ontime != 0) this.targets[i].cancelScheduledValues(this.ontime);
+			this.targets[i].setValueAtTime(OFF_VOL, time+0.001);
 		}
 	}
 	
@@ -795,6 +795,7 @@ class ADSR {
 		for (var i = 0; i < this.targets.length; i++) {
 			this.targets[i].cancelScheduledValues(this.ontime);
 			var v = f + this.relv * this.multi;
+			//if (v == 0) v = 0.0000001;
 			var t = time+this.relt.value;
 			this.targets[i].exponentialRampToValueAtTime(v, t);
 			//console.log("adsr note off from " + this.targets[i].value + " to " + this.relv + " at time " + t + " + " + this.relt.value);
@@ -1886,6 +1887,11 @@ class SynthModule extends Drawable {
 		this.targetType = "timevalue";
 	}
 	
+	setValueTarget(t) {
+		this.targets = t;
+		this.targetType = "setvalue";
+	}
+	
 	setParentModule(p) {
 		this.parents = p;
 	}
@@ -1910,6 +1916,7 @@ class SynthModule extends Drawable {
 				} else {
 					for (var i = 0; i < this.targets.length; i++) {
 						this.targets[i].value = this.val;
+						//console.log(this.targets[i].gtype + " " + this.targets[i].gname + ": " + this.targets[i].value);
 					}
 				}
 			} else if (this.targetType == "toggle") {
@@ -2170,10 +2177,10 @@ class Knob extends SynthModule {
 		this.min.max = this.max;
 		this.max.min = this.min;
 		this.val = 0;
+		this.halfTurn = 0.5;
 		if (init) this.setValue(vals[init]); else this.setValue(vals[0]);
 		this.calcDotPos();
 		this.color = pianocol;
-		this.halfTurn = 0.5;
 	}
 	
 	updateValue() {
@@ -4590,11 +4597,15 @@ class NineBandEqualizer extends SynthModContainer {
 			cf = cf*2;
 			var j = 0;
 			this.eqs[j].push(ls.gain);
+			ls.gain.gname = i + "." + j;
+			ls.gain.gtype = "ls";
 			for (j = 1; j < this.bands-1; j++) {
 				var filt = sound.ctx.createBiquadFilter();
 				filt.type = 'peaking';
 				filt.frequency.value = cf;
 				filt.gain.value = 0;
+				filt.gain.gname = i + "." + j;
+				filt.gain.gtype = "band" + j;
 				cf = cf*2;
 				this.eqs[j].push(filt.gain);
 				lastfilt.connect(filt);
@@ -4606,6 +4617,8 @@ class NineBandEqualizer extends SynthModContainer {
 			hs.gain.value = 0;
 			lastfilt.connect(hs);
 			this.eqs[j].push(hs.gain);
+			hs.gain.gname = i + "." + j;
+			hs.gain.gtype = "hs";
 			eqins.push(ls);
 			eqouts.push(hs);
 		}
@@ -4619,14 +4632,36 @@ class NineBandEqualizer extends SynthModContainer {
 			slider.name = "";
 			this.addModule(slider, sx, sy);
 			sx += sw;
-			slider.setTimeValueTarget(this.eqs[i]);
+			slider.setNumTarget(this.eqs[i]);
 			this.sliders.push(slider);
+			slider.setValue(0);
+		}
+		
+		for (var i = 0; i < this.eqs.length; i++) {
+			for (var j = 0; j < this.eqs[i].length; j++) {
+				var eq = this.eqs[i][j];
+				//console.log("eq " + eq.gname + " val: " + eq.value);
+			}
 		}
 		
 		this.addINode(0, this.h*0.5-noder, noder, TYPE_AUDIO, [TYPE_AUDIO], "eq");
 		this.inNodes[0].setObject(eqins);
 		this.addONode(this.w-2*noder, this.h*0.5-noder, noder, TYPE_AUDIO, [TYPE_AUDIO], "eq");
 		this.outNodes[0].setObject(eqouts);
+	}
+	
+	hitCheck(isdown, coords) {
+		var r = super.hitCheck(isdown, coords);
+		if (!r) return false;
+		/*
+		for (var i = 0; i < this.eqs.length; i++) {
+			for (var j = 0; j < this.eqs[i].length; j++) {
+				var eq = this.eqs[i][j];
+				console.log("eq " + eq.gname + " val: " + eq.value);
+			}
+		}
+		*/
+		return r;
 	}
 	
 	save() {
