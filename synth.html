@@ -5281,6 +5281,32 @@ class VBtn extends ValBtn {
 	}
 }
 
+class StartBtn extends Drawable {
+	constructor(x, y, w, h) {
+		super(x, y, w, h);
+		this.fillCol = keypresscol;
+		this.name = "restart";
+		this.tx = this.x + this.w*0.05;
+		this.ty = this.y + this.h*0.9;
+	}
+	
+	hitCheck(isdown, coords) {
+		var hit = super.hitCheck(isdown, coords);
+		if (hit) {
+			piano.restartVoices();
+		}
+		return hit;
+	}
+	
+	drawOb(ctx) {
+		super.drawOb(ctx);
+		ctx.font = this.h*0.5 + "px Arial";
+		ctx.fillStyle = pianocol;
+		ctx.fillText(this.name, this.tx, this.ty);
+	}
+
+}
+
 class MBtn extends Drawable {
 	constructor(x, y, w, h) {
 		super(x, y, w, h);
@@ -6347,6 +6373,53 @@ class SHProcessor {
 				outputData[sample] = this.sample;
 			}
 		}
+	}
+}
+
+class ChorderMod extends SynthModContainer {
+	constructor(x, y, w, h, bl, br, bt, bb, noder) {
+		super(x, y, w, h, bl, br, bt, bb);
+		this.c = new Clicker(0, 0, w*0.6, w*0.6, this.trigprop);
+		this.addModule(this.c, w*0.1, h*0.2);
+		this.chord = new Array();
+		this.chord.push(50, 53, 56);
+	}
+	
+	save() {
+		var t = '{"type":"ChorderMod" , ' + super.save();
+		t += '}';
+		return t;
+	}
+	
+	trigger(on, knum, onum, f, baton) {
+		if (on) {
+			this.rollDown();
+		} else {
+			this.rollUp();
+		}
+	}
+	
+	rollDown() {
+		//var a = this.roll[this.rolli].time;
+		for (var i = 0; i < piano.allkeys.length; i++) {
+			piano.allkeys[i].colordown();
+		}
+		for (var i = 0; i < this.chord.length; i++) {
+			piano.allkeys[this.chord[i]].press(true, i, false, false);
+		}
+	}
+	
+	rollUp() {
+		for (var i = 0; i < piano.allkeys.length; i++) {
+			piano.allkeys[i].colordown();
+		}
+		for (var i = 0; i < this.chord.length; i++) {
+			piano.allkeys[this.chord[i]].press(false, i, true);
+		}
+	}
+	
+	drawOb(ctx) {
+		super.drawOb(ctx);
 	}
 }
 
@@ -8360,6 +8433,18 @@ class SHIcon extends ModuleIcon {
 	}
 }
 
+class ChorderIcon extends ModuleIcon {
+	createMod() {
+		return new ChorderMod(this.x, piano.modbt, piano.modh, piano.modh, piano.modbl, piano.modbr, piano.modbt, piano.modbb, piano.noder);
+	}
+	
+	drawOb(ctx) {
+		super.drawOb(ctx);
+		ctx.font = this.h*0.22 + "px Arial";
+		ctx.fillText("CHORD", this.x+this.w*0.1, this.y+this.h*0.5);
+	}	
+}
+
 class ModuleBar extends Drawable {
 	constructor(x, y, w, h) {
 		super(x, y, w, h);
@@ -8449,6 +8534,8 @@ class ModuleBar extends Drawable {
 		this.spdtlb = new SPDTLIcon(x+a,y+b, h*0.8, h*0.8, 0, canW, y, canH);
 		a += h*0.9;
 		this.spdtrb = new SPDTRIcon(x+a,y+b, h*0.8, h*0.8, 0, canW, y, canH);
+		a += h*0.9;
+		this.chorderb = new ChorderIcon(x+a,y+b, h*0.8, h*0.8, 0, canW, y, canH);
 		
 		this.icons.push(this.keyb);
 		this.icons.push(this.oscb);
@@ -8489,6 +8576,7 @@ class ModuleBar extends Drawable {
 		this.icons.push(this.expb);
 		this.icons.push(this.spdtlb);
 		this.icons.push(this.spdtrb);
+		this.icons.push(this.chorderb);
 		//this.icons.push(this.testb);
 		//this.icons.push(this.sptb);
 		this.hideicon = -1;
@@ -9020,6 +9108,9 @@ class Piano {
 		this.noder = kw*0.08;
 		
 		var mbh = keyW*btnw*0.7;
+		var sbh = keyW*btnw*0.3;
+		this.startb = new StartBtn(x, y + keyW*btnw - sbh, mbh, sbh);
+		this.synthbtns.push(this.startb);
 		this.monob = new MBtn(x, y + keyH * 1.5 + keyW*btnw - mbh, mbh, mbh);
 		this.synthbtns.push(this.monob);
 		this.portb = new PortBtn(x + mbh*1.1, y + keyH * 1.5 + keyW*btnw - mbh, mbh, mbh);
@@ -9159,6 +9250,10 @@ class Piano {
 		}
 	}
 	
+	restartVoices() {
+		this.loadModules(this.getModuleSaveText());
+	}
+	
 	incrementVoices(amt) {
 		var newv = numpianos + amt;
 		if (newv < 1) return false;
@@ -9277,6 +9372,8 @@ class Piano {
 			m = this.modbar.spdtlb.createMod();
 		} else if (type == "SPDTRMod") {
 			m = this.modbar.spdtrb.createMod();
+		} else if (type == "ChorderMod") {
+			m = this.modbar.chorderb.createMod();
 		}
 		if (m) {
 			this.pushModule(m);
@@ -9625,7 +9722,7 @@ class Piano {
 	}
 	
 	hitCheck(coords, isdown) {
-		if (ctrlOn || getNumDragMods() > 0) {
+		if (!touching && (ctrlOn || getNumDragMods() > 0)) {
 			this.ctrlHitCheck(coords, isdown);
 			if (!isdown) {
 				this.modbar.hideicon = -1;
@@ -9700,7 +9797,7 @@ class Piano {
 			if (rkp || rollkey.pressed) return;
 			this.unpressAllKeys();
 		}
-		if (!copiedMod) if (this.doSquare(coords, isdown)) return;
+		if (!copiedMod && !touching) if (this.doSquare(coords, isdown)) return;
 		return false;
 	}
 	
@@ -9840,6 +9937,7 @@ var clickCoords = {x:0, y:0};
 var dragCoords = {x:0, y:0};
 var mouseCoords = {x:0, y:0};
 var dragThresh = 5;
+var touching = false;
 var clicking = false;
 var dragging = false;
 var sound = new AudioManager();
@@ -9853,7 +9951,17 @@ var txtCol = "black";
 var keyW = 21;
 var keyH = 70.5;
 
+function textChange(msg) {
+	var infield = document.getElementById('valin');
+	setMsg(msg);
+	if (msg.search(/blue/i) > -1) {
+		infield.value = "";
+	}
+}
+
 function setup() {
+	var infield = document.getElementById('valin');
+	infield.addEventListener("input", function() {textChange(document.getElementById('valin').value)});
 	var myCanvas = document.getElementById('myCanvas');
 	myCanvas.addEventListener("mousedown", mouseDown);
 	myCanvas.addEventListener("mousemove", mouseMove);
@@ -9960,7 +10068,7 @@ function onMIDISuccess(midiAccess) {
 	}
 	if (!inputfound) {
 		piano.midiline1.txt = "no MIDI device found"
-		piano.midiline2.txt = "connect device and restart to use a MIDI controller";
+		piano.midiline2.txt = "connect device and reload to use a MIDI controller";
 	}
 }
 
@@ -10452,6 +10560,7 @@ function mouseDown(event, allowdef) {
 
 function touchstart(event) {
 	//event.preventDefault();
+	touching = true;
 	if (mouseDown(event.changedTouches[0], true)) event.preventDefault();
 	//document.getElementById("msgdiv").innerHTML = "touchstart";
 }
