@@ -5437,7 +5437,7 @@ class CCMod extends SynthModContainer {
 	}
 	
 	load(data) {
-		this.id = data.id;
+		this.id = data.val;
 	}
 	
 	sendValue(v, t, baton) {
@@ -9521,9 +9521,9 @@ class Piano {
 		//velocity is 0 to 127 value of knob
 		//note is knob id
 		//console.log("doCC: n:" + note + " v:" + velocity);
-		piano.midiline1.txt = "last received midi CC message:";
-		piano.midiline2.txt = "control: " + note + ", value: " + velocity;
-		piano.midiline3.txt = "";
+		//piano.midiline1.txt = "last received midi CC message:";
+		//piano.midiline2.txt = "control: " + note + ", value: " + velocity;
+		//piano.midiline3.txt = "";
 		if (note == 64) {
 			//sustain
 			piano.setSustain(velocity > 63);
@@ -9951,17 +9951,19 @@ var txtCol = "black";
 var keyW = 21;
 var keyH = 70.5;
 
-function textChange(msg) {
+function textChange() {
 	var infield = document.getElementById('valin');
+	var msg = infield.value;
 	setMsg(msg);
-	if (msg.search(/blue/i) > -1) {
-		infield.value = "";
-	}
+	//example:case insensitive search for word "blue"
+	//if (msg.search(/blue/i) > -1) {
+	//	infield.value = "";
+	//}
 }
 
 function setup() {
 	var infield = document.getElementById('valin');
-	infield.addEventListener("input", function() {textChange(document.getElementById('valin').value)});
+	infield.addEventListener("input", textChange);
 	var myCanvas = document.getElementById('myCanvas');
 	myCanvas.addEventListener("mousedown", mouseDown);
 	myCanvas.addEventListener("mousemove", mouseMove);
@@ -10080,6 +10082,10 @@ function rcvMIDIMessage(message) {
 	var command = message.data[0];
     var note = message.data[1];
     var velocity = (message.data.length > 2) ? message.data[2] : 0;
+	
+	piano.midiline1.txt = "last received midi CC message:";
+	piano.midiline2.txt = "command: " + command + ", note: " + note;
+	piano.midiline3.txt = "velocity: " + velocity;
 	var k = note - 21;
     switch (command) {
         case 144: // noteOn
