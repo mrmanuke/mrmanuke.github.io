@@ -3076,6 +3076,7 @@ class ioNode extends Drawable {
 		}
 		this.trigprop.connect(node.trigprop);
 		node.trigprop.notifyConnect(node);
+		if (node.obj.isknob) node.obj.lock(true);
 		this.conx = node.x+node.r;
 		this.cony = node.y+node.r;
 		this.connected = true;
@@ -3421,7 +3422,12 @@ class SynthModContainer extends Drawable {
 				this.starty = this.y;
 			}
 			return true;
+		} else {
+			this.unfocusCC();
 		}
+	}
+	
+	unfocusCC() {
 	}
 	
 	hitCheckObs(obs, isdown, coords) {
@@ -3681,9 +3687,9 @@ class FrequencySetter {
 		return true;
 	}
 	
-	trigger(on, knum, onum, f) {
+	trigger(on, knum, onum, f, baton, vol) {
 		if (!on) return;
-		this.noteOnNow(f, knum, onum);
+		this.noteOnNow(f, knum, onum, vol);
 	}
 	
 	noteOnNow(f, knum, onum, vol) {
@@ -4448,31 +4454,6 @@ class SynthFilterContainer extends SynthModContainer {
 		this.filtQKnob.setValue(data.Q);
 		this.filtGKnob.setValue(data.G);
 	}
-	
-	notifyConnect(n) {
-		if (n == this.fnode) {
-			console.log("f");
-			this.filtFreqKnob.lock(true);
-		} else if (n == this.qnode) {
-			console.log("q");
-			this.filtQKnob.lock(true);
-		} else if (n == this.gnode) {
-			console.log("g");
-			this.filtGKnob.lock(true);
-		}
-		super.notifyConnect(n);
-	}
-	
-	notifyDisconnect(n) {
-		if (n == this.fnode) {
-			this.filtFreqKnob.lock(false);
-		} else if (n == this.qnode) {
-			this.filtQKnob.lock(false);
-		} else if (n == this.gnode) {
-			this.filtGKnob.lock(false);
-		}
-		super.notifyDisconnect(n);
-	}
 }
 
 class SynthCompContainer extends SynthModContainer {
@@ -4873,8 +4854,10 @@ class ValueKnobModule extends SynthModContainer {
 		this.inNodes[0].setObject(this.knob.min);
 		this.addINode(this.w*0.6-noder, 0, noder, TYPE_VALUE, [TYPE_VALUE], "max", "M");
 		this.inNodes[1].setObject(this.knob.max);
-		this.addINode(0, this.h-2*noder, noder, TYPE_VALUE, [TYPE_VALUE], "max", "T");
+		this.addINode(0, this.h-2*noder, noder, TYPE_VALUE, [TYPE_VALUE], "turns", "t");
 		this.inNodes[2].setObject(this.knob.turns);
+		this.addINode(this.w*0.6-noder, this.h-noder*2, noder, TYPE_VALUE, [TYPE_VALUE, TYPE_ENV], "env", "E");
+		this.inNodes[3].setObject(this.knob);
 		this.digs = 5;
 		this.text_offset = "    ";
 		this.knob.name = this.text_offset + "0";
@@ -4997,20 +4980,6 @@ class SynthGainContainer extends SynthModContainer {
 				this.mutearr[i].gain.value = 1;
 			}
 		}		
-	}
-	
-	notifyConnect(node) {
-		if (node === this.envnode) {
-			this.knob.lock(true);
-		}
-		super.notifyConnect();
-	}
-	
-	notifyDisconnect(node) {
-		if (node === this.envnode) {
-			this.knob.lock(false);
-		}
-		super.notifyDisconnect();
 	}
 	
 	drawOb(ctx) {
@@ -5207,7 +5176,7 @@ class ValBtn extends Drawable {
 		if (v > 99) {
 			this.tx = this.w*0.12;
 		} else if (v > 9) {
-			this.tx = this.w*0.25;
+			this.tx = this.w*0.23;
 		} else {
 			this.tx = this.w*0.38;
 		}
@@ -5228,7 +5197,11 @@ class ValBtn extends Drawable {
 		ctx.lineTo(this.x+this.ax3, this.y+this.ay3);
 		ctx.stroke();
 		ctx.font = this.h*0.3 + "px Arial";
-		ctx.fillStyle = pianocol;
+		if (focusCCOb == this) {
+			ctx.fillStyle = focusCol;
+		} else {
+			ctx.fillStyle = pianocol;
+		}
 		ctx.fillText(this.text, this.x+this.tx, this.y+this.ty);
 		ctx.font = this.h*0.23 + "px Arial";
 		ctx.fillText(this.text2, this.x+this.tx2, this.y+this.ty2);
@@ -5246,6 +5219,11 @@ class CCVBtn extends ValBtn {
 		this.setText(n);
 	}
 	
+	focusSetCC(c) {
+		this.setText(c);
+		this.parent.setID(c);
+	}
+	
 	hitCheck(isdown, coords) {
 		var hit = super.hitCheck(isdown, coords);
 		if (hit && !isdown) {
@@ -5253,8 +5231,12 @@ class CCVBtn extends ValBtn {
 				this.parent.incrementID(1);
 			} else if (coords.y > this.y+this.y2) {
 				this.parent.incrementID(-1);
+			} else {
+				focusCCOb = this;
 			}
 			this.setText(this.parent.id);
+		} else {
+			if (focusCCOb == this) focusCCOb = null;
 		}
 		return hit;
 	}
@@ -5438,10 +5420,15 @@ class CCMod extends SynthModContainer {
 	
 	load(data) {
 		this.id = data.val;
+		this.vbtn.setID(this.id);
 	}
 	
 	sendValue(v, t, baton) {
 		this.valueOb.setValue(v, null, null, baton);
+	}
+	
+	setID(newval) {
+		this.id = newval;
 	}
 	
 	incrementID(amt) {
@@ -5452,6 +5439,10 @@ class CCMod extends SynthModContainer {
 			newval = 0;
 		}
 		this.id = newval;
+	}
+	
+	unfocusCC() {
+		if (focusCCOb == this.vbtn) focusCCOb = null;
 	}
 	
 	drawOb(ctx) {
@@ -6672,24 +6663,6 @@ class SynthADSRContainer extends ENVContainer {
 	load(data) {
 		this.mod.load(data);
 	}
-	
-	notifyConnect(n) {
-		for (var i = 0; i < this.knobnodes.length; i++) {
-			if (n == this.knobnodes[i]) {
-				this.knobnodes[i].obj.lock(true);
-			}
-		}
-		super.notifyConnect(n);
-	}
-	
-	notifyDisconnect(n) {
-		for (var i = 0; i < this.knobnodes.length; i++) {
-			if (n == this.knobnodes[i]) {
-				this.knobnodes[i].obj.lock(false);
-			}
-		}
-		super.notifyDisconnect(n);
-	}
 }
 
 class SynthENVLPContainer extends ENVContainer {
@@ -6722,24 +6695,6 @@ class SynthENVLPContainer extends ENVContainer {
 	
 	load(data) {
 		this.mod.load(data);
-	}
-	
-	notifyConnect(n) {
-		for (var i = 0; i < this.knobnodes.length; i++) {
-			if (n == this.knobnodes[i]) {
-				this.knobnodes[i].obj.lock(true);
-			}
-		}
-		super.notifyConnect(n);
-	}
-	
-	notifyDisconnect(n) {
-		for (var i = 0; i < this.knobnodes.length; i++) {
-			if (n == this.knobnodes[i]) {
-				this.knobnodes[i].obj.lock(false);
-			}
-		}
-		super.notifyDisconnect(n);
 	}
 }
 
@@ -6775,6 +6730,191 @@ class SynthModKeyboard extends SynthModContainer {
 		super.setPos(x, y);
 		this.kx = x + this.w*0.05;
 		this.ky = y + this.h*0.1;
+	}
+	
+	drawOb(ctx) {
+		super.drawOb(ctx);
+		//drawRect(ctx, this.x, this.y, this.w, this.h, this.stroke, this.fill, this.fillCol, this.strokeCol);
+		drawLittleKeyboard(ctx, this.kx, this.ky, this.kw, this.kh, this.fillCol, this.strokeCol);
+		ctx.font = this.h*0.1 + "px Arial";
+		ctx.fillStyle = pianocol;
+		ctx.fillText("MULTI", this.x + this.mx, this.y + this.my);
+		ctx.fillText("VEL", this.x + this.vx, this.y + this.my);
+		ctx.fillText("OUT", this.x + this.vx, this.y + this.vy);
+	}
+	
+	drag(dcoords, ccoords) {
+		super.drag(dcoords, ccoords);
+		this.kx += this.stepx;
+		this.ky += this.stepy;
+	}
+}
+
+class VKey {
+	constructor() {
+		this.knum = sound.getKeyNum();
+		this.onum = -1;
+		this.note = -1;
+	}
+	
+	getPiano(note) {
+		this.onum = sound.getPiano(this.knum);
+		this.note = note;
+		this.freq = this.noteToFreq(note);
+		return this.onum;
+	}
+	
+	noteToFreq(note) {
+		return piano.allkeys[note-21].freq;
+	}
+	
+	returnPiano() {
+		sound.returnPiano(this.onum);
+		this.onum = -1;
+		this.note = -1;
+	}
+}
+
+class SynthModKeyboard2 extends SynthModContainer {
+	constructor(x, y, w, h, bl, br, bt, bb, noder) {
+		super(x, y, w, h, bl, br, bt, bb);
+		this.isChannel = true;
+		this.kw = w*0.6/1.4;
+		this.kh = h*0.6;
+		this.kxoff = w - 3*noder - this.kw;
+		this.kx = x + this.kxoff;
+		this.kyoff = h*0.1;
+		this.ky = y + this.kyoff;
+		this.mx = this.w*0.35;
+		this.my = this.h*0.8;
+		this.vx = this.w*0.7;
+		this.vy = this.h*0.9;
+		this.fillCol = pianocol;
+		this.id = 0;
+		var vw = w*0.25;
+		this.vbtn = new CCVBtn(0, 0, vw, h*0.8, this);
+		this.vbtn.isChannel = true;
+		this.addModule(this.vbtn, w*0.05, h*0.1);
+		this.addONode(this.w-2*noder, this.h*0.25-noder, noder, TYPE_KEY, [TYPE_KEY], "key");
+		this.outNodes[0].setObject(this);
+		this.addONode(this.w-2*noder, this.h*0.50-noder, noder, TYPE_KEY, [TYPE_KEY], "key");
+		this.outNodes[1].setObject(this);
+		this.addONode(this.w-2*noder, this.h-2*noder, noder, TYPE_VALUE, [TYPE_VALUE], "velocity");
+		this.velocityOut = new VelocityOutput();
+		this.outNodes[2].setObject(this.velocityOut);
+		this.addINode(this.w*0.6-noder, this.h-noder*2, noder, TYPE_VALUE, [TYPE_VALUE], "fmulti", "F");
+		//this.inNodes[0].setObject(obj);
+		this.keys = new Array();
+		for (var i = 0; i < sound.numpianos; i++) {
+			this.keys.push(new VKey());
+		}
+	}
+	
+	save() {
+		var t = '{"type":"SynthModKeyboard2" , "id":' + this.id + " , " + super.save();
+		t += '}';
+		return t;
+	}
+	
+	load(data) {
+		this.id = data.id;
+		this.vbtn.setID(this.id);
+	}
+	
+	sendValue(note, velocity, t, on) {
+		if (on) {
+			var k = -1;
+			for (var i = 0; i < this.keys.length; i++) {
+				if (this.keys[i].onum == -1) {
+					k = i;
+					break;
+				}
+			}
+			if (k > -1) {
+				this.noteOnNow(this.keys[k], note, velocity);
+			} else {
+				console.log("couldn't get an unused key");
+			}
+		} else {
+			var k = -1;
+			for (var i = 0; i < this.keys.length; i++) {
+				if (this.keys[i].note == note) {
+					k = i;
+					break;
+				}
+			}
+			if (k > -1) {
+				this.noteOFF(this.keys[k], null, note);
+			} else {
+				console.log("couldn't find key with note " + note);
+			}
+		}
+	}
+	
+	noteOFF(key, msg) {
+		var baton = new Baton();
+		var oscnum = key.onum;
+		var knum = key.knum;
+		//for (var i = 0; i < this.outputs.length; i++) {
+		//	this.outputs[i].noteOFF(oscnum, knum, msg, baton);
+		//}
+		if (oscnum < 0) return;
+		this.velocityOut.trigger(0, knum, oscnum, baton);
+		for (var i = 0; i < this.triggers.length; i++) {
+			this.triggers[i].trigger(false, knum, oscnum, key.freq, baton);
+		}
+		key.returnPiano();
+	}
+	
+	noteOnNow(key, note, vol) {
+		//console.log("key2 note on");
+		var oscnum = key.getPiano(note);
+		var knum = key.knum;
+		var freq = key.freq;
+		if (oscnum < 0) {
+			//var t = rollkey.roll[rollkey.rolli].time;
+			//console.log("can't get voice at " + t.measure + ":" + t.beat + ":" + t.fraction);
+			setMsg("error: ran out of voices");
+			return oscnum;
+		}
+		sound.setPeriod(sound.ctx.sampleRate / freq);
+		lastonum = oscnum;
+		//for (var i = 0; i < this.outputs.length; i++) {
+		//	this.outputs[i].noteOnNow(freq*this.multi, knum, oscnum, vol);
+		//}
+		var baton = new Baton();
+		this.velocityOut.trigger(vol, knum, oscnum, baton);
+		for (var i = 0; i < this.triggers.length; i++) {
+			this.triggers[i].trigger(true, knum, oscnum, freq, baton, vol);
+		}
+		if (sound.monophonic) {
+			sound.pianos[oscnum].noteOnNow(knum);
+		}
+		return oscnum;
+	}
+	
+	setID(newval) {
+		this.id = newval;
+	}
+	
+	incrementID(amt) {
+		var newval = this.id + amt;
+		if (newval > 127) {
+			newval = 127;
+		} else if (newval < 0) {
+			newval = 0;
+		}
+		this.id = newval;
+	}
+	
+	unfocusCC() {
+		if (focusCCOb == this.vbtn) focusCCOb = null;
+	}
+	
+	setPos(x, y) {
+		super.setPos(x, y);
+		this.kx = x + this.kxoff;
+		this.ky = y + this.kyoff;
 	}
 	
 	drawOb(ctx) {
@@ -7922,6 +8062,22 @@ class KeyboardIcon extends ModuleIcon {
 	}
 }
 
+class KeyboardIcon2 extends ModuleIcon {
+	createMod(d) {
+		return new SynthModKeyboard2(this.x, piano.modbt, piano.modw*1.4, piano.modh*1.2, piano.modbl, piano.modbr, piano.modbt, piano.modbb, piano.noder);
+	}
+	
+	drawOb(ctx) {
+		super.drawOb(ctx);
+		drawLittleKeyboard(ctx, this.x, this.y, this.w, this.h, this.fillCol, this.strokeCol);
+		//draw text "2" over keyboard icon
+		
+		ctx.font = this.h*0.26 + "px Arial";
+		ctx.fillStyle = pianocol;
+		ctx.fillText("2", this.x+this.w*0.1, this.y+this.h*0.75);
+	}
+}
+
 class PWMIcon extends ModuleIcon {
 	createMod() {
 		return new SynthPWMContainer(this.x, piano.modbt, piano.modh*3, piano.modh*1.2, piano.modbl, piano.modbr, piano.modbt, piano.modbb, piano.noder);
@@ -8499,8 +8655,10 @@ class ModuleBar extends Drawable {
 		this.analyseb = new AnalyserIcon(x+a,y+b, h*0.8, h*0.8, 0, canW, y, canH);
 		a += h*0.9;
 		this.speakerb = new SpeakerIcon(x+a,y+b, h*0.8, h*0.8, 0, canW, y, canH);
-		b += h*0.9;//next row
+		b += h*0.9;//next row////////////////////////////////////
 		a = h*0.1;
+		this.keyb2 = new KeyboardIcon2(x+a, y+b, h*0.8, h*0.8, 0, canW, y, canH);
+		a += h*0.9;
 		this.valb = new ValueIcon(x+a,y+b, h*0.8, h*0.8, 0, canW, y, canH);
 		a += h*0.9;
 		this.valkb = new VKnobIcon(x+a,y+b, h*0.8, h*0.8, 0, canW, y, canH);
@@ -8577,6 +8735,7 @@ class ModuleBar extends Drawable {
 		this.icons.push(this.spdtlb);
 		this.icons.push(this.spdtrb);
 		this.icons.push(this.chorderb);
+		this.icons.push(this.keyb2);
 		//this.icons.push(this.testb);
 		//this.icons.push(this.sptb);
 		this.hideicon = -1;
@@ -9095,6 +9254,7 @@ class Piano {
 		
 		this.modules = new Array();
 		this.ccmods = new Array();
+		this.channelmods = new Array();
 		this.textlines = new Array();
 		
 		var tw = keyW*btnw*2;
@@ -9329,6 +9489,8 @@ class Piano {
 			m.isEnv = true;
 		} else if (type == "SynthModKeyboard") {
 			m = this.modbar.keyb.createMod();
+		} else if (type == "SynthModKeyboard2") {
+			m = this.modbar.keyb2.createMod();
 		} else if (type == "MergerMod") {
 			m = this.modbar.mergerb.createMod();
 		} else if (type == "SplitterMod") {
@@ -9497,6 +9659,9 @@ class Piano {
 		if (mod.isCC) {
 			this.ccmods.push(mod);
 		}
+		if (mod.isChannel) {
+			this.channelmods.push(mod);
+		}
 	}
 	
 	trash(mod) {
@@ -9507,12 +9672,21 @@ class Piano {
 				return;
 			}
 		}
-		if (!mod.isCC) return;
-		for (var i = 0; i < this.ccmods.length; i++) {
-			if (this.ccmods[i] === mod) {
-				//console.log("trash " + mod.name);
-				this.ccmods.splice(i, 1);
-				return;
+		if (mod.isCC) {
+			for (var i = 0; i < this.ccmods.length; i++) {
+				if (this.ccmods[i] === mod) {
+					//console.log("trash " + mod.name);
+					this.ccmods.splice(i, 1);
+					break;
+				}
+			}
+		}
+		if (mod.isChannel) {
+			for (var i = 0; i < this.channelmods.length; i++) {
+				if (this.channelmods[i] == mod) {
+					this.channelmods.splice(i, 1);
+					break;
+				}
 			}
 		}
 	}
@@ -9524,6 +9698,10 @@ class Piano {
 		//piano.midiline1.txt = "last received midi CC message:";
 		//piano.midiline2.txt = "control: " + note + ", value: " + velocity;
 		//piano.midiline3.txt = "";
+		if (focusCCOb && !focusCCOb.isChannel) {
+			focusCCOb.focusSetCC(note);
+			focusCCOb = null;
+		}
 		if (note == 64) {
 			//sustain
 			piano.setSustain(velocity > 63);
@@ -9537,6 +9715,20 @@ class Piano {
 			if (this.ccmods[i].id == note) {
 				var baton = new Baton();
 				this.ccmods[i].sendValue(velocity/127, t, baton);
+			}
+		}
+	}
+	
+	doChannel(chan, note, velocity, on) {
+		if (focusCCOb && focusCCOb.isChannel) {
+			focusCCOb.focusSetCC(chan);
+			focusCCOb = null;
+		}
+		var t = sound.ctx.currentTime;
+		for (var i = 0; i < this.channelmods.length; i++) {
+			if (this.channelmods[i].id == chan) {
+				var baton = new Baton();
+				this.channelmods[i].sendValue(note, velocity/127, t, on)
 			}
 		}
 	}
@@ -9946,6 +10138,7 @@ var dragOb = new Array();
 var keyDragging = false;
 var copiedMod = false;
 var focusOb = null;
+var focusCCOb = null;
 var loop = new GameLoop();
 var txtCol = "black";
 var keyW = 21;
@@ -10087,24 +10280,31 @@ function rcvMIDIMessage(message) {
 	piano.midiline2.txt = "command: " + command + ", note: " + note;
 	piano.midiline3.txt = "velocity: " + velocity;
 	var k = note - 21;
-    switch (command) {
-        case 144: // noteOn
-			if (k < 0 || k > piano.allkeys.length-1) return;
-            if (velocity > 0) {
-				piano.allkeys[k].press(true, 0, false, true, velocity/127);
-            } else {
+	if (command > 127 && command < 144) { //noteOff
+		var chan = command - 128 + 1;
+		if (chan == 1) {
+			if (k > -1 && k < piano.allkeys.length) {
 				piano.allkeys[k].press(false, 0, false, true);
-            }
-            break;
-        case 128: // noteOff
-			if (k < 0 || k > piano.allkeys.length-1) return;
-			piano.allkeys[k].press(false, 0, false, true);
-            break;
-		case 176: // CC
-			//velocity is 0 to 127
-			//note is knob id
-			piano.doCC(note, velocity);
-			break;
+			}
+		}
+		piano.doChannel(chan, note, velocity, false);
+	} else if (command > 143 && command < 160) { //noteOn
+		var chan = command - 144 + 1;
+		console.log(chan);
+		if (chan == 1) {
+			if (k > -1 && k < piano.allkeys.length) {
+				if (velocity > 0) {
+					piano.allkeys[k].press(true, 0, false, true, velocity/127);
+				} else {
+					piano.allkeys[k].press(false, 0, false, true);
+				}
+			}
+		}
+		piano.doChannel(chan, note, velocity, velocity > 0);
+	} else if (command == 176) {// CC
+		//velocity is 0 to 127
+		//note is knob id
+		piano.doCC(note, velocity);
 	}
 }
 
