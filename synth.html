@@ -2203,12 +2203,12 @@ class Knob extends SynthModule {
 		ctx.strokeStyle = this.color;
 		ctx.stroke();
 		ctx.strokeStyle = pianocol;
-		if (this.cc || !this.locked) {
+		//if (this.cc || !this.locked) {
 			ctx.beginPath();
 			ctx.arc(this.dotx + this.dotr, this.doty + this.dotr, this.dotr, 0, 2*Math.PI);
-			if (this.cc) ctx.strokeStyle = cccol;
+			if (this.cc || this.locked) ctx.strokeStyle = cccol;
 			ctx.stroke();
-		}
+		//}
 		ctx.fillStyle = pianocol;
 		ctx.font = this.h*0.26 + "px Arial";
 		ctx.fillText(this.name, this.x + this.w*0.1, this.y + this.h*1.2);
@@ -3146,6 +3146,7 @@ class ioNode extends Drawable {
 		this.con.disconnectInput();
 		this.trigprop.disconnect(node.trigprop);
 		node.trigprop.notifyDisconnect(node);
+		if (node.obj.isknob) node.obj.lock(false);
 		this.drawline = false;
 		this.conx = this.x+this.r;
 		this.cony = this.y+this.r;
