@@ -1,7 +1,7 @@
 <html>
 <head>
 <script>
-//test update
+//todo:
 var numpianos = 25;
 var lastonum = 0;
 var playcount = 0;
@@ -3540,6 +3540,25 @@ class ValueSetter {
 	}
 }
 
+class ValueRounder {
+	constructor(parent) {
+		this.parent = parent;
+	}
+	
+	setValue(v, k, o, baton) {
+		var noerr = true;
+		if (!this.parent.setRoundValue(v, k, o, baton)) noerr = false;
+		return noerr;		
+	}
+	
+	notifyConnect() {
+	}
+	
+	notifyDisconnect() {
+		this.parent.setRoundValue(null);
+	}
+}
+
 class CCValueSetter extends ValueSetter {
 	setValue(v, k, o, baton) {
 		if (v === 0) this.val = 0;
@@ -4857,7 +4876,7 @@ class ValueKnobModule extends SynthModContainer {
 		this.inNodes[1].setObject(this.knob.max);
 		this.addINode(0, this.h-2*noder, noder, TYPE_VALUE, [TYPE_VALUE], "turns", "t");
 		this.inNodes[2].setObject(this.knob.turns);
-		this.addINode(this.w*0.6-noder, this.h-noder*2, noder, TYPE_VALUE, [TYPE_VALUE, TYPE_ENV], "env", "E");
+		this.addINode(this.w-2*noder, this.h-noder*2, noder, TYPE_VALUE, [TYPE_VALUE, TYPE_ENV], "env", "E");
 		this.inNodes[3].setObject(this.knob);
 		this.digs = 5;
 		this.text_offset = "    ";
@@ -5405,6 +5424,7 @@ class CCMod extends SynthModContainer {
 		this.addONode(w-2*noder, 0, noder, TYPE_VALUE, [TYPE_VALUE], "value");
 		this.valueOb = new CCValueSetter();
 		this.outNodes[0].setObject(this.valueOb);
+		this.outNodes[0].isCC = true;
 		this.txt = "C";
 		this.txtsize = h*0.2;
 		this.txtx = w*0.72;
@@ -5612,6 +5632,7 @@ class ValueModContainer extends SynthModContainer {
 		this.lockinput = false;
 		this.digs = 2;
 		this.setDigs(2);
+		this.round = null;
 	}
 	
 	save() {
@@ -5660,16 +5681,24 @@ class ValueModContainer extends SynthModContainer {
 		this.setValue(v, null, null, baton);
 	}
 	
+	doRounding(v) {
+		if (this.round) {
+			return v - v % this.round;
+		} else {
+			return v;
+		}
+	}
+	
 	setValue(v, k, o, baton) {
 		var val = 0;
 		if (v || v === 0) {
-			val = v;
-			this.text = (Math.round(v*this.dmult)*this.ddiv).toString();
+			val = this.doRounding(v);
+			this.text = (Math.round(val*this.dmult)*this.ddiv).toString();
 			if (this.text.length > 2+this.digs) {
 				this.text = this.text.substring(0, 2+this.digs);
 			}
 		} else {
-			val = parseFloat(this.text);
+			val = this.doRounding(parseFloat(this.text));
 			this.text = (Math.round(val*this.dmult)*this.ddiv).toString();
 			if (this.text.length > 2+this.digs) {
 				this.text = this.text.substring(0, 2+this.digs);
@@ -5769,12 +5798,17 @@ class ValueModContainer extends SynthModContainer {
 class TextField extends ValueModContainer {
 	constructor(x, y, w, h, bl, br, bt, bb, noder) {
 		super(x, y, w, h, bl, br, bt, bb, noder);
-		this.addONode(w-2*noder, this.h*0.7-noder, noder, TYPE_VALUE, [TYPE_VALUE], "value");
+		this.round = null;
+		this.addONode(w-2*noder, this.h-2*noder, noder, TYPE_VALUE, [TYPE_VALUE], "value");
 		this.text = "0";
 		this.valueOb = new ValueSetter();
 		this.outNodes[0].setObject(this.valueOb);
-		this.addINode(0, this.h*0.7-noder, noder, TYPE_VALUE, [TYPE_VALUE, TYPE_KEY], "value");
+		this.addINode(0, this.h-2*noder, noder, TYPE_VALUE, [TYPE_VALUE, TYPE_KEY], "value");
 		this.inNodes[0].setObject(this);
+		this.addINode(0, 0, noder, TYPE_VALUE, [TYPE_VALUE], "round", "R");
+		this.rounder = new ValueRounder(this);
+		this.rounderNode = this.inNodes[1];
+		this.inNodes[1].setObject(this.rounder);
 	}
 	
 	save() {
@@ -5788,6 +5822,10 @@ class TextField extends ValueModContainer {
 		this.setValue(data.val, null, -2);
 	}
 	
+	drawOb(ctx) {
+		super.drawOb(ctx, null, this.h*0.6);
+	}
+	
 	trigger(on, knum, onum, f, baton) {
 		//super.trigger(on, knum, onum, f, baton);
 	}
@@ -5799,12 +5837,34 @@ class TextField extends ValueModContainer {
 	noteOFF() {
 	}
 	
-	notifyConnect() {
-		this.lockinput = true;
+	setRoundValue(rv) {
+		var c = false;
+		if(!rv) {
+			this.round = null;
+			c = true;
+		}
+		if(rv <= 0) {
+			this.round = null;
+			c = false;
+		}
+		if(rv > 0) {
+			this.round = rv;
+			c = true;
+		}
+		this.setValue(null, null, -2, null, true);
+		return c;
 	}
 	
-	notifyDisconnect() {
-		this.lockinput = false;
+	notifyConnect(node) {
+		if (node != this.rounderNode) this.lockinput = true;
+	}
+	
+	notifyDisconnect(node) {
+		if (node != this.rounderNode) {
+			this.lockinput = false; 
+		} else {
+			this.setRoundValue(null);
+		}
 	}
 }
 
