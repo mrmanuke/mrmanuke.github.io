@@ -3692,6 +3692,8 @@ class FrequencySetter {
 		this.o = o;
 		if (!mosc) this.setMulti(1);
 		this.foffset = 0;
+		this.rampformulti = true;
+		this.ramptime = 0.1;
 	}
 	
 	setOffset(f, knum, onum) {
@@ -3701,8 +3703,12 @@ class FrequencySetter {
 	setMulti(m) {
 		if (m == 0) return false;
 		this.multi = m;
+		var rt = 0;
+		if (this.rampformulti) rt = this.ramptime;
 		for (var i = 0; i < this.o.length; i++) {
 			this.o[i].frequency.multi = m;
+			var val = this.o[i].origFrequency * this.multi + this.foffset;
+			this.setFrequency(i, val, sound.ctx.currentTime + rt, this.rampformulti);
 		}
 		return true;
 	}
@@ -3718,6 +3724,7 @@ class FrequencySetter {
 		if (vol) {
 			this.setGain(onum, vol, stime);
 		}
+		this.o[onum].origFrequency = f;
 		if (sound.porto && !sound.pianos[onum].off) {
 			stime += sound.porttime;
 			this.setFrequency(onum, val, stime, true);
@@ -3737,6 +3744,7 @@ class FrequencySetter {
 		if (onum == -2) {
 			var val = v*this.multi + this.foffset;
 			for (var i = 0; i < this.o.length; i++) {
+				this.o[i].origFrequency = v;
 				this.setFrequency(i, val, sound.ctx.currentTime, false);
 			}
 			return true;
@@ -3748,6 +3756,7 @@ class FrequencySetter {
 		var val = v*this.multi + this.foffset;
 		//for (var i = 0; i < this.o.length; i++) {
 			this.setFrequency(onum, val, sound.ctx.currentTime, false);
+			this.o[onum].origFrequency = val;
 		//}
 		return true;
 	}
@@ -3777,6 +3786,7 @@ class FMFrequencySetter extends FrequencySetter {
 	}
 	
 	setFrequency(onum, f, stime, ramp) {
+		if(isNaN(f)) return false;
 		super.setFrequency(onum, f, stime, ramp);
 		this.p.setGains(f, onum);
 	}
@@ -3786,12 +3796,19 @@ class MultiFrequencySetter extends FrequencySetter {
 	constructor(p) {
 		super(null, true);
 		this.p = p;
-		this.setMulti(1);
+		//this.setMulti(1);
+		this.multi = 1;
 	}
 	
 	setMulti(m) {
 		if (m == 0) return false;
 		this.multi = m;
+		var rt = 0;
+		if (this.rampformulti) rt = this.ramptime;
+		for (var i = 0; i < this.o.length; i++) {
+			var val = this.o[i].origFrequency * this.multi + this.foffset;
+			this.setFrequency(i, val, sound.ctx.currentTime + rt, this.rampformulti);
+		}
 		return true;
 	}
 	
@@ -3804,6 +3821,7 @@ class MultiFrequencySetter extends FrequencySetter {
 	}
 	
 	setFrequency(onum, f, stime, ramp) {
+		if(isNaN(f)) return false;
 		if (ramp) {
 			for (var i = 0; i < this.o[onum].length; i++) {
 				this.o[onum][i].frequency.linearRampToValueAtTime(f*this.s[i], stime);
