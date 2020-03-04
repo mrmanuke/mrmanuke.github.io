@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>3D Paint</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<script>
+	</script>
+</head>
+<body>
+	<div id="cursor1"></div>
+	<div id="cursor2"></div>
+	<div ="toolbar">
+		Size (can also change with WASD)
+		<input type="range" min="1" max="200" value="40" class="slider" id="sizeRanger" onInput="changeSizer(this.value)">
+		<button style="background-color:#FF0000;color:#FF0000" onClick="colorchoose(this.style.color)">_</button><!--red-->
+		<button style="background-color:#FFA000;color:#FFA000" onClick="colorchoose(this.style.color)">_</button><!--orange-->
+		<button style="background-color:#FFFF00;color:#FFFF00" onClick="colorchoose(this.style.color)">_</button><!--yellow-->
+		<button style="background-color:#00FF00;color:#00FF00" onClick="colorchoose(this.style.color)">_</button><!--green-->
+		<button style="background-color:#0000FF;color:#0000FF" onClick="colorchoose(this.style.color)">_</button><!--blue-->
+		<button style="background-color:#A000FF;color:#A000FF" onClick="colorchoose(this.style.color)">_</button><!--purple-->
+		<button style="background-color:#000000;color:#000000" onClick="colorchoose(this.style.color)">_</button><!--black-->
+		<button style="background-color:#FFFFFF;color:#FFFFFF" onClick="colorchoose(this.style.color)">_</button><!--white-->
+		<button style="background-color:#7E7E7E;color:#7E7E7E" onClick="colorchoose(this.style.color)" id="changer">_</button><!--changer-->
+		<input type="range" min="0" max="255" value="126" class="slider" id="redRanger" onInput="changeRanger()">
+		<input type="range" min="0" max="255" value="126" class="slider" id="greenRanger" onInput="changeRanger()">
+		<input type="range" min="0" max="255" value="126" class="slider" id="blueRanger" onInput="changeRanger()">
+	</div>
+	<canvas id="canvas" tabindex="1"></canvas>
+	<script src="main.js"></script>
+</body>
+</html>

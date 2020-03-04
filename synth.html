@@ -82,6 +82,39 @@ var piano;
 var qwertyboard;// = new qwerty();
 var ctrlOn = false;
 var shiftOn = false;
+var audioContextStarted = false;
+
+//chord quality constants
+var Q_MAJ = 0;
+var Q_MIN = 1;
+var Q_MAJ7 = 2;
+var Q_MIN7 = 3;
+var Q_DOM7 = 4;
+var Q_DIM = 5;
+var Q_SUS2 = 6;
+var Q_SUS4 = 7
+var Q_AUG = 8;
+var Q_DOM9 = 9;
+var Q_MAJ11 = 10;
+
+var MAJ_CHORD = [0, 4, 7];
+var MAJ7_CHORD = [0, 4, 7, 11];
+var MIN_CHORD = [0, 3, 7];
+var MIN7_CHORD = [0, 3, 7, 10];
+var DOM7_CHORD = [0, 4, 7, 10];
+var DIM_CHORD = [0, 3, 6];
+var SUS2_CHORD = [0, 2, 7];
+var SUS4_CHORD = [0, 5, 7];
+var AUG_CHORD = [0, 4, 8];
+var DOM9_CHORD = [0, 4, 7, 10, 14];
+var MAJ11_CHORD = [0, 4, 7, 11, 14, 17];
+
+var CHORD_TYPES = [MAJ_CHORD, MIN_CHORD, MAJ7_CHORD, MIN7_CHORD, DOM7_CHORD, DIM_CHORD, SUS2_CHORD, SUS4_CHORD, AUG_CHORD, DOM9_CHORD, MAJ11_CHORD];
+//---------------
+
+var music_key = 60;//C
+var music_major_key = true;
+var music_key_q = Q_MAJ;
 
 var TYPE_NULL = -1;
 var TYPE_KEY = 0;
@@ -1322,6 +1355,7 @@ class PKey extends Drawable {
 	}
 	
 	press(isdown, pnum, holdColor, manual, vol) {
+		//console.log("key " + this.num + " pressed");
 		vol = vol || 1;
 		manual = false;
 		if (isdown === this.pressed && (this.oscnum == -1 && !manual)) {
@@ -10223,17 +10257,205 @@ var txtCol = "black";
 var keyW = 21;
 var keyH = 70.5;
 
+var commandlist = new Array();
+var key = 39;
+
+class TextCommand {
+	constructor(word, fnc) {
+		this.word = new RegExp(word, "i");
+		this.fnc = fnc;
+	}
+	
+	execute(msg, field, findpos) {
+		return this.fnc(msg, field, findpos);
+	}
+}
+
 function textChange() {
 	var infield = document.getElementById('valin');
 	var msg = infield.value;
 	setMsg(msg);
-	//example:case insensitive search for word "blue"
-	//if (msg.search(/blue/i) > -1) {
+	//example:case insensitive search for word "blue 2"
+	//if (msg.search(/blue 2/i) > -1) {
 	//	infield.value = "";
 	//}
+	for (var i = 0; i < commandlist.length; i++) {
+		var findpos = msg.search(commandlist[i].word);
+		if (findpos > -1) {
+			msg = msg.slice(0, findpos-1);
+			if (commandlist[i].execute(msg, infield, findpos)) break;
+		}
+	}
+}
+
+function setupCommands() {
+	commandlist.push(new TextCommand("clear", clearFnc));
+	commandlist.push(new TextCommand("set key", setKeyFnc));
+	commandlist.push(new TextCommand("show chord", showChordFnc));
+	commandlist.push(new TextCommand("test", testFnc));
+}
+
+function testFnc(msg, field, pos) {
+	var mpos;
+	if ((mpos = msg.search(/xyz/i)) > -1) {
+		console.log("xyz:" + mpos);
+	} else if ((mpos = msg.search(/major seventh/i)) > -1) {
+		console.log("maj7:" + mpos);
+	} else {
+		console.log(mpos);
+	}
+	//msg.search(/asdf/i);
+	field.value = "";
+}
+
+function showChordFnc(msg, field, pos) {//show notes on piano of a chord named in msg
+	//field is element containing message to be processed
+	//msg is the value of the input field
+	//pos is position in msg where the command key word was found
+	var c = new Chord(msg);
+	if (c.quality > -1 && c.quality < CHORD_TYPES.length) {
+		console.log(CHORD_TYPES[c.quality]);
+	}
+	field.value = "";
+}
+
+function clearFnc(msg, field, pos) {
+	field.value = "";
+}
+
+class Chord {
+	constructor(msg) {
+		this.root = 60;//C
+		this.quality = Q_MAJ;
+		this.error = false;
+		if (msg) this.evaluate(msg);
+	}
+	
+	evaluate(msg) {
+		console.log("evaluate msg: " + msg);
+		this.error = false;
+		var major = true;
+		var mpos;
+		if ((mpos = msg.search(/minor seventh/i)) > -1) {
+			major = false;
+			this.quality = Q_MIN7;
+			msg = msg.slice(0, mpos) + msg.slice(mpos + 13, msg.length);
+		} else if ((mpos = msg.search(/minor/i)) > -1) {
+			major = false;
+			this.quality = Q_MIN;
+			msg = msg.slice(0, mpos) + msg.slice(mpos + 5, msg.length);
+		} else if ((mpos = msg.search(/major seventh/i)) > -1) {
+			this.quality = Q_MAJ7;
+			msg = msg.slice(0, mpos) + msg.slice(mpos + 13, msg.length);
+		} else if ((mpos = msg.search(/major eleventh/i)) > -1) {
+			this.quality = Q_MAJ11;
+			msg = msg.slice(0, mpos) + msg.slice(mpos + 14, msg.length);
+		} else if ((mpos = msg.search(/major/i)) > -1) {
+			msg = msg.slice(0, mpos) + msg.slice(mpos + 5, msg.length);
+			this.quality = Q_MAJ;
+		} else if ((mpos = msg.search(/dominant seventh/i)) > -1) {
+			this.quality = Q_DOM7;
+			msg = msg.slice(0, mpos) + msg.slice(mpos + 16, msg.length);
+		} else if ((mpos = msg.search(/diminished/i)) > -1) {
+			msg = msg.slice(0, mpos) + msg.slice(mpos + 10, msg.length);
+			this.quality = Q_DIM;
+		} else if ((mpos = msg.search(/suspended second/i)) > -1) {
+			msg = msg.slice(0, mpos) + msg.slice(mpos + 16, msg.length);
+			this.quality = Q_SUS2;
+		} else if ((mpos = msg.search(/suspended fourth/i)) > -1) {
+			msg = msg.slice(0, mpos) + msg.slice(mpos + 16, msg.length);
+			this.quality = Q_SUS4;
+		} else if ((mpos = msg.search(/augmented/i)) > -1) {
+			msg = msg.slice(0, mpos) + msg.slice(mpos + 9, msg.length);
+			this.quality = Q_AUG;
+		} else if ((mpos = msg.search(/dominant ninth/i)) > -1) {
+			msg = msg.slice(0, mpos) + msg.slice(mpos + 14, msg.length);
+			this.quality = Q_DOM9;
+		} else {
+			this.quality = Q_MAJ;
+		}
+		this.root = parseNote(msg);
+		console.log("remaining msg: [START]" + msg + "[END]");
+	}
+}
+
+function setKeyFnc(msg, field, pos) {
+	var c = new Chord(msg);
+	if (!c.error) {
+		music_key = c.root;
+		music_key_q = c.quality;
+	}
+	console.log("pos: " + pos + " remainder: " + msg + " nkey:" + nkey + "[end]");
+	piano.allkeys[key].press(true, 0, false, false, 1);//press(isdown, pnum, holdColor, manual, vol)
+	setTimeout(function() { piano.allkeys[key].press(false, 0, false, false, 1) }, 1000);
+	field.value = "";
+}
+
+function letterToMidiNote(ltr) {
+	switch (ltr) {
+		case "A":
+			return 57;
+		case "a":
+			return 57;
+		case "B":
+			return 59;
+		case "b":
+			return 59;
+		case "C":
+			return 60;
+		case "c":
+			return 60;
+		case "D":
+			return 62;
+		case "d":
+			return 62;
+		case "E":
+			return 64;
+		case "e":
+			return 64;
+		case "F":
+			return 65;
+		case "f":
+			return 65;
+		case "G":
+			return 67;
+		case "g":
+			return 67;
+		default:
+			return -1;
+	}
+}
+
+function midiNoteToPianoNote(note) {
+	return note - 21;//todo: this function is unused?
+}
+
+function parseNote(msg) {
+	var sharp = false;
+	var flat = false;
+	var pos = msg.search(/sharp/i);
+	var ltr;
+	if (pos > -1) {
+		sharp = true;
+		ltr = msg.slice(0, pos-1);
+	}
+	pos = msg.search(/flat/i);
+	if (pos > -1) {
+		ltr = msg.slice(0, pos-1);
+	}
+	if (!ltr) {
+		ltr = msg;
+	}
+	var mnum = letterToMidiNote(ltr.trim());
+	if (mnum < 0) return -1;
+	if (sharp && flat) return -2;
+	if (sharp) return mnum + 1;
+	if (flat) return mnum -1;
+	return mnum;
 }
 
 function setup() {
+	setupCommands();
 	var infield = document.getElementById('valin');
 	infield.addEventListener("input", textChange);
 	var myCanvas = document.getElementById('myCanvas');
@@ -10433,6 +10655,7 @@ function isKSPrintableCode(keycode) {
 }
 
 function onkeypress(event) {
+	if (document.getElementById('valin') === document.activeElement) return;
 	//console.log("keypress: " + event.keyCode + ' was pressed ' + isKPPrintableCode(event.keyCode));
 	if (!isKPPrintableCode(event.keyCode)) return;
 	if (focusOb) {
@@ -10442,6 +10665,7 @@ function onkeypress(event) {
 }
 
 function keystart(event) {
+	if (document.getElementById('valin') === document.activeElement) return;
 	if (event.keyCode == 16) {
 		shiftOn = true;
 	}
@@ -10459,6 +10683,7 @@ function keystart(event) {
 };
 
 function keyend(event) {
+	if (document.getElementById('valin') === document.activeElement) return;
 	//console.log(event.keyCode + ' was unpressed');
 	if (event.keyCode == 16) {
 		shiftOn = false;
@@ -10835,6 +11060,11 @@ function mouseOut(event) {
 }
 
 function mouseDown(event, allowdef) {
+	document.getElementById('valin').blur();
+	if (!audioContextStarted) {
+		audioContextStarted = true;
+		sound.ctx.resume();
+	}
 	if (!allowdef) event.preventDefault();
 	clicking = true;
 	dragging = false;
@@ -10848,46 +11078,6 @@ function touchstart(event) {
 	touching = true;
 	if (mouseDown(event.changedTouches[0], true)) event.preventDefault();
 	//document.getElementById("msgdiv").innerHTML = "touchstart";
-}
-
-function getNumDragMods() {
-	var l = dragOb.length;
-	if (piano.square.visible) l--;
-	for (var i = 0; i < dragOb.length; i++) {
-		if (dragOb[i].isNode) l--;
-	}
-	return l;
-}
-
-function releaseDragObs() {
-	for (var i = dragOb.length-1; i > -1; i--) {
-		dragOb[i].dragging = false;
-	}
-	dragOb.length = 0;
-}
-
-function removeDragOb(ob) {
-	var ind = -1;
-	for (var i = 0; i < dragOb.length; i++) {
-		if (dragOb[i] === ob) {
-			ind = i;
-			break;
-		}
-	}
-	if (ind < 0) return;
-	dragOb.splice(ind, 1);
-	ob.dragging = false;
-}
-
-function addDragOb(ob) {
-	for (var i = 0; i < dragOb.length; i++) {
-		if (dragOb[i] === ob) {
-			return false;
-		}
-	}
-	dragOb.push(ob);
-	ob.dragging = true;
-	return true;
 }
 
 function mouseUp(event, allowdef) {
@@ -10969,6 +11159,46 @@ String.prototype.replaceAll = function(search, replace) {
         return this.toString();
     }
     return this.split(search).join(replace);
+}
+
+function getNumDragMods() {
+	var l = dragOb.length;
+	if (piano.square.visible) l--;
+	for (var i = 0; i < dragOb.length; i++) {
+		if (dragOb[i].isNode) l--;
+	}
+	return l;
+}
+
+function releaseDragObs() {
+	for (var i = dragOb.length-1; i > -1; i--) {
+		dragOb[i].dragging = false;
+	}
+	dragOb.length = 0;
+}
+
+function removeDragOb(ob) {
+	var ind = -1;
+	for (var i = 0; i < dragOb.length; i++) {
+		if (dragOb[i] === ob) {
+			ind = i;
+			break;
+		}
+	}
+	if (ind < 0) return;
+	dragOb.splice(ind, 1);
+	ob.dragging = false;
+}
+
+function addDragOb(ob) {
+	for (var i = 0; i < dragOb.length; i++) {
+		if (dragOb[i] === ob) {
+			return false;
+		}
+	}
+	dragOb.push(ob);
+	ob.dragging = true;
+	return true;
 }
 
 function drawRect(ctx, x, y, width, height, stroke, fill, fillCol, strokeCol) {
