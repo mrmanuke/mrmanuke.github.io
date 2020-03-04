@@ -45,6 +45,7 @@ window.onload = function() {
 }
 
 window.onresize = function() {
+	return;
 	canvas.width = window.innerWidth;
 	canvas.height = window.innerHeight;
 	var context = canvas.getContext('2d');
