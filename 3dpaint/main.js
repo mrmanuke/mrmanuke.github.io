@@ -46,18 +46,18 @@ window.onload = function() {
 
 window.onresize = function() {
 	return;
-	canvas.width = window.innerWidth;
-	canvas.height = window.innerHeight;
-	var context = canvas.getContext('2d');
-	ctx.beginPath();
-	ctx.moveTo(canvas.width/2+.5,20);
-	ctx.lineTo(canvas.width/2+.5,canvas.height-20);
-	ctx.strokeStyle = "#aaa";
-	ctx.lineWidth = 1;
-	ctx.stroke();
-	ctx.beginPath();
-	ctx.strokeStyle = "black";
-	ctx.lineWidth = r*2;
+	//canvas.width = window.innerWidth;
+	//canvas.height = window.innerHeight;
+	//var context = canvas.getContext('2d');
+	//ctx.beginPath();
+	//ctx.moveTo(canvas.width/2+.5,20);
+	//ctx.lineTo(canvas.width/2+.5,canvas.height-20);
+	//ctx.strokeStyle = "#aaa";
+	//ctx.lineWidth = 1;
+	//ctx.stroke();
+	//ctx.beginPath();
+	//ctx.strokeStyle = "black";
+	//ctx.lineWidth = r*2;
 }
 
 var count = 0;
