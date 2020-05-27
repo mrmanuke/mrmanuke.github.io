@@ -42,6 +42,7 @@ window.onload = function() {
 	ctx.beginPath();
 	ctx.strokeStyle = "black";
 	ctx.lineWidth = r*2;
+	changeSize(0);
 }
 
 window.onresize = function() {
