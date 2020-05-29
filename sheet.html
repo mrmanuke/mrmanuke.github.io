@@ -126,6 +126,12 @@ for (var i = 0; i < trebleSharps.length; i++) {
 	bassFlats.push(trebleFlats[i] - 24);
 }
 
+var BASS_CLEF = 1;
+var TREBLE_CLEF = 0;
+
+var BOTTOM_STAFF = 1;
+var TOP_STAFF = 0;
+
 //chord quality constants
 var Q_MAJ = 0;
 var Q_MIN = 1;
@@ -3627,6 +3633,90 @@ class SheetCursor extends SheetMod {
 	}
 }
 
+class TrebleClefMod extends SheetMod {
+	constructor(ico, w, h, staff) {
+		super(ico, w, h);
+		this.key = sharpKeys[0];
+		this.keyName = sharpKeyNames[0];
+		this.w = this.sheet.lineH;
+		this.staff = staff;
+		this.sx = -this.w;
+		this.isClef = true;
+		this.sigW = 0;
+		this.numSigns = 0;
+		this.clef = TREBLE_CLEF;
+	}
+	
+	save() {
+		return '{"type":"TrebleClefMod", "staffx":' + this.staffx + ',"substaff":' + this.substaff + ', "key":"' + this.keyName + '"}';
+	}
+	
+	create(data) {
+		super.create(data);
+		this.setKeyFromName(data.key);
+		this.substaff = data.substaff;
+	}
+	
+	setKeyFromName(kn) {
+		for (var i = 0; i < sharpKeyNames.length; i++) {
+			if (kn.localeCompare(sharpKeyNames[i]) == 0) {
+				this.setKey(sharpKeys[i], sharpKeyNames[i]);
+				return;
+			}
+		}
+		for (var i = 0; i < flatKeyNames.length; i++) {
+			if (kn.localeCompare(flatKeyNames[i]) == 0) {
+				this.setKey(flatKeys[i], flatKeyNames[i]);
+				return;
+			}
+		}
+		this.setKey(sharpKeys[0], sharpKeyNames[0], piano.allkeys);
+	}
+	
+	setKey(k, kn) {
+		this.key = k;
+		this.keyName = kn;
+		this.keyIsFlat = (k[1] == 1);
+		this.numSigns = this.sheet.staves[0].getNumSigns(k);
+		this.sigW = this.sheet.staves[0].getSigW(0, this.numSigns);
+	}
+	
+	scaleSize() {
+		var ms = this.sheet.staves[0];
+		this.h = ms.tbotl - ms.ttopl;
+	}
+	
+	drawOb(ctx) {
+		this.sheet.getModStaff(this).drawTrebleAt(ctx, this.x + this.sx, this.y, this.h, this.color);
+		this.sheet.getModStaff(this).drawTrebleSignsAt(ctx, this.x + this.sx + this.h + this.w, this.substaff, this.numSigns, this.color, this.keyIsFlat);
+	}
+	
+	getLX() {
+		return this.x + this.sx + this.w*0.5;
+	}
+	
+	getRX() {
+		return this.x + this.sx + this.w*0.5 + this.h + this.sigW;
+	}
+}
+
+class BassClefMod extends TrebleClefMod {
+	constructor(ico, w, h, staff) {
+		super(ico, w, h, staff);
+		this.clef = BASS_CLEF;
+	}
+	
+	save() {
+		return '{"type":"BassClefMod", "staffx":' + this.staffx + ',"substaff":' + this.substaff + ', "key":"' + this.keyName + '"}';
+	}
+	
+	drawOb(ctx) {
+		this.sheet.getModStaff(this).drawBassAt(ctx, this.x + this.sx, this.y, this.h, this.color);
+		this.sheet.getModStaff(this).drawBassSignsAt(ctx, this.x + this.sx + this.h, this.substaff, this.numSigns, this.color, this.keyIsFlat);
+	}
+	
+}
+
 class MeasureMod extends SheetMod {
 	constructor(ico, w, h) {
 		super(ico, w, h);
@@ -3638,7 +3728,6 @@ class MeasureMod extends SheetMod {
 	}
 	
 	setActive(a) {
-		this.active = a;
 		this.active = a;
 	}
 	
@@ -3667,22 +3756,6 @@ class MeasureMod extends SheetMod {
 class RestMod extends SheetMod {
 	constructor(ico, w, h) {
 		super(ico, w, h);
-	}
-}
-
-class ClefMod extends SheetMod {
-	constructor(ico, w, h) {
-		super(ico, w, h);
-		this.isClef = true;
-	}
-	
-	setKey(k, kn) {
-		this.key = k;
-		this.keyName = kn;
-	}
-	
-	drawOb(ctx) {
-		this.sheet.getModStaff(this).drawClef(ctx, this);
 	}
 }
 
@@ -3800,8 +3873,8 @@ class NoteMod extends SheetMod {
 	}
 	
 	refactor() {
-		this.lx = this.sheet.staves[0].getNoteLeftBound(this);
-		this.rx = this.sheet.staves[0].getNoteRightBound(this);
+		this.lx = this.sheet.staves[0].getNoteLeftBound(this, true);
+		this.rx = this.sheet.staves[0].getNoteRightBound(this, true);
 	}
 }
 
@@ -8749,6 +8822,46 @@ class SheetModuleIcon extends ModuleIcon {
 	}
 }
 
+class TrebleClefIcon extends SheetModuleIcon {
+	constructor(x, y, w, h, bar, staff) {
+		super(x, y, w, h, bar);
+		this.name = "Treble";
+		this.staff = staff;
+		this.signx = x + h*0.15;
+		this.signy = y + h*0.25;
+		this.signh = h*0.5;
+	}
+	
+	createMod() {
+		return new TrebleClefMod(this, 1, 1, this.staff);
+	}
+	
+	drawOb(ctx) {
+		super.drawOb(ctx);
+		this.staff.drawTrebleAt(ctx, this.signx, this.signy, this.signh);
+	}
+}
+
+class BassClefIcon extends SheetModuleIcon {
+	constructor(x, y, w, h, bar, staff) {
+		super(x, y, w, h, bar);
+		this.name = "Bass";
+		this.staff = staff;
+		this.signx = x + h*0.1;
+		this.signy = y + h*0.2;
+		this.signh = h*0.7;
+	}
+	
+	createMod() {
+		return new BassClefMod(this, 1, 1, this.staff);
+	}
+	
+	drawOb(ctx) {
+		super.drawOb(ctx);
+		this.staff.drawBassAt(ctx, this.signx, this.signy, this.signh);
+	}
+}
+
 class MeasureIcon extends SheetModuleIcon {
 	constructor(x, y, w, h, bar) {
 		super(x, y, w, h, bar);
@@ -9666,10 +9779,16 @@ class SheetModuleBar extends ModuleBar {
 		//b += cushion + iw;
 		//this.testb = new NoteIcon(x+cushion, y+b, iw, iw, this);
 		this.measureb = new MeasureIcon(x+cushion, y+b, iw, iw, this);
+		b += cushion + iw;
+		this.trebleb = new TrebleClefIcon(x+cushion, y+b, iw, iw, this, s.staff0);
+		b += cushion + iw;
+		this.bassb = new BassClefIcon(x+cushion, y+b, iw, iw, this, s.staff0);
 		
 		//this.addIcon(this.noteb);
 		//this.addIcon(this.testb);
 		this.addIcon(this.measureb);
+		this.addIcon(this.trebleb);
+		this.addIcon(this.bassb);
 	}
 }
 
@@ -10465,6 +10584,8 @@ class MusicSheet extends Drawable {
 		this.boxy = boxy;
 		this.staffH = staffH;
 		this.lineH = lineH;
+		this.modcushion = lineH*0.7;
+		this.betweenw = this.lineH * 0.4;
 		this.staves = new Array();
 		this.staffydiffs = new Array();
 		this.modules = new Array();
@@ -10505,7 +10626,7 @@ class MusicSheet extends Drawable {
 		var staff = this.staves[0];
 		staff.ycheckstaff = this.modules[mod0].substaff;
 		var y;
-		if (this.modules[mod0].substaff == 0) {
+		if (this.modules[mod0].substaff == TOP_STAFF) {
 			y = staff.getTrebleNoteY(staff.getSpos(pk));
 		} else {
 			y = staff.getBassNoteY(staff.getSpos(pk));
@@ -10613,7 +10734,7 @@ class MusicSheet extends Drawable {
 		var staff = tmod.staff;
 		staff.ycheckstaff = tmod.substaff;
 		var y;
-		if (tmod.substaff == 0) {
+		if (tmod.substaff == TOP_STAFF) {
 			y = staff.getTrebleNoteY(staff.getSpos(pk));
 		} else {
 			y = staff.getBassNoteY(staff.getSpos(pk));
@@ -10647,6 +10768,26 @@ class MusicSheet extends Drawable {
 				}
 			}
 		}
+	}
+	
+	setSelectionKey(k, kn) {
+		var found = false;
+		var foundat = -1;
+		for (var i = 0; i < this.modules.length; i++) {
+			if (this.modules[i].active && this.modules[i].isClef) {
+				this.modules[i].setKey(k, kn);
+				found = true;
+				foundat = i;
+			}
+		}
+		if (!found) return found;
+		for (var i = 0; i < this.modules.length; i++) {
+			if (!this.modules[i].active && this.modules[i].staffx == this.modules[foundat].staffx) {
+				this.modules[i].setKey(k, kn);
+				this.modules[i].setActive(true);
+			}
+		}
+		return found;
 	}
 	
 	makeSelectionLonger() {
@@ -10779,7 +10920,7 @@ class MusicSheet extends Drawable {
 	addStaff(noClef) {
 		var y = this.staffy + this.staves.length * this.staffH;
 		if (!noClef) noClef = false;
-		var staff = new SheetStaff(this.x, y, this.w, this.h, this.lineH, !noClef);
+		var staff = new SheetStaff(this.x, y, this.w, this.h, this.lineH, true);//, !noClef);
 		staff.num = this.staves.length;
 		this.staves.push(staff);
 		if (this.staves.length > 1) {
@@ -10840,22 +10981,22 @@ class MusicSheet extends Drawable {
 	}
 	
 	moveCursorUp() {
-		console.log("cursor staff:" + this.cursor.staffnum + "." + this.cursor.substaff);
-		if (this.cursor.substaff == 1) {
+		//console.log("cursor staff:" + this.cursor.staffnum + "." + this.cursor.substaff);
+		if (this.cursor.substaff == BOTTOM_STAFF) {
 			this.setModPos(this.cursor, this.cursor.x + this.cursor.w*0.5, this.cursor.staff.ttopl);
-		} else if (this.cursor.substaff == 0 && this.cursor.staffnum > 0) {
+		} else if (this.cursor.substaff == TOP_STAFF && this.cursor.staffnum > 0) {
 			this.setModPos(this.cursor, this.cursor.x + this.cursor.w*0.5, this.staves[this.cursor.staffnum-1].btopl);
 		}
 	}
 	
 	moveCursorDown() {
-		console.log("cursor staff:" + this.cursor.staffnum + "." + this.cursor.substaff);
-		if (this.cursor.substaff == 0) {
+		//console.log("cursor staff:" + this.cursor.staffnum + "." + this.cursor.substaff);
+		if (this.cursor.substaff == TOP_STAFF) {
 			this.setModPos(this.cursor, this.cursor.x + this.cursor.w*0.5, this.cursor.staff.btopl);
-		} else if (this.cursor.substaff == 1 && this.cursor.staffnum < this.staves.length-1) {
+		} else if (this.cursor.substaff == BOTTOM_STAFF && this.cursor.staffnum < this.staves.length-1) {
 			this.setModPos(this.cursor, this.cursor.x + this.cursor.w*0.5, this.staves[this.cursor.staffnum+1].ttopl);
 		}
-		console.log("cursor y:" + this.cursor.y);
+		//console.log("cursor y:" + this.cursor.y);
 	}
 	
 	getModAfterModX(modx) {
@@ -10951,11 +11092,16 @@ class MusicSheet extends Drawable {
 			this.placeModAtZero(this.cursor, this.cursor.staff);
 			return;
 		}
+		if (nmod) {
+			this.placeModAtModX(this.cursor, nmod, nmod.staff, true);
+			return;
+		}
 		for (var i = 0; i < this.modules.length; i++) {
 			if (this.modules[i].staffx == this.cursor.staffx) {
 				if (this.cursor.between) {
 					this.placeModAfterModX(this.cursor, this.modules[i-1], this.cursor.staff);
 				} else {
+					console.log("place cursor at substaff:" + this.modules[i].substaff);
 					this.placeModAtModX(this.cursor, this.modules[i], this.modules[i].staff);
 				}
 				return;
@@ -10976,22 +11122,31 @@ class MusicSheet extends Drawable {
 		var beat = 0;
 		var lastbeat = 0;
 		var lastmod = this.modules[0];
-		var curKey = sharpKeys[0];//asdf
+		var curKey = sharpKeys[0];
 		var curKeyName = sharpKeyNames[0];
+		var topClef = TREBLE_CLEF;
+		var botClef = BASS_CLEF;
 		for (var i = 0; i < this.modules.length; i++) {
-			this.modules[i].refactor();
 			if (this.modules[i].playable) {
 				this.staves[0].setModKey(curKey, curKeyName, this.modules[i]);
 			} else if (this.modules[i].isClef) {
 				curKey = this.modules[i].key;
 				curKeyName = this.modules[i].keyName;
 			}
-			/*this.modules[i].beat = this.modules[i].staffx;
-			if (i == this.modules.length-1) {//todo: fix this logic to choose mod that stops playing last
-				this.modules[i].last = true;
+			if (this.modules[i].substaff == TOP_STAFF) {
+				if (this.modules[i].isClef) {
+					topClef = this.modules[i].clef;
+				} else {
+					this.modules[i].clef = topClef;
+				}
 			} else {
-				this.modules[i].last = false;
-			}*/
+				if (this.modules[i].isClef) {
+					botClef = this.modules[i].clef;
+				} else {
+					this.modules[i].clef = botClef;
+				}
+			}
+			this.modules[i].refactor();
 		}
 		for (var i = 0; i < maxstaffx + 1; i++) {
 			var minl = this.modules[mi].getLX();//x;
@@ -11030,13 +11185,13 @@ class MusicSheet extends Drawable {
 					this.modules[j].setX(x + this.modules[j].vgroupxoff);
 					this.modules[j].vgroupx = x;
 					mi++
-					if (this.modules[j].staff !== this.staves[curstaff]) {
+					//if (this.modules[j].staff !== this.staves[curstaff]) {
 						this.staves[curstaff].ycheckline = this.modules[j].staffline;
-						this.staves[curstaff].ycheckstaff = this.modules[j].substaff;
 						this.modules[j].staff = this.staves[curstaff];
 						this.modules[j].staffnum = curstaff;
-						this.setModY(this.modules[j], 0, this.staves[curstaff]);
-					}
+					//}
+					this.staves[curstaff].ycheckstaff = this.modules[j].substaff;
+					this.setModY(this.modules[j], 0, this.staves[curstaff]);
 				} else {
 					break;
 				}
@@ -11045,7 +11200,7 @@ class MusicSheet extends Drawable {
 				this.cursor.x = this.modules[mi-1].vgroupx;
 				this.cursor.w = this.modules[mi-1].vgroupw;
 			}
-			x = this.modules[mi-1].vgroupx + this.modules[mi-1].vgroupw + this.lineH;
+			x = this.modules[mi-1].vgroupx + this.modules[mi-1].vgroupw + this.modcushion;
 			beat += this.modules[mi-1].vgroupblen;
 		}
 		for (var i = 0; i < this.modules.length; i++) {
@@ -11056,7 +11211,6 @@ class MusicSheet extends Drawable {
 			}
 		}
 		lastmod.last = true;
-		
 		this.refactorCursor(cmod);
 	}
 	
@@ -11113,7 +11267,7 @@ class MusicSheet extends Drawable {
 		//if (!mod.pkey) mod.y = modx.y;
 		mod.staffx = modx.staffx + 1;
 		if (mod === this.cursor) {
-			mod.w = this.lineH * 0.7;
+			mod.w = this.betweenw;
 			mod.between = true;
 			//console.log("cursorR:" + (mod.x + mod.w) + " rbound:" + (this.x + this.w) + " staffnum:" + mod.staffnum);
 			if (mod.x + mod.w > this.x + this.w) {
@@ -11185,12 +11339,12 @@ class MusicSheet extends Drawable {
 			} else if (syp == -1 && i == 0) {
 				//console.log("-1:" + i);
 				this.staves[i].ycheckline = 0;
-				this.staves[i].ycheckstaff = 0;
+				this.staves[i].ycheckstaff = TOP_STAFF;
 				return this.staves[i];
 			} else if (syp == 1 && i == this.staves.length-1) {
 				//console.log("1:" + i);
 				this.staves[i].ycheckline = 0;
-				this.staves[i].ycheckstaff = 0;
+				this.staves[i].ycheckstaff = TOP_STAFF;
 				return this.staves[i];
 			}
 		}
@@ -11210,14 +11364,14 @@ class MusicSheet extends Drawable {
 		}
 		if (mod.pkey) {
 			//console.log("s:" + cstaff.num);
-			if (cstaff.ycheckstaff == 0) {//treble staff
-				mod.y = cstaff.getTrebleNoteY(cstaff.getSpos(mod.pkey));
+			if (cstaff.ycheckstaff == TOP_STAFF) {//treble staff
+				mod.y = cstaff.getTrebleNoteY(cstaff.getSpos(mod), mod.clef);
 			} else {
-				mod.y = cstaff.getBassNoteY(cstaff.getSpos(mod.pkey));
+				mod.y = cstaff.getBassNoteY(cstaff.getSpos(mod), mod.clef);
 			}
 			//console.log("set mod y:" + mod.y + " pkey staff " + cstaff.num + "." + cstaff.ycheckstaff);
 		} else {
-			if (cstaff.ycheckstaff == 0) {//treble staff
+			if (cstaff.ycheckstaff == TOP_STAFF) {//treble staff
 				mod.y = cstaff.ttopl;
 			} else {
 				mod.y = cstaff.btopl;
@@ -11248,7 +11402,25 @@ class MusicSheet extends Drawable {
 			} else {
 				if (mod.playable && this.modules[0].playable) {
 					this.placeModAtModX(mod, this.modules[0], cstaff);
-					return 0;
+					return 1;
+				} else if (mod.isClef && this.modules[0].isClef) {
+					if (this.modules.length > 1 && this.modules[1].isClef) {
+						if (this.cursor.substaff == this.modules[0].substaff) {
+							this.placeModAtModX(mod, this.modules[0], cstaff);
+							return -1;
+						} else {
+							this.placeModAtModX(mod, this.modules[1], cstaff);
+							return -2;
+						}
+					} else {
+						if (this.cursor.substaff != this.modules[0].substaff) {
+							this.placeModAtModX(mod, this.modules[0], cstaff);
+							return 0;
+						} else {
+							this.placeModAtZero(mod, cstaff);
+							return -1;//need to delete this.modules[0]
+						}
+					}
 				} else {
 					var m = 0;
 					for (var i = 0; i < this.modules.length; i++) {
@@ -11263,7 +11435,24 @@ class MusicSheet extends Drawable {
 				}
 			}
 		}
-		if (this.cursor.between || !mod.playable || !this.modules[mi].playable) {
+		if (!this.cursor.between && mod.isClef && this.modules[mi].isClef) {
+			this.placeModAtModX(mod, this.modules[mi], cstaff);
+			if (this.modules.length > mi+1 && this.modules[mi+1].isClef && this.modules[mi+1].staffx == this.modules[mi].staffx) {
+				//console.log("cursor substaff:" + this.cursor.substaff);
+				if (this.modules[mi+1].substaff == this.cursor.substaff) {
+					return -mi-2;
+				}
+			}
+			if (this.cursor.substaff != this.modules[mi].substaff) {
+				return mi + 1;
+			} else {
+				return -mi-1;
+			}
+		} else if (this.cursor.between || !mod.playable || !this.modules[mi].playable) {
+			if (this.modules.length > mi+1 && this.modules[mi+1].isClef && this.modules[mi+1].staffx == this.modules[mi].staffx) {
+				this.placeModAfterModX(mod, this.modules[mi+1], cstaff);
+				return mi + 2;
+			}
 			this.placeModAfterModX(mod, this.modules[mi], cstaff);
 			return mi + 1;
 		} else {
@@ -11337,10 +11526,15 @@ class MusicSheet extends Drawable {
 	}
 	
 	setKey(k, kn, pks) {
-		for (var i = 0; i < this.staves.length; i++) {
-			this.staves[i].setKey(k, kn, pks);
+		if (!this.setSelectionKey(k, kn)) {
+			for (var i = 0; i < this.staves.length; i++) {
+				this.staves[i].setKey(k, kn, pks);
+			}
+			this.refactorMods();
+			return false;
 		}
 		this.refactorMods();
+		return true;
 	}
 	
 	initKey(pks) {
@@ -11355,8 +11549,12 @@ class MusicSheet extends Drawable {
 		mod.scaleSize(this.lineH);
 		//this.setModPos(mod, mod.x, mod.y);
 		var apos = this.setModAtCursor(mod);//, this.cursor.x + this.cursor.w*0.5, this.cursor.y);
-		if (apos < 0) return;
-		this.modules.splice(apos, 0, mod);
+		var del = 0;
+		if (apos < 0) {
+			del = 1;
+			apos = -1-apos
+		}
+		this.modules.splice(apos, del, mod);
 		if (!dontrefactor) {
 			console.log("push mod");
 			this.refactorMods(mod);
@@ -11436,6 +11634,7 @@ class SheetScene extends Scene {
 		this.sheet2.addStaff();
 		this.addSceneOb(this.sheet1);
 		this.addSceneOb(this.sheet2);
+		this.staff0 = this.sheet1.staves[0];
 		//var keymx = piano.w*1.4;
 		var keymw = piano.w*0.12;
 		var keymx = this.sheet2.x + this.sheet2.w - keymw;
@@ -11501,7 +11700,9 @@ class SheetScene extends Scene {
 		var m = null;
 		switch (type) {
 			case "NoteMod": m = this.modbar.noteb.createMod(); break;
-			case "MeasureMod": m = this.modbar.measureb.createMod(); break;			
+			case "MeasureMod": m = this.modbar.measureb.createMod(); break;
+			case "TrebleClefMod": m = this.modbar.trebleb.createMod(); break;
+			case "BassClefMod": m = this.modbar.bassb.createMod(); break;
 		}
 		return m;
 	}
@@ -11672,7 +11873,7 @@ class SheetScene extends Scene {
 	}
 	
 	setKey(k, kn, pks) {
-		this.sheet1.setKey(k, kn, pks);
+		if (this.sheet1.setKey(k, kn, pks)) return;
 		this.sheet2.setKey(k, kn, pks);
 	}
 	
@@ -11817,6 +12018,7 @@ class Staff extends Drawable {
 		this.tbotl = this.y + 13 * this.lineH;
 		this.btopl = this.y + 19 * this.lineH;
 		this.bbotl = this.y + 23 * this.lineH;
+		this.staffdiff = this.btopl - this.ttopl;
 		this.trebleZero = this.tbotl + 12 * this.lineH;
 		this.bassZero = this.bbotl + 6 * this.lineH;
 		//this.treble = true;
@@ -11857,7 +12059,7 @@ class Staff extends Drawable {
 		mod.sposnat = -1;
 		mod.spossharp = -1;
 		mod.sposflat = -1;
-		var oct = Math.floor((i+0.01)/12);
+		var oct = Math.floor((mod.pkey.num+0.01)/12);
 		var kpos = this.posInKey(mod.pkey.num, k);
 		//console.log("i: " + i + " kpos:" + kpos);
 		if (kpos > -1) {
@@ -11875,20 +12077,29 @@ class Staff extends Drawable {
 		}
 	}
 	
+	getNumSigns(k) {
+		var ns = 0;
+		for (var i = 0; i < k.length; i++) {
+			if (k[i] != sharpKeys[0][i]) ns++;
+		}
+		return ns;
+	}
+	
+	getSigW(clefw, ns) {
+		if (ns > 0) {
+			return clefw + this.signXs[ns-1];
+		} else {
+			return clefw + this.signXs[0];
+		}
+	}
+	
 	setKey(k, kn, pks) {
 		this.key = k;
 		this.keyName = kn;
 		this.keyIsFlat = (k[1] == 1);
-		this.numSigns = 0;
-		for (var i = 0; i < k.length; i++) {
-			if (k[i] != sharpKeys[0][i]) this.numSigns++;
-		}
+		this.numSigns = this.getNumSigns(k);
 		if (this.hasClef) {
-			if (this.numSigns > 0) {
-				this.sigw = this.clefw + this.signXs[this.numSigns-1];
-			} else {
-				this.sigw = this.clefw + this.signXs[0];
-			}
+			this.sigw = this.getSigW(this.clefw, this.numSigns);
 		}
 		//console.log("numsigns:" + this.numSigns);
 		for (var i = 0; i < pks.length; i++) {
@@ -11949,11 +12160,13 @@ class Staff extends Drawable {
 		}
 	}*/
 	
-	getTrebleNoteY(spos) {
+	getTrebleNoteY(spos, clef) {
+		if (clef == BASS_CLEF) spos += 5;//this.lineHalf * 2;
 		return this.trebleZero - spos * this.lineHalf + this.noteCushion;
 	}
 	
-	getBassNoteY(spos) {
+	getBassNoteY(spos, clef) {
+		if (clef == TREBLE_CLEF) spos -= 5;//this.lineHalf * 2;
 		return this.bassZero - spos * this.lineHalf + this.noteCushion;
 	}
 	
@@ -11977,6 +12190,41 @@ class Staff extends Drawable {
 		if (pk.sposflat > -1) {
 			this.drawFlat(ctx, x, y, r, c);
 			return;
+		}
+	}
+	
+	drawTrebleSignsAt(ctx, x, y, ns, color, flat) {
+		if (flat) {
+			for (var i = 0; i < ns; i++) {
+				this.drawFlat(ctx, x + this.signXs[i], this.tflatYs[i], this.noter, color);
+			}
+		} else {
+			for (var i = 0; i < ns; i++) {
+				this.drawSharp(ctx, x + this.signXs[i], this.tsharpYs[i], this.noter, color);
+			}
+		}
+	}
+	
+	drawBassSignsAt(ctx, x, sub, ns, color, flat) {
+		var ys;
+		if (flat) {
+			if (sub) {
+				ys = this.bflatYs;
+			} else {
+				ys = this.tflatYs;
+			}
+			for (var i = 0; i < ns; i++) {
+				this.drawFlat(ctx, x + this.signXs[i], ys[i], this.noter, color);
+			}
+		} else {
+			if (sub) {
+				ys = this.bsharpYs;
+			} else {
+				ys = this.tsharpYs;
+			}
+			for (var i = 0; i < ns; i++) {
+				this.drawSharp(ctx, x + this.signXs[i], ys[i], this.noter, color);
+			}
 		}
 	}
 	
@@ -12033,8 +12281,13 @@ class Staff extends Drawable {
 		ctx.stroke();
 	}
 	
-	getNoteLeftBound(mod) { //offset from "x" that note is drawn at to sign x
-		var pk = mod.pkey;
+	getNoteLeftBound(mod, ref) { //offset from "x" that note is drawn at to sign x
+		var pk;
+		if (ref) {
+			pk = mod;
+		} else {
+			pk = mod.pkey;
+		}
 		if (pk.spos > -1) return 0;
 		if (pk.sposnat > -1) {
 			//this.drawNat(ctx, x, y, r);
@@ -12221,9 +12474,9 @@ class Staff extends Drawable {
 			if (ypos < this.y + 26 * this.lineH) {
 				this.ycheckline = ypos - (this.y + 9 * this.lineH);
 				if (ypos > this.y + 16 * this.lineH) {
-					this.ycheckstaff = 1;
+					this.ycheckstaff = BOTTOM_STAFF;
 				} else {
-					this.ycheckstaff = 0;
+					this.ycheckstaff = TOP_STAFF;
 				}
 				return 0;
 			} else {
@@ -12260,36 +12513,46 @@ class Staff extends Drawable {
 	}
 	
 	drawTreble(ctx) {
+		this.drawTrebleAt(ctx, this.x, this.ttop, this.bh);
+	}
+	
+	drawTrebleAt(ctx, x, ttop, bh, color) {
 		ctx.beginPath();
-		ctx.moveTo(this.x + this.bh*0.65, this.ttop + this.bh * 1.25);
-		ctx.lineTo(this.x + this.bh*0.65, this.ttop - this.bh * 0.25);
-		ctx.lineTo(this.x + this.bh*0.80, this.ttop - this.bh * 0.25);
-		ctx.lineTo(this.x + this.bh*0.90, this.ttop - this.bh * 0.15);
-		ctx.lineTo(this.x + this.bh*0.30, this.ttop + this.bh * 0.70);
-		ctx.lineTo(this.x + this.bh*0.35, this.ttop + this.bh * 0.90);
-		ctx.lineTo(this.x + this.bh*0.65, this.ttop + this.bh * 1.00);
-		ctx.lineTo(this.x + this.bh*0.95, this.ttop + this.bh * 0.90);
-		ctx.lineTo(this.x + this.bh*1.00, this.ttop + this.bh * 0.70);
-		ctx.lineTo(this.x + this.bh*0.75, this.ttop + this.bh * 0.60);
-		ctx.lineTo(this.x + this.bh*0.55, this.ttop + this.bh * 0.70);
+		if (color) ctx.strokeStyle = color;
+		ctx.moveTo(x + bh*0.65, ttop + bh * 1.25);
+		ctx.lineTo(x + bh*0.65, ttop - bh * 0.25);
+		ctx.lineTo(x + bh*0.80, ttop - bh * 0.25);
+		ctx.lineTo(x + bh*0.90, ttop - bh * 0.15);
+		ctx.lineTo(x + bh*0.30, ttop + bh * 0.70);
+		ctx.lineTo(x + bh*0.35, ttop + bh * 0.90);
+		ctx.lineTo(x + bh*0.65, ttop + bh * 1.00);
+		ctx.lineTo(x + bh*0.95, ttop + bh * 0.90);
+		ctx.lineTo(x + bh*1.00, ttop + bh * 0.70);
+		ctx.lineTo(x + bh*0.75, ttop + bh * 0.60);
+		ctx.lineTo(x + bh*0.55, ttop + bh * 0.70);
 		ctx.stroke();
 	}
 	
 	drawBass(ctx) {
+		this.drawBassAt(ctx, this.x, this.btop, this.bh);
+	}
+	
+	drawBassAt(ctx, x, btop, bh, color) {
+		if (color) ctx.strokeStyle = color;
 		ctx.beginPath();
-		ctx.moveTo(this.x + this.bh*0.45, this.btop + this.bh * 0.80);
-		ctx.lineTo(this.x + this.bh*0.70, this.btop + this.bh * 0.40);
-		ctx.lineTo(this.x + this.bh*0.73, this.btop + this.bh * 0.25);
-		ctx.lineTo(this.x + this.bh*0.70, this.btop + this.bh * 0.10);
-		ctx.lineTo(this.x + this.bh*0.60, this.btop + this.bh * 0.05);
-		ctx.lineTo(this.x + this.bh*0.45, this.btop + this.bh * 0.05);
-		ctx.lineTo(this.x + this.bh*0.35, this.btop + this.bh * 0.15);
-		ctx.lineTo(this.x + this.bh*0.32, this.btop + this.bh * 0.25);
-		ctx.lineTo(this.x + this.bh*0.35, this.btop + this.bh * 0.32);
-		ctx.moveTo(this.x + this.bh*0.85, this.btop + this.bh * 0.10);
-		ctx.lineTo(this.x + this.bh*0.85, this.btop + this.bh * 0.18);
-		ctx.moveTo(this.x + this.bh*0.85, this.btop + this.bh * 0.30);
-		ctx.lineTo(this.x + this.bh*0.85, this.btop + this.bh * 0.38);
+		ctx.moveTo(x + bh*0.45, btop + bh * 0.80);
+		ctx.lineTo(x + bh*0.70, btop + bh * 0.40);
+		ctx.lineTo(x + bh*0.73, btop + bh * 0.25);
+		ctx.lineTo(x + bh*0.70, btop + bh * 0.10);
+		ctx.lineTo(x + bh*0.60, btop + bh * 0.05);
+		ctx.lineTo(x + bh*0.45, btop + bh * 0.05);
+		ctx.lineTo(x + bh*0.35, btop + bh * 0.15);
+		ctx.lineTo(x + bh*0.32, btop + bh * 0.25);
+		ctx.lineTo(x + bh*0.35, btop + bh * 0.32);
+		ctx.moveTo(x + bh*0.85, btop + bh * 0.10);
+		ctx.lineTo(x + bh*0.85, btop + bh * 0.18);
+		ctx.moveTo(x + bh*0.85, btop + bh * 0.30);
+		ctx.lineTo(x + bh*0.85, btop + bh * 0.38);
 		ctx.stroke();
 	}
 }
