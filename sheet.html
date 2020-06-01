@@ -10613,6 +10613,12 @@ class MusicSheet extends Drawable {
 		this.msperbeat = 1000*60/this.bpm;
 	}
 	
+	selectNone() {
+		for (var i = 0; i < this.modules.length; i++) {
+			this.modules[i].setActive(false);
+		}
+	}
+	
 	doTestStart(pk) {
 		this.testing = true;
 		this.startTestOnKeyPress = false;
@@ -10920,7 +10926,7 @@ class MusicSheet extends Drawable {
 	addStaff(noClef) {
 		var y = this.staffy + this.staves.length * this.staffH;
 		if (!noClef) noClef = false;
-		var staff = new SheetStaff(this.x, y, this.w, this.h, this.lineH, true);//, !noClef);
+		var staff = new SheetStaff(this.x, y, this.w, this.h, this.lineH, !noClef);
 		staff.num = this.staves.length;
 		this.staves.push(staff);
 		if (this.staves.length > 1) {
@@ -11152,6 +11158,8 @@ class MusicSheet extends Drawable {
 			var minl = this.modules[mi].getLX();//x;
 			var maxr = this.modules[mi].getRX();//x + this.modules[mi].w;
 			var minblen = this.modules[mi].beatlen;
+			curKey = this.modules[mi].key;
+			curKeyName = this.modules[mi].keyName;
 			for (var j = mi+1; j < this.modules.length; j++) {
 				if (this.modules[j].staffx == i) {
 					if (this.modules[j].getLX() < minl) minl = this.modules[j].getLX();//x;
@@ -11172,6 +11180,7 @@ class MusicSheet extends Drawable {
 					console.log("!!!!!!!sheet is full!!!!!!!");
 					return;
 				}
+				this.staves[curstaff].setKey(curKey, curKeyName, piano.allkeys);
 				x = this.staves[curstaff].x + this.staves[curstaff].sigw;
 				console.log("staff " + curstaff + " sigw:" + this.staves[curstaff].sigw);
 			}
@@ -11203,6 +11212,9 @@ class MusicSheet extends Drawable {
 			x = this.modules[mi-1].vgroupx + this.modules[mi-1].vgroupw + this.modcushion;
 			beat += this.modules[mi-1].vgroupblen;
 		}
+		for (var i = curstaff+1; i < this.staves.length; i++) {
+			this.staves[i].setKey(curKey, curKeyName, piano.allkeys);
+		}
 		for (var i = 0; i < this.modules.length; i++) {
 			this.modules[i].last = false;
 			if (this.modules[i].playable && this.modules[i].beat + this.modules[i].beatlen > lastbeat) {
@@ -11216,6 +11228,9 @@ class MusicSheet extends Drawable {
 	
 	placeModAtModX(mod, modx, staff, cursorToModSubstaff) {
 		//if (!mod.pkey) mod.y = modx.y;
+		if (mod.isClef && modx.isClef && this.staves[0].signXs.length > 0) {
+			mod.setKey(modx.key, modx.keyName);
+		}
 		if (mod === this.cursor) {
 			if (cursorToModSubstaff) {
 				this.setCursorStaffAtMod(modx);
@@ -11650,6 +11665,15 @@ class SheetScene extends Scene {
 			this.addSceneOb(this.keyMenu);
 			this.addSceneOb(this.modbar);
 			this.addSceneOb(this.moptionbar);
+			console.log("push mod 1");
+			this.pushModule(this.modbar.trebleb.createMod());
+			this.sheet1.staves[0].ycheckstaff = BOTTOM_STAFF;
+			this.sheet1.placeModAtModX(this.sheet1.cursor, this.sheet1.modules[0], this.sheet1.staves[0]);
+			console.log("push mod 2");
+			this.pushModule(this.modbar.bassb.createMod());
+			this.sheet1.staves[0].ycheckstaff = TOP_STAFF;
+			this.sheet1.placeModAfterModX(this.sheet1.cursor, this.sheet1.modules[0], this.sheet1.staves[0]);
+			this.sheet1.selectNone();
 		} else {
 			this.addSceneOb(this.practiceMenu);
 		}
@@ -12046,6 +12070,8 @@ class Staff extends Drawable {
 	}
 	
 	setModKey(k, kn, mod) {
+		mod.key = k;
+		mod.keyName = kn;
 		mod.numSigns = 0;
 		for (var i = 0; i < k.length; i++) {
 			if (k[i] != sharpKeys[0][i]) mod.numSigns++;
