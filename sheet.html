@@ -10609,14 +10609,25 @@ class GroupFlag extends Drawable {
 		super(1, 1, 1, 1);
 		this.startx = sx;
 		this.endx = -1;
-		this.numFlags = nf;
+		this.numFlags = 1;//nf;
 		this.lineH = lh * 0.4;
 		this.lineT = lh * 0.15;
 		this.xl = 0;
 		this.xr = 1;
 		this.yl = 0;
-		this.yl = 1;
+		this.yr = 1;
 		this.color = "black";
+		this.subFlags = new Array();
+		//this.subSubFlags = new Array();
+	}
+	
+	addSubFlag(level, startx, endx, toLeft) {
+		//if (level == 2) {
+			this.subFlags.push(new SubFlag(level, startx, endx, toLeft, this.lineH));
+			console.log("new subflag startx:" + this.subFlags[this.subFlags.length-1].startx);
+		//} else if (level == 3) {
+		//	this.subSubFlags.push(new SubFlag(level, startx, endx, toLeft));
+		//}
 	}
 	
 	drawOb(ctx) {
@@ -10624,7 +10635,7 @@ class GroupFlag extends Drawable {
 		var yr = this.yr;
 		ctx.strokeStyle = this.color;
 		ctx.fillStyle = this.color;
-		for (var i = 0; i < this.numFlags; i++) {
+		//for (var i = 0; i < this.numFlags; i++) {
 			ctx.beginPath();
 			ctx.moveTo(this.xl, yl);
 			ctx.lineTo(this.xl, yl+this.lineT);
@@ -10636,7 +10647,24 @@ class GroupFlag extends Drawable {
 			ctx.fill();
 			yl += this.lineH;
 			yr += this.lineH;
+		//}
+		for (var i = 0; i < this.subFlags.length; i++) {
+			this.subFlags[i].drawOb(ctx);
 		}
+	}
+}
+
+class SubFlag extends GroupFlag {
+	constructor(level, startx, endx, toLeft, lineH) {
+		super(startx, 1, lineH);
+		this.level = level;
+		this.endx = endx;
+		this.toLeft = toLeft;
+		if (this.startx < 0) {
+			this.startx = endx;
+			this.toLeft = true;
+		}
+		this.xlen = this.endx - this.startx;
 	}
 }
 
@@ -11195,7 +11223,7 @@ class MusicSheet extends Drawable {
 		this.placeModAfterModX(this.cursor, this.modules[this.modules.length-1], this.cursor.staff);
 	}
 	
-	refactorMods(cmod) {//this is where beat numbers are set
+	refactorMods(cmod) {//refimo this is where beat numbers are set
 		if (this.modules.length < 1) {
 			this.refactorCursor(cmod);
 			return;
@@ -11217,6 +11245,8 @@ class MusicSheet extends Drawable {
 			} else if (this.modules[i].isClef) {
 				curKey = this.modules[i].key;
 				curKeyName = this.modules[i].keyName;
+			} else {
+				this.staves[0].setModKey(curKey, curKeyName, this.modules[i]);
 			}
 			if (this.modules[i].substaff == TOP_STAFF) {
 				if (this.modules[i].isClef) {
@@ -11277,8 +11307,8 @@ class MusicSheet extends Drawable {
 					if (this.modules[j].isNote) {
 						if (this.modules[j].substaff == TOP_STAFF) {
 							if (this.modules[j].flags > 0) {
-								if (curFGroupT != groupFlagsT.length-1 || this.modules[j].flags != numFlagsT) {
-									numFlagsT = this.modules[j].flags;
+								if (curFGroupT != groupFlagsT.length-1) {// || this.modules[j].flags != numFlagsT) {
+									//numFlagsT = this.modules[j].flags;
 									groupFlagsT.push(new GroupFlag(i, numFlagsT, this.lineH));
 									curFGroupT = groupFlagsT.length-1;
 								} else {
@@ -11289,8 +11319,8 @@ class MusicSheet extends Drawable {
 							}
 						} else {
 							if (this.modules[j].flags > 0) {
-								if (curFGroupB != groupFlagsB.length-1 || this.modules[j].flags != numFlagsB) {
-									numFlagsB = this.modules[j].flags;
+								if (curFGroupB != groupFlagsB.length-1) {// || this.modules[j].flags != numFlagsB) {
+									//numFlagsB = this.modules[j].flags;
 									groupFlagsB.push(new GroupFlag(i, numFlagsB, this.lineH));
 									curFGroupB = groupFlagsB.length-1;
 								} else {
@@ -11344,94 +11374,8 @@ class MusicSheet extends Drawable {
 				lastmod = this.modules[i];
 			}
 		}
-		console.log("groupflagst:" + groupFlagsT.length);
-		console.log("groupflagsb:" + groupFlagsB.length);
-		for (var k = 0; k < 2; k++) {
-			var groupFlags;
-			var cs;
-			if (k == 0) {
-				groupFlags = groupFlagsT;
-				cs = TOP_STAFF;
-			} else {
-				groupFlags = groupFlagsB;
-				cs = BOTTOM_STAFF;
-			}
-			for (var i = groupFlags.length-1; i > -1; i--) {
-				if (groupFlags[i].endx <= groupFlags[i].startx) {
-					groupFlags.splice(i, 1);
-				} else {
-					//determine (x, y) of start and end
-					//set drawflags = false for all modules within group flag range
-					var maxystart = -1;
-					var xstart = -1;
-					var maxyend = -1;
-					var xend = -1;
-					var maxymid = -1;
-					var xmid = -1;
-					for (var j = 0; j < this.modules.length; j++) {
-						var mod = this.modules[j];
-						if (mod.substaff != cs || !mod.isNote) continue;
-						var pt = mod.getPoleTop();
-						if (mod.staffx < groupFlags[i].startx) {
-							//go to next mod
-						} else if (mod.staffx == groupFlags[i].startx) {
-							mod.drawFlags = false;
-							if (maxystart == -1 || pt < maxystart) {
-								maxystart = pt;
-								xstart = mod.getPoleX();
-							}
-						} else if (mod.staffx == groupFlags[i].endx) {
-							mod.drawFlags = false;
-							if (maxyend == -1 || pt < maxyend) {
-								maxyend = pt;
-								xend = mod.getPoleX();
-							}
-						} else if (mod.staffx > groupFlags[i].startx && mod.staffx < groupFlags[i].endx) {
-							mod.drawFlags = false;
-							if (maxymid == -1 || pt < maxymid) {
-								maxymid = pt;
-								xmid = mod.getPoleX();
-							}
-						} else if (mod.staffx > groupFlags[i].endx) {
-							break;
-						}
-					}
-					//determine if maxymid is higher than group flag level
-					var dx = xend - xstart;
-					var dy = maxyend - maxystart;
-					if (maxymid != -1) {
-						var x1 = xmid - xstart;
-						var y1 = maxymid - maxystart;
-						if (y1 < dy*x1/dx) {
-							maxyend = maxymid;
-							maxystart = maxymid;
-						}
-					}
-					groupFlags[i].xl = xstart;
-					groupFlags[i].xr = xend;
-					groupFlags[i].yl = maxystart;
-					groupFlags[i].yr = maxyend;
-					//set pole extensions
-					dy = maxyend - maxystart;
-					for (var j = 0; j < this.modules.length; j++) {
-						var mod = this.modules[j];
-						if (mod.substaff != cs || !mod.isNote) continue;
-						if (mod.staffx < groupFlags[i].startx) {
-							//go to next mod
-						} else if (mod.staffx == groupFlags[i].startx) {
-							mod.poleExt = groupFlags[i].yl - mod.getPoleTop();
-						} else if (mod.staffx == groupFlags[i].endx) {
-							mod.poleExt = groupFlags[i].yr - mod.getPoleTop();
-						} else if (mod.staffx > groupFlags[i].startx && mod.staffx < groupFlags[i].endx) {
-							var x1 = mod.getPoleX() - xstart;
-							mod.poleExt = maxystart + (dy * x1 / dx) - mod.getPoleTop();
-						} else if (mod.staffx > groupFlags[i].endx) {
-							break;
-						}
-					}
-				}
-			}
-		}
+		this.processGroupFlags(groupFlagsT, TOP_STAFF);
+		this.processGroupFlags(groupFlagsB, BOTTOM_STAFF);
 		for (var i = 0; i < groupFlagsB.length; i++) {
 			var g = groupFlagsB[i];
 			console.log("groupFlagsB" + i + " x:" + g.xl + "~" + g.xr + " y:" + g.yl + "~" + g.yr);
@@ -11444,6 +11388,175 @@ class MusicSheet extends Drawable {
 		this.groupFlagsB = groupFlagsB;
 		lastmod.last = true;
 		this.refactorCursor(cmod);
+	}
+	
+	processGroupFlags(groupFlags, cs) {
+		for (var i = groupFlags.length-1; i > -1; i--) {
+			if (groupFlags[i].endx <= groupFlags[i].startx) {
+				groupFlags.splice(i, 1);
+			} else {
+				//determine (x, y) of start and end
+				//set drawflags = false for all modules within group flag range
+				var maxystart = -1;
+				var xstart = -1;
+				var maxyend = -1;
+				var xend = -1;
+				var maxymid = -1;
+				var xmid = -1;
+				var flags2 = -1;
+				var flags3 = -1;
+				for (var j = 0; j < this.modules.length; j++) {
+					var mod = this.modules[j];
+					if (mod.substaff != cs || !mod.isNote) continue;
+					var pt = mod.getPoleTop();
+					if (mod.staffx < groupFlags[i].startx) {
+						//go to next mod
+					} else if (mod.staffx == groupFlags[i].startx) {
+						mod.drawFlags = false;
+						if (mod.flags > 1) {
+							flags2 = j;
+						}
+						if (mod.flags > 2) {
+							flags3 = j;
+						}
+						if (maxystart == -1 || pt < maxystart) {
+							maxystart = pt;
+							xstart = mod.getPoleX();
+						}
+					} else if (mod.staffx == groupFlags[i].endx) {
+						mod.drawFlags = false;
+						if(mod.flags > 1) {
+							//end flags2 subflag here j
+							this.makeSubFlag(groupFlags[i], 2, flags2, j, true);
+							flags2 = -1;
+						} else if (flags2 != -1) {
+							//end flags2 subflag on previous mod j-1
+							this.makeSubFlag(groupFlags[i], 2, flags2, j-1);
+							flags2 = -1
+						}
+						if (mod.flags > 2) {
+							//end flags3 subflag here j
+							this.makeSubFlag(groupFlags[i], 3, flags3, j, true);
+							flags3 = -1;
+						} else if (flags3 != -1) {
+							//end flags3 subflag on previous mod j-1
+							this.makeSubFlag(groupFlags[i], 3, flags3, j-1);
+							flags3 = -1;
+						}
+						if (maxyend == -1 || pt < maxyend) {
+							maxyend = pt;
+							xend = mod.getPoleX();
+						}
+					} else if (mod.staffx > groupFlags[i].startx && mod.staffx < groupFlags[i].endx) {
+						mod.drawFlags = false;
+						if(mod.flags > 1) {
+							if (flags2 == -1) {
+								flags2 = j;
+							}
+						} else if (flags2 != -1) {
+							//end flags2 subflag on previous mod j-1
+							this.makeSubFlag(groupFlags[i], 2, flags2, j-1);
+							flags2 = -1;
+						}
+						if (mod.flags > 2) {
+							if (flags3 == -1) {
+								flags3 = j;
+							}
+						} else if (flags3 != -1) {
+							//end flags3 subflag on previous mod j
+							this.makeSubFlag(groupFlags[i], 3, flags3, j-1);
+							flags3 = -1;
+						}
+						if (maxymid == -1 || pt < maxymid) {
+							maxymid = pt;
+							xmid = mod.getPoleX();
+						}
+					} else if (mod.staffx > groupFlags[i].endx) {
+						break;
+					}
+				}
+				//determine if maxymid is higher than group flag level
+				var dx = xend - xstart;
+				var dy = maxyend - maxystart;
+				if (maxymid != -1) {
+					var x1 = xmid - xstart;
+					var y1 = maxymid - maxystart;
+					if (y1 < dy*x1/dx) {
+						maxyend = maxymid;
+						maxystart = maxymid;
+					}
+				}
+				groupFlags[i].xl = xstart;
+				groupFlags[i].xr = xend;
+				groupFlags[i].yl = maxystart;
+				groupFlags[i].yr = maxyend;
+				//set pole extensions
+				dy = maxyend - maxystart;
+				for (var j = 0; j < this.modules.length; j++) {
+					var mod = this.modules[j];
+					if (mod.substaff != cs || !mod.isNote) continue;
+					if (mod.staffx < groupFlags[i].startx) {
+						//go to next mod
+					} else if (mod.staffx == groupFlags[i].startx) {
+						mod.poleExt = groupFlags[i].yl - mod.getPoleTop();
+					} else if (mod.staffx == groupFlags[i].endx) {
+						mod.poleExt = groupFlags[i].yr - mod.getPoleTop();
+					} else if (mod.staffx > groupFlags[i].startx && mod.staffx < groupFlags[i].endx) {
+						var x1 = mod.getPoleX() - xstart;
+						mod.poleExt = maxystart + (dy * x1 / dx) - mod.getPoleTop();
+					} else if (mod.staffx > groupFlags[i].endx) {
+						break;
+					}
+				}
+				this.processSubFlags(groupFlags[i]);
+			}
+		}
+	}
+	
+	makeSubFlag(group, level, startx, endx, toLeft) {
+		console.log("make subflag level:" + level + " startx:" + startx + " endx:" + endx + " toLeft:" + toLeft);
+		group.addSubFlag(level, startx, endx, toLeft);
+	}
+	
+	processSubFlags(group) {
+		var halfFlagLen = 0.3;
+		var dx = group.xr - group.xl;
+		var dy = group.yr - group.yl;
+		for (var i = 0; i < group.subFlags.length; i++) {
+			var f = group.subFlags[i];
+			var yoff;
+			if (f.level == 2) {
+				yoff = this.lineH * 0.4;
+			} else if (f.level == 3) {
+				yoff = this.lineH * 0.8;
+			}
+			var xl;
+			var xr;
+			var yl;
+			var yr;
+			if (f.xlen == 0) {//make half flag
+				if (f.toLeft) {
+					xr = this.modules[f.startx].getPoleX();
+					xl = this.modules[f.startx-1].getPoleX();
+					xl += (xr-xl)*(1-halfFlagLen);
+					console.log("xl:" + xl + " xr:" + xr);
+				} else {
+					xl = this.modules[f.startx].getPoleX();
+					xr = this.modules[f.startx+1].getPoleX();
+					xr -= (xr-xl)*(1-halfFlagLen);
+				}
+			} else {
+				console.log("f.startx:" + f.startx + " endx:" + f.endx + " modules.length:" + this.modules.length);
+				xl = this.modules[f.startx].getPoleX();
+				xr = this.modules[f.endx].getPoleX();
+			}
+			yl = yoff + group.yl + dy * (xl-group.xl) / dx;
+			yr = yoff + group.yl + dy * (xr-group.xl) / dx;
+			f.xl = xl;
+			f.xr = xr;
+			f.yl = yl;
+			f.yr = yr;
+		}
 	}
 	
 	placeModAtModX(mod, modx, staff, cursorToModSubstaff) {
@@ -12322,6 +12435,7 @@ class Staff extends Drawable {
 	setModKey(k, kn, mod) {
 		mod.key = k;
 		mod.keyName = kn;
+		if (!mod.playable) return;
 		mod.numSigns = 0;
 		for (var i = 0; i < k.length; i++) {
 			if (k[i] != sharpKeys[0][i]) mod.numSigns++;
