@@ -3772,12 +3772,6 @@ class MeasureMod extends SheetMod {
 	}
 }
 
-class RestMod extends SheetMod {
-	constructor(ico, w, h) {
-		super(ico, w, h);
-	}
-}
-
 class NoteMod extends SheetMod {
 	constructor(ico, pk, w, h) {
 		super(ico, w, h);
@@ -3803,14 +3797,14 @@ class NoteMod extends SheetMod {
 		return t;
 	}
 	
-	create(data) {
+	create(data, rest) {
 		super.create(data);
-		this.pkey = piano.allkeys[data.pkey];
+		if (!rest) this.pkey = piano.allkeys[data.pkey];
 		this.nodotlen = data.nodotlen;
 		this.dotted = BinaryToBool(data.dotted);
 		this.substaff = data.substaff;
-		this.lx = this.sheet.staves[0].getNoteLeftBound(this);
-		this.rx = this.sheet.staves[0].getNoteRightBound(this);
+		if (!rest) this.lx = this.sheet.staves[0].getNoteLeftBound(this);
+		if (!rest) this.rx = this.sheet.staves[0].getNoteRightBound(this);
 		this.setSpecs();
 	}
 	
@@ -3834,12 +3828,12 @@ class NoteMod extends SheetMod {
 			this.dotmulti = 1;
 		}
 		switch (this.nodotlen) {
-			case 4: this.flags = 0; this.fill = false; this.pole = false; this.dotted = false; this.dotmulti = 1; break;
-			case 2: this.flags = 0; this.fill = false; this.pole = true; break;
-			case 1: this.flags = 0; this.fill = true; this.pole = true; break;
-			case 0.5: this.flags = 1; this.fill = true; this.pole = true; break;
-			case 0.25: this.flags = 2; this.fill = true; this.pole = true; break;
-			case 0.125: this.flags = 3; this.fill = true; this.pole = true; break;
+			case 4: this.flags = 0; this.fill = false; this.pole = false; this.dotted = false; this.dotmulti = 1; this.lineY = 1; break;
+			case 2: this.flags = 0; this.fill = false; this.pole = true; this.lineY = 1.5; break;
+			case 1: this.flags = 0; this.fill = true; this.pole = true; this.lineY = 0.5; break;
+			case 0.5: this.flags = 1; this.fill = true; this.pole = true; this.lineY = 1; break;
+			case 0.25: this.flags = 2; this.fill = true; this.pole = true; this.lineY = 1; break;
+			case 0.125: this.flags = 3; this.fill = true; this.pole = true; this.lineY = 1; break;
 		}
 		this.beatlen = this.nodotlen * this.dotmulti;
 	}
@@ -3854,7 +3848,7 @@ class NoteMod extends SheetMod {
 			case 0.125: this.nodotlen = 0.25; break;
 		}
 		this.setSpecs();
-		console.log("set beatlen:" + this.beatlen + " nodotlen:" + this.nodotlen);
+		//console.log("set beatlen:" + this.beatlen + " nodotlen:" + this.nodotlen);
 	}
 	
 	makeShorter() {
@@ -3903,6 +3897,69 @@ class NoteMod extends SheetMod {
 	refactor() {
 		this.lx = this.sheet.staves[0].getNoteLeftBound(this, true);
 		this.rx = this.sheet.staves[0].getNoteRightBound(this, true);
+	}
+}
+
+class RestMod extends NoteMod {
+	constructor(ico, w, h) {
+		super(ico, null, w, h);
+		this.pkey = false;
+		this.setImage();
+		this.w = this.sheet.lineH;
+		this.isRest = true;
+		this.lineY = 1;
+		this.nodotlen = 1;
+		this.setSpecs();
+	}
+	
+	save() {
+		var t = '{"type":"RestMod", "nodotlen":' + this.nodotlen + ', "dotted":' + BoolToBinary(this.dotted);
+		t += ', "substaff":' + this.substaff + ', "staffx":' + this.staffx + '}';
+		return t;
+	}
+	
+	create(data) {
+		super.create(data, true);
+	}
+	
+	/*
+	create(data) {
+		super.create(data);
+		this.nodotlen = data.nodotlen;
+		this.dotted = BinaryToBool(data.dotted);
+		this.substaff = data.substaff;
+		this.lx = this.sheet.staves[0].getNoteLeftBound(this);
+		this.rx = this.sheet.staves[0].getNoteRightBound(this);
+		this.setSpecs();
+	}*/
+	
+	drawOb(ctx) {
+		ctx.drawImage(this.image, this.x, this.y);
+	}
+	
+	scaleSize() {}
+	
+	addYOffset(lineH) {
+		this.y += lineH * this.lineY;
+	}
+	
+	setImage() {
+		this.image = this.sheet.getRestImage(this.nodotlen);
+		this.w = this.image.width;
+		console.log("rest.w:" + this.w);
+	}
+	
+	setSpecs() {
+		super.setSpecs();
+		this.setImage();
+	}
+	
+	getLX() {
+		return this.x - this.sheet.lineH*0.2;
+	}
+	
+	getRX() {
+		return this.x + this.w + this.sheet.lineH*0.2;
 	}
 }
 
@@ -8935,6 +8992,22 @@ class NoteIcon extends SheetModuleIcon {
 	}
 }
 
+class RestIcon extends SheetModuleIcon {
+	constructor(x, y, w, h, bar, img) {
+		super(x, y, w, h, bar);
+		this.img = img;
+	}
+	
+	createMod() {
+		return new RestMod(this, 1, 1);
+	}
+	
+	drawOb(ctx) {
+		super.drawOb(ctx);
+		ctx.drawImage(this.img, this.x + this.w*0.5, this.y + this.y*0.5);
+	}
+}
+
 class SynthModuleIcon extends ModuleIcon {
 	constructor(x, y, w, h, bar) {
 		super(x, y, w, h, bar);
@@ -9807,6 +9880,8 @@ class SheetModuleBar extends ModuleBar {
 		this.noteb = new NoteIcon(x+cushion, y+b, iw, iw, this);
 		//b += cushion + iw;
 		//this.testb = new NoteIcon(x+cushion, y+b, iw, iw, this);
+		this.restb = new RestIcon(x+cushion, y+b, iw, iw, this, this.sheet1.getRestImage(1));
+		b += cushion + iw;
 		this.measureb = new MeasureIcon(x+cushion, y+b, iw, iw, this);
 		b += cushion + iw;
 		this.trebleb = new TrebleClefIcon(x+cushion, y+b, iw, iw, this, s.staff0);
@@ -9815,6 +9890,7 @@ class SheetModuleBar extends ModuleBar {
 		
 		//this.addIcon(this.noteb);
 		//this.addIcon(this.testb);
+		this.addIcon(this.restb);
 		this.addIcon(this.measureb);
 		this.addIcon(this.trebleb);
 		this.addIcon(this.bassb);
@@ -10668,6 +10744,36 @@ class SubFlag extends GroupFlag {
 	}
 }
 
+function drawWholeRestImage(lh) {
+	var c = document.createElement('canvas');
+	c.height = lh*0.5;
+	c.width = lh;
+	var ctx = c.getContext("2d");
+	ctx.fillStyle = "black";
+	ctx.fillRect(0, 0, c.width, c.height);
+	return c;
+}
+
+function drawHalfRestImage(lh) {
+	return drawWholeRestImage(lh);
+}
+
+function drawQuarterRestImage(lh) {
+	return drawWholeRestImage(lh);
+}
+
+function drawEighthRestImage(lh) {
+	return drawWholeRestImage(lh);
+}
+
+function drawSixteenthRestImage(lh) {
+	return drawWholeRestImage(lh);
+}
+
+function drawThirtySecondRestImage(lh) {
+	return drawWholeRestImage(lh);
+}
+
 class MusicSheet extends Drawable {
 	constructor(x, y, w, h, boxy, staffH, lineH, drawCursor, s) {
 		super(x, boxy, w, h);
@@ -10677,6 +10783,7 @@ class MusicSheet extends Drawable {
 		this.boxy = boxy;
 		this.staffH = staffH;
 		this.lineH = lineH;
+		this.drawRestImages();
 		this.modcushion = lineH*0.7;
 		this.betweenw = this.lineH * 0.4;
 		this.staves = new Array();
@@ -10697,6 +10804,26 @@ class MusicSheet extends Drawable {
 		this.testNotes = new Array();
 		this.groupFlagsT = new Array();
 		this.groupFlagsB = new Array();
+	}
+	
+	drawRestImages() {
+		this.wholeRestImage = drawWholeRestImage(this.lineH);
+		this.halfRestImage = drawHalfRestImage(this.lineH);
+		this.quarterRestImage = drawQuarterRestImage(this.lineH);
+		this.eighthRestImage = drawEighthRestImage(this.lineH);
+		this.sixteenthRestImage = drawSixteenthRestImage(this.lineH);
+		this.thirtysecondRestImage = drawThirtySecondRestImage(this.lineH);
+	}
+	
+	getRestImage(ndl) {
+		switch (ndl) {
+			case 4: return this.wholeRestImage;
+			case 2: return this.halfRestImage;
+			case 1: return this.quarterRestImage;
+			case 0.5: return this.eighthRestImage;
+			case 0.25: return this.sixteenthRestImage;
+			case 0.125: return this.thirtysecondRestImage;
+		}
 	}
 	
 	onMetronomeTick() {
@@ -11378,11 +11505,11 @@ class MusicSheet extends Drawable {
 		this.processGroupFlags(groupFlagsB, BOTTOM_STAFF);
 		for (var i = 0; i < groupFlagsB.length; i++) {
 			var g = groupFlagsB[i];
-			console.log("groupFlagsB" + i + " x:" + g.xl + "~" + g.xr + " y:" + g.yl + "~" + g.yr);
+			//console.log("groupFlagsB" + i + " x:" + g.xl + "~" + g.xr + " y:" + g.yl + "~" + g.yr);
 		}
 		for (var i = 0; i < groupFlagsT.length; i++) {
 			var g = groupFlagsT[i];
-			console.log("groupFlagT" + i + " x:" + g.xl + "~" + g.xr + " y:" + g.yl + "~" + g.yr);
+			//console.log("groupFlagT" + i + " x:" + g.xl + "~" + g.xr + " y:" + g.yl + "~" + g.yr);
 		}
 		this.groupFlagsT = groupFlagsT;
 		this.groupFlagsB = groupFlagsB;
@@ -11514,7 +11641,7 @@ class MusicSheet extends Drawable {
 	}
 	
 	makeSubFlag(group, level, startx, endx, toLeft) {
-		console.log("make subflag level:" + level + " startx:" + startx + " endx:" + endx + " toLeft:" + toLeft);
+		//console.log("make subflag level:" + level + " startx:" + startx + " endx:" + endx + " toLeft:" + toLeft);
 		group.addSubFlag(level, startx, endx, toLeft);
 	}
 	
@@ -11535,6 +11662,11 @@ class MusicSheet extends Drawable {
 			var yl;
 			var yr;
 			if (f.xlen == 0) {//make half flag
+				if (this.modules[f.startx].staffx == group.startx) {
+					f.toLeft = false;
+				} else if (!f.toLeft && f.level == 3 && f.startx < this.modules.length-1 && this.modules[f.startx+1].flags < 2) {
+					f.toLeft = true;
+				}
 				if (f.toLeft) {
 					xr = this.modules[f.startx].getPoleX();
 					xl = this.modules[f.startx-1].getPoleX();
@@ -11723,6 +11855,9 @@ class MusicSheet extends Drawable {
 				mod.y = cstaff.ttopl;
 			} else {
 				mod.y = cstaff.btopl;
+			}
+			if (mod.isRest) {
+				mod.addYOffset(cstaff.lineH);
 			}
 		}
 		return cstaff;
@@ -12063,6 +12198,7 @@ class SheetScene extends Scene {
 			case "MeasureMod": m = this.modbar.measureb.createMod(); break;
 			case "TrebleClefMod": m = this.modbar.trebleb.createMod(); break;
 			case "BassClefMod": m = this.modbar.bassb.createMod(); break;
+			case "RestMod": m = this.modbar.restb.createMod(); break;
 		}
 		return m;
 	}
