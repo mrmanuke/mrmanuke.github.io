@@ -132,6 +132,11 @@ var TREBLE_CLEF = 0;
 var BOTTOM_STAFF = 1;
 var TOP_STAFF = 0;
 
+var NATURAL = 0;
+var SHARP = 1;
+var FLAT = 2;
+var ENHARMONICS = [0, 1, 2];
+
 //chord quality constants
 var Q_MAJ = 0;
 var Q_MIN = 1;
@@ -3537,6 +3542,7 @@ class SheetMod extends Drawable {
 	makeLonger() {}
 	makeShorter() {}
 	updateStaff() {}
+	cycleEnharmonic() {}
 	
 	scaleSize(lineH) {
 		if (this.h == 0) this.h = 1;
@@ -3789,23 +3795,69 @@ class NoteMod extends SheetMod {
 		this.dotmulti = 1;
 		this.pole = true;
 		this.isNote = true;
+		this.enharmonic = -1;
 	}
 	
 	save() {
-		var t = '{"type":"NoteMod", "pkey":' + this.pkey.num + ', "nodotlen":' + this.nodotlen + ', "dotted":' + BoolToBinary(this.dotted);
-		t += ', "substaff":' + this.substaff + ', "staffx":' + this.staffx + '}';
+		var t = '{"type":"NoteMod", "pkey":' + this.pkey.num + ', "enharmonic":' + this.enharmonic + ', "nodotlen":' + this.nodotlen;
+		t += ', "dotted":' + BoolToBinary(this.dotted) + ', "substaff":' + this.substaff + ', "staffx":' + this.staffx + '}';
 		return t;
 	}
 	
 	create(data, rest) {
 		super.create(data);
-		if (!rest) this.pkey = piano.allkeys[data.pkey];
+		if (!rest) {
+			this.pkey = piano.allkeys[data.pkey];
+			this.enharmonic = data.enharmonic;
+		}
 		this.nodotlen = data.nodotlen;
 		this.dotted = BinaryToBool(data.dotted);
 		this.substaff = data.substaff;
-		if (!rest) this.lx = this.sheet.staves[0].getNoteLeftBound(this);
-		if (!rest) this.rx = this.sheet.staves[0].getNoteRightBound(this);
+		if (!rest) {
+			this.lx = this.sheet.staves[0].getNoteLeftBound(this);
+			this.rx = this.sheet.staves[0].getNoteRightBound(this);
+		}
 		this.setSpecs();
+	}
+	
+	cycleEnharmonic() {	
+		//mod.spos = -1;
+		//mod.sposnat = -1;
+		//mod.spossharp = -1;
+		//mod.sposflat = -1;
+		for (var i = 0; i < ENHARMONICS.length; i++) {
+			var e = this.enharmonic + 1 + i;
+			if (this.enharmonic + 1 + i >= ENHARMONICS.length) {
+				if (this.spos != -1) {
+					this.setEnharmonic(-1);
+					break;
+				} else {
+					e = e % ENHARMONICS.length;
+				}
+			}
+			switch (e) {
+				case NATURAL:
+					if (this.sposnat > -1) {
+						this.setEnharmonic(NATURAL);
+						return;
+					}
+				case SHARP:
+					if (this.spossharp > -1) {
+						this.setEnharmonic(SHARP);
+						return;
+					}
+				case FLAT:
+					if (this.sposflat > -1) {
+						this.setEnharmonic(FLAT);
+						return;
+					}
+			}
+			
+		}
+	}
+	
+	setEnharmonic(e) {
+		this.enharmonic = e;
 	}
 	
 	toggleDot() {
@@ -3831,9 +3883,9 @@ class NoteMod extends SheetMod {
 			case 4: this.flags = 0; this.fill = false; this.pole = false; this.dotted = false; this.dotmulti = 1; this.lineY = 1; break;
 			case 2: this.flags = 0; this.fill = false; this.pole = true; this.lineY = 1.5; break;
 			case 1: this.flags = 0; this.fill = true; this.pole = true; this.lineY = 0.5; break;
-			case 0.5: this.flags = 1; this.fill = true; this.pole = true; this.lineY = 1; break;
-			case 0.25: this.flags = 2; this.fill = true; this.pole = true; this.lineY = 1; break;
-			case 0.125: this.flags = 3; this.fill = true; this.pole = true; this.lineY = 1; break;
+			case 0.5: this.flags = 1; this.fill = true; this.pole = true; this.lineY = 1.1; break;
+			case 0.25: this.flags = 2; this.fill = true; this.pole = true; this.lineY = 1.1; break;
+			case 0.125: this.flags = 3; this.fill = true; this.pole = true; this.lineY = 0.1; break;
 		}
 		this.beatlen = this.nodotlen * this.dotmulti;
 	}
@@ -3906,10 +3958,12 @@ class RestMod extends NoteMod {
 		this.pkey = false;
 		this.setImage();
 		this.w = this.sheet.lineH;
+		this.doty = this.sheet.lineH*1.5;
 		this.isRest = true;
 		this.lineY = 1;
 		this.nodotlen = 1;
 		this.setSpecs();
+		this.noter = this.w*0.6;
 	}
 	
 	save() {
@@ -3922,29 +3976,35 @@ class RestMod extends NoteMod {
 		super.create(data, true);
 	}
 	
-	/*
-	create(data) {
-		super.create(data);
-		this.nodotlen = data.nodotlen;
-		this.dotted = BinaryToBool(data.dotted);
-		this.substaff = data.substaff;
-		this.lx = this.sheet.staves[0].getNoteLeftBound(this);
-		this.rx = this.sheet.staves[0].getNoteRightBound(this);
-		this.setSpecs();
-	}*/
+	setActive(a) {
+		super.setActive(a);
+		this.active = a;
+		if (a) {
+			this.image = this.redImage;
+		} else {
+			this.image = this.blackImage;
+		}
+	}
 	
 	drawOb(ctx) {
 		ctx.drawImage(this.image, this.x, this.y);
+		if (this.dotted) {
+			this.sheet.getModStaff(this).drawDot(ctx, this.x, this.doty, this.noter, this.color);
+		}
 	}
 	
 	scaleSize() {}
 	
 	addYOffset(lineH) {
+		this.doty = this.y + lineH * 1.5;
 		this.y += lineH * this.lineY;
 	}
 	
 	setImage() {
-		this.image = this.sheet.getRestImage(this.nodotlen);
+		var images = this.sheet.getRestImage(this.nodotlen);
+		this.redImage = images.red;
+		this.blackImage = images.black;
+		this.image = this.blackImage;
 		this.w = this.image.width;
 		console.log("rest.w:" + this.w);
 	}
@@ -3959,7 +4019,11 @@ class RestMod extends NoteMod {
 	}
 	
 	getRX() {
-		return this.x + this.w + this.sheet.lineH*0.2;
+		if (this.dotted) {
+			return this.x + this.w + this.sheet.lineH*0.2 + this.sheet.lineH;		
+		} else {
+			return this.x + this.w + this.sheet.lineH*0.2;
+		}
 	}
 }
 
@@ -9004,7 +9068,7 @@ class RestIcon extends SheetModuleIcon {
 	
 	drawOb(ctx) {
 		super.drawOb(ctx);
-		ctx.drawImage(this.img, this.x + this.w*0.5, this.y + this.y*0.5);
+		ctx.drawImage(this.img, this.x + this.w*0.45, this.y + this.h*0.4);
 	}
 }
 
@@ -9715,6 +9779,17 @@ class SheetNoteDotBtn extends ScenePressBtn {
 	}
 }
 
+class SheetNoteEnharmonicBtn extends ScenePressBtn {
+	constructor(x, y, w, h, s) {
+		super(x, y, w, h, s);
+		this.name = "enh";
+	}
+	
+	performAction() {
+		this.scene.cycleSelectionEnharmonic();
+	}
+}
+
 class SheetOptionBar extends SceneMenu {
 	constructor(x, y, w, h, s) {
 		super(x, y, w, h, s);
@@ -9730,6 +9805,10 @@ class SheetOptionBar extends SceneMenu {
 		bx += bh + this.pad;
 		this.notedotbtn = new SheetNoteDotBtn(bx, by, bh, bh, s);
 		this.addBtn(this.notedotbtn);
+		bx = this.x + this.pad;
+		by += bh + this.pad;
+		this.noteenhbtn = new SheetNoteEnharmonicBtn(bx, by, bh, bh, s);
+		this.addBtn(this.noteenhbtn);
 	}
 }
 
@@ -9880,7 +9959,7 @@ class SheetModuleBar extends ModuleBar {
 		this.noteb = new NoteIcon(x+cushion, y+b, iw, iw, this);
 		//b += cushion + iw;
 		//this.testb = new NoteIcon(x+cushion, y+b, iw, iw, this);
-		this.restb = new RestIcon(x+cushion, y+b, iw, iw, this, this.sheet1.getRestImage(1));
+		this.restb = new RestIcon(x+cushion, y+b, iw, iw, this, this.sheet1.getRestImage(0.5).black);
 		b += cushion + iw;
 		this.measureb = new MeasureIcon(x+cushion, y+b, iw, iw, this);
 		b += cushion + iw;
@@ -10744,34 +10823,137 @@ class SubFlag extends GroupFlag {
 	}
 }
 
-function drawWholeRestImage(lh) {
+function drawWholeRestImage(lh, color) {
 	var c = document.createElement('canvas');
 	c.height = lh*0.5;
 	c.width = lh;
 	var ctx = c.getContext("2d");
-	ctx.fillStyle = "black";
+	ctx.fillStyle = color;
 	ctx.fillRect(0, 0, c.width, c.height);
 	return c;
 }
 
-function drawHalfRestImage(lh) {
-	return drawWholeRestImage(lh);
+function drawHalfRestImage(lh, color) {
+	return drawWholeRestImage(lh, color);
 }
 
-function drawQuarterRestImage(lh) {
-	return drawWholeRestImage(lh);
+function drawQuarterRestImage(lh, color) {
+	var c = document.createElement('canvas');
+	var h = lh*3;
+	var w = lh*0.8;
+	c.height = h;
+	c.width = w;
+	var ctx = c.getContext("2d");
+	ctx.fillStyle = color;
+	ctx.beginPath();
+	ctx.moveTo(w*0.5, 0);
+	ctx.lineTo(w, h*12/40);
+	ctx.lineTo(w*0.55, h*22/40);
+	ctx.lineTo(w, h*36/40);
+	ctx.lineTo(w*0.5, h*34/40);
+	ctx.lineTo(w*0.25, h*36/40);
+	ctx.lineTo(w*0.45, h);
+	ctx.lineTo(0, h*36/40);
+	ctx.lineTo(0, h*30/40);
+	ctx.lineTo(w*0.2, h*27/40);
+	ctx.lineTo(w*0.55, h*29/40);
+	ctx.lineTo(0, h*17/40);
+	ctx.lineTo(w*0.55, h*8/40);
+	ctx.lineTo(w*0.5, 0);
+	ctx.closePath();
+	ctx.fill();
+	return c;
 }
 
-function drawEighthRestImage(lh) {
-	return drawWholeRestImage(lh);
+function drawEighthRestImage(lh, color) {
+	var c = document.createElement('canvas');
+	var h = lh*1.8;
+	var w = lh*0.9;
+	var t = w*0.1;
+	var r = w*0.3;
+	c.height = h;
+	c.width = w;
+	var ctx = c.getContext("2d");
+	ctx.fillStyle = color;
+	ctx.beginPath();
+	ctx.arc(r, r, r, 0, 2*Math.PI);
+	ctx.moveTo(r, r*2-t);
+	ctx.lineTo(w, 0);
+	ctx.lineTo(w*0.5+t*0.5, h);
+	ctx.lineTo(w*0.45-t*0.5, h);
+	ctx.lineTo(w-t, t);
+	ctx.lineTo(r, r*2);
+	ctx.closePath();
+	ctx.fill();
+	return c;
 }
 
-function drawSixteenthRestImage(lh) {
-	return drawWholeRestImage(lh);
+function drawSixteenthRestImage(lh, color) {
+	var c = document.createElement('canvas');
+	var h = lh*2.8;
+	var wm = 1.3;
+	var w = lh*0.9*wm;
+	var t = w*0.1/wm;
+	var r = w*0.3/wm;
+	c.height = h;
+	c.width = w;
+	var ctx = c.getContext("2d");
+	ctx.fillStyle = color;
+	ctx.beginPath();
+	ctx.arc(2*r, r, r, 0, 2*Math.PI);
+	ctx.arc(r, r+lh, r, 0, 2*Math.PI);
+	ctx.moveTo(2*r, r*2-t);
+	ctx.lineTo(w, 0);
+	ctx.lineTo(w*0.5+t*0.5, h);
+	ctx.lineTo(w*0.45-t*0.5, h);
+	//2nd branch
+	ctx.lineTo(w*0.75, lh+t);
+	ctx.lineTo(r, r*2+lh);
+	ctx.lineTo(r, r*2+lh-t);
+	ctx.lineTo(w*0.78, lh);
+	//end 2nd branch
+	ctx.lineTo(w-t, t);
+	ctx.lineTo(2*r, r*2);
+	ctx.closePath();
+	ctx.fill();
+	return c;
 }
 
-function drawThirtySecondRestImage(lh) {
-	return drawWholeRestImage(lh);
+function drawThirtySecondRestImage(lh, color) {
+	var c = document.createElement('canvas');
+	var h = lh*3.8;
+	var wm = 1.6;
+	var w = lh*0.9*wm;
+	var t = w*0.1/wm;
+	var r = w*0.3/wm;
+	c.height = h;
+	c.width = w;
+	var ctx = c.getContext("2d");
+	ctx.fillStyle = color;
+	ctx.beginPath();
+	ctx.arc(2*r, r+lh, r, 0, 2*Math.PI);
+	ctx.moveTo(3*r, r*2-t);
+	ctx.lineTo(w, 0);
+	ctx.lineTo(w*0.5+t*0.5, h);
+	ctx.lineTo(w*0.45-t*0.5, h);
+	//3rd branch
+	ctx.lineTo(w*0.68, lh*2+t);
+	ctx.lineTo(r, r*2+2*lh);
+	ctx.lineTo(r, r*2+2*lh-t);
+	ctx.lineTo(w*0.71, lh*2);
+	//2nd branch
+	ctx.lineTo(w*0.8, lh+t);
+	ctx.lineTo(r*2, r*2+lh);
+	ctx.arc(r, r+2*lh, r, 0, 2*Math.PI);
+	ctx.lineTo(r*2, r*2+lh-t);
+	ctx.lineTo(w*0.83, lh);
+	//end 2nd branch
+	ctx.lineTo(w-t, t);
+	ctx.arc(3*r, r, r, 0, 2*Math.PI);
+	ctx.lineTo(3*r, r*2);
+	ctx.closePath();
+	ctx.fill();
+	return c;
 }
 
 class MusicSheet extends Drawable {
@@ -10807,12 +10989,24 @@ class MusicSheet extends Drawable {
 	}
 	
 	drawRestImages() {
-		this.wholeRestImage = drawWholeRestImage(this.lineH);
-		this.halfRestImage = drawHalfRestImage(this.lineH);
-		this.quarterRestImage = drawQuarterRestImage(this.lineH);
-		this.eighthRestImage = drawEighthRestImage(this.lineH);
-		this.sixteenthRestImage = drawSixteenthRestImage(this.lineH);
-		this.thirtysecondRestImage = drawThirtySecondRestImage(this.lineH);
+		this.wholeRestImage = new Object();
+		this.wholeRestImage.black = drawWholeRestImage(this.lineH, "black");
+		this.wholeRestImage.red = drawWholeRestImage(this.lineH, "red");
+		this.halfRestImage = new Object();
+		this.halfRestImage.black = drawHalfRestImage(this.lineH, "black");
+		this.halfRestImage.red = drawHalfRestImage(this.lineH, "red");
+		this.quarterRestImage = new Object();
+		this.quarterRestImage.black = drawQuarterRestImage(this.lineH, "black");
+		this.quarterRestImage.red = drawQuarterRestImage(this.lineH, "red");
+		this.eighthRestImage = new Object();
+		this.eighthRestImage.black = drawEighthRestImage(this.lineH, "black");
+		this.eighthRestImage.red = drawEighthRestImage(this.lineH, "red");
+		this.sixteenthRestImage = new Object();
+		this.sixteenthRestImage.black = drawSixteenthRestImage(this.lineH, "black");
+		this.sixteenthRestImage.red = drawSixteenthRestImage(this.lineH, "red");
+		this.thirtysecondRestImage = new Object();
+		this.thirtysecondRestImage.black = drawThirtySecondRestImage(this.lineH, "black");
+		this.thirtysecondRestImage.red = drawThirtySecondRestImage(this.lineH, "red");
 	}
 	
 	getRestImage(ndl) {
@@ -11008,14 +11202,25 @@ class MusicSheet extends Drawable {
 				foundat = i;
 			}
 		}
-		if (!found) return found;
-		for (var i = 0; i < this.modules.length; i++) {
-			if (!this.modules[i].active && this.modules[i].staffx == this.modules[foundat].staffx) {
-				this.modules[i].setKey(k, kn);
-				this.modules[i].setActive(true);
+		if (!found) {
+			//get last clef module before current position
+			for (var i = this.modules.length-1; i > -1; i--) {
+				if (this.modules[i].staffx < this.cursor.staffx && this.modules[i].isClef) {
+					this.modules[i].setKey(k, kn);
+					found = true;
+					foundat = i;
+					break;
+				}
 			}
 		}
-		return found;
+		if (!found) return;
+		for (var i = 0; i < this.modules.length; i++) {
+			if (i != foundat && !this.modules[i].active && this.modules[i].staffx == this.modules[foundat].staffx) {
+				this.modules[i].setKey(k, kn);
+				//this.modules[i].setActive(true);
+			}
+		}
+		//return found;
 	}
 	
 	makeSelectionLonger() {
@@ -11038,6 +11243,17 @@ class MusicSheet extends Drawable {
 			}
 		}
 		this.refactorMods(cmod);
+	}
+	
+	cycleSelectionEnharmonic() {
+		var cmod;
+		for (var i = 0; i < this.modules.length; i++) {
+			if (this.modules[i].active) {
+				this.modules[i].cycleEnharmonic();
+				cmod = this.modules[i];
+			}			
+		}
+		this.refactorMods(cmod, true);
 	}
 	
 	dotSelection() {
@@ -11262,7 +11478,7 @@ class MusicSheet extends Drawable {
 				console.log("clicked mod " + i + " x" + this.modules[i].x + " y" + this.modules[i].y + "staff:" + this.modules[i].staffnum + " staffx:" + this.modules[i].staffx);
 				this.deactivateModules();
 				this.setActiveModule(this.modules[i]);
-				this.placeModAtModX(this.cursor, this.modules[i], this.modules[i].staff, true);
+				this.placeModAtModX(this.cursor, this.modules[i], this.modules[i].staff, true, true);
 				return true;
 			}
 		}
@@ -11350,7 +11566,7 @@ class MusicSheet extends Drawable {
 		this.placeModAfterModX(this.cursor, this.modules[this.modules.length-1], this.cursor.staff);
 	}
 	
-	refactorMods(cmod) {//refimo this is where beat numbers are set
+	refactorMods(cmod, dontChangeSelection) {//refimo this is where beat numbers are set
 		if (this.modules.length < 1) {
 			this.refactorCursor(cmod);
 			return;
@@ -11514,7 +11730,7 @@ class MusicSheet extends Drawable {
 		this.groupFlagsT = groupFlagsT;
 		this.groupFlagsB = groupFlagsB;
 		lastmod.last = true;
-		this.refactorCursor(cmod);
+		if (!dontChangeSelection) this.refactorCursor(cmod);
 	}
 	
 	processGroupFlags(groupFlags, cs) {
@@ -11691,7 +11907,7 @@ class MusicSheet extends Drawable {
 		}
 	}
 	
-	placeModAtModX(mod, modx, staff, cursorToModSubstaff) {
+	placeModAtModX(mod, modx, staff, cursorToModSubstaff, dontChangeSelection) {
 		//if (!mod.pkey) mod.y = modx.y;
 		if (mod.isClef && modx.isClef && this.staves[0].signXs.length > 0) {
 			mod.setKey(modx.key, modx.keyName);
@@ -11714,7 +11930,7 @@ class MusicSheet extends Drawable {
 		//this.cursor.starty = this.cursor.y;
 		//var staff = this.getStaffAtY(mod.y);
 		this.placeModStaffAndBounds(mod, staff);
-		if (mod === this.cursor) {
+		if (mod === this.cursor && !dontChangeSelection) {
 			this.deactivateModules();
 			for (var i = 0; i < this.modules.length; i++) {
 				if (this.modules[i].staffx == this.cursor.staffx && this.modules[i].substaff == this.cursor.substaff) {
@@ -11845,9 +12061,9 @@ class MusicSheet extends Drawable {
 		if (mod.pkey) {
 			//console.log("s:" + cstaff.num);
 			if (cstaff.ycheckstaff == TOP_STAFF) {//treble staff
-				mod.y = cstaff.getTrebleNoteY(cstaff.getSpos(mod), mod.clef);
+				mod.y = cstaff.getTrebleNoteY(cstaff.getModSpos(mod), mod.clef);
 			} else {
-				mod.y = cstaff.getBassNoteY(cstaff.getSpos(mod), mod.clef);
+				mod.y = cstaff.getBassNoteY(cstaff.getModSpos(mod), mod.clef);
 			}
 			//console.log("set mod y:" + mod.y + " pkey staff " + cstaff.num + "." + cstaff.ycheckstaff);
 		} else {
@@ -11883,7 +12099,7 @@ class MusicSheet extends Drawable {
 				this.placeModAtZero(mod, cstaff);
 				return 0;
 			} else {
-				if (mod.playable && this.modules[0].playable) {
+				if (mod.playable && this.modules[0].playable && !this.modules[0].isRest && !mod.isRest) {
 					this.placeModAtModX(mod, this.modules[0], cstaff);
 					return 1;
 				} else if (mod.isClef && this.modules[0].isClef) {
@@ -11931,7 +12147,7 @@ class MusicSheet extends Drawable {
 			} else {
 				return -mi-1;
 			}
-		} else if (this.cursor.between || !mod.playable || !this.modules[mi].playable) {
+		} else if (this.cursor.between || !mod.playable || !this.modules[mi].playable || mod.isRest || this.modules[mi].isRest) {
 			if (this.modules.length > mi+1 && this.modules[mi+1].isClef && this.modules[mi+1].staffx == this.modules[mi].staffx) {
 				this.placeModAfterModX(mod, this.modules[mi+1], cstaff);
 				return mi + 2;
@@ -12142,8 +12358,8 @@ class SheetScene extends Scene {
 			this.sheet1.staves[0].ycheckstaff = BOTTOM_STAFF;
 			this.sheet1.placeModAtModX(this.sheet1.cursor, this.sheet1.modules[0], this.sheet1.staves[0]);
 			this.pushModule(this.modbar.bassb.createMod());
-			this.sheet1.staves[0].ycheckstaff = TOP_STAFF;
-			this.sheet1.placeModAfterModX(this.sheet1.cursor, this.sheet1.modules[0], this.sheet1.staves[0]);
+			//this.sheet1.staves[0].ycheckstaff = TOP_STAFF;
+			//this.sheet1.placeModAfterModX(this.sheet1.cursor, this.sheet1.modules[0], this.sheet1.staves[0]);
 			this.sheet1.selectNone();
 		} else {
 			this.addSceneOb(this.practiceMenu);
@@ -12223,6 +12439,10 @@ class SheetScene extends Scene {
 	
 	dotSelection() {
 		this.sheet1.dotSelection();
+	}
+	
+	cycleSelectionEnharmonic() {
+		this.sheet1.cycleSelectionEnharmonic();
 	}
 	
 	play(force) {
@@ -12370,7 +12590,7 @@ class SheetScene extends Scene {
 	
 	setKey(k, kn, pks) {
 		if (this.sheet1.setKey(k, kn, pks)) return;
-		this.sheet2.setKey(k, kn, pks);
+		//this.sheet2.setKey(k, kn, pks);
 	}
 	
 	initKey(pks) {
@@ -12569,6 +12789,7 @@ class Staff extends Drawable {
 	}
 	
 	setModKey(k, kn, mod) {
+		if (mod.key === k) return; 
 		mod.key = k;
 		mod.keyName = kn;
 		if (!mod.playable) return;
@@ -12600,6 +12821,9 @@ class Staff extends Drawable {
 			var i = mod.pkey.num;
 			if (i < piano.allkeys.length-1 && piano.allkeys[i+1].spos > -1) mod.sposflat = piano.allkeys[i+1].spos;
 			if (i > 0 && piano.allkeys[i-1].spos > -1) mod.spossharp = piano.allkeys[i-1].spos;
+		}
+		if ((mod.enharmonic == NATURAL && mod.sposnat == -1) || (mod.enharmonic == FLAT && mod.sposflat == -1) || (mod.enharmonic == SHARP && mod.spossharp == -1)) {
+			mod.setEnharmonic(-1);
 		}
 	}
 	
@@ -12696,11 +12920,41 @@ class Staff extends Drawable {
 		return this.bassZero - spos * this.lineHalf + this.noteCushion;
 	}
 	
+	getModSpos(mod) {
+		switch (mod.enharmonic) {
+			case -1:
+				return this.getSpos(mod);
+			case NATURAL:
+				return mod.sposnat;
+			case FLAT:
+				return mod.sposflat;
+			case SHARP:
+				return mod.spossharp;
+		}	
+	}
+	
 	getSpos(pk) {
 		if (pk.spos > -1) return pk.spos;
 		if (pk.sposnat > -1) return pk.sposnat;
 		if (pk.spossharp > -1) return pk.spossharp;
 		if (pk.sposflat > -1) return pk.sposflat;
+	}
+	
+	drawSignMod(ctx, pk, x, y, r, c, mod) {
+		switch (mod.enharmonic) {
+			case -1:
+				this.drawSign(ctx, pk, x, y, r, c);
+				return;
+			case NATURAL:
+				this.drawNat(ctx, x, y, r, c);
+				return;
+			case FLAT:
+				this.drawFlat(ctx, x, y, r, c);
+				return;
+			case SHARP:
+				this.drawSharp(ctx, x, y, r, c);
+				return;
+		}
 	}
 	
 	drawSign(ctx, pk, x, y, r, c) {
@@ -12833,7 +13087,7 @@ class Staff extends Drawable {
 	
 	drawNoteMod(ctx, mod) {
 		this.drawCirc(ctx, mod.x, mod.y, this.noter, (mod.substaff !== 0), mod.color, mod.fill);
-		this.drawSign(ctx, mod, mod.x, mod.y, this.noter, mod.color);
+		this.drawSignMod(ctx, mod, mod.x, mod.y, this.noter, mod.color, mod);
 		if (mod.pole) {
 			this.drawPole(ctx, mod.x, mod.y, mod.poleExt, this.noter, mod.color, mod.invert);
 		}
@@ -12864,18 +13118,29 @@ class Staff extends Drawable {
 		} else {
 			pk = mod.pkey;
 		}
-		if (pk.spos > -1) return 0;
-		if (pk.sposnat > -1) {
-			//this.drawNat(ctx, x, y, r);
-			return -this.noter*2.1;
-		}
-		if (pk.spossharp > -1) {
-			//this.drawSharp(ctx, x, y, r);
-			return -this.noter*2.3;
-		}
-		if (pk.sposflat > -1) {
-			//this.drawFlat(ctx, x, y, r);
-			return -this.noter*2;
+		if (mod.enharmonic == -1) {
+			if (pk.spos > -1) return 0;
+			if (pk.sposnat > -1) {
+				//this.drawNat(ctx, x, y, r);
+				return -this.noter*2.1;
+			}
+			if (pk.spossharp > -1) {
+				//this.drawSharp(ctx, x, y, r);
+				return -this.noter*2.3;
+			}
+			if (pk.sposflat > -1) {
+				//this.drawFlat(ctx, x, y, r);
+				return -this.noter*2;
+			}
+		} else {
+			switch (mod.enharmonic) {
+				case NATURAL:
+					return -this.noter*2.1;
+				case FLAT:
+					return -this.noter*2;
+				case SHARP:
+					return -this.noter*2.3;
+			}	
 		}
 	}
 	
