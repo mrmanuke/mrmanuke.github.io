@@ -3517,13 +3517,22 @@ class SheetMod extends Drawable {
 		this.beat = 0;
 		this.color = "black";
 		this.active = false;
+		this.woff = 0;
 	}
 	
-	save() {
-		return "";
+	saveb() {
+		return '"staffx":' + this.staffx + ', "woff":' + this.woff;
 	}
+	
 	create(data) {
 		this.staffx = data.staffx;
+		this.woff = data.woff
+	}
+	
+	incrementWoff(i) {
+		var w = this.woff + i;
+		//todo: check if w is valid
+		this.woff = w;
 	}
 	
 	activate() {
@@ -3543,6 +3552,8 @@ class SheetMod extends Drawable {
 	makeShorter() {}
 	updateStaff() {}
 	cycleEnharmonic() {}
+	toggleInvert() {}
+	toggleMirror() {}
 	
 	scaleSize(lineH) {
 		if (this.h == 0) this.h = 1;
@@ -3616,7 +3627,11 @@ class SheetMod extends Drawable {
 	}
 	
 	getRX() {
-		return this.x + this.w;
+		return this.x + this.w + this.woff;
+	}
+	
+	getRXIgnoreWoff() {
+		return this.getRX() - this.woff;
 	}
 }
 
@@ -3656,7 +3671,7 @@ class TrebleClefMod extends SheetMod {
 	}
 	
 	save() {
-		return '{"type":"TrebleClefMod", "staffx":' + this.staffx + ',"substaff":' + this.substaff + ', "key":"' + this.keyName + '"}';
+		return '{"type":"TrebleClefMod", ' + super.saveb() +  ',"substaff":' + this.substaff + ', "key":"' + this.keyName + '"}';
 	}
 	
 	create(data) {
@@ -3713,7 +3728,7 @@ class TrebleClefMod extends SheetMod {
 	}
 	
 	getRX() {
-		return this.x + this.sx + this.w + this.h + this.sigW;
+		return this.x + this.sx + this.w + this.h + this.sigW + this.woff;
 	}
 }
 
@@ -3724,7 +3739,7 @@ class BassClefMod extends TrebleClefMod {
 	}
 	
 	save() {
-		return '{"type":"BassClefMod", "staffx":' + this.staffx + ',"substaff":' + this.substaff + ', "key":"' + this.keyName + '"}';
+		return '{"type":"BassClefMod", ' + super.saveb() + ',"substaff":' + this.substaff + ', "key":"' + this.keyName + '"}';
 	}
 	
 	initClefSignYs() {
@@ -3749,7 +3764,7 @@ class MeasureMod extends SheetMod {
 	}
 	
 	save() {
-		return '{"type":"MeasureMod", "staffx":' + this.staffx + '}';
+		return '{"type":"MeasureMod", ' + super.saveb() + '}';
 	}
 	
 	setActive(a) {
@@ -3774,7 +3789,55 @@ class MeasureMod extends SheetMod {
 	}
 	
 	getRX() {
-		return this.x + this.sheet.lineH*0.5;
+		return this.x + this.sheet.lineH*0.5 + this.woff;
+	}
+}
+
+class BreakerMod extends MeasureMod {
+	constructor(ico, w, h) {
+		super(ico, w, h);
+		this.isBreaker = true;
+	}
+	
+	save() {
+		return '{"type":"BreakerMod", ' + super.saveb() + ', "substaff":' + this.substaff + '}';
+	}
+	
+	create(data) {
+		super.create(data);
+		this.substaff = data.substaff;
+	}
+	
+	drawOb(ctx) {
+		this.sheet.getModStaff(this).drawBreaker(ctx, this);
+	}
+	
+	setCorners(x) {
+		//lcx, rcx, mx, ty, by
+		this.lcx = x - this.w * 0.25;
+		this.rcx = x + this.w * 0.25;
+		this.mx = x;
+	}
+	
+	setX(x) {
+		console.log("set breaker x:" + x);
+		this.x = x;
+		//this.cursorLBound = this.x + this.w*0.25;
+		//this.cursorRBound = this.x + this.w*0.75;
+		this.setCorners(x);
+	}
+	
+	setY() {
+		this.ty = this.y + this.w*0.5;
+		this.by = this.y;
+	}
+	
+	getLX() {
+		return this.x - this.sheet.lineH*0.25;
+	}
+	
+	getRX() {
+		return this.x + this.sheet.lineH*0.25 + this.woff;
 	}
 }
 
@@ -3789,6 +3852,7 @@ class NoteMod extends SheetMod {
 		}
 		this.fill = true;
 		this.invert = false;
+		this.mirror = false;
 		this.flags = 0;
 		this.nodotlen = 1;
 		this.beatlen = 1;
@@ -3800,7 +3864,8 @@ class NoteMod extends SheetMod {
 	
 	save() {
 		var t = '{"type":"NoteMod", "pkey":' + this.pkey.num + ', "enharmonic":' + this.enharmonic + ', "nodotlen":' + this.nodotlen;
-		t += ', "dotted":' + BoolToBinary(this.dotted) + ', "substaff":' + this.substaff + ', "staffx":' + this.staffx + '}';
+		t += ', "dotted":' + BoolToBinary(this.dotted) + ', "substaff":' + this.substaff + ',' + super.saveb();
+		t += ', "invert":' + BoolToBinary(this.invert) + ', "mirror":' + BoolToBinary(this.mirror) + '}';
 		return t;
 	}
 	
@@ -3809,6 +3874,8 @@ class NoteMod extends SheetMod {
 		if (!rest) {
 			this.pkey = piano.allkeys[data.pkey];
 			this.enharmonic = data.enharmonic;
+			this.invert = BinaryToBool(data.invert);
+			this.mirror = BinaryToBool(data.mirror);
 		}
 		this.nodotlen = data.nodotlen;
 		this.dotted = BinaryToBool(data.dotted);
@@ -3820,11 +3887,15 @@ class NoteMod extends SheetMod {
 		this.setSpecs();
 	}
 	
+	toggleInvert() {
+		this.invert = !this.invert;
+	}
+	
+	toggleMirror() {
+		this.mirror = !this.mirror;
+	}
+	
 	cycleEnharmonic() {	
-		//mod.spos = -1;
-		//mod.sposnat = -1;
-		//mod.spossharp = -1;
-		//mod.sposflat = -1;
 		for (var i = 0; i < ENHARMONICS.length; i++) {
 			var e = this.enharmonic + 1 + i;
 			if (this.enharmonic + 1 + i >= ENHARMONICS.length) {
@@ -3931,19 +4002,29 @@ class NoteMod extends SheetMod {
 	}
 	
 	getLX() {
-		return this.x + this.lx;
+		//if (this.mirror) {
+		//	return this.x + this.lx - this.w;
+		//} else {
+			return this.x + this.lx;
+		//}
 	}
 	
 	getRX() {
-		return this.x + this.w + this.rx;
+		//if (this.mirror) {
+		//	return this.x + this.rx;
+		//} else {
+			return this.x + this.w + this.rx + this.woff;
+		//}
 	}
 	
 	getPoleX() {
-		return this.x + 1.9 * this.sheet.getModStaff(this).noter;
+		//return this.x + 1.9 * this.sheet.getModStaff(this).noter;
+		return this.sheet.getModStaff(this).getPoleX(this);
 	}
 	
 	getPoleTop() {
-		return this.y - 4 * this.sheet.getModStaff(this).noter
+		//return this.y - 4 * this.sheet.getModStaff(this).noter
+		return this.sheet.getModStaff(this).getPoleTop(this);
 	}
 	
 	refactor() {
@@ -3968,7 +4049,7 @@ class RestMod extends NoteMod {
 	
 	save() {
 		var t = '{"type":"RestMod", "nodotlen":' + this.nodotlen + ', "dotted":' + BoolToBinary(this.dotted);
-		t += ', "substaff":' + this.substaff + ', "staffx":' + this.staffx + '}';
+		t += ', "substaff":' + this.substaff + ',' + super.saveb() + '}';
 		return t;
 	}
 	
@@ -4006,7 +4087,6 @@ class RestMod extends NoteMod {
 		this.blackImage = images.black;
 		this.image = this.blackImage;
 		this.w = this.image.width;
-		console.log("rest.w:" + this.w);
 	}
 	
 	setSpecs() {
@@ -4020,9 +4100,9 @@ class RestMod extends NoteMod {
 	
 	getRX() {
 		if (this.dotted) {
-			return this.x + this.w + this.sheet.lineH*0.2 + this.sheet.lineH;		
+			return this.x + this.w + this.sheet.lineH*0.2 + this.sheet.lineH + this.woff;		
 		} else {
-			return this.x + this.w + this.sheet.lineH*0.2;
+			return this.x + this.w + this.sheet.lineH*0.2 + this.woff;
 		}
 	}
 }
@@ -9030,6 +9110,25 @@ class MeasureIcon extends SheetModuleIcon {
 	}
 }
 
+class BreakerIcon extends SheetModuleIcon {
+	constructor(x, y, w, h, bar) {
+		super(x, y, w, h, bar);
+		this.name = "B";
+	}
+	
+	createMod() {
+		return new BreakerMod(this, 1, 1);
+	}
+	
+	drawOb(ctx) {
+		super.drawOb(ctx);
+		ctx.font = this.h*0.26 + "px Arial";
+		ctx.fillStyle = pianocol;
+		ctx.fillText(this.name, this.x+this.w*0.1, this.y+this.h*0.75);
+	}
+	
+}
+
 class NoteIcon extends SheetModuleIcon {
 	constructor(x, y, w, h, bar) {
 		super(x, y, w, h, bar);
@@ -9790,6 +9889,50 @@ class SheetNoteEnharmonicBtn extends ScenePressBtn {
 	}
 }
 
+class SheetNoteInvertBtn extends ScenePressBtn {
+	constructor(x, y, w, h, s) {
+		super(x, y, w, h, s);
+		this.name = "inv";
+	}
+	
+	performAction() {
+		this.scene.invertSelection();
+	}
+}
+
+class SheetNoteMirrorBtn extends ScenePressBtn {
+	constructor(x, y, w, h, s) {
+		super(x, y, w, h, s);
+		this.name = "mir";
+	}
+	
+	performAction() {
+		this.scene.mirrorSelection();
+	}
+}
+
+class SheetModWiderBtn extends ScenePressBtn {
+	constructor(x, y, w, h, s) {
+		super(x, y, w, h, s);
+		this.name = "wid";
+	}
+	
+	performAction() {
+		this.scene.widenSelection();
+	}
+}
+
+class SheetModNarrowerBtn extends ScenePressBtn {
+	constructor(x, y, w, h, s) {
+		super(x, y, w, h, s);
+		this.name = "nar";
+	}
+	
+	performAction() {
+		this.scene.narrowSelection();
+	}
+}
+
 class SheetOptionBar extends SceneMenu {
 	constructor(x, y, w, h, s) {
 		super(x, y, w, h, s);
@@ -9809,6 +9952,19 @@ class SheetOptionBar extends SceneMenu {
 		by += bh + this.pad;
 		this.noteenhbtn = new SheetNoteEnharmonicBtn(bx, by, bh, bh, s);
 		this.addBtn(this.noteenhbtn);
+		by += bh + this.pad;
+		this.invertbtn = new SheetNoteInvertBtn(bx, by, bh, bh, s);
+		this.addBtn(this.invertbtn);
+		bx += bh + this.pad;
+		this.mirrorbtn = new SheetNoteMirrorBtn(bx, by, bh, bh, s);
+		this.addBtn(this.mirrorbtn);
+		bx = this.x + this.pad;
+		by += bh + this.pad;
+		this.widerbtn = new SheetModWiderBtn(bx, by, bh, bh, s);
+		this.addBtn(this.widerbtn);
+		bx += bh + this.pad;
+		this.narrowbtn = new SheetModNarrowerBtn(bx, by, bh, bh, s);
+		this.addBtn(this.narrowbtn);
 	}
 }
 
@@ -9966,6 +10122,8 @@ class SheetModuleBar extends ModuleBar {
 		this.trebleb = new TrebleClefIcon(x+cushion, y+b, iw, iw, this, s.staff0);
 		b += cushion + iw;
 		this.bassb = new BassClefIcon(x+cushion, y+b, iw, iw, this, s.staff0);
+		b += cushion + iw;
+		this.breakb = new BreakerIcon(x+cushion, y+b, iw, iw, this);
 		
 		//this.addIcon(this.noteb);
 		//this.addIcon(this.testb);
@@ -9973,6 +10131,7 @@ class SheetModuleBar extends ModuleBar {
 		this.addIcon(this.measureb);
 		this.addIcon(this.trebleb);
 		this.addIcon(this.bassb);
+		this.addIcon(this.breakb);
 	}
 }
 
@@ -10760,10 +10919,12 @@ class TestNote {
 }
 
 class GroupFlag extends Drawable {
-	constructor(sx, nf, lh) {
+	constructor(sx, nf, lh, sheet) {
 		super(1, 1, 1, 1);
+		this.sheet = sheet;
 		this.startx = sx;
 		this.endx = -1;
+		this.xlen = 0;
 		this.numFlags = 1;//nf;
 		this.lineH = lh * 0.4;
 		this.lineT = lh * 0.15;
@@ -10771,9 +10932,44 @@ class GroupFlag extends Drawable {
 		this.xr = 1;
 		this.yl = 0;
 		this.yr = 1;
+		this.inc = this.lineH*1.5;
 		this.color = "black";
 		this.subFlags = new Array();
+		this.drawPrerendered = false;
+		if (sheet) this.setImage();
+		this.flags = 1;
 		//this.subSubFlags = new Array();
+		this.invert = false;
+	}
+	
+	setImage() {
+		var images = this.sheet.getFlagImage();
+		this.redImage = images.red;
+		this.blackImage = images.black;
+		this.invertedBlackImage = images.invertedBlack;
+		this.invertedRedImage = images.invertedRed;
+		this.image = this.blackImage;
+		this.w = this.image.width;
+		this.h = this.image.height;
+		console.log("flag.w:" + this.w);
+	}
+	
+	setInvert(inv) {
+		this.invert = inv;
+		if (inv) {
+			this.image = this.invertedBlackImage;
+			this.inc = -this.lineH*1.5
+			this.yl -= this.h;
+		} else {
+			this.image = this.blackImage;
+			this.inc = this.lineH*1.5
+		}
+	}
+	
+	setEndX(i) {
+		this.endx = i;
+		this.xlen = this.endx - this.startx;
+		this.drawPrerendered = (this.xlen <= 0);
 	}
 	
 	addSubFlag(level, startx, endx, toLeft) {
@@ -10785,7 +10981,20 @@ class GroupFlag extends Drawable {
 		//}
 	}
 	
+	drawPrerenderedFlags(ctx) {
+		//console.log(this.flags);
+		var yl = this.yl;
+		for (var i = 0; i < this.flags; i++) {
+			ctx.drawImage(this.image, this.xl, yl);
+			yl += this.inc;
+		}
+	}
+	
 	drawOb(ctx) {
+		if (this.drawPrerendered) {
+			this.drawPrerenderedFlags(ctx);
+			return;
+		}
 		var yl = this.yl;
 		var yr = this.yr;
 		ctx.strokeStyle = this.color;
@@ -10821,6 +11030,43 @@ class SubFlag extends GroupFlag {
 		}
 		this.xlen = this.endx - this.startx;
 	}
+	
+	setEndX(i) {
+		console.log("error. setEndX() shouldn't be called on a subflag");
+	}
+}
+
+function drawFlagImage(lh, color, invert) {
+	//lh *= 2;
+	var c = document.createElement('canvas');
+	var w = lh*0.8;
+	var h = lh*1.8;
+	var wi = 0;
+	var wm = 1;
+	var hi = 0;
+	var hm = 1;
+	if (invert) {
+		//wi = w;
+		//wm = -1;
+		hi = h;
+		hm = -1;
+	}
+	c.height = h;
+	c.width = w;
+	var ctx = c.getContext("2d");
+	ctx.fillStyle = color;
+	ctx.beginPath();
+	ctx.moveTo(wi + wm*0, hi + hm*0);
+	ctx.lineTo(wi + wm*0.8*w, hi + hm*0.5*h);
+	ctx.lineTo(wi + wm*w, hi + hm*0.8*h);
+	ctx.lineTo(wi + wm*w, hi + hm*h);
+	ctx.lineTo(wi + wm*0.95*w, hi + hm*0.8*h);
+	ctx.lineTo(wi + wm*0.74*w, hi + hm*0.5*h);
+	ctx.lineTo(wi + wm*0, hi + hm*0.2*h);
+	ctx.lineTo(wi + wm*0, hi + hm*0);
+	ctx.closePath();
+	ctx.fill();
+	return c;
 }
 
 function drawWholeRestImage(lh, color) {
@@ -10966,6 +11212,7 @@ class MusicSheet extends Drawable {
 		this.staffH = staffH;
 		this.lineH = lineH;
 		this.drawRestImages();
+		this.drawFlagImages();
 		this.modcushion = lineH*0.7;
 		this.betweenw = this.lineH * 0.4;
 		this.staves = new Array();
@@ -10986,6 +11233,18 @@ class MusicSheet extends Drawable {
 		this.testNotes = new Array();
 		this.groupFlagsT = new Array();
 		this.groupFlagsB = new Array();
+	}
+	
+	drawFlagImages() {
+		this.flagImage = new Object();
+		this.flagImage.black = drawFlagImage(this.lineH, "black");
+		this.flagImage.red = drawFlagImage(this.lineH, "red");
+		this.flagImage.invertedBlack = drawFlagImage(this.lineH, "black", true);
+		this.flagImage.invertedRed = drawFlagImage(this.lineH, "red", true);		
+	}
+	
+	getFlagImage() {
+		return this.flagImage;
 	}
 	
 	drawRestImages() {
@@ -11250,6 +11509,50 @@ class MusicSheet extends Drawable {
 		for (var i = 0; i < this.modules.length; i++) {
 			if (this.modules[i].active) {
 				this.modules[i].cycleEnharmonic();
+				cmod = this.modules[i];
+			}			
+		}
+		this.refactorMods(cmod, true);
+	}
+	
+	invertSelection() {
+		var cmod;
+		for (var i = 0; i < this.modules.length; i++) {
+			if (this.modules[i].active) {
+				this.modules[i].toggleInvert();
+				cmod = this.modules[i];
+			}			
+		}
+		this.refactorMods(cmod, true);	
+	}
+	
+	mirrorSelection() {
+		var cmod;
+		for (var i = 0; i < this.modules.length; i++) {
+			if (this.modules[i].active) {
+				this.modules[i].toggleMirror();
+				cmod = this.modules[i];
+			}			
+		}
+		this.refactorMods(cmod, true);
+	}
+	
+	widenSelection() {
+		var cmod;
+		for (var i = 0; i < this.modules.length; i++) {
+			if (this.modules[i].active) {
+				this.modules[i].incrementWoff(1);
+				cmod = this.modules[i];
+			}			
+		}
+		this.refactorMods(cmod, true);		
+	}
+	
+	narrowSelection() {
+		var cmod;
+		for (var i = 0; i < this.modules.length; i++) {
+			if (this.modules[i].active) {
+				this.modules[i].incrementWoff(-1);
 				cmod = this.modules[i];
 			}			
 		}
@@ -11615,6 +11918,7 @@ class MusicSheet extends Drawable {
 		for (var i = 0; i < maxstaffx + 1; i++) {
 			var minl = this.modules[mi].getLX();//x;
 			var maxr = this.modules[mi].getRX();//x + this.modules[mi].w;
+			var maxrig = this.modules[mi].getRXIgnoreWoff();
 			var minblen = this.modules[mi].beatlen;
 			curKey = this.modules[mi].key;
 			curKeyName = this.modules[mi].keyName;
@@ -11622,6 +11926,7 @@ class MusicSheet extends Drawable {
 				if (this.modules[j].staffx == i) {
 					if (this.modules[j].getLX() < minl) minl = this.modules[j].getLX();//x;
 					if (this.modules[j].getRX() > maxr) maxr = this.modules[j].getRX();
+					if (this.modules[j].getRXIgnoreWoff > maxrig) maxrig = this.modules[j].getRXIgnoreWoff();
 					if (this.modules[j].beatlen < minblen) minblen = this.modules[j].beatlen;
 				} else {
 					break;
@@ -11652,10 +11957,10 @@ class MusicSheet extends Drawable {
 							if (this.modules[j].flags > 0) {
 								if (curFGroupT != groupFlagsT.length-1) {// || this.modules[j].flags != numFlagsT) {
 									//numFlagsT = this.modules[j].flags;
-									groupFlagsT.push(new GroupFlag(i, numFlagsT, this.lineH));
+									groupFlagsT.push(new GroupFlag(i, numFlagsT, this.lineH, this));
 									curFGroupT = groupFlagsT.length-1;
 								} else {
-									groupFlagsT[curFGroupT].endx = i;
+									groupFlagsT[curFGroupT].setEndX(i);
 								}
 							} else {
 								curFGroupT++;
@@ -11664,18 +11969,18 @@ class MusicSheet extends Drawable {
 							if (this.modules[j].flags > 0) {
 								if (curFGroupB != groupFlagsB.length-1) {// || this.modules[j].flags != numFlagsB) {
 									//numFlagsB = this.modules[j].flags;
-									groupFlagsB.push(new GroupFlag(i, numFlagsB, this.lineH));
+									groupFlagsB.push(new GroupFlag(i, numFlagsB, this.lineH, this));
 									curFGroupB = groupFlagsB.length-1;
 								} else {
-									groupFlagsB[curFGroupB].endx = i;
+									groupFlagsB[curFGroupB].setEndX(i);
 								}
 							} else {
 								curFGroupB++;
 							}
 						}
 					} else {
-						curFGroupT++;
-						curFGroupB++;
+						if (!(this.modules[j].isBreaker && this.modules[j].substaff == BOTTOM_STAFF)) curFGroupT++;
+						if (!(this.modules[j].isBreaker && this.modules[j].substaff == TOP_STAFF)) curFGroupB++;
 					}
 					//
 					this.modules[j].beat = beat;
@@ -11683,6 +11988,7 @@ class MusicSheet extends Drawable {
 					this.modules[j].vgroupblen = minblen;
 					this.modules[j].vgroupxoff = this.modules[j].x - minl;
 					this.modules[j].vgroupw = maxr - minl;
+					this.modules[j].vgroupwig = maxrig - minl;
 					this.modules[j].setX(x + this.modules[j].vgroupxoff);
 					this.modules[j].vgroupx = x;
 					mi++
@@ -11735,8 +12041,30 @@ class MusicSheet extends Drawable {
 	
 	processGroupFlags(groupFlags, cs) {
 		for (var i = groupFlags.length-1; i > -1; i--) {
-			if (groupFlags[i].endx <= groupFlags[i].startx) {
-				groupFlags.splice(i, 1);
+			//if (false && groupFlags[i].endx <= groupFlags[i].startx) {//assign prerendered group flags in setEndX() instead of not assigning group flags
+				//groupFlags.splice(i, 1);
+			if (groupFlags[i].xlen <= 0) {
+				groupFlags[i].setEndX(groupFlags[i].startx);//make sure that drawPrerendered is set even if endx hasn't been assigned yet
+				var maxy = -1;
+				var gx = -1;
+				var flags = -1;
+				var inv = false;
+				for (var j = 0; j < this.modules.length; j++) {
+					var mod = this.modules[j];
+					if (mod.staffx == groupFlags[i].startx) {
+						if (maxy == -1 || maxy > mod.getPoleTop()) {
+							maxy = mod.getPoleTop();
+						}
+						gx = mod.getPoleX();
+						flags = mod.flags;
+						inv = mod.invert;
+					}
+				}
+				groupFlags[i].flags = flags;
+				groupFlags[i].xl = gx;
+				groupFlags[i].yl = maxy;
+				groupFlags[i].setInvert(inv);
+				console.log("set groupflag flags to " + mod.flags);				
 			} else {
 				//determine (x, y) of start and end
 				//set drawflags = false for all modules within group flag range
@@ -11757,7 +12085,12 @@ class MusicSheet extends Drawable {
 					} else if (mod.staffx == groupFlags[i].startx) {
 						mod.drawFlags = false;
 						if (mod.flags > 1) {
-							flags2 = j;
+							if (groupFlags[i].startx == groupFlags[i].endx) {
+								this.makeSubFlag(groupFlags[i], 2, j, j, true);
+								flags2 = -1;
+							} else {
+								flags2 = j;
+							}
 						}
 						if (mod.flags > 2) {
 							flags3 = j;
@@ -11862,6 +12195,9 @@ class MusicSheet extends Drawable {
 	}
 	
 	processSubFlags(group) {
+		if (group.xlen == 0) {
+			return;
+		}
 		var halfFlagLen = 0.3;
 		var dx = group.xr - group.xl;
 		var dy = group.yr - group.yl;
@@ -11869,9 +12205,9 @@ class MusicSheet extends Drawable {
 			var f = group.subFlags[i];
 			var yoff;
 			if (f.level == 2) {
-				yoff = this.lineH * 0.4;
+				yoff = this.lineH * 0.35;
 			} else if (f.level == 3) {
-				yoff = this.lineH * 0.8;
+				yoff = this.lineH * 0.7;
 			}
 			var xl;
 			var xr;
@@ -11898,6 +12234,9 @@ class MusicSheet extends Drawable {
 				xl = this.modules[f.startx].getPoleX();
 				xr = this.modules[f.endx].getPoleX();
 			}
+			if (this.modules[f.startx].invert) {
+				yoff = -yoff;
+			}
 			yl = yoff + group.yl + dy * (xl-group.xl) / dx;
 			yr = yoff + group.yl + dy * (xr-group.xl) / dx;
 			f.xl = xl;
@@ -11920,7 +12259,7 @@ class MusicSheet extends Drawable {
 			}
 			//mod.x = modx.x;
 			mod.x = modx.vgroupx - this.lineH*0.2;
-			mod.w = modx.vgroupw + this.lineH*0.4;
+			mod.w = modx.vgroupwig + this.lineH*0.4;
 		} else {
 			mod.x = modx.x;
 		}
@@ -12074,6 +12413,9 @@ class MusicSheet extends Drawable {
 			}
 			if (mod.isRest) {
 				mod.addYOffset(cstaff.lineH);
+			}
+			if (mod.isBreaker) {
+				mod.setY();
 			}
 		}
 		return cstaff;
@@ -12412,6 +12754,7 @@ class SheetScene extends Scene {
 		switch (type) {
 			case "NoteMod": m = this.modbar.noteb.createMod(); break;
 			case "MeasureMod": m = this.modbar.measureb.createMod(); break;
+			case "BreakerMod": m = this.modbar.breakb.createMod(); break;
 			case "TrebleClefMod": m = this.modbar.trebleb.createMod(); break;
 			case "BassClefMod": m = this.modbar.bassb.createMod(); break;
 			case "RestMod": m = this.modbar.restb.createMod(); break;
@@ -12443,6 +12786,22 @@ class SheetScene extends Scene {
 	
 	cycleSelectionEnharmonic() {
 		this.sheet1.cycleSelectionEnharmonic();
+	}
+	
+	invertSelection() {
+		this.sheet1.invertSelection();
+	}
+	
+	mirrorSelection() {
+		this.sheet1.mirrorSelection();
+	}
+	
+	widenSelection() {
+		this.sheet1.widenSelection();
+	}
+	
+	narrowSelection() {
+		this.sheet1.narrowSelection();
 	}
 	
 	play(force) {
@@ -12698,6 +13057,7 @@ class StaffScene extends Scene {
 class Staff extends Drawable {
 	constructor(x, y, w, h, lineH, hasClef) {
 		super(x, y, w, h);
+		this.polelen = 7;
 		this.x = x;
 		this.y = y;
 		this.w = w;
@@ -13086,15 +13446,19 @@ class Staff extends Drawable {
 	}
 	
 	drawNoteMod(ctx, mod) {
-		this.drawCirc(ctx, mod.x, mod.y, this.noter, (mod.substaff !== 0), mod.color, mod.fill);
-		this.drawSignMod(ctx, mod, mod.x, mod.y, this.noter, mod.color, mod);
+		var x = mod.x;
+		if (mod.mirror) {
+			x += 2*this.noter;
+		}
+		this.drawCirc(ctx, x, mod.y, this.noter, (mod.substaff !== 0), mod.color, mod.fill);
+		this.drawSignMod(ctx, mod, x, mod.y, this.noter, mod.color, mod);
 		if (mod.pole) {
-			this.drawPole(ctx, mod.x, mod.y, mod.poleExt, this.noter, mod.color, mod.invert);
+			this.drawPole(ctx, mod.x, mod.y, mod.poleExt, this.noter, mod.color, mod.invert, mod.mirror);
 		}
 		if (mod.dotted) {
-			this.drawDot(ctx, mod.x, mod.y, this.noter, mod.color);
+			this.drawDot(ctx, x, mod.y, this.noter, mod.color);
 		}
-		if (mod.drawFlags) this.drawFlags(ctx, mod.x, mod.y, this.noter, mod.color, mod.flags, mod.invert);
+		//if (mod.drawFlags) this.drawFlags(ctx, mod.x, mod.y, this.noter, mod.color, mod.flags, mod.invert);
 	}
 	
 	drawCursor(ctx, cursor) {
@@ -13111,42 +13475,75 @@ class Staff extends Drawable {
 		ctx.stroke();
 	}
 	
+	drawBreaker(ctx, mod) {
+		ctx.beginPath();
+		ctx.fillStyle = mod.color || "black";
+		ctx.moveTo(mod.lcx, mod.by);
+		ctx.lineTo(mod.rcx, mod.by);
+		ctx.lineTo(mod.mx, mod.ty);
+		ctx.lineTo(mod.lcx, mod.by);
+		ctx.closePath();
+		ctx.fill();
+	}
+	
+	getPoleX(mod) {
+		var xoff = 0;
+		if (mod.invert && mod.mirror) xoff = this.noter*4;
+		if (mod.invert) {
+			return xoff + mod.x;
+		} else {
+			return xoff + mod.x + 1.9 * this.noter;			
+		}
+	}
+	
+	getPoleTop(mod) {
+		if (mod.invert) {
+			return mod.y + this.polelen*this.noter + 1 * this.noter;
+		} else {
+			return mod.y - this.polelen * this.noter
+		}
+	}
+	
 	getNoteLeftBound(mod, ref) { //offset from "x" that note is drawn at to sign x
 		var pk;
+		var xoff = 0;
+		if (mod.mirror) xoff = 2*this.noter;
 		if (ref) {
 			pk = mod;
 		} else {
 			pk = mod.pkey;
 		}
 		if (mod.enharmonic == -1) {
-			if (pk.spos > -1) return 0;
+			if (pk.spos > -1) return xoff;
 			if (pk.sposnat > -1) {
 				//this.drawNat(ctx, x, y, r);
-				return -this.noter*2.1;
+				return xoff-this.noter*2.1;
 			}
 			if (pk.spossharp > -1) {
 				//this.drawSharp(ctx, x, y, r);
-				return -this.noter*2.3;
+				return xoff-this.noter*2.3;
 			}
 			if (pk.sposflat > -1) {
 				//this.drawFlat(ctx, x, y, r);
-				return -this.noter*2;
+				return xoff-this.noter*2;
 			}
 		} else {
 			switch (mod.enharmonic) {
 				case NATURAL:
-					return -this.noter*2.1;
+					return xoff-this.noter*2.1;
 				case FLAT:
-					return -this.noter*2;
+					return xoff-this.noter*2;
 				case SHARP:
-					return -this.noter*2.3;
+					return xoff-this.noter*2.3;
 			}	
 		}
 	}
 	
 	getNoteRightBound(mod) { //offset from x+w that note is drawn at to right bound
-		if (mod.dotted || mod.flags) return this.noter*1.5;
-		return 0;
+		var xoff = 0;
+		if (mod.mirror) xoff = 2*this.noter;
+		if (mod.dotted || mod.flags) return xoff + this.noter*1.5;
+		return xoff;
 	}
 	
 	drawNote(ctx, pk) {
@@ -13188,22 +13585,26 @@ class Staff extends Drawable {
 		ctx.stroke();
 	}
 	
-	drawPole(ctx, x, y, ext, r, color, invert) {
+	drawPole(ctx, x, y, ext, r, color, invert, mirror) {
 		//this.drawPole(ctx, mod.x, mod.y, this.noter, mod.color, mod.invert);
 		var c = color || this.color;
 		ctx.strokeStyle = c;
 		y += 0.6*r;
 		x += 1.9*r;
 		if (invert) {
-			x -= 1.9*r;
-			y += 3.8*r;
+			if(!mirror) {
+				x -= 2*r;
+			} else {
+				x += 2*r;
+			}
+			y += this.polelen*r + 0.3*r;
 		}
 		ctx.beginPath();
-		ctx.moveTo(x, y-4*r+ext);
+		ctx.moveTo(x, y-this.polelen*r+ext);
 		ctx.lineTo(x, y);
 		ctx.lineTo(x+r*0.1, y);
-		ctx.lineTo(x+r*0.1, y-4*r+ext);
-		ctx.lineTo(x, y-4*r+ext);
+		ctx.lineTo(x+r*0.1, y-this.polelen*r+ext);
+		ctx.lineTo(x, y-this.polelen*r+ext);
 		ctx.closePath();
 		ctx.stroke();
 		ctx.fill();
