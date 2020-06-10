@@ -12,6 +12,11 @@ var numpianos = 25;
 var lastonum = 0;
 var playcount = 0;
 //built-in practice exercises
+//var winters = '{"name":"winters", "mods":{"key":"C", "bpm":150, "mods":[{"type":"BassClefMod", "staffx":0, "woff":0,"substaff":1, "key":"C"}, {"type":"TrebleClefMod", "staffx":0, "woff":0,"substaff":0, "key":"C"}, {"type":"NoteMod", "pkey":15, "enharmonic":-1, "nodotlen":2, "dotted":1, "substaff":1,"staffx":1, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":50, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":1, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":51, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":2, "woff":0, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":58, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":3, "woff":0, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":15, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":1,"staffx":3, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":57, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":4, "woff":0, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":22, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":4, "woff":0, "invert":0, "mirror":0}, {"type":"MeasureMod", "staffx":5, "woff":0}, {"type":"NoteMod", "pkey":55, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":6, "woff":0, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":27, "enharmonic":-1, "nodotlen":2, "dotted":1, "substaff":1,"staffx":6, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":55, "enharmonic":-1, "nodotlen":0.25, "dotted":0, "substaff":0,"staffx":7, "woff":-17, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":57, "enharmonic":-1, "nodotlen":0.25, "dotted":0, "substaff":0,"staffx":8, "woff":-12, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":55, "enharmonic":-1, "nodotlen":0.25, "dotted":0, "substaff":0,"staffx":9, "woff":-11, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":53, "enharmonic":-1, "nodotlen":0.25, "dotted":0, "substaff":0,"staffx":10, "woff":0, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":55, "enharmonic":-1, "nodotlen":2, "dotted":1, "substaff":0,"staffx":11, "woff":0, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":27, "enharmonic":-1, "nodotlen":2, "dotted":1, "substaff":1,"staffx":11, "woff":0, "invert":0, "mirror":0}, {"type":"MeasureMod", "staffx":12, "woff":0}, {"type":"NoteMod", "pkey":50, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":13, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":15, "enharmonic":-1, "nodotlen":2, "dotted":1, "substaff":1,"staffx":13, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":51, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":14, "woff":0, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":58, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":15, "woff":0, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":15, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":1,"staffx":15, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":57, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":16, "woff":0, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":22, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":16, "woff":0, "invert":0, "mirror":0}, {"type":"MeasureMod", "staffx":17, "woff":0}, {"type":"NoteMod", "pkey":55, "enharmonic":-1, "nodotlen":2, "dotted":1, "substaff":0,"staffx":18, "woff":0, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":27, "enharmonic":-1, "nodotlen":2, "dotted":1, "substaff":1,"staffx":18, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":55, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":19, "woff":0, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":27, "enharmonic":-1, "nodotlen":2, "dotted":1, "substaff":1,"staffx":19, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":57, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":20, "woff":0, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":58, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":21, "woff":0, "invert":1, "mirror":0}, {"type":"MeasureMod", "staffx":22, "woff":0}]}}';
+//var winters = '{"name":"winters", "mods":{"key":"G", "bpm":150, "mods":[{"type":"BassClefMod", "staffx":0, "woff":0,"substaff":1, "key":"G"}, {"type":"TrebleClefMod", "staffx":0, "woff":0,"substaff":0, "key":"G"}, {"type":"NoteMod", "pkey":15, "enharmonic":-1, "nodotlen":2, "dotted":1, "substaff":1,"staffx":1, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":50, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":1, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":51, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":2, "woff":0, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":58, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":3, "woff":0, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":15, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":1,"staffx":3, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":57, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":4, "woff":0, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":22, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":4, "woff":0, "invert":0, "mirror":0}, {"type":"MeasureMod", "staffx":5, "woff":0}, {"type":"NoteMod", "pkey":55, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":6, "woff":0, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":27, "enharmonic":-1, "nodotlen":2, "dotted":1, "substaff":1,"staffx":6, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":55, "enharmonic":-1, "nodotlen":0.25, "dotted":0, "substaff":0,"staffx":7, "woff":-13, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":57, "enharmonic":-1, "nodotlen":0.25, "dotted":0, "substaff":0,"staffx":8, "woff":-12, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":55, "enharmonic":-1, "nodotlen":0.25, "dotted":0, "substaff":0,"staffx":9, "woff":-11, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":53, "enharmonic":-1, "nodotlen":0.25, "dotted":0, "substaff":0,"staffx":10, "woff":0, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":29, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":1,"staffx":11, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":55, "enharmonic":-1, "nodotlen":2, "dotted":1, "substaff":0,"staffx":11, "woff":0, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":31, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":12, "woff":0, "invert":0, "mirror":0}, {"type":"MeasureMod", "staffx":13, "woff":0}, {"type":"NoteMod", "pkey":50, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":14, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":15, "enharmonic":-1, "nodotlen":2, "dotted":1, "substaff":1,"staffx":14, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":51, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":15, "woff":0, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":58, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":16, "woff":0, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":15, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":1,"staffx":16, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":57, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":17, "woff":0, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":22, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":17, "woff":0, "invert":0, "mirror":0}, {"type":"MeasureMod", "staffx":18, "woff":0}, {"type":"NoteMod", "pkey":55, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":19, "woff":0, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":27, "enharmonic":-1, "nodotlen":2, "dotted":1, "substaff":1,"staffx":19, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":55, "enharmonic":-1, "nodotlen":0.25, "dotted":0, "substaff":0,"staffx":20, "woff":-9, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":57, "enharmonic":-1, "nodotlen":0.25, "dotted":0, "substaff":0,"staffx":21, "woff":-10, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":55, "enharmonic":-1, "nodotlen":0.25, "dotted":0, "substaff":0,"staffx":22, "woff":-11, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":53, "enharmonic":-1, "nodotlen":0.25, "dotted":0, "substaff":0,"staffx":23, "woff":0, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":55, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":24, "woff":0, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":27, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":24, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":29, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":25, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":57, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":25, "woff":0, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":31, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":26, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":58, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":26, "woff":0, "invert":1, "mirror":0}, {"type":"MeasureMod", "staffx":27, "woff":0}]}}';
+var winters = '{"name":"winters", "mods":{"key":"G", "bpm":150, "mods":[{"type":"BassClefMod", "staffx":0, "woff":0,"substaff":1, "key":"G"}, {"type":"TrebleClefMod", "staffx":0, "woff":0,"substaff":0, "key":"G"}, {"type":"NoteMod", "pkey":15, "enharmonic":-1, "nodotlen":2, "dotted":1, "substaff":1,"staffx":1, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":50, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":1, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":51, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":2, "woff":0, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":58, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":3, "woff":0, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":15, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":1,"staffx":3, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":57, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":4, "woff":0, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":22, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":4, "woff":0, "invert":0, "mirror":0}, {"type":"MeasureMod", "staffx":5, "woff":0}, {"type":"NoteMod", "pkey":55, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":6, "woff":0, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":27, "enharmonic":-1, "nodotlen":2, "dotted":1, "substaff":1,"staffx":6, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":55, "enharmonic":-1, "nodotlen":0.25, "dotted":0, "substaff":0,"staffx":7, "woff":-13, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":57, "enharmonic":-1, "nodotlen":0.25, "dotted":0, "substaff":0,"staffx":8, "woff":-12, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":55, "enharmonic":-1, "nodotlen":0.25, "dotted":0, "substaff":0,"staffx":9, "woff":-11, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":53, "enharmonic":-1, "nodotlen":0.25, "dotted":0, "substaff":0,"staffx":10, "woff":0, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":29, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":1,"staffx":11, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":55, "enharmonic":-1, "nodotlen":2, "dotted":1, "substaff":0,"staffx":11, "woff":0, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":31, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":12, "woff":0, "invert":0, "mirror":0}, {"type":"MeasureMod", "staffx":13, "woff":0}, {"type":"NoteMod", "pkey":50, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":14, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":15, "enharmonic":-1, "nodotlen":2, "dotted":1, "substaff":1,"staffx":14, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":51, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":15, "woff":0, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":58, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":16, "woff":0, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":15, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":1,"staffx":16, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":57, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":17, "woff":0, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":22, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":17, "woff":0, "invert":0, "mirror":0}, {"type":"MeasureMod", "staffx":18, "woff":0}, {"type":"NoteMod", "pkey":55, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":19, "woff":0, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":27, "enharmonic":-1, "nodotlen":2, "dotted":1, "substaff":1,"staffx":19, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":55, "enharmonic":-1, "nodotlen":0.25, "dotted":0, "substaff":0,"staffx":20, "woff":-9, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":57, "enharmonic":-1, "nodotlen":0.25, "dotted":0, "substaff":0,"staffx":21, "woff":-10, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":55, "enharmonic":-1, "nodotlen":0.25, "dotted":0, "substaff":0,"staffx":22, "woff":-11, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":53, "enharmonic":-1, "nodotlen":0.25, "dotted":0, "substaff":0,"staffx":23, "woff":0, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":55, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":24, "woff":0, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":27, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":24, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":29, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":25, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":57, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":25, "woff":0, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":31, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":26, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":58, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":26, "woff":0, "invert":1, "mirror":0}, {"type":"MeasureMod", "staffx":27, "woff":0}, {"type":"NoteMod", "pkey":53, "enharmonic":-1, "nodotlen":2, "dotted":1, "substaff":0,"staffx":28, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":10, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":1,"staffx":28, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":17, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":29, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":24, "enharmonic":-1, "nodotlen":2, "dotted":1, "substaff":1,"staffx":30, "woff":0, "invert":0, "mirror":0}, {"type":"MeasureMod", "staffx":31, "woff":0}, {"type":"NoteMod", "pkey":10, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":32, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":10, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":33, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":17, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":34, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":26, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":1,"staffx":35, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":22, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":36, "woff":0, "invert":0, "mirror":0}]}}';
+var mountainking = '{"name":"mountain", "mods":{"key":"D", "bpm":90, "mods":[{"type":"BassClefMod", "staffx":0, "woff":0,"substaff":1, "key":"D"}, {"type":"BassClefMod", "staffx":0, "woff":0,"substaff":0, "key":"D"}, {"type":"NoteMod", "pkey":14, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":1, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":38, "enharmonic":-1, "nodotlen":0.5, "dotted":0, "substaff":0,"staffx":1, "woff":-6, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":40, "enharmonic":-1, "nodotlen":0.5, "dotted":0, "substaff":0,"staffx":2, "woff":-6, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":21, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":3, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":41, "enharmonic":-1, "nodotlen":0.5, "dotted":0, "substaff":0,"staffx":3, "woff":-6, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":43, "enharmonic":-1, "nodotlen":0.5, "dotted":0, "substaff":0,"staffx":4, "woff":-14, "invert":0, "mirror":0}, {"type":"BreakerMod", "staffx":5, "woff":-5, "substaff":0}, {"type":"NoteMod", "pkey":14, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":6, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":45, "enharmonic":-1, "nodotlen":0.5, "dotted":0, "substaff":0,"staffx":6, "woff":-11, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":41, "enharmonic":-1, "nodotlen":0.5, "dotted":0, "substaff":0,"staffx":7, "woff":-7, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":21, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":8, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":45, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":8, "woff":-3, "invert":1, "mirror":0}, {"type":"MeasureMod", "staffx":9, "woff":-5}, {"type":"NoteMod", "pkey":14, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":10, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":44, "enharmonic":1, "nodotlen":0.5, "dotted":0, "substaff":0,"staffx":10, "woff":-6, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":40, "enharmonic":-1, "nodotlen":0.5, "dotted":0, "substaff":0,"staffx":11, "woff":-12, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":21, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":12, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":44, "enharmonic":1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":12, "woff":0, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":14, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":13, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":43, "enharmonic":-1, "nodotlen":0.5, "dotted":0, "substaff":0,"staffx":13, "woff":-15, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":39, "enharmonic":-1, "nodotlen":0.5, "dotted":0, "substaff":0,"staffx":14, "woff":-7, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":21, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":15, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":43, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":15, "woff":-9, "invert":1, "mirror":0}, {"type":"MeasureMod", "staffx":16, "woff":-7}, {"type":"NoteMod", "pkey":14, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":17, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":38, "enharmonic":-1, "nodotlen":0.5, "dotted":0, "substaff":0,"staffx":17, "woff":-7, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":40, "enharmonic":-1, "nodotlen":0.5, "dotted":0, "substaff":0,"staffx":18, "woff":-10, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":21, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":19, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":41, "enharmonic":-1, "nodotlen":0.5, "dotted":0, "substaff":0,"staffx":19, "woff":-9, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":43, "enharmonic":-1, "nodotlen":0.5, "dotted":0, "substaff":0,"staffx":20, "woff":-14, "invert":0, "mirror":0}, {"type":"BreakerMod", "staffx":21, "woff":-9, "substaff":0}, {"type":"NoteMod", "pkey":14, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":22, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":45, "enharmonic":-1, "nodotlen":0.5, "dotted":0, "substaff":0,"staffx":22, "woff":-11, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":41, "enharmonic":-1, "nodotlen":0.5, "dotted":0, "substaff":0,"staffx":23, "woff":-11, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":21, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":24, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":45, "enharmonic":-1, "nodotlen":0.5, "dotted":0, "substaff":0,"staffx":24, "woff":-11, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":50, "enharmonic":-1, "nodotlen":0.5, "dotted":0, "substaff":0,"staffx":25, "woff":-12, "invert":1, "mirror":0}, {"type":"MeasureMod", "staffx":26, "woff":-3}, {"type":"NoteMod", "pkey":17, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":27, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":48, "enharmonic":-1, "nodotlen":0.5, "dotted":0, "substaff":0,"staffx":27, "woff":-9, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":45, "enharmonic":-1, "nodotlen":0.5, "dotted":0, "substaff":0,"staffx":28, "woff":-8, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":24, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":29, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":41, "enharmonic":-1, "nodotlen":0.5, "dotted":0, "substaff":0,"staffx":29, "woff":-8, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":45, "enharmonic":-1, "nodotlen":0.5, "dotted":0, "substaff":0,"staffx":30, "woff":-3, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":17, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":31, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":48, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":31, "woff":0, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":24, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":32, "woff":0, "invert":0, "mirror":0}, {"type":"MeasureMod", "staffx":33, "woff":0}, {"type":"MeasureMod", "staffx":34, "woff":0}]}}';
+var practiceSongs = [winters, mountainking];
 var practiceExs = '{"exs":[{"name":"exercise 4", "mods":{"key":"C", "bpm":90, "mods":[{"type":"MeasureMod", "staffx":0}, {"type":"NoteMod", "pkey":39, "nodotlen":4, "dotted":0, "substaff":0, "staffx":1}, {"type":"MeasureMod", "staffx":2}, {"type":"NoteMod", "pkey":39, "nodotlen":4, "dotted":0, "substaff":0, "staffx":3}, {"type":"MeasureMod", "staffx":4}, {"type":"NoteMod", "pkey":39, "nodotlen":4, "dotted":0, "substaff":0, "staffx":5}, {"type":"MeasureMod", "staffx":6}, {"type":"NoteMod", "pkey":39, "nodotlen":4, "dotted":0, "substaff":0, "staffx":7}, {"type":"MeasureMod", "staffx":8}, {"type":"NoteMod", "pkey":39, "nodotlen":4, "dotted":0, "substaff":0, "staffx":9}, {"type":"MeasureMod", "staffx":10}, {"type":"NoteMod", "pkey":39, "nodotlen":4, "dotted":0, "substaff":0, "staffx":11}, {"type":"MeasureMod", "staffx":12}, {"type":"NoteMod", "pkey":39, "nodotlen":4, "dotted":0, "substaff":0, "staffx":13}, {"type":"MeasureMod", "staffx":14}, {"type":"NoteMod", "pkey":39, "nodotlen":4, "dotted":0, "substaff":0, "staffx":15}, {"type":"MeasureMod", "staffx":16}, {"type":"NoteMod", "pkey":39, "nodotlen":4, "dotted":0, "substaff":0, "staffx":17}, {"type":"MeasureMod", "staffx":18}, {"type":"NoteMod", "pkey":39, "nodotlen":4, "dotted":0, "substaff":0, "staffx":19}, {"type":"MeasureMod", "staffx":20}]}}, {"name":"exercise 5", "mods":{"key":"C", "bpm":90, "mods":[{"type":"MeasureMod", "staffx":0}, {"type":"NoteMod", "pkey":39, "nodotlen":2, "dotted":0, "substaff":0, "staffx":1}, {"type":"NoteMod", "pkey":39, "nodotlen":2, "dotted":0, "substaff":0, "staffx":2}, {"type":"MeasureMod", "staffx":3}, {"type":"NoteMod", "pkey":39, "nodotlen":2, "dotted":0, "substaff":0, "staffx":4}, {"type":"NoteMod", "pkey":39, "nodotlen":2, "dotted":0, "substaff":0, "staffx":5}, {"type":"MeasureMod", "staffx":6}, {"type":"NoteMod", "pkey":39, "nodotlen":2, "dotted":0, "substaff":0, "staffx":7}, {"type":"NoteMod", "pkey":39, "nodotlen":2, "dotted":0, "substaff":0, "staffx":8}, {"type":"MeasureMod", "staffx":9}, {"type":"NoteMod", "pkey":39, "nodotlen":2, "dotted":0, "substaff":0, "staffx":10}, {"type":"NoteMod", "pkey":39, "nodotlen":2, "dotted":0, "substaff":0, "staffx":11}, {"type":"MeasureMod", "staffx":12}, {"type":"NoteMod", "pkey":39, "nodotlen":2, "dotted":0, "substaff":0, "staffx":13}, {"type":"NoteMod", "pkey":39, "nodotlen":2, "dotted":0, "substaff":0, "staffx":14}, {"type":"MeasureMod", "staffx":15}, {"type":"NoteMod", "pkey":39, "nodotlen":2, "dotted":0, "substaff":0, "staffx":16}, {"type":"NoteMod", "pkey":39, "nodotlen":2, "dotted":0, "substaff":0, "staffx":17}, {"type":"MeasureMod", "staffx":18}, {"type":"NoteMod", "pkey":39, "nodotlen":2, "dotted":0, "substaff":0, "staffx":19}, {"type":"NoteMod", "pkey":39, "nodotlen":2, "dotted":0, "substaff":0, "staffx":20}, {"type":"MeasureMod", "staffx":21}, {"type":"NoteMod", "pkey":39, "nodotlen":2, "dotted":0, "substaff":0, "staffx":22}, {"type":"NoteMod", "pkey":39, "nodotlen":2, "dotted":0, "substaff":0, "staffx":23}, {"type":"MeasureMod", "staffx":24}, {"type":"NoteMod", "pkey":39, "nodotlen":2, "dotted":0, "substaff":0, "staffx":25}, {"type":"NoteMod", "pkey":39, "nodotlen":2, "dotted":0, "substaff":0, "staffx":26}, {"type":"MeasureMod", "staffx":27}, {"type":"NoteMod", "pkey":39, "nodotlen":2, "dotted":0, "substaff":0, "staffx":28}, {"type":"NoteMod", "pkey":39, "nodotlen":2, "dotted":0, "substaff":0, "staffx":29}, {"type":"MeasureMod", "staffx":30}, {"type":"NoteMod", "pkey":39, "nodotlen":2, "dotted":0, "substaff":0, "staffx":31}, {"type":"NoteMod", "pkey":39, "nodotlen":2, "dotted":0, "substaff":0, "staffx":32}, {"type":"MeasureMod", "staffx":33}]}}, {"name":"exercise 6", "mods":{"key":"C", "bpm":90, "mods":[{"type":"MeasureMod", "staffx":0}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":1}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":2}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":3}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":4}, {"type":"MeasureMod", "staffx":5}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":6}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":7}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":8}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":9}, {"type":"MeasureMod", "staffx":10}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":11}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":12}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":13}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":14}, {"type":"MeasureMod", "staffx":15}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":16}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":17}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":18}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":19}, {"type":"MeasureMod", "staffx":20}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":21}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":22}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":23}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":24}, {"type":"MeasureMod", "staffx":25}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":26}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":27}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":28}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":29}, {"type":"MeasureMod", "staffx":30}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":31}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":32}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":33}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":34}]}}, {"name":"exercise 7", "mods":{"key":"C", "bpm":90, "mods":[{"type":"MeasureMod", "staffx":0}, {"type":"NoteMod", "pkey":39, "nodotlen":4, "dotted":0, "substaff":0, "staffx":1}, {"type":"MeasureMod", "staffx":2}, {"type":"NoteMod", "pkey":39, "nodotlen":2, "dotted":0, "substaff":0, "staffx":3}, {"type":"NoteMod", "pkey":39, "nodotlen":2, "dotted":0, "substaff":0, "staffx":4}, {"type":"MeasureMod", "staffx":5}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":6}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":7}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":8}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":9}, {"type":"MeasureMod", "staffx":10}, {"type":"NoteMod", "pkey":39, "nodotlen":4, "dotted":0, "substaff":0, "staffx":11}, {"type":"MeasureMod", "staffx":12}, {"type":"NoteMod", "pkey":39, "nodotlen":2, "dotted":0, "substaff":0, "staffx":13}, {"type":"NoteMod", "pkey":39, "nodotlen":2, "dotted":0, "substaff":0, "staffx":14}, {"type":"MeasureMod", "staffx":15}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":16}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":17}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":18}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":19}, {"type":"MeasureMod", "staffx":20}, {"type":"NoteMod", "pkey":39, "nodotlen":4, "dotted":0, "substaff":0, "staffx":21}, {"type":"MeasureMod", "staffx":22}, {"type":"NoteMod", "pkey":39, "nodotlen":2, "dotted":0, "substaff":0, "staffx":23}, {"type":"NoteMod", "pkey":39, "nodotlen":2, "dotted":0, "substaff":0, "staffx":24}, {"type":"MeasureMod", "staffx":25}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":26}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":27}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":28}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":29}, {"type":"MeasureMod", "staffx":30}]}}]}';
 //built-in synth mod configurations
 var testconfig = '{"voices":5, "mods":[{"type":"SynthModKeyboard" , "x":10 , "y":388.03749999999997 , "w":126 , "h":120.96000000000001 , "outnodes" : [{"mod":1 , "node":0} , {"mod":4 , "node":2} , {"mod":-1 , "node":-1}]}, {"type":"SynthOscContainer" , "x":144 , "y":388.03749999999997 , "w":352.80000000000007 , "h":120.96000000000001 , "outnodes" : [{"mod":2 , "node":0}] , "osc":"2"}, {"type":"SynthGainContainer" , "x":506 , "y":388.03749999999997 , "w":141.12 , "h":131.04000000000002 , "outnodes" : [{"mod":6 , "node":0}] , "gain":0 , "mute":0}, {"type":"SpeakerMod" , "x":1334.4 , "y":388.03749999999997 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : []}, {"type":"SynthADSRContainer" , "x":168.20000000000005 , "y":517.8375000000001 , "w":302.40000000000003 , "h":201.60000000000002 , "outnodes" : [{"mod":2 , "node":4}] , "A":0.01 , "D":0.05 , "DV":0.5 , "S":5 , "SV":0.1 , "R":0.00001}, {"type":"AnalyserContainer" , "x":1124.8400000000001 , "y":388.03749999999997 , "w":201.60000000000002 , "h":201.60000000000002 , "outnodes" : [{"mod":3 , "node":0}]}, {"type":"SynthGainContainer" , "x":655.44 , "y":388.03749999999997 , "w":141.12 , "h":131.04000000000002 , "outnodes" : [{"mod":7 , "node":0}] , "gain":1 , "mute":0}, {"type":"NineBandEqualizer" , "x":837.7650000000003 , "y":388.03749999999997 , "w":201.60000000000002 , "h":201.60000000000002 , "outnodes" : [{"mod":5 , "node":0}] , "bands":[0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0]}]}';
@@ -118,7 +123,7 @@ flatKeys.push([11, 1, 2, 4, 6, 7, 9]);//Cb
 var flatKeyNames = ["F", "Bb", "Eb", "Ab", "Db", "Gb", "Cb"];
 
 var trebleSharps = [56, 51, 58, 53, 44, 55, 50];
-var trebleFlats = [50, 55, 44, 53, 58, 51, 56];
+var trebleFlats = [50, 55, 48, 53, 46, 51, 44];
 var bassSharps = new Array();
 var bassFlats = new Array();
 for (var i = 0; i < trebleSharps.length; i++) {
@@ -9998,21 +10003,44 @@ class SheetPracticeMenu extends SceneMenu {
 		this.pad = w*0.02;
 		var rows = 10;
 		var cols = 3;
-		var by = this.y + this.pad;
-		var bx = this.x + this.pad;
-		var bw = (w - (cols+1)*this.pad) / cols;
-		var bh = (h - (rows+1)*this.pad) / rows;
-		var btn = new SheetExerciseBtn(bx, by, bw, bh, s);
+		this.by = this.y + this.pad;
+		this.bx = this.x + this.pad;
+		this.bw = (w - (cols+1)*this.pad) / cols;
+		this.bh = (h - (rows+1)*this.pad) / rows;
+		var btn = new SheetExerciseBtn(this.bx, this.by, this.bw, this.bh, s);
 		this.addBtn(btn);
 		for (var i = 0; i < exs.length; i++) {
-			bx += this.pad + bw;
-			if (bx + bw > x + w) {
-				bx = x + this.pad;
-				by += this.pad + bh;
-			}
-			btn = new SheetExerciseBtn(bx, by, bw, bh, s, exs[i]);
-			this.addBtn(btn);
+			//this.bx += this.pad + bw;
+			//if (this.bx + this.bw > this.x + this.w) {
+			//	this.bx = this.x + this.pad;
+			//	this.by += this.pad + this.bh;
+			//}
+			//btn = new SheetExerciseBtn(this.bx, this.by, this.bw, this.bh, this.scene, exs[i]);
+			//this.addBtn(btn);
+			this.addEx(exs[i]);
 		}
+	}
+	
+	addEx(ex) {
+		this.bx += this.pad + this.bw;
+		if (this.bx + this.bw > this.x + this.w) {
+			this.bx = this.x + this.pad;
+			this.by += this.pad + this.bh;
+		}
+		var btn = new SheetExerciseBtn(this.bx, this.by, this.bw, this.bh, this.scene, ex);
+		this.addBtn(btn);
+	}
+}
+
+class SheetLoadPBtn extends ScenePressBtn {
+	constructor(x, y, w, h, s) {
+		super(x, y, w, h);
+		this.scene = s
+		this.name = "LoadP";
+	}
+	
+	performAction() {
+		this.scene.loadFromPractice();
 	}
 }
 
@@ -10065,6 +10093,11 @@ class SheetActionMenu extends SceneMenu {
 		}
 		this.setBPMbtn = new SheetBPMBtn(bx, by, bh, bh, s);
 		this.addBtn(this.setBPMbtn);
+		if (s.editable) {
+			bx += bh + this.pad;
+			this.loadpbtn = new SheetLoadPBtn(bx, by, bh, bh, s);
+			this.addBtn(this.loadpbtn);
+		}
 	}
 }
 
@@ -10808,6 +10841,7 @@ class Scene {
 	keyboardPress(keycode) {}
 	keyboardUnpress(keycode) {}
 	setActive() {}
+	saveSheet() {}
 }
 
 class KeyButton extends Drawable {
@@ -11620,6 +11654,7 @@ class MusicSheet extends Drawable {
 			} else if (that.modules[that.curMod].playable) {
 				//console.log("play next in " + (that.modules[that.curMod].beat - that.curBeat) + " beats");
 				var time = (that.modules[that.curMod].beat - that.curBeat) * that.msperbeat;
+				//console.log("play next in " + time + "ms, next mod beat:" + that.modules[that.curMod].beat + ", this beat:" + that.curBeat);
 				setTimeout(that.playNext, time, that, Date.now());
 				return;
 			}
@@ -11633,6 +11668,7 @@ class MusicSheet extends Drawable {
 			mod.pkey.press(true);
 			var time = that.msperbeat * mod.beatlen;
 			//console.log("play mod " + modnum + " for " + mod.beatlen + " beats");
+			//console.log("stop in " + time + "ms");
 			setTimeout(that.stopMod, time, modnum, that, Date.now());
 		} else {
 			//
@@ -11779,6 +11815,7 @@ class MusicSheet extends Drawable {
 		for (var i = this.modules.length-1; i > -1; i--) {
 			if (this.modules[i].hitCheck(isDown, clickCoords)) {
 				console.log("clicked mod " + i + " x" + this.modules[i].x + " y" + this.modules[i].y + "staff:" + this.modules[i].staffnum + " staffx:" + this.modules[i].staffx);
+				console.log("beat: " + this.modules[i].beat + ", vgroupblen:" + this.modules[i].vgroupblen);
 				this.deactivateModules();
 				this.setActiveModule(this.modules[i]);
 				this.placeModAtModX(this.cursor, this.modules[i], this.modules[i].staff, true, true);
@@ -11938,7 +11975,8 @@ class MusicSheet extends Drawable {
 			//}
 			//if (maxr > this.x + this.w || curstaff < this.modules[mi].staffnum) {
 			if (x + groupw > this.x + this.w) {
-				curFGroup++;
+				curFGroupT++;
+				curFGroupB++;
 				curstaff++;
 				if (curstaff == this.staves.length) {
 					console.log("!!!!!!!sheet is full!!!!!!!");
@@ -11949,6 +11987,7 @@ class MusicSheet extends Drawable {
 				x = this.staves[curstaff].x + this.staves[curstaff].sigw + this.staves[curstaff].lineH*0.5;
 				//console.log("staff " + curstaff + " sigw:" + this.staves[curstaff].sigw);
 			}
+			//console.log("******" + i);
 			for (var j = mi; j < this.modules.length; j++) {
 				if (this.modules[j].staffx == i) {
 					//
@@ -11992,6 +12031,7 @@ class MusicSheet extends Drawable {
 					this.modules[j].setX(x + this.modules[j].vgroupxoff);
 					this.modules[j].vgroupx = x;
 					mi++
+					//console.log("mod " + j + " beat:" + this.modules[j].beat + ", vgroupblen:" + this.modules[j].vgroupblen);
 					//if (this.modules[j].staff !== this.staves[curstaff]) {
 						this.staves[curstaff].ycheckline = this.modules[j].staffline;
 						this.modules[j].staff = this.staves[curstaff];
@@ -12010,9 +12050,11 @@ class MusicSheet extends Drawable {
 			}
 			x = this.modules[mi-1].vgroupx + this.modules[mi-1].vgroupw + this.modcushion;
 			beat += this.modules[mi-1].vgroupblen;
+			//console.log("beat = " + beat + ", vgroupblen = " + this.modules[mi-1].vgroupblen);
 		}
 		for (var i = curstaff+1; i < this.staves.length; i++) {
 			this.staves[i].setKey(curKey, curKeyName, piano.allkeys);
+			this.staves[i].setClefs(botClef, topClef);
 		}
 		for (var i = 0; i < this.modules.length; i++) {
 			this.modules[i].last = false;
@@ -12692,6 +12734,9 @@ class SheetScene extends Scene {
 		var mobw = this.keyMenu.x - (this.modbar.x + this.modbar.w + this.keyMenu.pad) - this.keyMenu.pad;
 		this.moptionbar = new SheetOptionBar(this.modbar.x + this.modbar.w + this.keyMenu.pad, this.modbar.y, mobw, mbh, this);
 		this.practiceMenu = new SheetPracticeMenu(this.sheet2.x, this.sheet1.y, this.sheet2.w, this.sheet2.y - this.sheet1.y - this.keyMenu.pad, this, JSON.parse(practiceExs).exs);
+		for (var i = 0; i < practiceSongs.length; i++) {
+			this.practiceMenu.addEx(JSON.parse(practiceSongs[i]));
+		}
 		if (this.editable) {
 			this.addSceneOb(this.keyMenu);
 			this.addSceneOb(this.modbar);
@@ -12711,6 +12756,17 @@ class SheetScene extends Scene {
 		this.addSceneOb(this.actionMenu);
 		this.metronome = new Metronome(this);
 		this.isLoaded = false;
+	}	
+	
+	saveSheet(fn) {
+		var t = this.getModuleSaveText();
+		//console.log(t);
+		if (!fn && document.getElementById("sheettime").value.length < 1) {
+			document.getElementById("sheettime").value = "sheetmusic";
+		}
+		var fname = fn || document.getElementById("sheettime").value;
+		t = "'" + '{"name":"' + fname + '", "mods":' + t + '}' + "';";
+		download(fname, t);
 	}
 		
 	getModuleSaveText() {
@@ -12724,6 +12780,13 @@ class SheetScene extends Scene {
 		return t;
 	}
 	
+	setPracticeScene(ps) {
+		this.practiceSheet = ps;
+	}
+	
+	loadFromPractice() {
+		this.loadModules(this.practiceSheet.getModuleSaveText());
+	}
 	
 	loadModules(jso) {
 		var mods = JSON.parse(jso);
@@ -13168,7 +13231,7 @@ class Staff extends Drawable {
 		mod.sposflat = -1;
 		var oct = Math.floor((mod.pkey.num+0.01)/12);
 		var kpos = this.posInKey(mod.pkey.num, k);
-		//console.log("i: " + i + " kpos:" + kpos);
+		//console.log("pkey.num: " + mod.pkey.num + " kpos:" + kpos + " key:" + k);
 		if (kpos > -1) {
 			mod.spos = oct*7 + kpos;
 		} else {
@@ -13201,6 +13264,11 @@ class Staff extends Drawable {
 		} else {
 			return clefw + this.signXs[0];
 		}
+	}
+	
+	setClefs(bc, tc) {
+		this.topClef = tc;//BASS_CLEF or TREBLE_CLEF
+		this.botClef = bc;
 	}
 	
 	setKey(k, kn, pks) {
@@ -13238,11 +13306,20 @@ class Staff extends Drawable {
 	}
 	
 	posInKey(num, k) {
-		//console.log("n" + num);
+		//console.log("n" + num + " in " + k);
+		var kmin = k[0];
+		var mini = 0;
 		for (var i = 0; i < k.length; i++) {
-			if (num%12 == k[i]) return i;
-			if (num%12 < k[i]) {
-				return -i-1;
+			if (k[i] < kmin) {
+				kmin = k[i];
+				mini = i;
+			}
+		}
+		for (var i = 0; i < k.length; i++) {
+			var ki = (kmin + i)%k.length;
+			if (num%12 == k[ki]) return i;
+			if (num%12 < k[ki]) {
+				return -ki-1;
 			}
 		}
 		return -i-1;
@@ -13253,8 +13330,25 @@ class Staff extends Drawable {
 		this.drawSigns(ctx, this.noter);
 		this.drawLines(ctx);
 		if (this.hasClef) {
-			this.drawTreble(ctx);
-			this.drawBass(ctx);
+			if (this.topClef == TREBLE_CLEF) {
+				this.drawTrebleAt(ctx, this.x, this.ttop, this.bh);
+			} else if (this.topClef == BASS_CLEF) {
+				this.drawBassAt(ctx, this.x, this.ttop, this.bh);
+			}
+			if (this.botClef == TREBLE_CLEF) {
+				this.drawTrebleAt(ctx, this.x, this.btop, this.bh);
+			} else if (this.botClef == BASS_CLEF) {
+				this.drawBassAt(ctx, this.x, this.btop, this.bh);
+			}
+			//this.drawTreble(ctx);
+			//this.drawBass(ctx);
+			
+			//drawBass(ctx) {
+			//	this.drawBassAt(ctx, this.x, this.btop, this.bh);
+			//}
+			//drawTreble(ctx) {
+			//	this.drawTrebleAt(ctx, this.x, this.ttop, this.bh);
+			//}
 		}
 		this.drawNotes(ctx);
 	}
@@ -13367,8 +13461,14 @@ class Staff extends Drawable {
 	
 	drawModSigns(ctx, mod) {
 		var x = mod.x + mod.sx + mod.h + mod.w;
-		for (var i = 0; i < mod.numSigns; i++) {
-			this.drawSharp(ctx, x + this.signXs[i], mod.signYs[i], this.noter, mod.color);
+		if (mod.keyIsFlat) {
+			for (var i = 0; i < mod.numSigns; i++) {
+				this.drawFlat(ctx, x + this.signXs[i], mod.signYs[i], this.noter, mod.color);
+			}
+		} else {
+			for (var i = 0; i < mod.numSigns; i++) {
+				this.drawSharp(ctx, x + this.signXs[i], mod.signYs[i], this.noter, mod.color);
+			}
 		}
 	}
 	
@@ -13376,18 +13476,18 @@ class Staff extends Drawable {
 		var ys;
 		if (flat) {
 			if (sub) {
-				ys = this.bflatYs;
+				ys = this.bflatTYs;
 			} else {
-				ys = this.tflatBYs;
+				ys = this.tflatYs;
 			}
 			for (var i = 0; i < ns; i++) {
 				this.drawFlat(ctx, x + this.signXs[i], ys[i], this.noter, color);
 			}
 		} else {
 			if (sub) {
-				ys = this.bsharpYs;
+				ys = this.bsharpTYs;
 			} else {
-				ys = this.tsharpBYs;
+				ys = this.tsharpYs;
 			}
 			for (var i = 0; i < ns; i++) {
 				this.drawSharp(ctx, x + this.signXs[i], ys[i], this.noter, color);
@@ -13416,7 +13516,7 @@ class Staff extends Drawable {
 				this.drawSharp(ctx, x + this.signXs[i], ys[i], this.noter, color);
 			}
 		}
-	}
+	} 
 	
 	drawSigns(ctx, r) {
 		if (this.keyIsFlat) {
@@ -13588,6 +13688,7 @@ class Staff extends Drawable {
 	drawPole(ctx, x, y, ext, r, color, invert, mirror) {
 		//this.drawPole(ctx, mod.x, mod.y, this.noter, mod.color, mod.invert);
 		var c = color || this.color;
+		var mext = 0;
 		ctx.strokeStyle = c;
 		y += 0.6*r;
 		x += 1.9*r;
@@ -13598,11 +13699,13 @@ class Staff extends Drawable {
 				x += 2*r;
 			}
 			y += this.polelen*r + 0.3*r;
+			mext = ext;
+			ext = 0;
 		}
 		ctx.beginPath();
 		ctx.moveTo(x, y-this.polelen*r+ext);
-		ctx.lineTo(x, y);
-		ctx.lineTo(x+r*0.1, y);
+		ctx.lineTo(x, y+mext);
+		ctx.lineTo(x+r*0.1, y+mext);
 		ctx.lineTo(x+r*0.1, y-this.polelen*r+ext);
 		ctx.lineTo(x, y-this.polelen*r+ext);
 		ctx.closePath();
@@ -13802,17 +13905,43 @@ class Staff extends Drawable {
 class SheetStaff extends Staff {
 	constructor(x, y, w, h, lineH, hasClef) {
 		super(x, y, w, h, lineH, hasClef);
+		this.topClef = TREBLE_CLEF;
+		this.botClef = BASS_CLEF;
 	}
 	
 	drawOb(ctx) {
 		ctx.strokeStyle = this.color;
 		this.drawLines(ctx);
 		if (this.hasClef) {
-			this.drawSigns(ctx, this.noter);
-			this.drawTreble(ctx);
-			this.drawBass(ctx);
+			this.drawSignsB(ctx);//, this.noter);
+			//console.log("topclef:" + this.topClef + "(" + TREBLE_CLEF);
+			if (this.topClef == TREBLE_CLEF) {
+				this.drawTrebleAt(ctx, this.x, this.ttop, this.bh);
+			} else if (this.topClef == BASS_CLEF) {
+				this.drawBassAt(ctx, this.x, this.ttop, this.bh);
+			}
+			if (this.botClef == TREBLE_CLEF) {
+				this.drawTrebleAt(ctx, this.x, this.btop, this.bh);
+			} else if (this.botClef == BASS_CLEF) {
+				this.drawBassAt(ctx, this.x, this.btop, this.bh);
+			}
+			//this.drawTreble(ctx);
+			//this.drawBass(ctx);
 		}
 		//this.drawNotes(ctx);		
+	}
+	
+	drawSignsB(ctx) {
+		if (this.topClef == TREBLE_CLEF) {
+			this.drawTrebleSignsAt(ctx, this.x + this.clefw, TOP_STAFF, this.numSigns, this.color, this.keyIsFlat);
+		} else if (this.topClef == BASS_CLEF) {
+			this.drawBassSignsAt(ctx, this.x + this.clefw, TOP_STAFF, this.numSigns, this.color, this.keyIsFlat);
+		}
+		if (this.botClef == TREBLE_CLEF) {
+			this.drawTrebleSignsAt(ctx, this.x + this.clefw, BOTTOM_STAFF, this.numSigns, this.color, this.keyIsFlat);
+		} else if (this.botClef == BASS_CLEF) {
+			this.drawBassSignsAt(ctx, this.x + this.clefw, BOTTOM_STAFF, this.numSigns, this.color, this.keyIsFlat);
+		}
 	}
 }
 
@@ -14990,6 +15119,7 @@ function setup() {
 	practiceSheetScene.setKey(sharpKeys[0], sharpKeyNames[0], piano.allkeys);
 	menu.addScene(practiceSheetScene);
 	setMode(sheetScene);
+	sheetScene.setPracticeScene(practiceSheetScene);
 	qwertyboard = new qwerty();
 	var s = window.location.href.split("?");
 	var loadedmod = false;
@@ -15166,6 +15296,7 @@ function isKSPrintableCode(keycode) {
 
 function onkeypress(event) {
 	if (document.getElementById('valin') === document.activeElement) return;
+	if (document.getElementById('sheettime') === document.activeElement) return;
 	//console.log("keypress: " + event.keyCode + ' was pressed ' + isKPPrintableCode(event.keyCode));
 	if (!isKPPrintableCode(event.keyCode)) return;
 	if (focusOb) {
@@ -15180,6 +15311,7 @@ function keystart(event) {
 		sound.ctx.resume();
 	}
 	if (document.getElementById('valin') === document.activeElement) return;
+	if (document.getElementById('sheettime') === document.activeElement) return;
 	if (event.keyCode == 16) {
 		shiftOn = true;
 	}
@@ -15204,6 +15336,7 @@ function keystart(event) {
 
 function keyend(event) {
 	if (document.getElementById('valin') === document.activeElement) return;
+	if (document.getElementById('sheettime') === document.activeElement) return;
 	//console.log(event.keyCode + ' was unpressed');
 	if (event.keyCode == 16) {
 		shiftOn = false;
@@ -16423,6 +16556,11 @@ function loadMidi(input, fname) {
 		<button onclick="loadChoral()">Load Choral Patch</button>
 		<button onclick="loadDrip()">Load Drip Patch</button>
 		<p><input id="uploadInput" type="file" name="myFiles" onchange="updateSize();"> selected files: <span id="fileNum">0</span>; total size: <span id="fileSize">0</span></p>
+	</div>
+	<br>save sheet
+	<div id="textin" style="border:1px solid #000;">
+		<p><button onclick="activeScene.saveSheet()">Save Sheet</button> Enter file name below:
+		<br><input type="text" id="sheettime"/><br>
 	</div>
 	<br>save patch
 	<div id="textin" style="border:1px solid #000;">
