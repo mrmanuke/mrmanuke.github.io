@@ -16,7 +16,8 @@ var playcount = 0;
 //var winters = '{"name":"winters", "mods":{"key":"G", "bpm":150, "mods":[{"type":"BassClefMod", "staffx":0, "woff":0,"substaff":1, "key":"G"}, {"type":"TrebleClefMod", "staffx":0, "woff":0,"substaff":0, "key":"G"}, {"type":"NoteMod", "pkey":15, "enharmonic":-1, "nodotlen":2, "dotted":1, "substaff":1,"staffx":1, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":50, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":1, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":51, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":2, "woff":0, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":58, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":3, "woff":0, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":15, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":1,"staffx":3, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":57, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":4, "woff":0, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":22, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":4, "woff":0, "invert":0, "mirror":0}, {"type":"MeasureMod", "staffx":5, "woff":0}, {"type":"NoteMod", "pkey":55, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":6, "woff":0, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":27, "enharmonic":-1, "nodotlen":2, "dotted":1, "substaff":1,"staffx":6, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":55, "enharmonic":-1, "nodotlen":0.25, "dotted":0, "substaff":0,"staffx":7, "woff":-13, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":57, "enharmonic":-1, "nodotlen":0.25, "dotted":0, "substaff":0,"staffx":8, "woff":-12, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":55, "enharmonic":-1, "nodotlen":0.25, "dotted":0, "substaff":0,"staffx":9, "woff":-11, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":53, "enharmonic":-1, "nodotlen":0.25, "dotted":0, "substaff":0,"staffx":10, "woff":0, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":29, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":1,"staffx":11, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":55, "enharmonic":-1, "nodotlen":2, "dotted":1, "substaff":0,"staffx":11, "woff":0, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":31, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":12, "woff":0, "invert":0, "mirror":0}, {"type":"MeasureMod", "staffx":13, "woff":0}, {"type":"NoteMod", "pkey":50, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":14, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":15, "enharmonic":-1, "nodotlen":2, "dotted":1, "substaff":1,"staffx":14, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":51, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":15, "woff":0, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":58, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":16, "woff":0, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":15, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":1,"staffx":16, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":57, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":17, "woff":0, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":22, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":17, "woff":0, "invert":0, "mirror":0}, {"type":"MeasureMod", "staffx":18, "woff":0}, {"type":"NoteMod", "pkey":55, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":19, "woff":0, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":27, "enharmonic":-1, "nodotlen":2, "dotted":1, "substaff":1,"staffx":19, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":55, "enharmonic":-1, "nodotlen":0.25, "dotted":0, "substaff":0,"staffx":20, "woff":-9, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":57, "enharmonic":-1, "nodotlen":0.25, "dotted":0, "substaff":0,"staffx":21, "woff":-10, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":55, "enharmonic":-1, "nodotlen":0.25, "dotted":0, "substaff":0,"staffx":22, "woff":-11, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":53, "enharmonic":-1, "nodotlen":0.25, "dotted":0, "substaff":0,"staffx":23, "woff":0, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":55, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":24, "woff":0, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":27, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":24, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":29, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":25, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":57, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":25, "woff":0, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":31, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":26, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":58, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":26, "woff":0, "invert":1, "mirror":0}, {"type":"MeasureMod", "staffx":27, "woff":0}]}}';
 var winters = '{"name":"winters", "mods":{"key":"G", "bpm":150, "mods":[{"type":"BassClefMod", "staffx":0, "woff":0,"substaff":1, "key":"G"}, {"type":"TrebleClefMod", "staffx":0, "woff":0,"substaff":0, "key":"G"}, {"type":"NoteMod", "pkey":15, "enharmonic":-1, "nodotlen":2, "dotted":1, "substaff":1,"staffx":1, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":50, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":1, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":51, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":2, "woff":0, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":58, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":3, "woff":0, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":15, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":1,"staffx":3, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":57, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":4, "woff":0, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":22, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":4, "woff":0, "invert":0, "mirror":0}, {"type":"MeasureMod", "staffx":5, "woff":0}, {"type":"NoteMod", "pkey":55, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":6, "woff":0, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":27, "enharmonic":-1, "nodotlen":2, "dotted":1, "substaff":1,"staffx":6, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":55, "enharmonic":-1, "nodotlen":0.25, "dotted":0, "substaff":0,"staffx":7, "woff":-13, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":57, "enharmonic":-1, "nodotlen":0.25, "dotted":0, "substaff":0,"staffx":8, "woff":-12, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":55, "enharmonic":-1, "nodotlen":0.25, "dotted":0, "substaff":0,"staffx":9, "woff":-11, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":53, "enharmonic":-1, "nodotlen":0.25, "dotted":0, "substaff":0,"staffx":10, "woff":0, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":29, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":1,"staffx":11, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":55, "enharmonic":-1, "nodotlen":2, "dotted":1, "substaff":0,"staffx":11, "woff":0, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":31, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":12, "woff":0, "invert":0, "mirror":0}, {"type":"MeasureMod", "staffx":13, "woff":0}, {"type":"NoteMod", "pkey":50, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":14, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":15, "enharmonic":-1, "nodotlen":2, "dotted":1, "substaff":1,"staffx":14, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":51, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":15, "woff":0, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":58, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":16, "woff":0, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":15, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":1,"staffx":16, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":57, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":17, "woff":0, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":22, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":17, "woff":0, "invert":0, "mirror":0}, {"type":"MeasureMod", "staffx":18, "woff":0}, {"type":"NoteMod", "pkey":55, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":19, "woff":0, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":27, "enharmonic":-1, "nodotlen":2, "dotted":1, "substaff":1,"staffx":19, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":55, "enharmonic":-1, "nodotlen":0.25, "dotted":0, "substaff":0,"staffx":20, "woff":-9, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":57, "enharmonic":-1, "nodotlen":0.25, "dotted":0, "substaff":0,"staffx":21, "woff":-10, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":55, "enharmonic":-1, "nodotlen":0.25, "dotted":0, "substaff":0,"staffx":22, "woff":-11, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":53, "enharmonic":-1, "nodotlen":0.25, "dotted":0, "substaff":0,"staffx":23, "woff":0, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":55, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":24, "woff":0, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":27, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":24, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":29, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":25, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":57, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":25, "woff":0, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":31, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":26, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":58, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":26, "woff":0, "invert":1, "mirror":0}, {"type":"MeasureMod", "staffx":27, "woff":0}, {"type":"NoteMod", "pkey":53, "enharmonic":-1, "nodotlen":2, "dotted":1, "substaff":0,"staffx":28, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":10, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":1,"staffx":28, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":17, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":29, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":24, "enharmonic":-1, "nodotlen":2, "dotted":1, "substaff":1,"staffx":30, "woff":0, "invert":0, "mirror":0}, {"type":"MeasureMod", "staffx":31, "woff":0}, {"type":"NoteMod", "pkey":10, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":32, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":10, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":33, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":17, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":34, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":26, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":1,"staffx":35, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":22, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":36, "woff":0, "invert":0, "mirror":0}]}}';
 var mountainking = '{"name":"mountain", "mods":{"key":"D", "bpm":90, "mods":[{"type":"BassClefMod", "staffx":0, "woff":0,"substaff":1, "key":"D"}, {"type":"BassClefMod", "staffx":0, "woff":0,"substaff":0, "key":"D"}, {"type":"NoteMod", "pkey":14, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":1, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":38, "enharmonic":-1, "nodotlen":0.5, "dotted":0, "substaff":0,"staffx":1, "woff":-6, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":40, "enharmonic":-1, "nodotlen":0.5, "dotted":0, "substaff":0,"staffx":2, "woff":-6, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":21, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":3, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":41, "enharmonic":-1, "nodotlen":0.5, "dotted":0, "substaff":0,"staffx":3, "woff":-6, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":43, "enharmonic":-1, "nodotlen":0.5, "dotted":0, "substaff":0,"staffx":4, "woff":-14, "invert":0, "mirror":0}, {"type":"BreakerMod", "staffx":5, "woff":-5, "substaff":0}, {"type":"NoteMod", "pkey":14, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":6, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":45, "enharmonic":-1, "nodotlen":0.5, "dotted":0, "substaff":0,"staffx":6, "woff":-11, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":41, "enharmonic":-1, "nodotlen":0.5, "dotted":0, "substaff":0,"staffx":7, "woff":-7, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":21, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":8, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":45, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":8, "woff":-3, "invert":1, "mirror":0}, {"type":"MeasureMod", "staffx":9, "woff":-5}, {"type":"NoteMod", "pkey":14, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":10, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":44, "enharmonic":1, "nodotlen":0.5, "dotted":0, "substaff":0,"staffx":10, "woff":-6, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":40, "enharmonic":-1, "nodotlen":0.5, "dotted":0, "substaff":0,"staffx":11, "woff":-12, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":21, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":12, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":44, "enharmonic":1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":12, "woff":0, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":14, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":13, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":43, "enharmonic":-1, "nodotlen":0.5, "dotted":0, "substaff":0,"staffx":13, "woff":-15, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":39, "enharmonic":-1, "nodotlen":0.5, "dotted":0, "substaff":0,"staffx":14, "woff":-7, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":21, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":15, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":43, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":15, "woff":-9, "invert":1, "mirror":0}, {"type":"MeasureMod", "staffx":16, "woff":-7}, {"type":"NoteMod", "pkey":14, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":17, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":38, "enharmonic":-1, "nodotlen":0.5, "dotted":0, "substaff":0,"staffx":17, "woff":-7, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":40, "enharmonic":-1, "nodotlen":0.5, "dotted":0, "substaff":0,"staffx":18, "woff":-10, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":21, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":19, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":41, "enharmonic":-1, "nodotlen":0.5, "dotted":0, "substaff":0,"staffx":19, "woff":-9, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":43, "enharmonic":-1, "nodotlen":0.5, "dotted":0, "substaff":0,"staffx":20, "woff":-14, "invert":0, "mirror":0}, {"type":"BreakerMod", "staffx":21, "woff":-9, "substaff":0}, {"type":"NoteMod", "pkey":14, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":22, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":45, "enharmonic":-1, "nodotlen":0.5, "dotted":0, "substaff":0,"staffx":22, "woff":-11, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":41, "enharmonic":-1, "nodotlen":0.5, "dotted":0, "substaff":0,"staffx":23, "woff":-11, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":21, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":24, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":45, "enharmonic":-1, "nodotlen":0.5, "dotted":0, "substaff":0,"staffx":24, "woff":-11, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":50, "enharmonic":-1, "nodotlen":0.5, "dotted":0, "substaff":0,"staffx":25, "woff":-12, "invert":1, "mirror":0}, {"type":"MeasureMod", "staffx":26, "woff":-3}, {"type":"NoteMod", "pkey":17, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":27, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":48, "enharmonic":-1, "nodotlen":0.5, "dotted":0, "substaff":0,"staffx":27, "woff":-9, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":45, "enharmonic":-1, "nodotlen":0.5, "dotted":0, "substaff":0,"staffx":28, "woff":-8, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":24, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":29, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":41, "enharmonic":-1, "nodotlen":0.5, "dotted":0, "substaff":0,"staffx":29, "woff":-8, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":45, "enharmonic":-1, "nodotlen":0.5, "dotted":0, "substaff":0,"staffx":30, "woff":-3, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":17, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":31, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":48, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":31, "woff":0, "invert":1, "mirror":0}, {"type":"NoteMod", "pkey":24, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":32, "woff":0, "invert":0, "mirror":0}, {"type":"MeasureMod", "staffx":33, "woff":0}, {"type":"MeasureMod", "staffx":34, "woff":0}]}}';
-var practiceSongs = [winters, mountainking];
+var foodchain = '{"name":"foodchain", "mods":{"key":"Bb", "bpm":110, "mods":[{"type":"BassClefMod", "staffx":0, "woff":0,"substaff":1, "key":"Bb"}, {"type":"BassClefMod", "staffx":0, "woff":0,"substaff":0, "key":"Bb"}, {"type":"NoteMod", "pkey":13, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":1, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":37, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":1, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":41, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":1, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":32, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":1, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":20, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":2, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":36, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":2, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":39, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":2, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":44, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":2, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":13, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":1,"staffx":3, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":37, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":3, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":32, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":3, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":41, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":3, "woff":0, "invert":0, "mirror":0}, {"type":"MeasureMod", "staffx":4, "woff":0}, {"type":"NoteMod", "pkey":12, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":1,"staffx":5, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":36, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":5, "woff":-8, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":42, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":5, "woff":-8, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":39, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":5, "woff":-8, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":5, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":1,"staffx":6, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":33, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":6, "woff":-5, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":39, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":6, "woff":-5, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":44, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":6, "woff":-5, "invert":0, "mirror":0}, {"type":"MeasureMod", "staffx":7, "woff":0}, {"type":"NoteMod", "pkey":22, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":8, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":34, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":8, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":37, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":8, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":41, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":8, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":17, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":9, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":37, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":9, "woff":-10, "invert":0, "mirror":1}, {"type":"NoteMod", "pkey":32, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":9, "woff":-10, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":39, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":9, "woff":-10, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":23, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":1,"staffx":10, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":33, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":10, "woff":-3, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":42, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":10, "woff":-3, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":35, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":10, "woff":-3, "invert":0, "mirror":1}, {"type":"MeasureMod", "staffx":11, "woff":-6}, {"type":"NoteMod", "pkey":22, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":1,"staffx":12, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":34, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":12, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":38, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":12, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":41, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":12, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":22, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":1,"staffx":13, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":38, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":13, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":34, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":13, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":41, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":13, "woff":0, "invert":0, "mirror":0}, {"type":"MeasureMod", "staffx":14, "woff":0}, {"type":"NoteMod", "pkey":15, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":15, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":34, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":15, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":37, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":15, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":42, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":15, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":17, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":16, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":37, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":16, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":32, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":16, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":41, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":16, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":18, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":17, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":30, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":17, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":34, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":17, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":39, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":17, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":19, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":18, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":34, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":18, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":31, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":18, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":37, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":18, "woff":0, "invert":0, "mirror":0}, {"type":"MeasureMod", "staffx":19, "woff":0}, {"type":"NoteMod", "pkey":20, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":1,"staffx":20, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":30, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":20, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":34, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":20, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":41, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":20, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":20, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":1,"staffx":21, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":34, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":21, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":30, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":21, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":39, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":21, "woff":0, "invert":0, "mirror":0}, {"type":"MeasureMod", "staffx":22, "woff":-2}, {"type":"NoteMod", "pkey":13, "enharmonic":-1, "nodotlen":4, "dotted":0, "substaff":1,"staffx":23, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":37, "enharmonic":-1, "nodotlen":4, "dotted":0, "substaff":0,"staffx":23, "woff":-4, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":32, "enharmonic":-1, "nodotlen":4, "dotted":0, "substaff":0,"staffx":23, "woff":-4, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":30, "enharmonic":-1, "nodotlen":4, "dotted":0, "substaff":0,"staffx":23, "woff":-4, "invert":0, "mirror":0}, {"type":"MeasureMod", "staffx":24, "woff":0}, {"type":"NoteMod", "pkey":13, "enharmonic":-1, "nodotlen":4, "dotted":0, "substaff":1,"staffx":25, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":32, "enharmonic":-1, "nodotlen":4, "dotted":0, "substaff":0,"staffx":25, "woff":-3, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":29, "enharmonic":-1, "nodotlen":4, "dotted":0, "substaff":0,"staffx":25, "woff":-3, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":37, "enharmonic":-1, "nodotlen":4, "dotted":0, "substaff":0,"staffx":25, "woff":-3, "invert":0, "mirror":0}, {"type":"MeasureMod", "staffx":26, "woff":-3}, {"type":"NoteMod", "pkey":13, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":27, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":37, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":27, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":41, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":27, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":32, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":27, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":20, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":28, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":36, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":28, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":39, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":28, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":44, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":28, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":13, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":1,"staffx":29, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":37, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":29, "woff":-4, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":41, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":29, "woff":-4, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":32, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":29, "woff":-4, "invert":0, "mirror":0}, {"type":"MeasureMod", "staffx":30, "woff":-2}, {"type":"NoteMod", "pkey":13, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":1,"staffx":31, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":32, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":31, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":37, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":31, "woff":2, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":41, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":31, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":20, "enharmonic":-1, "nodotlen":0.5, "dotted":0, "substaff":1,"staffx":32, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":37, "enharmonic":-1, "nodotlen":0.5, "dotted":0, "substaff":0,"staffx":32, "woff":-11, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":46, "enharmonic":-1, "nodotlen":0.5, "dotted":0, "substaff":0,"staffx":32, "woff":-5, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":20, "enharmonic":-1, "nodotlen":1, "dotted":1, "substaff":1,"staffx":33, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":37, "enharmonic":-1, "nodotlen":1, "dotted":1, "substaff":0,"staffx":33, "woff":-9, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":44, "enharmonic":-1, "nodotlen":1, "dotted":1, "substaff":0,"staffx":33, "woff":-9, "invert":0, "mirror":0}, {"type":"MeasureMod", "staffx":34, "woff":-2}, {"type":"NoteMod", "pkey":13, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":35, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":37, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":35, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":41, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":35, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":32, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":35, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":20, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":36, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":36, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":36, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":39, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":36, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":44, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":36, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":13, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":1,"staffx":37, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":37, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":37, "woff":-3, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":41, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":37, "woff":-3, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":32, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":37, "woff":-3, "invert":0, "mirror":0}, {"type":"MeasureMod", "staffx":38, "woff":13}, {"type":"NoteMod", "pkey":13, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":1,"staffx":39, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":37, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":39, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":41, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":39, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":32, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":39, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":14, "enharmonic":-1, "nodotlen":0.5, "dotted":0, "substaff":1,"staffx":40, "woff":-6, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":38, "enharmonic":-1, "nodotlen":0.5, "dotted":0, "substaff":0,"staffx":40, "woff":-6, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":41, "enharmonic":-1, "nodotlen":0.5, "dotted":0, "substaff":0,"staffx":40, "woff":-6, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":32, "enharmonic":-1, "nodotlen":0.5, "dotted":0, "substaff":0,"staffx":40, "woff":-6, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":14, "enharmonic":-1, "nodotlen":1, "dotted":1, "substaff":1,"staffx":41, "woff":-10, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":38, "enharmonic":-1, "nodotlen":1, "dotted":1, "substaff":0,"staffx":41, "woff":-10, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":32, "enharmonic":-1, "nodotlen":1, "dotted":1, "substaff":0,"staffx":41, "woff":-10, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":41, "enharmonic":-1, "nodotlen":1, "dotted":1, "substaff":0,"staffx":41, "woff":-10, "invert":0, "mirror":0}, {"type":"MeasureMod", "staffx":42, "woff":-2}, {"type":"NoteMod", "pkey":15, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":43, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":34, "enharmonic":-1, "nodotlen":4, "dotted":0, "substaff":0,"staffx":43, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":30, "enharmonic":-1, "nodotlen":4, "dotted":0, "substaff":0,"staffx":43, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":39, "enharmonic":-1, "nodotlen":4, "dotted":0, "substaff":0,"staffx":43, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":22, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":44, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":15, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":1,"staffx":45, "woff":0, "invert":0, "mirror":0}, {"type":"MeasureMod", "staffx":46, "woff":0}, {"type":"NoteMod", "pkey":15, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":1,"staffx":47, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":34, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":47, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":30, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":47, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":39, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":47, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":14, "enharmonic":-1, "nodotlen":0.5, "dotted":0, "substaff":1,"staffx":48, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":34, "enharmonic":-1, "nodotlen":0.5, "dotted":0, "substaff":0,"staffx":48, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":38, "enharmonic":-1, "nodotlen":0.5, "dotted":0, "substaff":0,"staffx":48, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":29, "enharmonic":-1, "nodotlen":0.5, "dotted":0, "substaff":0,"staffx":48, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":14, "enharmonic":-1, "nodotlen":1, "dotted":1, "substaff":1,"staffx":49, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":34, "enharmonic":-1, "nodotlen":1, "dotted":1, "substaff":0,"staffx":49, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":29, "enharmonic":-1, "nodotlen":1, "dotted":1, "substaff":0,"staffx":49, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":38, "enharmonic":-1, "nodotlen":1, "dotted":1, "substaff":0,"staffx":49, "woff":0, "invert":0, "mirror":0}, {"type":"MeasureMod", "staffx":50, "woff":0}, {"type":"NoteMod", "pkey":15, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":51, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":34, "enharmonic":-1, "nodotlen":4, "dotted":0, "substaff":0,"staffx":51, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":30, "enharmonic":-1, "nodotlen":4, "dotted":0, "substaff":0,"staffx":51, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":37, "enharmonic":-1, "nodotlen":4, "dotted":0, "substaff":0,"staffx":51, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":22, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":52, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":15, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":1,"staffx":53, "woff":0, "invert":0, "mirror":0}, {"type":"MeasureMod", "staffx":54, "woff":0}, {"type":"NoteMod", "pkey":15, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":1,"staffx":55, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":37, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":55, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":30, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":55, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":34, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":55, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":20, "enharmonic":-1, "nodotlen":0.5, "dotted":0, "substaff":1,"staffx":56, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":36, "enharmonic":-1, "nodotlen":0.5, "dotted":0, "substaff":0,"staffx":56, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":44, "enharmonic":-1, "nodotlen":0.5, "dotted":0, "substaff":0,"staffx":56, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":39, "enharmonic":-1, "nodotlen":0.5, "dotted":0, "substaff":0,"staffx":56, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":20, "enharmonic":-1, "nodotlen":1, "dotted":1, "substaff":1,"staffx":57, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":36, "enharmonic":-1, "nodotlen":1, "dotted":1, "substaff":0,"staffx":57, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":39, "enharmonic":-1, "nodotlen":1, "dotted":1, "substaff":0,"staffx":57, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":44, "enharmonic":-1, "nodotlen":1, "dotted":1, "substaff":0,"staffx":57, "woff":0, "invert":0, "mirror":0}, {"type":"MeasureMod", "staffx":58, "woff":0}, {"type":"NoteMod", "pkey":15, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":59, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":34, "enharmonic":-1, "nodotlen":4, "dotted":0, "substaff":0,"staffx":59, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":30, "enharmonic":-1, "nodotlen":4, "dotted":0, "substaff":0,"staffx":59, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":39, "enharmonic":-1, "nodotlen":4, "dotted":0, "substaff":0,"staffx":59, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":22, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":60, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":15, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":1,"staffx":61, "woff":0, "invert":0, "mirror":0}, {"type":"MeasureMod", "staffx":62, "woff":0}, {"type":"NoteMod", "pkey":15, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":1,"staffx":63, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":39, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":63, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":30, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":63, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":34, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":63, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":14, "enharmonic":-1, "nodotlen":0.5, "dotted":0, "substaff":1,"staffx":64, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":34, "enharmonic":-1, "nodotlen":0.5, "dotted":0, "substaff":0,"staffx":64, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":29, "enharmonic":-1, "nodotlen":0.5, "dotted":0, "substaff":0,"staffx":64, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":38, "enharmonic":-1, "nodotlen":0.5, "dotted":0, "substaff":0,"staffx":64, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":14, "enharmonic":-1, "nodotlen":1, "dotted":1, "substaff":1,"staffx":65, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":34, "enharmonic":-1, "nodotlen":1, "dotted":1, "substaff":0,"staffx":65, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":29, "enharmonic":-1, "nodotlen":1, "dotted":1, "substaff":0,"staffx":65, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":38, "enharmonic":-1, "nodotlen":1, "dotted":1, "substaff":0,"staffx":65, "woff":0, "invert":0, "mirror":0}, {"type":"MeasureMod", "staffx":66, "woff":0}, {"type":"NoteMod", "pkey":15, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":67, "woff":1, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":34, "enharmonic":-1, "nodotlen":4, "dotted":0, "substaff":0,"staffx":67, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":37, "enharmonic":-1, "nodotlen":4, "dotted":0, "substaff":0,"staffx":67, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":30, "enharmonic":-1, "nodotlen":4, "dotted":0, "substaff":0,"staffx":67, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":22, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":68, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":15, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":1,"staffx":69, "woff":-5, "invert":0, "mirror":0}, {"type":"MeasureMod", "staffx":70, "woff":0}, {"type":"NoteMod", "pkey":15, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":1,"staffx":71, "woff":-2, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":37, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":71, "woff":-2, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":34, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":71, "woff":-2, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":30, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":71, "woff":-2, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":20, "enharmonic":-1, "nodotlen":0.5, "dotted":0, "substaff":1,"staffx":72, "woff":-2, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":36, "enharmonic":-1, "nodotlen":0.5, "dotted":0, "substaff":0,"staffx":72, "woff":-2, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":44, "enharmonic":-1, "nodotlen":0.5, "dotted":0, "substaff":0,"staffx":72, "woff":-2, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":39, "enharmonic":-1, "nodotlen":0.5, "dotted":0, "substaff":0,"staffx":72, "woff":-2, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":20, "enharmonic":-1, "nodotlen":1, "dotted":1, "substaff":1,"staffx":73, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":36, "enharmonic":-1, "nodotlen":1, "dotted":1, "substaff":0,"staffx":73, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":39, "enharmonic":-1, "nodotlen":1, "dotted":1, "substaff":0,"staffx":73, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":44, "enharmonic":-1, "nodotlen":1, "dotted":1, "substaff":0,"staffx":73, "woff":0, "invert":0, "mirror":0}, {"type":"MeasureMod", "staffx":74, "woff":0}, {"type":"NoteMod", "pkey":15, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":75, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":34, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":75, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":37, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":75, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":42, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":75, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":17, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":1,"staffx":76, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":37, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":76, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":32, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":76, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":41, "enharmonic":-1, "nodotlen":1, "dotted":0, "substaff":0,"staffx":76, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":18, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":1,"staffx":77, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":37, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":77, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":34, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":77, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":42, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":77, "woff":0, "invert":0, "mirror":0}, {"type":"MeasureMod", "staffx":78, "woff":0}, {"type":"NoteMod", "pkey":17, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":1,"staffx":79, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":37, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":79, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":32, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":79, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":41, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":79, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":17, "enharmonic":-1, "nodotlen":0.5, "dotted":0, "substaff":1,"staffx":80, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":32, "enharmonic":-1, "nodotlen":0.5, "dotted":0, "substaff":0,"staffx":80, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":41, "enharmonic":-1, "nodotlen":0.5, "dotted":0, "substaff":0,"staffx":80, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":37, "enharmonic":-1, "nodotlen":0.5, "dotted":0, "substaff":0,"staffx":80, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":17, "enharmonic":-1, "nodotlen":1, "dotted":1, "substaff":1,"staffx":81, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":37, "enharmonic":-1, "nodotlen":1, "dotted":1, "substaff":0,"staffx":81, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":32, "enharmonic":-1, "nodotlen":1, "dotted":1, "substaff":0,"staffx":81, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":41, "enharmonic":-1, "nodotlen":1, "dotted":1, "substaff":0,"staffx":81, "woff":0, "invert":0, "mirror":0}, {"type":"MeasureMod", "staffx":82, "woff":0}, {"type":"NoteMod", "pkey":13, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":1,"staffx":83, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":34, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":83, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":37, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":83, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":42, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":83, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":15, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":1,"staffx":84, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":36, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":84, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":44, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":84, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":39, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":84, "woff":0, "invert":0, "mirror":0}, {"type":"MeasureMod", "staffx":85, "woff":0}, {"type":"NoteMod", "pkey":17, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":1,"staffx":86, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":41, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":86, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":37, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":86, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":46, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":86, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":15, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":1,"staffx":87, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":36, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":87, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":44, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":87, "woff":0, "invert":0, "mirror":0}, {"type":"NoteMod", "pkey":39, "enharmonic":-1, "nodotlen":2, "dotted":0, "substaff":0,"staffx":87, "woff":0, "invert":0, "mirror":0}, {"type":"MeasureMod", "staffx":88, "woff":0}]}}';
+var practiceSongs = [winters, mountainking, foodchain];
 var practiceExs = '{"exs":[{"name":"exercise 4", "mods":{"key":"C", "bpm":90, "mods":[{"type":"MeasureMod", "staffx":0}, {"type":"NoteMod", "pkey":39, "nodotlen":4, "dotted":0, "substaff":0, "staffx":1}, {"type":"MeasureMod", "staffx":2}, {"type":"NoteMod", "pkey":39, "nodotlen":4, "dotted":0, "substaff":0, "staffx":3}, {"type":"MeasureMod", "staffx":4}, {"type":"NoteMod", "pkey":39, "nodotlen":4, "dotted":0, "substaff":0, "staffx":5}, {"type":"MeasureMod", "staffx":6}, {"type":"NoteMod", "pkey":39, "nodotlen":4, "dotted":0, "substaff":0, "staffx":7}, {"type":"MeasureMod", "staffx":8}, {"type":"NoteMod", "pkey":39, "nodotlen":4, "dotted":0, "substaff":0, "staffx":9}, {"type":"MeasureMod", "staffx":10}, {"type":"NoteMod", "pkey":39, "nodotlen":4, "dotted":0, "substaff":0, "staffx":11}, {"type":"MeasureMod", "staffx":12}, {"type":"NoteMod", "pkey":39, "nodotlen":4, "dotted":0, "substaff":0, "staffx":13}, {"type":"MeasureMod", "staffx":14}, {"type":"NoteMod", "pkey":39, "nodotlen":4, "dotted":0, "substaff":0, "staffx":15}, {"type":"MeasureMod", "staffx":16}, {"type":"NoteMod", "pkey":39, "nodotlen":4, "dotted":0, "substaff":0, "staffx":17}, {"type":"MeasureMod", "staffx":18}, {"type":"NoteMod", "pkey":39, "nodotlen":4, "dotted":0, "substaff":0, "staffx":19}, {"type":"MeasureMod", "staffx":20}]}}, {"name":"exercise 5", "mods":{"key":"C", "bpm":90, "mods":[{"type":"MeasureMod", "staffx":0}, {"type":"NoteMod", "pkey":39, "nodotlen":2, "dotted":0, "substaff":0, "staffx":1}, {"type":"NoteMod", "pkey":39, "nodotlen":2, "dotted":0, "substaff":0, "staffx":2}, {"type":"MeasureMod", "staffx":3}, {"type":"NoteMod", "pkey":39, "nodotlen":2, "dotted":0, "substaff":0, "staffx":4}, {"type":"NoteMod", "pkey":39, "nodotlen":2, "dotted":0, "substaff":0, "staffx":5}, {"type":"MeasureMod", "staffx":6}, {"type":"NoteMod", "pkey":39, "nodotlen":2, "dotted":0, "substaff":0, "staffx":7}, {"type":"NoteMod", "pkey":39, "nodotlen":2, "dotted":0, "substaff":0, "staffx":8}, {"type":"MeasureMod", "staffx":9}, {"type":"NoteMod", "pkey":39, "nodotlen":2, "dotted":0, "substaff":0, "staffx":10}, {"type":"NoteMod", "pkey":39, "nodotlen":2, "dotted":0, "substaff":0, "staffx":11}, {"type":"MeasureMod", "staffx":12}, {"type":"NoteMod", "pkey":39, "nodotlen":2, "dotted":0, "substaff":0, "staffx":13}, {"type":"NoteMod", "pkey":39, "nodotlen":2, "dotted":0, "substaff":0, "staffx":14}, {"type":"MeasureMod", "staffx":15}, {"type":"NoteMod", "pkey":39, "nodotlen":2, "dotted":0, "substaff":0, "staffx":16}, {"type":"NoteMod", "pkey":39, "nodotlen":2, "dotted":0, "substaff":0, "staffx":17}, {"type":"MeasureMod", "staffx":18}, {"type":"NoteMod", "pkey":39, "nodotlen":2, "dotted":0, "substaff":0, "staffx":19}, {"type":"NoteMod", "pkey":39, "nodotlen":2, "dotted":0, "substaff":0, "staffx":20}, {"type":"MeasureMod", "staffx":21}, {"type":"NoteMod", "pkey":39, "nodotlen":2, "dotted":0, "substaff":0, "staffx":22}, {"type":"NoteMod", "pkey":39, "nodotlen":2, "dotted":0, "substaff":0, "staffx":23}, {"type":"MeasureMod", "staffx":24}, {"type":"NoteMod", "pkey":39, "nodotlen":2, "dotted":0, "substaff":0, "staffx":25}, {"type":"NoteMod", "pkey":39, "nodotlen":2, "dotted":0, "substaff":0, "staffx":26}, {"type":"MeasureMod", "staffx":27}, {"type":"NoteMod", "pkey":39, "nodotlen":2, "dotted":0, "substaff":0, "staffx":28}, {"type":"NoteMod", "pkey":39, "nodotlen":2, "dotted":0, "substaff":0, "staffx":29}, {"type":"MeasureMod", "staffx":30}, {"type":"NoteMod", "pkey":39, "nodotlen":2, "dotted":0, "substaff":0, "staffx":31}, {"type":"NoteMod", "pkey":39, "nodotlen":2, "dotted":0, "substaff":0, "staffx":32}, {"type":"MeasureMod", "staffx":33}]}}, {"name":"exercise 6", "mods":{"key":"C", "bpm":90, "mods":[{"type":"MeasureMod", "staffx":0}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":1}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":2}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":3}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":4}, {"type":"MeasureMod", "staffx":5}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":6}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":7}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":8}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":9}, {"type":"MeasureMod", "staffx":10}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":11}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":12}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":13}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":14}, {"type":"MeasureMod", "staffx":15}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":16}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":17}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":18}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":19}, {"type":"MeasureMod", "staffx":20}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":21}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":22}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":23}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":24}, {"type":"MeasureMod", "staffx":25}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":26}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":27}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":28}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":29}, {"type":"MeasureMod", "staffx":30}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":31}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":32}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":33}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":34}]}}, {"name":"exercise 7", "mods":{"key":"C", "bpm":90, "mods":[{"type":"MeasureMod", "staffx":0}, {"type":"NoteMod", "pkey":39, "nodotlen":4, "dotted":0, "substaff":0, "staffx":1}, {"type":"MeasureMod", "staffx":2}, {"type":"NoteMod", "pkey":39, "nodotlen":2, "dotted":0, "substaff":0, "staffx":3}, {"type":"NoteMod", "pkey":39, "nodotlen":2, "dotted":0, "substaff":0, "staffx":4}, {"type":"MeasureMod", "staffx":5}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":6}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":7}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":8}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":9}, {"type":"MeasureMod", "staffx":10}, {"type":"NoteMod", "pkey":39, "nodotlen":4, "dotted":0, "substaff":0, "staffx":11}, {"type":"MeasureMod", "staffx":12}, {"type":"NoteMod", "pkey":39, "nodotlen":2, "dotted":0, "substaff":0, "staffx":13}, {"type":"NoteMod", "pkey":39, "nodotlen":2, "dotted":0, "substaff":0, "staffx":14}, {"type":"MeasureMod", "staffx":15}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":16}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":17}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":18}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":19}, {"type":"MeasureMod", "staffx":20}, {"type":"NoteMod", "pkey":39, "nodotlen":4, "dotted":0, "substaff":0, "staffx":21}, {"type":"MeasureMod", "staffx":22}, {"type":"NoteMod", "pkey":39, "nodotlen":2, "dotted":0, "substaff":0, "staffx":23}, {"type":"NoteMod", "pkey":39, "nodotlen":2, "dotted":0, "substaff":0, "staffx":24}, {"type":"MeasureMod", "staffx":25}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":26}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":27}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":28}, {"type":"NoteMod", "pkey":39, "nodotlen":1, "dotted":0, "substaff":0, "staffx":29}, {"type":"MeasureMod", "staffx":30}]}}]}';
 //built-in synth mod configurations
 var testconfig = '{"voices":5, "mods":[{"type":"SynthModKeyboard" , "x":10 , "y":388.03749999999997 , "w":126 , "h":120.96000000000001 , "outnodes" : [{"mod":1 , "node":0} , {"mod":4 , "node":2} , {"mod":-1 , "node":-1}]}, {"type":"SynthOscContainer" , "x":144 , "y":388.03749999999997 , "w":352.80000000000007 , "h":120.96000000000001 , "outnodes" : [{"mod":2 , "node":0}] , "osc":"2"}, {"type":"SynthGainContainer" , "x":506 , "y":388.03749999999997 , "w":141.12 , "h":131.04000000000002 , "outnodes" : [{"mod":6 , "node":0}] , "gain":0 , "mute":0}, {"type":"SpeakerMod" , "x":1334.4 , "y":388.03749999999997 , "w":100.80000000000001 , "h":100.80000000000001 , "outnodes" : []}, {"type":"SynthADSRContainer" , "x":168.20000000000005 , "y":517.8375000000001 , "w":302.40000000000003 , "h":201.60000000000002 , "outnodes" : [{"mod":2 , "node":4}] , "A":0.01 , "D":0.05 , "DV":0.5 , "S":5 , "SV":0.1 , "R":0.00001}, {"type":"AnalyserContainer" , "x":1124.8400000000001 , "y":388.03749999999997 , "w":201.60000000000002 , "h":201.60000000000002 , "outnodes" : [{"mod":3 , "node":0}]}, {"type":"SynthGainContainer" , "x":655.44 , "y":388.03749999999997 , "w":141.12 , "h":131.04000000000002 , "outnodes" : [{"mod":7 , "node":0}] , "gain":1 , "mute":0}, {"type":"NineBandEqualizer" , "x":837.7650000000003 , "y":388.03749999999997 , "w":201.60000000000002 , "h":201.60000000000002 , "outnodes" : [{"mod":5 , "node":0}] , "bands":[0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0]}]}';
@@ -72,6 +73,8 @@ var keypresscol = "#ff9999";//"#ffb8b8";//"#ff0000";
 var lastkeycol = "#fff0f0";//"#ddddff";//"#aaaaff";
 var highlightcol = "#3333aa";
 var highlightcolb = "#b9b9ff";
+var showColor = "#3090ff";
+var showPressColor = "#30ff90";
 var modbarcol = lastkeycol;
 var bgcol = "#eeeeee";
 var dragCol = "blue";
@@ -1278,6 +1281,9 @@ class PKey extends Drawable {
 		this.keyout = keyout;
 		this.draggable = false;
 		this.fill = true;
+		this.show = false;
+		this.showcolor = showColor;
+		this.showpresscolor = showPressColor;
 		this.secondcolor = lastkeycol;
 		this.bordercolor = pianocol;
 		this.names = new Array();
@@ -1318,6 +1324,10 @@ class PKey extends Drawable {
 			this.bordercolor = pianocol;
 			this.txt = "";
 		}
+	}
+	
+	setShow(on) {
+		this.show = on;
 	}
 	
 	assignWhiteKey(num) {
@@ -1501,7 +1511,13 @@ class PKey extends Drawable {
 	}
 	
 	drawOb(ctx) {
-		drawRect(ctx, this.x, this.y, this.w, this.h, this.stroke, this.fill, this.fillCol, this.bordercolor);
+		if (this.show && !this.pressed) {
+			drawRect(ctx, this.x, this.y, this.w, this.h, this.stroke, this.fill, this.showcolor, this.bordercolor);
+		} else if (this.show && this.pressed) {
+			drawRect(ctx, this.x, this.y, this.w, this.h, this.stroke, this.fill, this.showpresscolor, this.bordercolor);
+		} else {
+			drawRect(ctx, this.x, this.y, this.w, this.h, this.stroke, this.fill, this.fillCol, this.bordercolor);
+		}
 		if (this.isblack && !this.pressed) {
 			ctx.fillStyle = highlightcolb;
 		} else {
@@ -1719,6 +1735,35 @@ class SheetPlayBtn extends PlayBtn {
 	
 	start() {
 		this.scene.play();
+	}
+}
+
+class SheetPlayCursorBtn extends PlayBtn {
+	constructor(x, y, w, h, s) {
+		super(x, y, w, h);
+		this.scene = s;
+		this.name = "CUR";
+		this.tx = x + w*0.2;
+		this.ty = y + h*0.6;
+	}
+	
+	playing() {
+		return this.scene.playing;
+	}
+	
+	stop() {
+		this.scene.stop();
+	}
+	
+	start() {
+		this.scene.playFromCursor();
+	}
+	
+	drawOb(ctx) {
+		super.drawOb(ctx);
+		ctx.font = this.h*0.3 + "px Arial";
+		ctx.fillStyle = pianocol;
+		ctx.fillText(this.name, this.tx, this.ty);
 	}
 }
 
@@ -10086,6 +10131,9 @@ class SheetActionMenu extends SceneMenu {
 		this.metrobtn = new SheetMetronomeBtn(bx, by, bh, bh, s);
 		this.addBtn(this.metrobtn);
 		bx += bh + this.pad;
+		this.playcurbtn = new SheetPlayCursorBtn(bx, by, bh, bh, s);
+		this.addBtn(this.playcurbtn);
+		bx += bh + this.pad;
 		if (!s.editable) {
 			this.testbtn = new SheetTestBtn(bx, by, bh, bh, s);
 			this.addBtn(this.testbtn);
@@ -10842,6 +10890,8 @@ class Scene {
 	keyboardUnpress(keycode) {}
 	setActive() {}
 	saveSheet() {}
+	doCC() {}
+	doCom() {}
 }
 
 class KeyButton extends Drawable {
@@ -11577,6 +11627,11 @@ class MusicSheet extends Drawable {
 			if (this.modules[i].active) {
 				this.modules[i].incrementWoff(1);
 				cmod = this.modules[i];
+				for (var j = 0; j < this.modules.length; j++) {
+					if (!this.modules[j].active && this.modules[j].staffx == this.modules[i].staffx) {
+						this.modules[j].incrementWoff(1);
+					}
+				}
 			}			
 		}
 		this.refactorMods(cmod, true);		
@@ -11588,6 +11643,11 @@ class MusicSheet extends Drawable {
 			if (this.modules[i].active) {
 				this.modules[i].incrementWoff(-1);
 				cmod = this.modules[i];
+				for (var j = 0; j < this.modules.length; j++) {
+					if (!this.modules[j].active && this.modules[j].staffx == this.modules[i].staffx) {
+						this.modules[j].incrementWoff(-1);
+					}
+				}
 			}			
 		}
 		this.refactorMods(cmod, true);
@@ -11616,13 +11676,27 @@ class MusicSheet extends Drawable {
 		return true;
 	}
 	
-	play() {
+	playFromCursor() {
+		console.log("cursor staffx:" + this.cursor.staffx);
+		this.play(this.cursor.staffx);
+	}
+	
+	play(startAt) {
 		if (this.playing || this.modules.length == 0) return;
+		piano.resetKeyboardShows();
 		this.playing = true;
-		this.curStaffX = 0;
 		this.curMod = 0;
 		this.curBeat = 0;
-		for (this.curMod = 0; this.curMod < this.modules.length; this.curMod++) {
+		this.curStaffX = startAt || 0;
+		console.log("curStaffX:" + this.curStaffX);
+		for (var i = 0; i < this.modules.length; i++) {
+			if (this.modules[i].playable && this.modules[i].staffx == this.curStaffX) {
+				this.curMod = i;
+				this.curBeat = this.modules[i].beat;
+				break;
+			}
+		}
+		for (this.curMod; this.curMod < this.modules.length; this.curMod++) {
 			if (this.modules[this.curMod].playable) {
 				this.playNext(this, Date.now());
 				return;
@@ -11759,6 +11833,7 @@ class MusicSheet extends Drawable {
 		} else {
 			this.placeModAfterModX(this.cursor, this.modules[this.modules.length-1], this.cursor.staff);
 		}
+		this.playNotesAtCursor();
 	}
 	
 	decrementCursor() {
@@ -11773,6 +11848,15 @@ class MusicSheet extends Drawable {
 		} else {
 			this.placeModAtZero(this.cursor, this.staves[0], this.cursor.staff);
 		}
+		this.playNotesAtCursor();
+	}
+	
+	moveCursorToTop() {
+		if (this.cursor.substaff == BOTTOM_STAFF) this.moveCursorUp();
+	}
+	
+	moveCursorToBottom() {
+		if (this.cursor.substaff == TOP_STAFF) this.moveCursorDown();
 	}
 	
 	moveCursorUp() {
@@ -11782,6 +11866,7 @@ class MusicSheet extends Drawable {
 		} else if (this.cursor.substaff == TOP_STAFF && this.cursor.staffnum > 0) {
 			this.setModPos(this.cursor, this.cursor.x + this.cursor.w*0.5, this.staves[this.cursor.staffnum-1].btopl);
 		}
+		this.playNotesAtCursor();
 	}
 	
 	moveCursorDown() {
@@ -11792,6 +11877,7 @@ class MusicSheet extends Drawable {
 			this.setModPos(this.cursor, this.cursor.x + this.cursor.w*0.5, this.staves[this.cursor.staffnum+1].ttopl);
 		}
 		//console.log("cursor y:" + this.cursor.y);
+		this.playNotesAtCursor();
 	}
 	
 	getModAfterModX(modx) {
@@ -11834,6 +11920,7 @@ class MusicSheet extends Drawable {
 		*/
 		if (isDown && super.hitCheck(isDown, clickCoords)) {
 			this.setModPos(this.cursor, clickCoords.x, clickCoords.y);
+			this.playNotesAtCursor();
 			//addDragOb(this.cursor);
 			return true;
 		}
@@ -11965,6 +12052,8 @@ class MusicSheet extends Drawable {
 					if (this.modules[j].getRX() > maxr) maxr = this.modules[j].getRX();
 					if (this.modules[j].getRXIgnoreWoff > maxrig) maxrig = this.modules[j].getRXIgnoreWoff();
 					if (this.modules[j].beatlen < minblen) minblen = this.modules[j].beatlen;
+					if (this.modules[j].substaff == TOP_STAFF) topClef = this.modules[j].clef;
+					if (this.modules[j].substaff == BOTTOM_STAFF) botClef = this.modules[j].clef;
 				} else {
 					break;
 				}
@@ -11978,6 +12067,7 @@ class MusicSheet extends Drawable {
 				curFGroupT++;
 				curFGroupB++;
 				curstaff++;
+				this.staves[curstaff].setClefs(botClef, topClef);
 				if (curstaff == this.staves.length) {
 					console.log("!!!!!!!sheet is full!!!!!!!");
 					return;
@@ -12582,6 +12672,16 @@ class MusicSheet extends Drawable {
 		return this.modules.length;
 	}
 	
+	playNotesAtCursor() {
+		piano.resetKeyboardShows();
+		for (var i = 0; i < this.modules.length; i++) {
+			if (this.modules[i].playable && this.modules[i].staffx == this.cursor.staffx) {
+				console.log("highlight pkey " + this.modules[i].pkey.num);
+				this.modules[i].pkey.setShow(true);
+			}
+		}
+	}
+	
 	deactivateModules() {
 		for (var i = 0; i < this.modules.length; i++) {
 			this.modules[i].setActive(false);
@@ -12666,6 +12766,7 @@ class Metronome {
 		this.scene = scene;
 		this.audio = new Audio('High Seiko SQ50.wav');
 		this.playsheet = false;
+		this.playsheetfromcursor = false;
 	}
 	
 	setTime(t) {
@@ -12685,11 +12786,19 @@ class Metronome {
 		this.playsheet = true;
 	}
 	
+	playSheetFromCursorOnBeat() {
+		this.playsheetfromcursor = true;
+	}
+	
 	pulse(that) {
 		if (that.playing) {
 			if (that.playsheet) {
 				that.playsheet = false;
+				that.playSheetFromCursorOnBeat = false;
 				that.scene.play(true);
+			} else if (that.playsheetfromcursor) {
+				that.playSheetFromCursorOnBeat = false;
+				that.scene.playFromCursor(true);
 			}
 			//make metronome tick
 			that.scene.onMetronomeTick();
@@ -12705,6 +12814,7 @@ class SheetScene extends Scene {
 		this.editable = true;
 		this.copyScene = copyScene;
 		if(copyScene) this.editable = false;
+		this.CCdown = false;
 		this.playing = false;
 		this.lineH = h/90;
 		this.box1y = this.y + piano.h*1.1;
@@ -12868,6 +12978,7 @@ class SheetScene extends Scene {
 	}
 	
 	play(force) {
+		if (this.playing) return;
 		this.playing = true;
 		if (!force && this.metronome.playing) {
 			//tell metronome to let us know when to start playing
@@ -12875,6 +12986,26 @@ class SheetScene extends Scene {
 		} else {
 			//start playing
 			this.sheet1.play();
+		}
+	}
+	
+	playFromCursor(force) {
+		if (this.playing) return;
+		this.playing = true;
+		if (!force && this.metronome.playing) {
+			//tell metronome to let us know when to start playing
+			this.metronome.playSheetFromCursorOnBeat();
+		} else {
+			//start playing
+			this.sheet1.playFromCursor();
+		}
+	}
+	
+	togglePlayFromCursor() {
+		if (this.playing) {
+			this.stop();
+		} else {
+			this.playFromCursor();
 		}
 	}
 	
@@ -12907,7 +13038,7 @@ class SheetScene extends Scene {
 	}
 	
 	allPianosOff() {
-		if(!this.playing && this.editable) this.sheet1.incrementCursor();
+		if(!this.playing && this.editable && !shiftOn && !this.CCdown) this.sheet1.incrementCursor();
 	}
 	allPianosNotOff() {}
 	
@@ -12926,12 +13057,44 @@ class SheetScene extends Scene {
 		}
 	}
 	
+	doCom(com, note, vel) {
+		//com 153 means pad press
+		//com 137 means pad release
+		if (com == 153) {
+			this.togglePlayFromCursor();
+		}
+	}
+	
+	doCC(note, vel) {
+		this.CCdown = (vel == 127);
+		console.log("vel:" + vel);
+		if (vel == 0) return;
+		switch (note) {
+			case 104:
+				this.sheet1.makeSelectionLonger();
+				break;
+			case 105:
+				this.sheet1.makeSelectionShorter();
+				break;
+			case 106:
+				this.sheet1.decrementCursor();
+				break;
+			case 107:
+				this.sheet1.incrementCursor();
+				break;
+			case 108:
+				this.sheet1.moveCursorUp();
+				break;
+			case 109:
+				this.sheet1.moveCursorDown();
+				break;
+		}
+	}
+	
 	keyboardPress(code) {
-		if (this.playing || !this.editable) return;
 		//console.log("sheet keyboard press: " + code);
+		if (this.playing) return;
 		switch (code) {
-			case 32: //space - insert rest
-				return true;
 			case 37: //left arrow
 				this.sheet1.decrementCursor();
 				return true;
@@ -12943,6 +13106,12 @@ class SheetScene extends Scene {
 				return true;
 			case 40: //down arrow
 				this.sheet1.moveCursorDown();
+				return true;
+		}
+		if (!this.editable) return;
+		switch (code) {
+			case 32: //space - insert rest
+				this.insertRest();
 				return true;
 			case 46: //delete
 				this.sheet1.deleteSelection();
@@ -12963,6 +13132,11 @@ class SheetScene extends Scene {
 	
 	insertMeasureMarker() {
 		var m = this.modbar.measureb.createMod();
+		this.sheet1.pushModule(m);
+	}
+	
+	insertRest() {
+		var m = this.modbar.restb.createMod();
 		this.sheet1.pushModule(m);
 	}
 	
@@ -13569,8 +13743,8 @@ class Staff extends Drawable {
 		ctx.beginPath();
 		ctx.strokeStyle = mod.color || "black";
 		ctx.moveTo(mod.x, this.ttopl);
-		ctx.lineTo(mod.x, this.tbotl);
-		ctx.moveTo(mod.x, this.btopl);
+		//ctx.lineTo(mod.x, this.tbotl);
+		//ctx.moveTo(mod.x, this.btopl);
 		ctx.lineTo(mod.x, this.bbotl);
 		ctx.stroke();
 	}
@@ -14146,6 +14320,12 @@ class Piano extends Scene {
 		for (var i = 0; i < this.allkeys.length; i++) {
 			this.allkeys[i].highlight(false);
 		}	
+	}
+	
+	resetKeyboardShows() {
+		for (var i = 0; i < this.allkeys.length; i++) {
+			this.allkeys[i].setShow(false);
+		}
 	}
 	
 	allkeysoff() {
@@ -15118,7 +15298,7 @@ function setup() {
 	practiceSheetScene.initKey(piano.allkeys);
 	practiceSheetScene.setKey(sharpKeys[0], sharpKeyNames[0], piano.allkeys);
 	menu.addScene(practiceSheetScene);
-	setMode(sheetScene);
+	setMode(practiceSheetScene);
 	sheetScene.setPracticeScene(practiceSheetScene);
 	qwertyboard = new qwerty();
 	var s = window.location.href.split("?");
@@ -15221,6 +15401,9 @@ function rcvMIDIMessage(message) {
 	piano.midiline2.txt = "command: " + command + ", note: " + note;
 	piano.midiline3.txt = "velocity: " + velocity;
 	var k = note - 21;
+	if (command == 137 || command == 153) {
+		if (activeScene) activeScene.doCom(command, note, velocity);
+	}
 	if (command > 127 && command < 144) { //noteOff
 		var chan = command - 128 + 1;
 		if (chan == 1) {
@@ -15245,7 +15428,7 @@ function rcvMIDIMessage(message) {
 	} else if (command == 176) {// CC
 		//velocity is 0 to 127
 		//note is knob id
-		piano.doCC(note, velocity);
+		if (activeScene) activeScene.doCC(note, velocity);
 	}
 }
 
@@ -15297,7 +15480,7 @@ function isKSPrintableCode(keycode) {
 function onkeypress(event) {
 	if (document.getElementById('valin') === document.activeElement) return;
 	if (document.getElementById('sheettime') === document.activeElement) return;
-	//console.log("keypress: " + event.keyCode + ' was pressed ' + isKPPrintableCode(event.keyCode));
+	console.log("keypress: " + event.keyCode + ' was pressed ' + isKPPrintableCode(event.keyCode));
 	if (!isKPPrintableCode(event.keyCode)) return;
 	if (focusOb) {
 		if(focusOb.press(event.keyCode)) event.preventDefault();
@@ -15306,6 +15489,7 @@ function onkeypress(event) {
 }
 
 function keystart(event) {
+	console.log("keycode:" + event.keyCode);
 	if (!audioContextStarted) {
 		audioContextStarted = true;
 		sound.ctx.resume();
@@ -15326,6 +15510,7 @@ function keystart(event) {
 	//console.log("keystart: " + event.keyCode + ' was pressed');		
 	if (event.keyCode == 17 && !clicking) {
 		ctrlOn = true;
+		event.preventDefault();
 		return;
 	}
 	if (focusOb) {
@@ -15344,6 +15529,7 @@ function keyend(event) {
 	if (activeScene) activeScene.keyboardUnpress(event.keyCode);
 	if (event.keyCode == 17) {
 		ctrlOn = false;
+		event.preventDefault();
 		return;	
 	}
 	if (focusOb) focusOb.unpress(event.keyCode);
