@@ -6290,11 +6290,15 @@ class MBtn extends Drawable {
 		var hit = super.hitCheck(isdown, coords);
 		if (hit) {
 			if (!isdown) {
-				this.fill = !this.fill;
-				sound.monophonic = this.fill;
+				this.toggle();
 			}
 		}
 		return hit;
+	}
+	
+	toggle() {
+		this.fill = !this.fill;
+		sound.monophonic = this.fill;
 	}
 	
 	drawOb(ctx) {
@@ -16371,6 +16375,7 @@ function loadBeachSample() {
 	piano.loadModules(sampleBeach);
 	piano.portb.toggle();
 	piano.portk.setValue(0.14);
+	piano.monob.toggle();
 	qwertyboard.setStartPos(0);
 	setMsg('loaded beach house sample patch');
 }
