@@ -83,7 +83,7 @@ var eventTimeThreshAdj = eventTimeThresh * timemulti;
 var rollkey;
 var pianocol = "#666666";//"#000000";
 var keypresscol = "#ff9999";//"#ffb8b8";//"#ff0000";
-var lastkeycol = "#ffffff";//"#fff0f0";//"#ddddff";//"#aaaaff";
+var lastkeycol = "#ddddff";//"#fff0f0";//"#ddddff";//"#aaaaff";
 var highlightcol = "#3333aa";
 var highlightcolb = "#b9b9ff";
 var showColor = "#3090ff";
@@ -1447,11 +1447,11 @@ class PKey extends Drawable {
 	}
 	
 	colordown() {
-		//if (this.fillCol == this.pressFillCol) {
-		//	this.fillCol = this.secondcolor;
-		//} else {
-		//	this.fillCol = this.unpressFillCol;
-		//}
+		if (this.fillCol == this.pressFillCol) {
+			this.fillCol = this.secondcolor;
+		} else {
+			this.fillCol = this.unpressFillCol;
+		}
 	}
 	
 	unsustain() {
@@ -1573,7 +1573,7 @@ class FBtn extends Drawable {
 	}
 }
 
-class BBtn extends Drawable {//backbutton
+class BBtn extends Drawable {//roll back button
 	constructor(x, y, w, h) {
 		super(x, y, w, h);
 		var ox = 0.1;
@@ -1614,13 +1614,14 @@ class BBtn extends Drawable {//backbutton
 		if (isdown) {
 			this.pressed = true;
 			this.fillCol = this.pressFillCol;
-			rollkey.pressed = true;
+			//rollkey.pressed = true;
+			rollkey.goback(2);
+			rollkey.rollDown(true);
 		} else if (this.pressed) {
 			this.pressed = false;
 			this.fillCol = this.unpressFillCol;
-			rollkey.goback(2);
-			rollkey.rollDown(true);
-			rollkey.pressed = false;
+			//rollkey.pressed = false;
+			rollkey.rollUp(false);
 		}
 	}
 
@@ -14412,8 +14413,9 @@ class Piano extends Scene {
 		this.freepline = this.textlines[4];
 		
 		rollkey = new PBtn(x + this.w - btnw*keyW, y + keyH * 1.5, keyW*btnw, keyW*btnw, 0);
+		this.bbtn = new BBtn(x + this.w - (btnw*2+1)*keyW, y + keyH * 1.5, keyW*btnw, keyW*btnw);
 		this.btns.push(rollkey);
-		this.btns.push(new BBtn(x + this.w - (btnw*2+1)*keyW, y + keyH * 1.5, keyW*btnw, keyW*btnw));
+		this.btns.push(this.bbtn);
 		this.btns.push(new TBtn(x + this.w - (btnw*3+2)*keyW, y + keyH * 1.5, keyW*btnw, keyW*btnw));
 		this.btns.push(new PlayBtn(x + this.w - (btnw*4+3)*keyW, y + keyH * 1.5, keyW*btnw, keyW*btnw));
 		this.btns.push(new SBtn(x + this.w - (btnw*5+4)*keyW, y + keyH * 1.5, keyW*btnw, keyW*btnw));
@@ -14855,6 +14857,13 @@ class Piano extends Scene {
 			piano.setPorto(velocity > 63);
 			return;
 		}
+		if (note == 104) {
+			//scene up
+			rollkey.press((velocity == 127), false, false, false);
+		} else if (note == 105) {
+			//scene down
+			piano.bbtn.press(velocity == 127)
+		}
 		var t = sound.ctx.currentTime;
 		for (var i = 0; i < this.ccmods.length; i++) {
 			if (this.ccmods[i].id == note) {
@@ -15128,7 +15137,7 @@ class Piano extends Scene {
 		} else {
 			var rkp = rollkey.pressed;
 			for (var i = 0; i < this.btns.length; i++) {
-				this.btns[i].press(isdown, 0);
+				this.btns[i].press(isdown, 0); 
 			}
 			if (rkp || rollkey.pressed) return;
 			this.unpressAllKeys();
